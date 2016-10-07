@@ -7,8 +7,8 @@
     <string name="stats">Stats</string>
     <string name="how_many_players">How many players are you looking for ?</string>
     <string-array name="player_num_array">
-        <item>One</item>
-        <item>Two</item>
-        <item>Three</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
 </resources>

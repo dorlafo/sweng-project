@@ -6,7 +6,7 @@ public class Player {
     private final String firstName;
     private PlayerRank rank;
 
-    Player(PlayerID id, String lastName, String firstName, PlayerRank rank) {
+    public Player(PlayerID id, String lastName, String firstName, PlayerRank rank) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;

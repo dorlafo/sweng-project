@@ -17,7 +17,7 @@ public abstract class Match {
     private GameVariant gameVariant;
     private Date expirationTime;
 
-    Match(MatchID id,
+    protected Match(MatchID id,
                  List<Player> players,
                  gpsCoordinates location,
                  String description,

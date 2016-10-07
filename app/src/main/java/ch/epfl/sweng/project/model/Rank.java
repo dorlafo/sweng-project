@@ -7,7 +7,7 @@ package ch.epfl.sweng.project.model;
 public abstract class Rank {
     private final int rank;
 
-    Rank(int rank) {
+    protected Rank(int rank) {
         this.rank = rank;
     }
 
