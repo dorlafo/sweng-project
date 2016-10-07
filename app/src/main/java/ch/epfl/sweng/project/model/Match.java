@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Amaury Combes
@@ -36,11 +37,12 @@ public abstract class Match {
     }
 
     private static class MatchRank extends Rank {
-
+        MatchRank(int rank) {
+            super(rank);
+        }
     }
 
     private static class MatchID extends ID {
-
         public MatchID(long id) {
             super(id);
         }
