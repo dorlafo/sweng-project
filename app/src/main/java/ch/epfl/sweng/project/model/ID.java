@@ -11,4 +11,7 @@ public abstract class ID {
         this.id = id;
     }
 
+    public long getID() {
+        return id;
+    }
 }
