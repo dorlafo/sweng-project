@@ -1,4 +1,4 @@
-package model;
+package ch.epfl.sweng.project.model;
 
 public class Player {
     private final PlayerID id;
