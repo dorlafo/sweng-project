@@ -5,4 +5,5 @@ package ch.epfl.sweng.project.model;
  */
 
 public final class gpsCoordinates {
+
 }
