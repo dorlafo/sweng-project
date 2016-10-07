@@ -7,7 +7,7 @@ import java.util.Date;
  */
 
 public abstract class Match {
-    private final MatchId id;
+    private final MatchID id;
     private List<Player> players;
     private gpsCoordinates location;
     private String description;
@@ -16,7 +16,7 @@ public abstract class Match {
     private GameVariant gameVariant;
     private Date expirationTime;
 
-    public Match(MatchId id,
+    public Match(MatchID id,
                  List<Player> players,
                  gpsCoordinates location,
                  String description,
@@ -39,9 +39,9 @@ public abstract class Match {
 
     }
 
-    private static class MatchId extends Id {
+    private static class MatchID extends ID {
 
-        public MatchId(long id) {
+        public MatchID(long id) {
             super(id);
         }
     }
