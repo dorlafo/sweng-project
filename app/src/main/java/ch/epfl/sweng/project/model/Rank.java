@@ -1,9 +1,17 @@
 package ch.epfl.sweng.project.model;
 
 /**
- * Created by Amaury on 07/10/2016.
+ * @author Amaury Combes
  */
 
 public abstract class Rank {
+    private final int rank;
 
+    public Rank(int rank) {
+        this.rank = rank;
+    }
+
+    public int getRank() {
+        return rank;
+    }
 }
