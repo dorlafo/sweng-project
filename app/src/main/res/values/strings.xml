@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Project</string>
+    <string name="nearby_matches">Nearby Matches</string>
+    <string name="create_match">Create Match</string>
+    <string name="profile">Profile</string>
+    <string name="ranking">Ranking</string>
+    <string name="stats">Stats</string>
+    <string name="how_many_players">How many players are you looking for ?</string>
+    <string-array name="player_num_array">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+    </string-array>
 </resources>

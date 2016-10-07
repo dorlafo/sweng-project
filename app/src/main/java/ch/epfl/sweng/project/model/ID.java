@@ -7,7 +7,7 @@ package ch.epfl.sweng.project.model;
 public abstract class ID {
     private final long id;
 
-    public ID(long id) {
+    ID(long id) {
         this.id = id;
     }
 
