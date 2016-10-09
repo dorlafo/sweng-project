@@ -46,6 +46,10 @@ public class Match {
         return location;
     }
 
+    public boolean isPrivateMatch() {
+        return privateMatch;
+    }
+
     private static class MatchRank extends Rank {
         MatchRank(int rank) {
             super(rank);

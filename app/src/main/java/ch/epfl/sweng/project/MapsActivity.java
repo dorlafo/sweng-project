@@ -42,6 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         matchMap = googleMap;
         matchMap.getUiSettings().setZoomControlsEnabled(true);
 
+        // TODO: change to use real matches
         displayNearbyMatches(DummyMatchData.dummyMatches());
 
         // Check if GPS permission has been granted, and request permission if not
@@ -69,9 +70,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void displayNearbyMatches(Iterable<Match> matches) {
         for (Match match : matches) {
-            String matchID = Long.toString(match.getID());
-            matchMap.addMarker(new MarkerOptions().position(match.getLocation()).title(matchID)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            if (!match.isPrivateMatch()) {
+                String matchID = Long.toString(match.getID());
+                matchMap.addMarker(new MarkerOptions().position(match.getLocation()).title(matchID)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            }
         }
     }
 }
