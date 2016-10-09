@@ -1,5 +1,13 @@
 package ch.epfl.sweng.project.model;
 
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.Date;
 import java.util.List;
 
@@ -8,25 +16,49 @@ import java.util.List;
  */
 
 public abstract class Match {
-    private final MatchID id;
     private List<Player> players;
-    private gpsCoordinates location;
+    private GPSPoint location;
     private String description;
     private MatchRank rank;
     private boolean privateMatch;
     private GameVariant gameVariant;
     private Date expirationTime;
 
-    protected Match(MatchID id,
-                 List<Player> players,
-                 gpsCoordinates location,
-                 String description,
-                 MatchRank rank,
-                 boolean privateMatch,
-                 GameVariant gameVariant,
-                 Date expirationTime)
-    {
-        this.id = id;
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public GPSPoint getLocation() {
+        return location;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public MatchRank getRank() {
+        return rank;
+    }
+
+    public boolean isPrivateMatch() {
+        return privateMatch;
+    }
+
+    public GameVariant getGameVariant() {
+        return gameVariant;
+    }
+
+    public Date getExpirationTime() {
+        return expirationTime;
+    }
+
+    Match(List<Player> players,
+          GPSPoint location,
+          String description,
+          MatchRank rank,
+          boolean privateMatch,
+          GameVariant gameVariant,
+          Date expirationTime) {
         this.players = players;
         this.location = location;
         this.description = description;
@@ -36,19 +68,17 @@ public abstract class Match {
         this.expirationTime = expirationTime;
     }
 
+    Match() {
+        // Default constructor required for calls to DataSnapshot.getValue
+    }
+
     private static class MatchRank extends Rank {
         MatchRank(int rank) {
             super(rank);
         }
+        MatchRank() { };
     }
 
-    private static class MatchID extends ID {
-        public MatchID(long id) {
-            super(id);
-        }
-    }
-
-    private enum GameVariant {
-
-    }
+    enum GameVariant {CLASSIC}
 }
+
