@@ -1,5 +1,7 @@
 package ch.epfl.sweng.project.model;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
 public abstract class Match {
     private final MatchID id;
     private List<Player> players;
-    private gpsCoordinates location;
+    private LatLng location;
     private String description;
     private MatchRank rank;
     private boolean privateMatch;
@@ -19,7 +21,7 @@ public abstract class Match {
 
     protected Match(MatchID id,
                  List<Player> players,
-                 gpsCoordinates location,
+                 LatLng location,
                  String description,
                  MatchRank rank,
                  boolean privateMatch,
@@ -34,6 +36,10 @@ public abstract class Match {
         this.privateMatch = privateMatch;
         this.gameVariant = gameVariant;
         this.expirationTime = expirationTime;
+    }
+
+    public LatLng getLocation() {
+        return location;
     }
 
     private static class MatchRank extends Rank {
