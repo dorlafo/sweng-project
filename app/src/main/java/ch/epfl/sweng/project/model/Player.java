@@ -1,10 +1,14 @@
 package ch.epfl.sweng.project.model;
 
-public class Player {
-    private final PlayerID id;
-    private final String lastName;
-    private final String firstName;
+class Player {
+    private PlayerID id;
+    private String lastName;
+    private String firstName;
     private PlayerRank rank;
+
+    public Player() {
+        // Default constructor required for calls to DataSnapshot.getValue
+    }
 
     public Player(PlayerID id, String lastName, String firstName, PlayerRank rank) {
         this.id = id;
@@ -13,11 +17,7 @@ public class Player {
         this.rank = rank;
     }
 
-    Player(PlayerID id, String lastName, String firstName) {
-        this(id, lastName, firstName, new PlayerRank());
-    }
-
-    public PlayerID getId() {
+    public PlayerID getID() {
         return id;
     }
 
@@ -38,8 +38,8 @@ public class Player {
     }
 
     private static class PlayerID extends ID {
-        PlayerID(long id) {
-            super(id);
+        PlayerID(long sciper) {
+            super(sciper);
         }
     }
 
