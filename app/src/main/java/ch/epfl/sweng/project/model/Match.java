@@ -9,8 +9,8 @@ import java.util.List;
  * @author Amaury Combes
  */
 
-public abstract class Match {
-    private final MatchID id;
+public class Match {
+    private final long id;
     private List<Player> players;
     private LatLng location;
     private String description;
@@ -19,7 +19,7 @@ public abstract class Match {
     private GameVariant gameVariant;
     private Date expirationTime;
 
-    protected Match(MatchID id,
+    public Match(long id,
                  List<Player> players,
                  LatLng location,
                  String description,
@@ -36,6 +36,10 @@ public abstract class Match {
         this.privateMatch = privateMatch;
         this.gameVariant = gameVariant;
         this.expirationTime = expirationTime;
+    }
+
+    public long getID() {
+        return id;
     }
 
     public LatLng getLocation() {
