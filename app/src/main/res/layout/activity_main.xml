@@ -10,7 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="ch.epfl.sweng.project.MainActivity"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:baselineAligned="false">
 
     <TextView
         android:layout_width="match_parent"
@@ -27,6 +28,13 @@
         android:layout_weight="0.90">
         <!-- Add match list Object -->
     </ScrollView>
+
+    <Button
+        android:text="@string/main_map_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainMapButton"
+        android:onClick="displayMatchesOnMap" />
 
     <Button
         android:text="@string/create_match"

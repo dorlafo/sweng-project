@@ -21,4 +21,9 @@ public final class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CreateMatchActivity.class);
         startActivity(intent);
     }
+
+    public void displayMatchesOnMap(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
 }
