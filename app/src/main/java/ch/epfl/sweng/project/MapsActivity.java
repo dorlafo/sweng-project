@@ -14,10 +14,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Iterator;
+import java.util.List;
+
 import ch.epfl.sweng.project.model.Match;
 
-// Used for test purposes
-import ch.epfl.sweng.project.res.DummyMatchData;
+import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.res.DummyMatchData; // Used for test purposes
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -68,13 +71,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    public void displayNearbyMatches(Iterable<Match> matches) {
+    private void displayNearbyMatches(Iterable<Match> matches) {
         for (Match match : matches) {
             if (!match.isPrivateMatch()) {
-                String matchID = Long.toString(match.getID().getID());
-                matchMap.addMarker(new MarkerOptions().position(match.getLocation()).title(matchID)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                matchMap.addMarker(new MarkerOptions()
+                        .position(match.getLocation())
+                        .title(match.getDescription())
+                        .snippet(markerSnippet(match))
+                        .icon(BitmapDescriptorFactory
+                                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             }
         }
+    }
+
+    private String markerSnippet(Match match) {
+        StringBuilder builder = new StringBuilder(R.string.snippet_match_rank);
+        builder.append(match.getRank().getRank())
+                .append(System.getProperty("line.separator"))
+                .append(R.string.snippet_player_list)
+                .append(listToString(match.getPlayers()))
+                .append(System.getProperty("line.separator"))
+                .append(R.string.snippet_game_variant)
+                //.append(match.getGameVariant().toString()) TODO: implement this
+                .append(System.getProperty("line.separator"))
+                .append(R.string.snippet_expiration_date)
+                .append(match.getExpirationTime().toString());
+        return builder.toString();
+    }
+
+    private String listToString(List<Player> players) {
+        StringBuilder builder = new StringBuilder();
+        Iterator<Player> playerIterator = players.iterator();
+
+        while (playerIterator.hasNext()) {
+            builder.append(playerIterator.next().toString());
+            if (playerIterator.hasNext()) {
+                builder.append(", ");
+            }
+        }
+        return builder.toString();
     }
 }

@@ -37,6 +37,11 @@ public class Player {
         this.rank = newRank;
     }
 
+    @Override
+    public String toString() {
+        return firstName + ' ' + lastName;
+    }
+
     public static class PlayerID extends ID {
         public PlayerID(long id) {
             super(id);
