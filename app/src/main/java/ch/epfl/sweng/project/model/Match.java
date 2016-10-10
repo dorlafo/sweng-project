@@ -2,7 +2,6 @@ package ch.epfl.sweng.project.model;
 
 import java.util.Date;
 import java.util.List;
-import com.google.android.gms.maps.model.LatLng;
 
 /**
  * @author Amaury Combes
@@ -10,18 +9,18 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Match {
     private List<Player> players;
-    private LatLng location;
+    private GPSPoint location;
     private String description;
     private MatchRank rank;
     private boolean privateMatch;
     private GameVariant gameVariant;
-    private Date expirationTime;
+    private long expirationTime;
 
     public List<Player> getPlayers() {
         return players;
     }
 
-    public LatLng getLocation() {
+    public GPSPoint getLocation() {
         return location;
     }
 
@@ -41,17 +40,17 @@ public class Match {
         return gameVariant;
     }
 
-    public Date getExpirationTime() {
+    public long getExpirationTime() {
         return expirationTime;
     }
 
     public Match(List<Player> players,
-                 LatLng location,
+                 GPSPoint location,
                  String description,
                  MatchRank rank,
                  boolean privateMatch,
                  GameVariant gameVariant,
-                 Date expirationTime) {
+                 long expirationTime) {
         this.players = players;
         this.location = location;
         this.description = description;
