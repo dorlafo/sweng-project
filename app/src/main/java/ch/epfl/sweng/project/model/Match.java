@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public class Match {
-    private final long id;
+    private final MatchID id;
     private List<Player> players;
     private LatLng location;
     private String description;
@@ -19,7 +19,7 @@ public class Match {
     private GameVariant gameVariant;
     private Date expirationTime;
 
-    public Match(long id,
+    public Match(MatchID id,
                  List<Player> players,
                  LatLng location,
                  String description,
@@ -38,7 +38,7 @@ public class Match {
         this.expirationTime = expirationTime;
     }
 
-    public long getID() {
+    public MatchID getID() {
         return id;
     }
 
@@ -50,13 +50,13 @@ public class Match {
         return privateMatch;
     }
 
-    private static class MatchRank extends Rank {
-        MatchRank(int rank) {
+    public static class MatchRank extends Rank {
+        public MatchRank(int rank) {
             super(rank);
         }
     }
 
-    private static class MatchID extends ID {
+    public static class MatchID extends ID {
         public MatchID(long id) {
             super(id);
         }

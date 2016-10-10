@@ -71,7 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void displayNearbyMatches(Iterable<Match> matches) {
         for (Match match : matches) {
             if (!match.isPrivateMatch()) {
-                String matchID = Long.toString(match.getID());
+                String matchID = Long.toString(match.getID().getID());
                 matchMap.addMarker(new MarkerOptions().position(match.getLocation()).title(matchID)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             }

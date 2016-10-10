@@ -13,7 +13,7 @@ public class Player {
         this.rank = rank;
     }
 
-    Player(PlayerID id, String lastName, String firstName) {
+    public Player(PlayerID id, String lastName, String firstName) {
         this(id, lastName, firstName, new PlayerRank());
     }
 
@@ -37,18 +37,18 @@ public class Player {
         this.rank = newRank;
     }
 
-    private static class PlayerID extends ID {
-        PlayerID(long id) {
+    public static class PlayerID extends ID {
+        public PlayerID(long id) {
             super(id);
         }
     }
 
-    private static class PlayerRank extends Rank {
-        PlayerRank(int rank) {
+    public static class PlayerRank extends Rank {
+        public PlayerRank(int rank) {
             super(rank);
         }
 
-        PlayerRank() {
+        public PlayerRank() {
             // TODO get rank of last player
             super(0);
         }
