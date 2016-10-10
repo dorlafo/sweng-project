@@ -39,7 +39,8 @@ public final class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                matches.put(dataSnapshot.getKey(), dataSnapshot.getValue(Match.class));
+                Match newMatch = dataSnapshot.getValue(Match.class);
+                matches.put(dataSnapshot.getKey(), newMatch);
             }
 
             @Override
@@ -48,14 +49,10 @@ public final class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) { }
         };
         dRef.addChildEventListener(matchListener);
     }
