@@ -1,23 +1,16 @@
 package ch.epfl.sweng.project.model;
 
-import android.util.Log;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.Date;
 import java.util.List;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * @author Amaury Combes
  */
 
-public abstract class Match {
+public class Match {
     private List<Player> players;
-    private GPSPoint location;
+    private LatLng location;
     private String description;
     private MatchRank rank;
     private boolean privateMatch;
@@ -28,7 +21,7 @@ public abstract class Match {
         return players;
     }
 
-    public GPSPoint getLocation() {
+    public LatLng getLocation() {
         return location;
     }
 
@@ -52,13 +45,13 @@ public abstract class Match {
         return expirationTime;
     }
 
-    Match(List<Player> players,
-          GPSPoint location,
-          String description,
-          MatchRank rank,
-          boolean privateMatch,
-          GameVariant gameVariant,
-          Date expirationTime) {
+    public Match(List<Player> players,
+                 LatLng location,
+                 String description,
+                 MatchRank rank,
+                 boolean privateMatch,
+                 GameVariant gameVariant,
+                 Date expirationTime) {
         this.players = players;
         this.location = location;
         this.description = description;
@@ -72,13 +65,13 @@ public abstract class Match {
         // Default constructor required for calls to DataSnapshot.getValue
     }
 
-    private static class MatchRank extends Rank {
-        MatchRank(int rank) {
+    public static class MatchRank extends Rank {
+        public MatchRank(int rank) {
             super(rank);
         }
-        MatchRank() { };
+        public MatchRank() { };
     }
 
-    enum GameVariant {CLASSIC}
+    public enum GameVariant {CLASSIC}
 }
 
