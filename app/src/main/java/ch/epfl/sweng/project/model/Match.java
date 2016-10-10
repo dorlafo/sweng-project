@@ -10,6 +10,7 @@ import java.util.List;
  */
 
 public class Match {
+    // TODO: make this immutable
     private final MatchID id;
     private List<Player> players;
     private LatLng location;
@@ -26,8 +27,7 @@ public class Match {
                  MatchRank rank,
                  boolean privateMatch,
                  GameVariant gameVariant,
-                 Date expirationTime)
-    {
+                 Date expirationTime) {
         this.id = id;
         this.players = players;
         this.location = location;
@@ -42,12 +42,32 @@ public class Match {
         return id;
     }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+
     public LatLng getLocation() {
         return location;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public MatchRank getRank() {
+        return rank;
+    }
+
     public boolean isPrivateMatch() {
         return privateMatch;
+    }
+
+    public GameVariant getGameVariant() {
+        return gameVariant;
+    }
+
+    public Date getExpirationTime() {
+        return expirationTime;
     }
 
     public static class MatchRank extends Rank {
