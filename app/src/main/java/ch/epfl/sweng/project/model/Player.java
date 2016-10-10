@@ -1,6 +1,6 @@
 package ch.epfl.sweng.project.model;
 
-class Player {
+public class Player {
     private PlayerID id;
     private String lastName;
     private String firstName;
@@ -37,20 +37,18 @@ class Player {
         this.rank = newRank;
     }
 
-    private static class PlayerID extends ID {
-        PlayerID(long sciper) {
+    public static class PlayerID extends ID {
+        public PlayerID(long sciper) {
             super(sciper);
         }
+        public PlayerID() {}
     }
 
-    private static class PlayerRank extends Rank {
-        PlayerRank(int rank) {
+    public static class PlayerRank extends Rank {
+        public PlayerRank(int rank) {
             super(rank);
         }
 
-        PlayerRank() {
-            // TODO get rank of last player
-            super(0);
-        }
+        public PlayerRank() { }
     }
 }
