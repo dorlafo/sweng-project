@@ -11,7 +11,7 @@ abstract class ID {
         // Default constructor required for calls to DataSnapshot.getValue
     }
 
-    ID(long id) {
+    public ID(long id) {
         this.id = id;
     }
 
