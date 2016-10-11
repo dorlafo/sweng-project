@@ -13,7 +13,8 @@ public class GPSPoint {
         this.longitude = longitude;
     }
 
-    public GPSPoint() { }
+    public GPSPoint() {
+    }
 
     public double getLatitude() {
         return latitude;
