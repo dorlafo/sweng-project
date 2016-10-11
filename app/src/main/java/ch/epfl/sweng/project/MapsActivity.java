@@ -3,7 +3,6 @@ package ch.epfl.sweng.project;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -24,15 +23,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Locale;
-
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.res.DummyMatchData; // TODO: delete when real data is used
+import ch.epfl.sweng.project.tools.MatchStringifier;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -121,55 +114,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void displayNearbyMatches(Iterable<Match> matches) {
+        MatchStringifier stringifier = new MatchStringifier(this);
+
         for (Match match : matches) {
             if (!match.isPrivateMatch()) {
+                stringifier.setMatch(match);
                 matchMap.addMarker(new MarkerOptions()
                         .position(match.getLocation())
                         .title(match.getDescription())
-                        .snippet(markerSnippet(match))
+                        .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             }
         }
-    }
-
-    private String markerSnippet(Match match) {
-        Resources res = getResources();
-        String newLine = System.getProperty("line.separator");
-
-        StringBuilder builder = new StringBuilder(
-                res.getString(R.string.snippet_match_rank))
-                .append(match.getRank().getRank())
-                .append(newLine)
-                .append(res.getString(R.string.snippet_player_list))
-                .append(playersToString(match.getPlayers()))
-                .append(newLine)
-                .append(res.getString(R.string.snippet_game_variant))
-                //builder.append(match.getGameVariant().toString()) TODO: implement this
-                .append(newLine)
-                .append(res.getString(R.string.snippet_expiration_date))
-                .append(dateToStringCustom(match.getExpirationTime()));
-
-        return builder.toString();
-    }
-
-    private String dateToStringCustom(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat(
-                getResources().getString(R.string.date_format),
-                Locale.FRENCH);
-        return dateFormat.format(date);
-    }
-
-    private String playersToString(Iterable<Player> players) {
-        StringBuilder builder = new StringBuilder();
-        Iterator<Player> playerIterator = players.iterator();
-
-        while (playerIterator.hasNext()) {
-            builder.append(playerIterator.next().toString());
-            if (playerIterator.hasNext()) {
-                builder.append(", ");
-            }
-        }
-        return builder.toString();
     }
 }
