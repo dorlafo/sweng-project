@@ -5,7 +5,6 @@ import android.content.res.Resources;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -34,27 +33,27 @@ public final class MatchStringifier {
                 .append(match.getRank().getRank())
                 .append(newLine)
                 .append(res.getString(R.string.snippet_player_list))
-                .append(playersToString(match.getPlayers()))
+                .append(playersToString())
                 .append(newLine)
                 .append(res.getString(R.string.snippet_game_variant))
                 //builder.append(match.getGameVariant().toString()) TODO: implement this
                 .append(newLine)
                 .append(res.getString(R.string.snippet_expiration_date))
-                .append(dateToStringCustom(match.getExpirationTime()));
+                .append(dateToStringCustom());
 
         return builder.toString();
     }
 
-    public String dateToStringCustom(Date date) {
+    public String dateToStringCustom() {
         DateFormat dateFormat = new SimpleDateFormat(
                 context.getResources().getString(R.string.date_format),
                 Locale.FRENCH);
-        return dateFormat.format(date);
+        return dateFormat.format(match.getExpirationTime());
     }
 
-    public String playersToString(Iterable<Player> players) {
+    public String playersToString() {
         StringBuilder builder = new StringBuilder();
-        Iterator<Player> playerIterator = players.iterator();
+        Iterator<Player> playerIterator = match.getPlayers().iterator();
 
         while (playerIterator.hasNext()) {
             builder.append(playerIterator.next().toString());
@@ -63,5 +62,9 @@ public final class MatchStringifier {
             }
         }
         return builder.toString();
+    }
+
+    public String rankToString() {
+        return Integer.toString(match.getRank().getRank());
     }
 }
