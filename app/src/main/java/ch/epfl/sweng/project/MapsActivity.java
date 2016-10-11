@@ -28,7 +28,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.project.model.Match;
@@ -143,7 +142,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .append(match.getRank().getRank())
                 .append(newLine)
                 .append(res.getString(R.string.snippet_player_list))
-                .append(listToString(match.getPlayers()))
+                .append(playersToString(match.getPlayers()))
                 .append(newLine)
                 .append(res.getString(R.string.snippet_game_variant))
                 //builder.append(match.getGameVariant().toString()) TODO: implement this
@@ -161,7 +160,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return dateFormat.format(date);
     }
 
-    private String listToString(List<Player> players) {
+    private String playersToString(Iterable<Player> players) {
         StringBuilder builder = new StringBuilder();
         Iterator<Player> playerIterator = players.iterator();
 
