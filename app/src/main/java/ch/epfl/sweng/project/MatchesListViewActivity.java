@@ -3,22 +3,30 @@ package ch.epfl.sweng.project;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import ch.epfl.sweng.project.model.Match;
+import ch.epfl.sweng.project.res.DummyMatchData;
+import ch.epfl.sweng.project.tools.CustomAdapter;
 
 public class MatchesListViewActivity extends ListActivity {
-    private TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.matches_list_view);
+        setContentView(R.layout.activity_list);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_2);
+        ListView listView = (ListView) findViewById(android.R.id.list);
 
-        setListAdapter(adapter);
+        // TODO: fix empty list and filter private matches
+
+        BaseAdapter customAdapter = new CustomAdapter(this, DummyMatchData.dummyMatches());
+        //BaseAdapter customAdapter = new CustomAdapter(this, new ArrayList<Match>());
+
+        listView.setAdapter(customAdapter);
     }
 
     @Override
