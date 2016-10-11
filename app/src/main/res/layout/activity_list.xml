@@ -22,4 +22,21 @@
         android:text="@+id/empty_match_list"
         android:visibility="gone"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/switch_to_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="26dp"
+            android:layout_marginLeft="13dp"
+            android:background="@android:color/transparent"
+            android:onClick="switchToMap"
+            android:src="@drawable/ic_map_black_24px"/>
+    </RelativeLayout>
+
 </LinearLayout>

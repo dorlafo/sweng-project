@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -111,6 +112,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //matchMap.setMyLocationEnabled(true);
                 }
         }
+    }
+
+    public void switchToList(View view) {
+        Intent intent = new Intent(this, MatchesListViewActivity.class);
+        startActivity(intent);
     }
 
     private void displayNearbyMatches(Iterable<Match> matches) {
