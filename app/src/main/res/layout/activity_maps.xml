@@ -19,8 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="26dp"
-        android:layout_marginLeft="13dp"
+        android:layout_marginBottom="@dimen/button_bottom_margin"
+        android:layout_marginLeft="@dimen/button_left_margin"
         android:background="@android:color/transparent"
         android:onClick="switchToList"
         android:src="@drawable/ic_list_black_24px"/>
