@@ -16,14 +16,18 @@ public final class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void createMatch(View view)
-    {
+    public void createMatch(View view) {
         Intent intent = new Intent(this, CreateMatchActivity.class);
         startActivity(intent);
     }
 
     public void displayMatchesOnMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
+
+    public void displayMatchesInList(View view) {
+        Intent intent = new Intent(this, MatchesListViewActivity.class);
         startActivity(intent);
     }
 }

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    tools:context="ch.epfl.sweng.project.MainActivity"
     android:weightSum="1"
-    android:baselineAligned="false">
+    tools:context="ch.epfl.sweng.project.MainActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -19,8 +20,8 @@
         android:gravity="center"
         android:text="@string/nearby_matches"
         android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,53 +31,60 @@
     </ScrollView>
 
     <Button
-        android:text="@string/main_map_button"
+        android:id="@+id/main_list_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/mainMapButton"
-        android:onClick="displayMatchesOnMap" />
+        android:onClick="displayMatchesInList"
+        android:text="@string/main_list_button"/>
 
     <Button
-        android:text="@string/create_match"
+        android:id="@+id/mainMapButton"
+        android:layout_width="351dp"
+        android:layout_height="wrap_content"
+        android:onClick="displayMatchesOnMap"
+        android:text="@string/main_map_button"/>
+
+    <Button
+        android:id="@+id/create_match_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="createMatch"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:layout_gravity="center"
-        android:onClick="createMatch"
-        android:id="@+id/create_match_button" />
+        android:text="@string/create_match"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_weight="0.16"
         android:gravity="center"
-        android:layout_weight="0.16">
+        android:orientation="horizontal">
 
         <Button
-            android:text="@string/profile"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
             android:id="@+id/profile_button"
-            android:background = "@drawable/roundedbutton" />
-
-        <Button
-            android:text="@string/ranking"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:background="@drawable/roundedbutton"
+            android:text="@string/profile"/>
+
+        <Button
             android:id="@+id/ranking_button"
-            android:background = "@drawable/roundedbutton"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp" />
-
-        <Button
-            android:text="@string/stats"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/roundedbutton"
+            android:text="@string/ranking"/>
+
+        <Button
             android:id="@+id/statistics_button"
-            android:background = "@drawable/roundedbutton" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/roundedbutton"
+            android:text="@string/stats"/>
 
     </LinearLayout>
 </LinearLayout>
