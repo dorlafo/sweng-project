@@ -41,7 +41,7 @@ public class CustomAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.list_row, parent);
+            convertView = inflater.inflate(R.layout.list_row, null);
         }
 
         TextView description = (TextView) convertView.findViewById(R.id.description);
