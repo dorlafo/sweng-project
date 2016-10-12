@@ -4,20 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/listactivity_background_color"
     tools:context="ch.epfl.sweng.project.MatchesListViewActivity">
 
     <LinearLayout
         android:id="@+id/activity_matches_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="@dimen/listview_layout_margin"
         android:orientation="vertical">
 
         <TextView
             android:id="@android:id/empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@+id/empty_match_list"
-            android:visibility="gone"/>
+            android:text="@+id/empty_match_list"/>
 
         <ListView
             android:id="@android:id/list"

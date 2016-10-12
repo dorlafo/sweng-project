@@ -21,11 +21,12 @@ public class MatchesListViewActivity extends ListActivity {
         setContentView(R.layout.activity_list);
 
         ListView listView = (ListView) findViewById(android.R.id.list);
+        listView.setEmptyView(findViewById(android.R.id.empty));
 
         // TODO: fix empty list and filter private matches
 
         BaseAdapter customAdapter = new CustomAdapter(this, DummyMatchData.dummyMatches());
-        //BaseAdapter customAdapter = new CustomAdapter(this, new ArrayList<Match>());
+        // BaseAdapter customAdapter = new CustomAdapter(this, new ArrayList<Match>());
 
         listView.setAdapter(customAdapter);
     }
