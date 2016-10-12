@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project.model;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,8 +17,28 @@ public class Match {
     private GameVariant gameVariant;
     private long expirationTime;
 
+    Match() {
+        // Default constructor required for calls to DataSnapshot.getValue
+    }
+
+    public Match(List<Player> players,
+                 GPSPoint location,
+                 String description,
+                 MatchRank rank,
+                 boolean privateMatch,
+                 GameVariant gameVariant,
+                 long expirationTime) {
+        this.players = new ArrayList<Player>(players);
+        this.location = location;
+        this.description = description;
+        this.rank = rank;
+        this.privateMatch = privateMatch;
+        this.gameVariant = gameVariant;
+        this.expirationTime = expirationTime;
+    }
+
     public List<Player> getPlayers() {
-        return players;
+        return Collections.unmodifiableList(players);
     }
 
     public GPSPoint getLocation() {
@@ -44,31 +65,14 @@ public class Match {
         return expirationTime;
     }
 
-    public Match(List<Player> players,
-                 GPSPoint location,
-                 String description,
-                 MatchRank rank,
-                 boolean privateMatch,
-                 GameVariant gameVariant,
-                 long expirationTime) {
-        this.players = players;
-        this.location = location;
-        this.description = description;
-        this.rank = rank;
-        this.privateMatch = privateMatch;
-        this.gameVariant = gameVariant;
-        this.expirationTime = expirationTime;
-    }
-
-    Match() {
-        // Default constructor required for calls to DataSnapshot.getValue
-    }
 
     public static class MatchRank extends Rank {
         public MatchRank(int rank) {
             super(rank);
         }
-        public MatchRank() { };
+
+        public MatchRank() {
+        }
     }
 
     public enum GameVariant {CLASSIC}
