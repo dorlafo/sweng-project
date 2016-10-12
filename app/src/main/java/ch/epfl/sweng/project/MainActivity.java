@@ -28,33 +28,8 @@ public final class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        matches = new HashMap<>();
-        dRef = FirebaseDatabase.getInstance().getReference("matches");
-        matchListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Match newMatch = dataSnapshot.getValue(Match.class);
-                matches.put(dataSnapshot.getKey(), newMatch);
-            }
+        retrieveMatchList();
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Match newMatch = dataSnapshot.getValue(Match.class);
-                matches.put(dataSnapshot.getKey(), newMatch);
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                matches.remove(dataSnapshot.getKey());
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) { }
-        };
-        dRef.addChildEventListener(matchListener);
     }
 
     public void createMatch(View view) {
@@ -62,9 +37,43 @@ public final class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void retrieveMatchList() {
+        matches = new HashMap<>();
+        dRef = FirebaseDatabase.getInstance().getReference("matches");
+        matchListener = new MatchEventListener();
+        dRef.addChildEventListener(matchListener);
+    }
+
     @Override
     protected void onStop() {
         dRef.removeEventListener(matchListener);
         super.onStop();
+    }
+
+    private class MatchEventListener implements ChildEventListener {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            Match newMatch = dataSnapshot.getValue(Match.class);
+            matches.put(dataSnapshot.getKey(), newMatch);
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            Match newMatch = dataSnapshot.getValue(Match.class);
+            matches.put(dataSnapshot.getKey(), newMatch);
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+            matches.remove(dataSnapshot.getKey());
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
     }
 }
