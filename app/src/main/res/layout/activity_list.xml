@@ -5,20 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/listactivity_background_color"
-    tools:context="ch.epfl.sweng.project.MatchesListViewActivity">
+    tools:context="ch.epfl.sweng.project.MatchListActivity">
 
     <LinearLayout
-        android:id="@+id/activity_matches_list_view"
+        android:id="@+id/match_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/listview_layout_margin"
         android:orientation="vertical">
-
-        <TextView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@+id/empty_match_list"/>
 
         <ListView
             android:id="@android:id/list"
@@ -28,6 +22,14 @@
             android:divider="@color/listview_divider_color"
             android:dividerHeight="@dimen/listview_divider_height"
             android:drawSelectorOnTop="true"/>
+
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@+id/empty_match_list"
+            android:textAlignment="center"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <ImageButton

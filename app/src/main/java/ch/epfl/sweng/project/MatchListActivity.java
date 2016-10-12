@@ -13,7 +13,7 @@ import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.res.DummyMatchData;
 import ch.epfl.sweng.project.tools.CustomAdapter;
 
-public class MatchesListViewActivity extends ListActivity {
+public class MatchListActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +25,8 @@ public class MatchesListViewActivity extends ListActivity {
 
         // TODO: fix empty list and filter private matches
 
-        BaseAdapter customAdapter = new CustomAdapter(this, DummyMatchData.dummyMatches());
-        // BaseAdapter customAdapter = new CustomAdapter(this, new ArrayList<Match>());
+        //BaseAdapter customAdapter = new CustomAdapter(this, DummyMatchData.dummyMatches());
+        BaseAdapter customAdapter = new CustomAdapter(this, new ArrayList<Match>());
 
         listView.setAdapter(customAdapter);
     }

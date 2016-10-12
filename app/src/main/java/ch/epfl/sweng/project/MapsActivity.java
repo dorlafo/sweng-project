@@ -24,6 +24,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.res.DummyMatchData; // TODO: delete when real data is used
 import ch.epfl.sweng.project.tools.MatchStringifier;
@@ -87,6 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         // TODO: change to use real matches
+        displayNearbyMatches(new ArrayList<Match>());
         displayNearbyMatches(DummyMatchData.dummyMatches());
 
         // Check if GPS permission has been granted, and request permission if not
@@ -115,7 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void switchToList(View view) {
-        Intent intent = new Intent(this, MatchesListViewActivity.class);
+        Intent intent = new Intent(this, MatchListActivity.class);
         startActivity(intent);
     }
 

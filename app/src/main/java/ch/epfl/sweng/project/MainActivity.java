@@ -27,7 +27,7 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     public void displayMatchesInList(View view) {
-        Intent intent = new Intent(this, MatchesListViewActivity.class);
+        Intent intent = new Intent(this, MatchListActivity.class);
         startActivity(intent);
     }
 }
