@@ -18,9 +18,4 @@ abstract class ID {
     public long getID() {
         return id;
     }
-
-    @Override
-    public boolean equals(Object other) {
-        return other instanceof ID && ((ID) other).getID() == this.getID();
-    }
 }
