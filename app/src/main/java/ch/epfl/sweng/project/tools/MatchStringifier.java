@@ -12,6 +12,12 @@ import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Player;
 
+/**
+ * Helper Class providing methods to "stringify" the different
+ * fields of a {@link ch.epfl.sweng.project.model.Match Match}.
+ *
+ * @author Nicolas Phan Van
+ */
 public final class MatchStringifier {
     private final Context context;
     private Match match;

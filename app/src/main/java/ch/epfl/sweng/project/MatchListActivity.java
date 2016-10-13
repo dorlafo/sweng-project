@@ -13,6 +13,11 @@ import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.res.DummyMatchData;
 import ch.epfl.sweng.project.tools.CustomAdapter;
 
+/**
+ * Activity displaying matches as a scrolling list.
+ *
+ * @author Nicolas Phan Van
+ */
 public class MatchListActivity extends ListActivity {
 
     @Override

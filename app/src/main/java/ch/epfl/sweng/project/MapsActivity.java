@@ -30,6 +30,13 @@ import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.res.DummyMatchData; // TODO: delete when real data is used
 import ch.epfl.sweng.project.tools.MatchStringifier;
 
+/**
+ * Activity displaying matches as markers on a Google Maps Fragment.
+ * <p>
+ * Clicking on a marker displays the match information.
+ *
+ * @author Nicolas Phan Van
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap matchMap;
