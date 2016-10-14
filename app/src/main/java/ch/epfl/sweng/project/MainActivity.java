@@ -21,4 +21,5 @@ public final class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CreateMatchActivity.class);
         startActivity(intent);
     }
+
 }

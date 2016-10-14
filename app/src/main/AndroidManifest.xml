@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="ch.epfl.sweng.project">
+
     <!--
      TODO: Depending on your app's features, enable some Android features here
                such as backups or search indexing
@@ -18,6 +19,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateMatchActivity">
+        </activity>
+        <activity android:name=".Tequila_Login_Activity">
+            <intent-filter>
+                <data android:scheme="http" android:host="project.sweng.epfl.ch" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
         </activity>
     </application>
 
