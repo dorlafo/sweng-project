@@ -1,23 +1,52 @@
 package ch.epfl.sweng.project.model;
 
-/**
- * @author Amaury Combes
- */
+import java.util.List;
 
-public abstract class Rank implements Comparable<Rank> {
+/**
+ * Rank is class that represents a rank in a competition system.
+ * It implements the Averageable interface and the Comparable interface
+ */
+public class Rank implements Averageable<Rank, Rank>, Comparable<Rank> {
     private int rank;
 
-    public Rank() { }
+    /**
+     * Default constructor required for calls to DataSnapshot.getValue when using Firebase
+     */
+    public Rank() {
+
+    }
+
+    /**
+     * Constructor of the Rank class
+     * @param rank the value of the rank
+     */
     public Rank(int rank) {
         this.rank = rank;
     }
 
-    public int getRank() {
-        return rank;
+    /**
+     * Provides a string representation for the Rank class
+     * @return returns a string representation of the Rank class
+     */
+    public String toSring() {
+        return Integer.toString(rank);
+    }
+
+    @Override
+    public Rank average(List<Rank> ranks) {
+        int sumRanks = this.rank;
+        int numElem = 1;
+
+        for(Rank r: ranks) {
+            sumRanks += r.rank;
+            ++numElem;
+        }
+
+        return new Rank(sumRanks);
     }
 
     @Override
     public int compareTo(Rank o) {
-        return  ((Integer) rank).compareTo(o.getRank());
+        return  ((Integer) rank).compareTo(o.rank);
     }
 }
