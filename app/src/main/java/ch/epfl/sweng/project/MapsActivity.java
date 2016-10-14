@@ -22,7 +22,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -33,11 +35,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationListener;
 
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.res.DummyMatchData; // TODO: delete when real data is used
+import ch.epfl.sweng.project.res.DummyMatchData;
 import ch.epfl.sweng.project.tools.MatchStringifier;
 
 /**
@@ -55,12 +55,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int MY_LOCATION_REQUEST_CODE = 39;
     private final long LOCATION_UPDATE_INTERVAL = 1000;
 
-    GoogleMap matchMap;
-    GoogleApiClient googleApiClient;
-    LocationRequest locationRequest;
-    Location userLastLocation;
-    Marker currentUserLocation;
-    LatLng currentPositionCoord;
+    private GoogleMap matchMap;
+    private GoogleApiClient googleApiClient;
+    private LocationRequest locationRequest;
+    private Location userLastLocation;
+    private Marker currentUserLocation;
+    private LatLng currentPositionCoord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,8 +182,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[],
-                                           int[] grantResults) {
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_LOCATION_REQUEST_CODE:
                 if (grantResults.length > 0
@@ -212,7 +212,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public boolean checkLocationPermission() {
+    private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {

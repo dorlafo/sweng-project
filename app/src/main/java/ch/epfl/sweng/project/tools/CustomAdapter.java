@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.List;
+
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.model.Match;
-
-import java.util.List;
 
 /**
  * Custom {@link android.widget.Adapter Adapter} used to display
@@ -20,8 +20,8 @@ import java.util.List;
  * @author Nicolas Phan Van
  */
 public class CustomAdapter extends BaseAdapter {
-    private Context context;
-    private List<Match> matches;
+    private final Context context;
+    private final List<Match> matches;
 
     public CustomAdapter(Context context, List<Match> matches) {
         this.context = context;

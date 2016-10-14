@@ -27,7 +27,6 @@
             android:id="@+id/rank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:text="@string/snippet_match_rank"
             android:textStyle="bold"/>
 
@@ -48,7 +47,6 @@
             android:id="@+id/players"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:text="@string/snippet_player_list"
             android:textStyle="bold"/>
 
