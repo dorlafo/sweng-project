@@ -1,5 +1,4 @@
 # Gradle
-.gradle
 /build
 
 # Android Studio
@@ -41,13 +40,14 @@ proguard/
 captures/
 
 # Intellij
-*.iml
-.idea/workspace.xml
-.idea/libraries
+.idea
 
 # Keystore files
 *.jks
 
 ### Android Patch ###
 gen-external-apklibs
+
+## MACOS
+*.DS_Store
 
