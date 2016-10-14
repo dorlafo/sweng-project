@@ -1,16 +1,23 @@
 package ch.epfl.sweng.project.model;
 
-public class Player {
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class Player implements Averageable<Player, Rank> {
     private PlayerID id;
     private String lastName;
     private String firstName;
-    private PlayerRank rank;
+    private Rank rank;
 
+    /**
+     * Default constructor required for calls to DataSnapshot.getValue when using Firebase
+     */
     public Player() {
-        // Default constructor required for calls to DataSnapshot.getValue
+
     }
 
-    public Player(PlayerID id, String lastName, String firstName, PlayerRank rank) {
+    public Player(PlayerID id, String lastName, String firstName, Rank rank) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -29,12 +36,23 @@ public class Player {
         return firstName;
     }
 
-    public PlayerRank getRank() {
+    public Rank getRank() {
         return rank;
     }
 
-    public void setRank(PlayerRank newRank) {
+    public void setRank(Rank newRank) {
         this.rank = newRank;
+    }
+
+    @Override
+    public Rank average(List<Player> players) {
+        List<Rank> rankList = new ArrayList<>();
+
+        for(Player p: players) {
+            rankList.add(p.rank);
+        }
+        Rank firstElem = rankList.remove(0);
+        return firstElem.average(rankList);
     }
 
     public static class PlayerID extends ID {
@@ -42,13 +60,5 @@ public class Player {
             super(sciper);
         }
         public PlayerID() {}
-    }
-
-    public static class PlayerRank extends Rank {
-        public PlayerRank(int rank) {
-            super(rank);
-        }
-
-        public PlayerRank() { }
     }
 }
