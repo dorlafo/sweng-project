@@ -22,4 +22,9 @@ public final class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void Login(View view) {
+        Intent intent = new Intent(this, Tequila_Login_Activity.class);
+        startActivity(intent);
+    }
+
 }

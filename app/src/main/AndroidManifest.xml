@@ -22,7 +22,8 @@
         </activity>
         <activity android:name=".Tequila_Login_Activity">
             <intent-filter>
-                <data android:scheme="http" android:host="project.sweng.epfl.ch" />
+                <data android:scheme="http"
+                      android:host="tequila.epfl.ch" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />

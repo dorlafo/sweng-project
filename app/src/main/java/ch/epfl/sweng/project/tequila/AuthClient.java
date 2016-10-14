@@ -14,7 +14,7 @@ import android.text.TextUtils;
 public final class AuthClient {
 
     public static String createCodeRequestUrl(OAuth2Config config) {
-        return "https://tequila.epfl.ch/cgi-bin/OAuth2IdP/auth" +
+        return "https://accounts.google.com/o/oauth2/auth" +
                 "?response_type=code" +
                 "&client_id=" + HttpUtils.urlEncode(config.clientId) +
                 "&redirect_uri=" + HttpUtils.urlEncode(config.redirectUri) +
