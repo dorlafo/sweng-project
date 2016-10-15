@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "330152058591",
+    "firebase_url": "https://jass-48d0b.firebaseio.com",
+    "project_id": "jass-48d0b",
+    "storage_bucket": "jass-48d0b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330152058591:android:3d283d7b9bf3b490",
+        "android_client_info": {
+          "package_name": "ch.epfl.sweng.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330152058591-82cui6t4tmt3tcjvmmdq2679blhmujej.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv_ck_NaLNPS92SJqYAU8aVdkB72M0T54"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

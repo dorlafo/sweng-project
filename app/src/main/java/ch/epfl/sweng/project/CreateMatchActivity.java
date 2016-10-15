@@ -5,6 +5,11 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import ch.epfl.sweng.project.model.Match;
+
 public class CreateMatchActivity extends AppCompatActivity {
 
     @Override
@@ -17,4 +22,10 @@ public class CreateMatchActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
+
+    void publishMatch(Match m) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRoot().child("matches");
+        ref.push().setValue(m);
+    }
+
 }

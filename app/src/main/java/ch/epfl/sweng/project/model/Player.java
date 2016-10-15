@@ -1,56 +1,93 @@
 package ch.epfl.sweng.project.model;
 
-public class Player {
-    private final PlayerID id;
-    private final String lastName;
-    private final String firstName;
-    private PlayerRank rank;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Player(PlayerID id, String lastName, String firstName, PlayerRank rank) {
+/**
+ * Player is class that represents a player
+ * It implements the Averageable interface
+ */
+public class Player implements Averageable<Player, Rank> {
+    private PlayerID id;
+    private String lastName;
+    private String firstName;
+    private Rank rank;
+
+    /**
+     * Default constructor required for calls to DataSnapshot.getValue when using Firebase
+     */
+    public Player() {
+    }
+
+    /**
+     * Constructor of the Player class with no default assignement
+     * @param id the id of the player (sciper)
+     * @param lastName the last name of the player
+     * @param firstName the first name of the player
+     * @param rank the rank of the player
+     */
+    public Player(PlayerID id, String lastName, String firstName, Rank rank) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.rank = rank;
     }
 
-    Player(PlayerID id, String lastName, String firstName) {
-        this(id, lastName, firstName, new PlayerRank());
-    }
-
-    public PlayerID getId() {
+    /**
+     * Getter for the id of the player
+     * @return returns the id of the player
+     */
+    public PlayerID getID() {
         return id;
     }
 
+    /**
+     * Getter for the last name of the player
+     * @return returns the last name of the player
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * Getter for the first name of the player
+     * @return returns the first name of the player
+     */
     public String getFirstName() {
         return firstName;
     }
 
-    public PlayerRank getRank() {
+    /**
+     * Getter for the rank of the player
+     * @return returns the rank of the player
+     */
+    public Rank getRank() {
         return rank;
     }
 
-    public void setRank(PlayerRank newRank) {
-        this.rank = newRank;
+    /**
+     * Sets the rank of the player
+     * @param newRank the new value of the rank we have to set
+     */
+    public void setRank(Rank newRank) {
+        rank = newRank;
     }
 
-    private static class PlayerID extends ID {
-        PlayerID(long id) {
-            super(id);
+    @Override
+    public Rank average(List<Player> players) {
+        List<Rank> rankList = new ArrayList<>();
+
+        for(Player p: players) {
+            rankList.add(p.getRank());
         }
+        Rank firstElem = rankList.remove(0);
+        return firstElem.average(rankList);
     }
 
-    private static class PlayerRank extends Rank {
-        PlayerRank(int rank) {
-            super(rank);
+    public static class PlayerID extends ID {
+        public PlayerID(long sciper) {
+            super(sciper);
         }
-
-        PlayerRank() {
-            // TODO get rank of last player
-            super(0);
-        }
+        public PlayerID() {}
     }
 }
