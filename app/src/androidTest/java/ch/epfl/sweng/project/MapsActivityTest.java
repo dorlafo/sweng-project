@@ -19,6 +19,7 @@ public final class MapsActivityTest {
 
     @Test
     public void testSwitchToListFromMap() {
+        activityTestRule.getActivity();
         onView(withId(R.id.switch_to_list)).perform(click());
         onView(withId(android.R.id.list)).check(matches(isEnabled()));
     }

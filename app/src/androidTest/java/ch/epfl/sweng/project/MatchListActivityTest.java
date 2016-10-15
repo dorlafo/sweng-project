@@ -19,6 +19,7 @@ public final class MatchListActivityTest {
 
     @Test
     public void testSwitchToMapFromList() {
+        activityTestRule.getActivity();
         onView(withId(R.id.switch_to_map)).perform(click());
         onView(withId(R.id.switch_to_list)).check(matches(isDisplayed()));
     }
