@@ -17,7 +17,6 @@ public class Player implements Averageable<Player, Rank> {
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase
      */
     public Player() {
-
     }
 
     /**
@@ -71,7 +70,7 @@ public class Player implements Averageable<Player, Rank> {
      * @param newRank the new value of the rank we have to set
      */
     public void setRank(Rank newRank) {
-        this.rank = newRank;
+        rank = newRank;
     }
 
     @Override
@@ -79,7 +78,7 @@ public class Player implements Averageable<Player, Rank> {
         List<Rank> rankList = new ArrayList<>();
 
         for(Player p: players) {
-            rankList.add(p.rank);
+            rankList.add(p.getRank());
         }
         Rank firstElem = rankList.remove(0);
         return firstElem.average(rankList);

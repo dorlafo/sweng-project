@@ -19,7 +19,7 @@ public class Match {
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase
      */
-    Match() {
+    public Match() {
 
     }
 
@@ -38,7 +38,7 @@ public class Match {
                  boolean privateMatch,
                  GameVariant gameVariant,
                  long expirationTime) {
-        this.players = new ArrayList<Player>(players);
+        this.players = new ArrayList<>(players);
         this.location = location;
         this.description = description;
         this.privateMatch = privateMatch;

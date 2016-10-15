@@ -15,6 +15,6 @@ public interface Averageable<T, E> {
      * @param elems the list of elements needed to compute the average
      * @return returns the average of elements
      */
-    public E average(List<T> elems);
+    E average(List<T> elems);
 
 }

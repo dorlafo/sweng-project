@@ -1,9 +1,9 @@
 package ch.epfl.sweng.project.model;
 
-/**
- * Created by vinz on 10/10/16.
- */
 
+/**
+ * Class representing a geographical position.
+ */
 public class GPSPoint {
     private double latitude;
     private double longitude;
@@ -13,6 +13,9 @@ public class GPSPoint {
         this.longitude = longitude;
     }
 
+    /**
+     * Default constructor required for calls to DataSnapshot.getValue when using Firebase
+     */
     public GPSPoint() {
     }
 

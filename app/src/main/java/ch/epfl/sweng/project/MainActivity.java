@@ -20,16 +20,15 @@ import ch.epfl.sweng.project.model.Match;
  * Your app's main activity.
  */
 public final class MainActivity extends AppCompatActivity {
-    Map<String, Match> matches;
-    DatabaseReference dRef;
-    ChildEventListener matchListener;
+    public static Map<String, Match> matches;
+    private DatabaseReference dRef;
+    private ChildEventListener matchListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         retrieveMatchList();
-
     }
 
     public void createMatch(View view) {
@@ -73,7 +72,6 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {
-        }
+        public void onCancelled(DatabaseError databaseError) { }
     }
 }

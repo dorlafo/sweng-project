@@ -34,7 +34,7 @@ public class Rank implements Averageable<Rank, Rank>, Comparable<Rank> {
 
     @Override
     public Rank average(List<Rank> ranks) {
-        int sumRanks = this.rank;
+        int sumRanks = rank;
         int numElem = 1;
 
         for(Rank r: ranks) {
@@ -42,7 +42,7 @@ public class Rank implements Averageable<Rank, Rank>, Comparable<Rank> {
             ++numElem;
         }
 
-        return new Rank(sumRanks);
+        return new Rank(sumRanks / numElem);
     }
 
     @Override
