@@ -10,7 +10,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.res.DummyMatchData;
 import ch.epfl.sweng.project.tools.CustomAdapter;
 
 /**
@@ -30,8 +29,7 @@ public class MatchListActivity extends ListActivity {
 
         // TODO: fix empty list and filter private matches
 
-        //BaseAdapter customAdapter = new CustomAdapter(this, DummyMatchData.dummyMatches());
-        BaseAdapter customAdapter = new CustomAdapter(this, new ArrayList<Match>());
+        BaseAdapter customAdapter = new CustomAdapter(this, new ArrayList<Match>(MainActivity.matches.values()));
 
         listView.setAdapter(customAdapter);
     }

@@ -1,27 +1,25 @@
 package ch.epfl.sweng.project.res;
 
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ch.epfl.sweng.project.model.GPSPoint;
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.model.Match.MatchID;
-import ch.epfl.sweng.project.model.Match.MatchRank;
 import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.model.Player.PlayerID;
 
 public class DummyMatchData {
 
     public static List<Match> dummyMatches() {
-        LatLng rolexCoord = new LatLng(46.518299, 6.568323);
-        LatLng BCCoord = new LatLng(46.518470, 6.561907);
-        LatLng COCoord = new LatLng(46.520050, 6.564625);
-        LatLng swissTechCoord = new LatLng(46.523103, 6.564649);
-        LatLng CECoord = new LatLng(46.520525, 6.569554);
-        LatLng flonCoord = new LatLng(46.520858, 6.629570);
-        LatLng lemanCoord = new LatLng(46.453986, 6.553145);
+        GPSPoint rolexCoord = new GPSPoint(46.518299, 6.568323);
+        GPSPoint BCCoord = new GPSPoint(46.518470, 6.561907);
+        GPSPoint COCoord = new GPSPoint(46.520050, 6.564625);
+        GPSPoint swissTechCoord = new GPSPoint(46.523103, 6.564649);
+        GPSPoint CECoord = new GPSPoint(46.520525, 6.569554);
+        GPSPoint flonCoord = new GPSPoint(46.520858, 6.629570);
+        GPSPoint lemanCoord = new GPSPoint(46.453986, 6.553145);
 
         Player amaury = new Player(new PlayerID(1), "Combes", "Amaury");
         Player vincenzo = new Player(new PlayerID(2), "Bazzucchi", "Vincenzo");
@@ -56,21 +54,21 @@ public class DummyMatchData {
 
         List<Player> match7Players = new ArrayList<>();
 
-        Match match1 = new Match(new MatchID(1), match1Players, rolexCoord,
-                "Rolex", new MatchRank(0), false, null, new Date());
-        Match match2 = new Match(new MatchID(2), match2Players, BCCoord,
-                "BC", new MatchRank(1), false, null, new Date(100, 12, 25));
-        Match match3 = new Match(new MatchID(3), match3Players, COCoord,
-                "CO", new MatchRank(2), false, null, new Date(120, 1, 1));
-        Match match4 = new Match(new MatchID(4), match4Players, swissTechCoord,
-                "SwissTech", new MatchRank(3), true, null, new Date(300, 31, 12));
-        Match match5 = new Match(new MatchID(5), match5Players, CECoord,
-                "CE", new MatchRank(4), false, null, new Date(300, 31, 12));
-        Match match6 = new Match(new MatchID(6), match6Players, flonCoord,
-                "Flon", new MatchRank(5), false, null, new Date(300, 31, 12));
-        Match match7 = new Match(new MatchID(7), match7Players, lemanCoord,
+        Match match1 = new Match(match1Players, rolexCoord,
+                "Rolex", false, null, new Date().getTime());
+        Match match2 = new Match(match2Players, BCCoord,
+                "BC",  false, null, new Date(100, 12, 25).getTime());
+        Match match3 = new Match(match3Players, COCoord,
+                "CO", false, null, new Date(120, 1, 1).getTime());
+        Match match4 = new Match(match4Players, swissTechCoord,
+                "SwissTech", true, null, new Date(300, 31, 12).getTime());
+        Match match5 = new Match(match5Players, CECoord,
+                "CE", false, null, new Date(300, 31, 12).getTime());
+        Match match6 = new Match(match6Players, flonCoord,
+                "Flon", false, null, new Date(300, 31, 12).getTime());
+        Match match7 = new Match(match7Players, lemanCoord,
                 "Cette String est beaucoup trop longue, je me demande si l'affichage va foirer???",
-                new MatchRank(6), false, null, new Date(300, 31, 12));
+                false, null, new Date(300, 31, 12).getTime());
 
         List<Match> matches = new ArrayList<>();
         matches.add(match1);
