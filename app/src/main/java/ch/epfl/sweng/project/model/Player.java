@@ -1,13 +1,9 @@
 package ch.epfl.sweng.project.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Player is class that represents a player
- * It implements the Averageable interface
  */
-public class Player implements Averageable<Player, Rank> {
+public class Player {
     private PlayerID id;
     private String lastName;
     private String firstName;
@@ -88,15 +84,6 @@ public class Player implements Averageable<Player, Rank> {
         return firstName + ' ' + lastName;
     }
 
-    public Rank average(List<Player> players) {
-        List<Rank> rankList = new ArrayList<>();
-
-        for (Player p : players) {
-            rankList.add(p.getRank());
-        }
-        Rank firstElem = rankList.remove(0);
-        return firstElem.average(rankList);
-    }
 
     public static class PlayerRank extends Rank {
         public PlayerRank(int rank) {
