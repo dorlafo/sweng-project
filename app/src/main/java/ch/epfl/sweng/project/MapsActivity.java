@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.model.Match;
+import ch.epfl.sweng.project.res.DummyMatchData;
 import ch.epfl.sweng.project.tools.MatchStringifier;
 
 /**
@@ -140,7 +141,8 @@ public class MapsActivity extends FragmentActivity implements
 
         // TODO: change to use real matches
         // displayNearbyMatches(new ArrayList<Match>());
-        displayNearbyMatches(new ArrayList<Match>(MainActivity.matches.values()));
+        // displayNearbyMatches(new ArrayList<Match>(MainActivity.matches.values()));
+        displayNearbyMatches(DummyMatchData.dummyMatches());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,

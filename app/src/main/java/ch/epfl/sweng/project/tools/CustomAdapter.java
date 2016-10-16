@@ -64,7 +64,7 @@ public class CustomAdapter extends BaseAdapter {
         description.setText(match.getDescription());
         rankData.setText(stringifier.rankToString());
         players.setText(stringifier.playersToString());
-        // variant.setText(stringifier.variantToString()); TODO: implement this
+        variant.setText(stringifier.variantToString());
         expirationDate.setText(stringifier.dateToStringCustom());
 
         return convertView;

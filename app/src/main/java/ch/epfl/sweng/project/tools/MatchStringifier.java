@@ -36,13 +36,13 @@ public final class MatchStringifier {
 
         StringBuilder builder = new StringBuilder(
                 res.getString(R.string.snippet_match_rank))
-                .append(match.getRank().getRank())
+                .append(match.getRank().toSring())
                 .append(newLine)
                 .append(res.getString(R.string.snippet_player_list))
                 .append(playersToString())
                 .append(newLine)
                 .append(res.getString(R.string.snippet_game_variant))
-                //builder.append(match.getGameVariant().toString()) TODO: implement this
+                .append(match.getGameVariant().getVariantName())
                 .append(newLine)
                 .append(res.getString(R.string.snippet_expiration_date))
                 .append(dateToStringCustom());
@@ -71,6 +71,11 @@ public final class MatchStringifier {
     }
 
     public String rankToString() {
-        return Integer.toString(match.getRank().getRank());
+        return match.getRank().toSring();
     }
+
+    public String variantToString() {
+        return match.getGameVariant().getVariantName();
+    }
+
 }

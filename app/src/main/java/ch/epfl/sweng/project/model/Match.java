@@ -120,9 +120,20 @@ public class Match {
     }
 
     /**
-     * GameVariant is an enumaration that represents the various game variant of a match
+     * GameVariant is an enumeration that represents the various game variant of a match
      */
     public enum GameVariant {
-        CLASSIC
+        CLASSIC("Classic");
+
+        private final String variantName;
+
+        private GameVariant(String variantName) {
+            this.variantName = variantName;
+        }
+
+        public String getVariantName() {
+            return variantName;
+        }
+
     }
 }
