@@ -5,11 +5,8 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.model.MatchProvider;
+import ch.epfl.sweng.project.database.MatchProvider;
 
 public class CreateMatchActivity extends AppCompatActivity {
     MatchProvider mProvider;
@@ -27,7 +24,7 @@ public class CreateMatchActivity extends AppCompatActivity {
     }
 
     void publishMatch(Match m) {
-        mProvider.writeMatchToDB(m);
+        mProvider.writeNewMatchToDB(m);
     }
 
 }

@@ -10,7 +10,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.model.Match;
 
 public class MatchProvider {
@@ -33,9 +32,12 @@ public class MatchProvider {
         return matches;
     }
 
-    public void writeMatchToDB(Match matchToWrite) {
-        DatabaseReference whereToWriteRef = dRef.getRoot().child("matches");
-        whereToWriteRef.push().setValue(matchToWrite);
+    public void writeNewMatchToDB(Match matchToWrite) {
+        dRef.push().setValue(matchToWrite);
+    }
+
+    public void updateMatch(String id, Match match) {
+        dRef.child(id).setValue(match);
     }
 
     private class MatchEventListener implements ChildEventListener {

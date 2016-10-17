@@ -5,23 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import ch.epfl.sweng.project.model.GPSPoint;
-import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.model.MatchProvider;
-import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.database.MatchProvider;
 //TODO Remove when tests are done
-import ch.epfl.sweng.project.model.Rank;
+
 
 /**
  * Your app's main activity.
@@ -43,7 +29,7 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        mProvider.stop();
+        mProvider.close();
         super.onStop();
     }
 }
