@@ -32,8 +32,10 @@ public class MatchProvider {
         return matches;
     }
 
-    public void writeNewMatchToDB(Match matchToWrite) {
+    public String writeNewMatchToDB(Match matchToWrite) {
         dRef.push().setValue(matchToWrite);
+        String token = dRef.getKey();
+        return token;
     }
 
     public void updateMatch(String id, Match match) {
