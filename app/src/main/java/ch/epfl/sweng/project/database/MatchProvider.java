@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project.model;
+package ch.epfl.sweng.project.database;
 
 
 import com.google.firebase.database.ChildEventListener;
@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.project.MainActivity;
+import ch.epfl.sweng.project.model.Match;
 
 public class MatchProvider {
     private final Map<String, Match> matches;
@@ -24,7 +25,7 @@ public class MatchProvider {
         dRef.addChildEventListener(matchListener);
     }
 
-    public void stop() {
+    public void close() {
         dRef.removeEventListener(matchListener);
     }
 
