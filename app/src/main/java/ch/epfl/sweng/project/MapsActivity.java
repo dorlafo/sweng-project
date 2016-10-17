@@ -166,7 +166,9 @@ public class MapsActivity extends FragmentActivity implements
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            handleNewLocation(location);
+            if (location != null) {
+                handleNewLocation(location);
+            }
             startLocationUpdates();
         }
     }
