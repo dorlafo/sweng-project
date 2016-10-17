@@ -32,7 +32,6 @@ public class Rank implements Averageable<Rank, Rank>, Comparable<Rank> {
         return Integer.toString(rank);
     }
 
-    @Deprecated
     public int getRank() {
         return rank;
     }
