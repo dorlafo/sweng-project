@@ -47,6 +47,20 @@ public class Match {
         rank = players.remove(0).average(players);
     }
 
+    public Match(List<Player> players,
+                 GPSPoint location,
+                 String description,
+                 boolean privateMatch,
+                 long expirationTime) {
+        this.players = new ArrayList<>(players);
+        this.location = location;
+        this.description = description;
+        this.privateMatch = privateMatch;
+        this.gameVariant = GameVariant.CLASSIC;
+        this.expirationTime = expirationTime;
+        rank = players.remove(0).average(players);
+    }
+
     /**
      * Getter for the players' list of the match
      * @return returns the players' list of the match

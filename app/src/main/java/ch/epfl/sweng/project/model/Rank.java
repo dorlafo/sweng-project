@@ -32,6 +32,11 @@ public class Rank implements Averageable<Rank, Rank>, Comparable<Rank> {
         return Integer.toString(rank);
     }
 
+    @Deprecated
+    public int getRank() {
+        return rank;
+    }
+
     @Override
     public Rank average(List<Rank> ranks) {
         int sumRanks = rank;

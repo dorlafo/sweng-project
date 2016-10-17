@@ -11,24 +11,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.project.model.GPSPoint;
 import ch.epfl.sweng.project.model.Match;
+import ch.epfl.sweng.project.model.MatchProvider;
+import ch.epfl.sweng.project.model.Player;
+//TODO Remove when tests are done
+import ch.epfl.sweng.project.model.Rank;
 
 /**
  * Your app's main activity.
  */
 public final class MainActivity extends AppCompatActivity {
-    public static Map<String, Match> matches;
-    private DatabaseReference dRef;
-    private ChildEventListener matchListener;
+    private MatchProvider mProvider; //TODO convention de nommage pour les providers ? "m" pour match puis "Provider". A décider.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        retrieveMatchList();
+        mProvider = new MatchProvider();
     }
 
     public void createMatch(View view) {
@@ -36,42 +41,9 @@ public final class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void retrieveMatchList() {
-        matches = new HashMap<>();
-        dRef = FirebaseDatabase.getInstance().getReference("matches");
-        matchListener = new MatchEventListener();
-        dRef.addChildEventListener(matchListener);
-    }
-
     @Override
     protected void onStop() {
-        dRef.removeEventListener(matchListener);
+        mProvider.stop();
         super.onStop();
-    }
-
-    private class MatchEventListener implements ChildEventListener {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            Match newMatch = dataSnapshot.getValue(Match.class);
-            matches.put(dataSnapshot.getKey(), newMatch);
-        }
-
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            Match newMatch = dataSnapshot.getValue(Match.class);
-            matches.put(dataSnapshot.getKey(), newMatch);
-        }
-
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-            matches.remove(dataSnapshot.getKey());
-        }
-
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) { }
     }
 }

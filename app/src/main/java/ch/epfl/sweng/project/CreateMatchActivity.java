@@ -9,11 +9,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.sweng.project.model.Match;
+import ch.epfl.sweng.project.model.MatchProvider;
 
 public class CreateMatchActivity extends AppCompatActivity {
+    MatchProvider mProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mProvider = new MatchProvider();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_match);
         Spinner spinner = (Spinner) findViewById(R.id.player_num_spinner);
@@ -24,8 +27,7 @@ public class CreateMatchActivity extends AppCompatActivity {
     }
 
     void publishMatch(Match m) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRoot().child("matches");
-        ref.push().setValue(m);
+        mProvider.writeMatchToDB(m);
     }
 
 }
