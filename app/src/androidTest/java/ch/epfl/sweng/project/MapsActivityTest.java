@@ -12,8 +12,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public final class MapsActivityTest extends
         ActivityInstrumentationTestCase2<MapsActivity> {
 
-    private MapsActivity activity;
-
     public MapsActivityTest() {
         super(MapsActivity.class);
     }
@@ -22,10 +20,10 @@ public final class MapsActivityTest extends
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        activity = getActivity();
     }
 
     public void testSwitchToListFromMap() {
+        getActivity();
         onView(withId(R.id.switch_to_list)).perform(click());
         onView(withId(android.R.id.list)).check(matches(isEnabled()));
     }

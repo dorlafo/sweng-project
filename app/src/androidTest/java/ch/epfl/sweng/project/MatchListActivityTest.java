@@ -12,8 +12,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public final class MatchListActivityTest extends
         ActivityInstrumentationTestCase2<MatchListActivity> {
 
-    private MatchListActivity activity;
-
     public MatchListActivityTest() {
         super(MatchListActivity.class);
     }
@@ -22,10 +20,10 @@ public final class MatchListActivityTest extends
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        activity = getActivity();
     }
 
     public void testSwitchToMapFromList() {
+        getActivity();
         onView(withId(R.id.switch_to_map)).perform(click());
         onView(withId(R.id.switch_to_list)).check(matches(isDisplayed()));
     }
