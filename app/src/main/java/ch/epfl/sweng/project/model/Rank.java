@@ -24,6 +24,15 @@ public class Rank implements Averageable<Rank, Rank>, Comparable<Rank> {
         this.rank = rank;
     }
 
+
+    /**
+     * Getter for the rank
+     * @return returns the rank value
+     */
+    public int getRank() {
+        return rank;
+    }
+
     /**
      * Provides a string representation for the Rank class
      * @return returns a string representation of the Rank class
