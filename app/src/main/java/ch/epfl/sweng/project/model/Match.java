@@ -123,15 +123,30 @@ public class Match {
 
     /**
      * Getter for the creator of the game.
+     *
      * @return the creator of the game
      */
-    public Player createdBy() { return players.get(0); }
+    public Player createdBy() {
+        return players.get(0);
+    }
 
     /**
-     * GameVariant is an enumaration that represents the various game variant of a match
+     * GameVariant is an enumeration that represents the various game variant of a match
      */
     public enum GameVariant {
-        CLASSIC
+        CLASSIC("Classic");
+
+        private final String variantName;
+
+        private GameVariant(String variantName) {
+            this.variantName = variantName;
+        }
+
+        @Override
+        public String toString() {
+            return variantName;
+        }
+
     }
 
     public static final class Builder {

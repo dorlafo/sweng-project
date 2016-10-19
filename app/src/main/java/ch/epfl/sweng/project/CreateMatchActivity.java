@@ -51,7 +51,7 @@ public class CreateMatchActivity extends AppCompatActivity
         Spinner variantSpinner = (Spinner) findViewById(R.id.variant_spinner);
         ArrayAdapter<CharSequence> playerNumAdapter = ArrayAdapter.createFromResource(this,
                 R.array.player_num_array, android.R.layout.simple_spinner_item);
-        //ArrayAdapter<CharSequence> variantAdapter = ArrayAdapter.createFromResource(this,Match.GameVariant.getVariantName(), android.R.layout.simple_spinner_item);
+        //ArrayAdapter<CharSequence> variantAdapter = ArrayAdapter.createFromResource(this,Match.GameVariant.toString(), android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> variantAdapter = ArrayAdapter.createFromResource(this,
                 R.array.variant_array, android.R.layout.simple_spinner_item);
 
