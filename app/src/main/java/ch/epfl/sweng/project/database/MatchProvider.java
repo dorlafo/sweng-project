@@ -38,6 +38,10 @@ public class MatchProvider {
         return token;
     }
 
+    public void deleteMatchFromDB(String token) {
+        dRef.getRoot().child(token).removeValue();
+    }
+
     public void updateMatch(String id, Match match) {
         dRef.child(id).setValue(match);
     }
