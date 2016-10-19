@@ -3,9 +3,11 @@
     <string name="nearby_matches">Nearby Matches</string>
     <string name="create_match">Create Match</string>
     <string name="profile">Profile</string>
+    <string name="menu">Menu</string>
     <string name="ranking">Ranking</string>
     <string name="stats">Stats</string>
     <string name="how_many_players">How many players are you looking for ?</string>
+    <string name="profileTitle">Profile</string>
     <string-array name="player_num_array">
         <item>1</item>
         <item>2</item>
