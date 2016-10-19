@@ -122,6 +122,12 @@ public class Match {
     }
 
     /**
+     * Getter for the creator of the game.
+     * @return the creator of the game
+     */
+    public Player createdBy() { return players.get(0); }
+
+    /**
      * GameVariant is an enumaration that represents the various game variant of a match
      */
     public enum GameVariant {
