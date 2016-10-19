@@ -10,12 +10,14 @@ import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
  * Match is a class that represents
  */
 public class Match {
+
     private List<Player> players;
     private GPSPoint location;
     private String description;
     private Rank rank;
     private boolean privateMatch;
     private GameVariant gameVariant;
+    private short maxPlayerNumber;
     private long expirationTime;
 
     /**
@@ -46,6 +48,7 @@ public class Match {
         this.description = description;
         this.privateMatch = privateMatch;
         this.gameVariant = gameVariant;
+        this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
         this.expirationTime = expirationTime;
         rank = players.remove(0).average(players);
     }
@@ -112,6 +115,10 @@ public class Match {
         return gameVariant;
     }
 
+    public short getMaxPlayerNumber() {
+        return maxPlayerNumber;
+    }
+
     /**
      * Getter for the expiration date of the match
      *
@@ -147,31 +154,47 @@ public class Match {
             return variantName;
         }
 
+        public short getMaxPlayerNumber() {
+            switch (this) {
+                case CLASSIC:
+                    return 4;
+                default:
+                    return 0;
+            }
+        }
+
     }
 
     public static final class Builder {
-        private final long HOUR = 3600 * 1000;
 
         private List<Player> players;
         private GPSPoint location;
         private String description;
         private boolean privateMatch;
         private GameVariant gameVariant;
+        private short maxPlayerNumber;
         private long expirationTime;
 
         public Builder() {
             players = new ArrayList<>();
             location = new GPSPoint(46.520407, 6.565802); // Esplanade
-            description = "New Match";
+            description = "New Match"; // TODO: maybe change this to another default description
             privateMatch = false;
             gameVariant = CLASSIC;
-            expirationTime = 2 * HOUR;
+            maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
+            expirationTime = 2 * 3600 * 1000; // 2 hours
         }
 
         public Builder addPlayer(Player player) {
-            players.add(player);
+            if (players.size() < maxPlayerNumber) {
+                players.add(player);
+            } else {
+                throw new IllegalArgumentException("Match is full.");
+            }
             return this;
         }
+
+        // TODO: add removePlayer method
 
         public Builder setLocation(GPSPoint location) {
             this.location = location;
@@ -190,6 +213,7 @@ public class Match {
 
         public Builder setVariant(GameVariant gameVariant) {
             this.gameVariant = gameVariant;
+            maxPlayerNumber = gameVariant.getMaxPlayerNumber();
             return this;
         }
 
@@ -202,6 +226,8 @@ public class Match {
         public Match build() throws IllegalArgumentException {
             if (players.isEmpty()) {
                 throw new IllegalArgumentException("Cannot create match without any player.");
+            } else if (players.size() > maxPlayerNumber) {
+                throw new IllegalStateException("Too many players.");
             } else {
                 return new Match(players, location, description, privateMatch,
                         gameVariant, expirationTime);
