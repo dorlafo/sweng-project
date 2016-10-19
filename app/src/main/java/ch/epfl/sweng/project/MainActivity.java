@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.CookieManager;
 
 import java.util.Map;
 
@@ -32,6 +33,7 @@ public final class MainActivity extends AppCompatActivity {
     private static String[] scopes = {"Tequila.profile"};
     private static OAuth2Config config = new OAuth2Config(scopes, clientID, clientSecret, redirectUri);
     private static final int REQUEST_CODE_AUTHENTICATE = 0;
+    private boolean logedIn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +44,16 @@ public final class MainActivity extends AppCompatActivity {
     // Creates Menu on top left corner
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.login_menu, menu);
+        getMenuInflater().inflate(R.menu.login_menu, menu);
         return true;
     }
 
-    // Handler for menu items
+    /* Handler for menu items
+     * Usage of deprecated method because the new one require
+     * a minimum of android 21, we set minimum android 15
+     */
     @Override
+    @SuppressWarnings("deprecation")
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Start the WebViewActivity to handle the authentication.
@@ -60,11 +65,27 @@ public final class MainActivity extends AppCompatActivity {
                 return true;
             // Log out.
             case R.id.menu_logout:
-                // TODO: implement log out
-                finish();
+                if(android.os.Build.VERSION.SDK_INT < 21) {
+                    CookieManager.getInstance().removeAllCookie();
+                } else {
+                    CookieManager.getInstance().removeAllCookies(null);
+                }
+                logedIn = false;
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(logedIn) {
+            menu.getItem(0).setVisible(false);
+            menu.getItem(1).setVisible(true);
+        } else {
+            menu.getItem(0).setVisible(true);
+            menu.getItem(1).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -72,7 +93,8 @@ public final class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_CODE_AUTHENTICATE:
                 if (resultCode != RESULT_OK || data == null) {
-                    Log.e("ERR", "ResultCodeErr or no data: " + resultCode);
+                    // Opens dialog box to alert user of the authentication fail
+                    // Allows user to cancel or retry
                     new AlertDialog.Builder(MainActivity.this)
                             .setTitle(R.string.auth_failed)
                             .setMessage(R.string.retry_message)
@@ -86,7 +108,7 @@ public final class MainActivity extends AppCompatActivity {
                             })
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                   // Do nothing
+                                   // Do nothing, goes back to MainActivity
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
@@ -102,8 +124,10 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     /* Fetched token from Tequila server using AuthServer methods
+     * Stores the user profile in Profile object
      * Execute HttpUrlConnection on a separated async thread
      */
+    //TODO: Store profile in profile Objet -> Voir avec Dorian
     private class FetchTokens extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -112,11 +136,8 @@ public final class MainActivity extends AppCompatActivity {
             try {
                 tokens = AuthServer.fetchTokens(config, params[0]);
                 profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
-                System.out.println(profile.firstNames);
-                System.out.println(profile.lastNames);
-                System.out.println(profile.email);
-                System.out.println(profile.gaspar);
-                System.out.println(profile.sciper);
+                logedIn = true;
+                //TODO: Here store in Profile & send to dataBase
             } catch(java.io.IOException e) {
                 Log.e("ERR", "IOException, couldnt fetch token");
             }
