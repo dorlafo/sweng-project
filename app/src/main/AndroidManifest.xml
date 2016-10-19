@@ -6,6 +6,8 @@
      TODO: Depending on your app's features, enable some Android features here
                such as backups or search indexing
     -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -14,19 +16,17 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".CreateMatchActivity">
         </activity>
-        <activity android:name=".Tequila_Login_Activity">
+        <activity android:name=".WebViewActivity" android:label="@string/app_name" >
             <intent-filter>
-                <data android:scheme="http"
-                      android:host="tequila.epfl.ch" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="jassatepfl" android:host="login" />
             </intent-filter>
         </activity>
     </application>

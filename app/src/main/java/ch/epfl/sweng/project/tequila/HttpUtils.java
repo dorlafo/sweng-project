@@ -31,13 +31,18 @@ public final class HttpUtils {
     }
 
     public static <T> T fetch(String url, Class<T> classOfT) throws IOException {
+        InputStream stream = null;
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            InputStream stream = connection.getInputStream();
+            stream = connection.getInputStream();
             String json = new Scanner(stream).useDelimiter("\\A").next();
             return new Gson().fromJson(json, classOfT);
         } catch (MalformedURLException e) {
             throw new AssertionError("The URL is malformed!?");
+        } finally {
+            if (stream != null) {
+                stream.close();
+            }
         }
     }
 }

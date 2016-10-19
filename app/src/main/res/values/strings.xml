@@ -6,6 +6,12 @@
     <string name="ranking">Ranking</string>
     <string name="stats">Stats</string>
     <string name="how_many_players">How many players are you looking for ?</string>
+    <string name="log_in">Log In</string>
+    <string name="log_out">Log Out</string>
+    <string name="auth_failed">Authentication Failed</string>
+    <string name="retry">Retry</string>
+    <string name="retry_message">We weren\'t able to authenticate you. Do you want to retry?</string>
+    <string name="cancel">Cancel</string>
     <string-array name="player_num_array">
         <item>1</item>
         <item>2</item>
