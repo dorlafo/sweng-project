@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -13,6 +14,7 @@ import android.widget.Switch;
 
 import ch.epfl.sweng.project.database.MatchProvider;
 import ch.epfl.sweng.project.model.Match;
+import ch.epfl.sweng.project.model.Match.GameVariant;
 
 public class CreateMatchActivity extends AppCompatActivity
         implements OnClickListener {
@@ -27,7 +29,10 @@ public class CreateMatchActivity extends AppCompatActivity
         mProvider = new MatchProvider();
         matchBuilder = new Match.Builder();
 
-        // getId of all buttons
+        // TODO: add user to player list
+        // matchBuilder.addPlayer(currentUser);
+
+        // TODO: set listener for all buttons
         Button createMatch = (Button) findViewById(R.id.create_create_button);
         createMatch.setOnClickListener(this);
 
@@ -55,6 +60,17 @@ public class CreateMatchActivity extends AppCompatActivity
         variantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         variantSpinner.setAdapter(variantAdapter);
 
+        variantSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Object item = parent.getItemAtPosition(position);
+                matchBuilder.setVariant((GameVariant) item);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
     }
 
