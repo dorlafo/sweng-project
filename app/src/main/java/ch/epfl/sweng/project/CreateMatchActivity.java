@@ -16,11 +16,20 @@ public class CreateMatchActivity extends AppCompatActivity {
         mProvider = new MatchProvider();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_match);
-        Spinner spinner = (Spinner) findViewById(R.id.player_num_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+
+        Spinner playerNumSpinner = (Spinner) findViewById(R.id.player_num_spinner);
+        Spinner variantSpinner = (Spinner) findViewById(R.id.variant_spinner);
+        ArrayAdapter<CharSequence> playerNumAdapter = ArrayAdapter.createFromResource(this,
                 R.array.player_num_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        //ArrayAdapter<CharSequence> variantAdapter = ArrayAdapter.createFromResource(this,Match.GameVariant.getVariantName(), android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> variantAdapter = ArrayAdapter.createFromResource(this,R.array.variant_array, android.R.layout.simple_spinner_item);
+
+        playerNumAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        playerNumSpinner.setAdapter(playerNumAdapter);
+        variantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        variantSpinner.setAdapter(variantAdapter);
+
+
     }
 
     void publishMatch(Match m) {

@@ -13,6 +13,14 @@
     tools:context="ch.epfl.sweng.project.CreateMatchActivity"
     android:weightSum="1">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/match_title"
+        android:textSize="22dp"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +31,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/how_many_players"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textSize="18sp"/>
 
         <Spinner
             android:layout_width="fill_parent"
@@ -31,5 +40,67 @@
             android:id="@+id/player_num_spinner" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="@string/description"
+        android:ems="10"
+        android:id="@+id/description_match_text"
+        android:layout_marginBottom="32dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/private_match"
+            android:textSize="18sp"
+            android:layout_marginBottom="12dp"/>
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/switch_private"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/variant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginBottom="12dp"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/variant_spinner" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:text="@string/validite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/expiration_time_match"/>
+    </LinearLayout>
+
+
 
 </LinearLayout>
