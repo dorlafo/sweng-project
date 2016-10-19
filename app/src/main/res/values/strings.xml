@@ -6,6 +6,7 @@
     <string name="ranking">Ranking</string>
     <string name="stats">Stats</string>
     <string name="how_many_players">How many players are you looking for ?</string>
+    <string name="create">Create Match</string>
     <string-array name="player_num_array">
         <item>1</item>
         <item>2</item>
