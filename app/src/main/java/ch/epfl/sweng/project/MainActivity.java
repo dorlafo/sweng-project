@@ -13,7 +13,8 @@ import ch.epfl.sweng.project.database.MatchProvider;
  * Your app's main activity.
  */
 public final class MainActivity extends AppCompatActivity {
-    private MatchProvider mProvider; //TODO convention de nommage pour les providers ? "m" pour match puis "Provider". A décider.
+    private MatchProvider mProvider;
+    //TODO convention de nommage pour les providers ? "m" pour match puis "Provider". A décider.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

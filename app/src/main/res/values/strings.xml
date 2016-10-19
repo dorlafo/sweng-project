@@ -8,8 +8,18 @@
     <string name="how_many_players">How many players are you looking for ?</string>
     <string name="create">Create Match</string>
     <string-array name="player_num_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+</string-array>
+    <string-array name="variant_array">
+        <item>Classic</item>
+        <item>Pique Double</item>
+        <item>Dourak</item>
     </string-array>
+    <string name="match_title">Recherche de joueurs</string>
+    <string name="private_match">Jeu privé ?</string>
+    <string name="variant">Quel variante de jeu ?</string>
+    <string name="validite">Recherche expirée dans ?</string>
+    <string name="description">Description</string>
 </resources>
