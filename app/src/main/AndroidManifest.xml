@@ -21,7 +21,7 @@
         </activity>
         <activity android:name=".CreateMatchActivity">
         </activity>
-        <activity android:name=".UserProfile">
+        <activity android:name=".UserProfileActivity">
         </activity>
     </application>
 

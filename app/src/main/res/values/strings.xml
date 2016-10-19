@@ -8,6 +8,10 @@
     <string name="stats">Stats</string>
     <string name="how_many_players">How many players are you looking for ?</string>
     <string name="profileTitle">Profile</string>
+    <string name="player_id_label">Player id :</string>
+    <string name="first_name_label">First name :</string>
+    <string name="last_name_label">Last name :</string>
+    <string name="rank_label">Rank :</string>
     <string-array name="player_num_array">
         <item>1</item>
         <item>2</item>

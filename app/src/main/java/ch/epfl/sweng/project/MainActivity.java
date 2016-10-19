@@ -36,6 +36,11 @@ public final class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void viewProfile(View view) {
+        Intent intent = new Intent(this, UserProfileActivity.class);
+        startActivity(intent);
+    }
+
     private void retrieveMatchList() {
         matches = new HashMap<>();
         dRef = FirebaseDatabase.getInstance().getReference("matches");
