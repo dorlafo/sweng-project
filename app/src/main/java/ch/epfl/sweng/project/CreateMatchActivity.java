@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -17,7 +18,8 @@ import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;
 
 public class CreateMatchActivity extends AppCompatActivity
-        implements OnClickListener {
+        implements OnClickListener, OnItemSelectedListener {
+
     private MatchProvider mProvider;
     private Match.Builder matchBuilder;
 
@@ -48,29 +50,20 @@ public class CreateMatchActivity extends AppCompatActivity
         });
 
         Spinner playerNumSpinner = (Spinner) findViewById(R.id.player_num_spinner);
-        Spinner variantSpinner = (Spinner) findViewById(R.id.variant_spinner);
+
         ArrayAdapter<CharSequence> playerNumAdapter = ArrayAdapter.createFromResource(this,
                 R.array.player_num_array, android.R.layout.simple_spinner_item);
-        //ArrayAdapter<CharSequence> variantAdapter = ArrayAdapter.createFromResource(this,Match.GameVariant.toString(), android.R.layout.simple_spinner_item);
-        ArrayAdapter<CharSequence> variantAdapter = ArrayAdapter.createFromResource(this,
-                R.array.variant_array, android.R.layout.simple_spinner_item);
-
         playerNumAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         playerNumSpinner.setAdapter(playerNumAdapter);
+
+        Spinner variantSpinner = (Spinner) findViewById(R.id.variant_spinner);
+
+        ArrayAdapter<GameVariant> variantAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, GameVariant.values());
         variantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         variantSpinner.setAdapter(variantAdapter);
-
-        variantSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Object item = parent.getItemAtPosition(position);
-                matchBuilder.setVariant((GameVariant) item);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        variantSpinner.setOnItemSelectedListener(this);
 
     }
 
@@ -89,8 +82,25 @@ public class CreateMatchActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Object item = parent.getItemAtPosition(position);
+        switch (parent.getId()) {
+            case R.id.variant_spinner:
+                matchBuilder.setVariant((GameVariant) item);
+                break;
+            // TODO: add spinner for expiration date
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     void publishMatch(Match match) {
         mProvider.writeNewMatchToDB(match);
     }
-
 }
