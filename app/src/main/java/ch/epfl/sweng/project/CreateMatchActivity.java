@@ -1,6 +1,8 @@
 package ch.epfl.sweng.project;
 
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,13 +14,19 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 import ch.epfl.sweng.project.database.MatchProvider;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;
+import ch.epfl.sweng.project.tools.TimePickerFragment;
 
-public class CreateMatchActivity extends AppCompatActivity
-        implements OnClickListener, OnItemSelectedListener {
+public class CreateMatchActivity extends AppCompatActivity implements
+        OnClickListener,
+        OnItemSelectedListener,
+        OnTimeSetListener {
 
     private MatchProvider mProvider;
     private Match.Builder matchBuilder;
@@ -41,6 +49,9 @@ public class CreateMatchActivity extends AppCompatActivity
         Button confirmDescription = (Button) findViewById(R.id.description_confirmation);
         confirmDescription.setOnClickListener(this);
 
+        Button timePickerDialog = (Button) findViewById(R.id.time_picker_button);
+        timePickerDialog.setOnClickListener(this);
+
         Switch privacySwitch = (Switch) findViewById(R.id.switch_private);
         privacySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -48,13 +59,6 @@ public class CreateMatchActivity extends AppCompatActivity
                 matchBuilder.setPrivacy(isChecked);
             }
         });
-
-        Spinner playerNumSpinner = (Spinner) findViewById(R.id.player_num_spinner);
-
-        ArrayAdapter<CharSequence> playerNumAdapter = ArrayAdapter.createFromResource(this,
-                R.array.player_num_array, android.R.layout.simple_spinner_item);
-        playerNumAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        playerNumSpinner.setAdapter(playerNumAdapter);
 
         Spinner variantSpinner = (Spinner) findViewById(R.id.variant_spinner);
 
@@ -77,6 +81,10 @@ public class CreateMatchActivity extends AppCompatActivity
                 EditText editDescription = (EditText) findViewById(R.id.description_match_text);
                 matchBuilder.setDescription(editDescription.getText().toString());
                 break;
+            case R.id.time_picker_button:
+                DialogFragment newFragment = new TimePickerFragment();
+                newFragment.show(getSupportFragmentManager(), "timePicker");
+                break;
             default:
                 break;
         }
@@ -89,10 +97,23 @@ public class CreateMatchActivity extends AppCompatActivity
             case R.id.variant_spinner:
                 matchBuilder.setVariant((GameVariant) item);
                 break;
-            // TODO: add spinner for expiration date
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar expirationTime = Calendar.getInstance();
+        expirationTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        expirationTime.set(Calendar.MINUTE, minute);
+
+        final Calendar currentTime = Calendar.getInstance();
+
+        if (expirationTime.compareTo(currentTime) > 0) {
+            matchBuilder.setExpirationTime(expirationTime.getTimeInMillis());
+        }
+        // TODO: warning or error for time before current time
     }
 
     @Override

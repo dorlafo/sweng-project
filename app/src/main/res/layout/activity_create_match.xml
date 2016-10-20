@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_create_match"
@@ -14,6 +14,7 @@
     tools:context="ch.epfl.sweng.project.CreateMatchActivity">
 
     <TextView
+        android:id="@+id/create_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
@@ -22,29 +23,10 @@
         android:textSize="22dp"/>
 
     <LinearLayout
+        android:id="@+id/create_row_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/how_many_players"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/how_many_players"
-            android:textSize="18sp"/>
-
-        <Spinner
-            android:id="@+id/player_num_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_below="@+id/create_title"
         android:orientation="horizontal">
 
         <EditText
@@ -52,7 +34,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:layout_marginRight="50dp"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="@string/description"/>
@@ -66,8 +47,10 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/create_row_privacy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/create_row_description"
         android:orientation="horizontal">
 
         <TextView
@@ -84,8 +67,10 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/create_row_variant"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/create_row_privacy">
 
         <TextView
             android:layout_width="wrap_content"
@@ -101,18 +86,13 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/expiration_time_match"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="time"
-            android:text="@string/validite"/>
-    </LinearLayout>
+    <Button
+        android:id="@+id/time_picker_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/create_row_variant"
+        android:layout_centerHorizontal="true"
+        android:text="@string/validite"/>
 
     <Button
         android:id="@+id/create_create_button"
@@ -122,4 +102,4 @@
         android:layout_centerHorizontal="true"
         android:text="@string/create"/>
 
-</LinearLayout>
+</RelativeLayout>
