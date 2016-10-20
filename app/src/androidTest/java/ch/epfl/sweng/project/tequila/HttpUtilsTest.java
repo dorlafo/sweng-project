@@ -2,15 +2,15 @@ package ch.epfl.sweng.project.tequila;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.junit.Assert;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
-import static org.junit.Assert.fail;
+import static junit.framework.Assert.fail;
+
 
 /**
  * Test for HttpUtils methods
@@ -20,7 +20,6 @@ import static org.junit.Assert.fail;
  * @author Alexis Montavon
  */
 
-@RunWith(JUnit4.class)
 public class HttpUtilsTest {
 
     private static final class JsonProfile {
