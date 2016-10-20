@@ -1,19 +1,25 @@
 package ch.epfl.sweng.project;
 
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -47,10 +53,21 @@ public class CreateMatchActivity extends AppCompatActivity implements
         Button createMatch = (Button) findViewById(R.id.create_create_button);
         createMatch.setOnClickListener(this);
 
-        Button confirmDescription = (Button) findViewById(R.id.description_confirmation);
-        confirmDescription.setOnClickListener(this);
+        final EditText editText = (EditText) findViewById(R.id.description_match_text);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    matchBuilder.setDescription(v.getText().toString());
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
 
-        Button timePickerDialog = (Button) findViewById(R.id.time_picker_button);
+        ImageButton timePickerDialog = (ImageButton) findViewById(R.id.time_picker_button);
         timePickerDialog.setOnClickListener(this);
 
         Button addPlayer = (Button) findViewById(R.id.add_player_button);
@@ -80,10 +97,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
         switch (v.getId()) {
             case R.id.create_create_button:
                 publishMatch(matchBuilder.build());
-                break;
-            case R.id.description_confirmation:
-                EditText editDescription = (EditText) findViewById(R.id.description_match_text);
-                matchBuilder.setDescription(editDescription.getText().toString());
                 break;
             case R.id.time_picker_button:
                 DialogFragment newFragment = new TimePickerFragment();

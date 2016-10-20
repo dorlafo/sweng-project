@@ -10,7 +10,7 @@
     <string name="button_confirmation">OK</string>
     <string name="match_title">Match Information</string>
     <string name="private_match">Private Match</string>
-    <string name="variant">Choose the match variant</string>
+    <string name="variant">Match Variant</string>
     <string name="description">Description</string>
     <string name="add_player_text">Add Player</string>
     <string name="expiration_time_query">Match valid until</string>
