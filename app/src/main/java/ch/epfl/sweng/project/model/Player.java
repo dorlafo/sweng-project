@@ -80,14 +80,19 @@ public class Player implements Averageable<Player, Rank> {
         for(Player p: players) {
             rankList.add(p.getRank());
         }
-        Rank firstElem = rankList.remove(0);
-        return firstElem.average(rankList);
+        if(rankList.isEmpty()) {
+            return rank;
+        } else {
+            Rank firstElem = rankList.remove(0);
+            return firstElem.average(rankList);
+        }
     }
 
     public static class PlayerID extends ID {
         public PlayerID(long sciper) {
             super(sciper);
         }
+
         public PlayerID() {}
     }
 }
