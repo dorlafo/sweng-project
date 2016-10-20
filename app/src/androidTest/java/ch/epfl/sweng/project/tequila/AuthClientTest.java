@@ -1,0 +1,40 @@
+package ch.epfl.sweng.project.tequila;
+
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+/**
+ * Tests for AuthClient methods
+ *
+ * @author Alexis Montavon
+ */
+
+@RunWith(JUnit4.class)
+public class AuthClientTest {
+
+    @Test
+    public void createRightRequestUrl() {
+        String rightSample = "https://tequila.epfl.ch/cgi-bin/OAuth2IdP/auth" +
+                "?response_type=code" +
+                "&client_id=TOTO" +
+                "&redirect_uri=TITI" +
+                "&scope=Tequila.profile";
+        String[] scopes = {"Tequila.profile"};
+        OAuth2Config testConfig = new OAuth2Config(scopes, "TOTO", "TUTU", "TITI");
+        String url = AuthClient.createCodeRequestUrl(testConfig);
+
+        Assert.assertEquals(rightSample, url);
+    }
+
+    @Test
+    public void extractCodeTest() {
+        String rightString = "cestbienlecoderequis112234";
+        String extractMe = "voila%undebut2string&inutilecode=cestbienlecoderequis112234";
+        String extractResult = AuthClient.extractCode(extractMe);
+
+        Assert.assertEquals(rightString, extractResult);
+    }
+}

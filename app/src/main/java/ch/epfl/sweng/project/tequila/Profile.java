@@ -44,12 +44,4 @@ public final class Profile {
         this.firstNames = firstNames;
         this.lastNames = lastNames;
     }
-
-    /*@Override
-    public String toString() {
-        return firstNames + " " + lastNames
-                + "\nsciper: " + sciper
-                + "\ngaspar: " + gaspar
-                + "\nemail: " + email;
-    }*/
 }

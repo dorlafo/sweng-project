@@ -44,7 +44,7 @@ public final class AuthServer {
         JsonProfile profile = HttpUtils.fetch(url, JsonProfile.class);
 
         if (profile.error != null) {
-            throw new IOException("Error from Tequila:" + profile.error);
+            throw new IOException("Error from Tequila: " + profile.error);
         }
 
         return new Profile(profile.sciper, profile.gaspar, profile.email, profile.firstNames, profile.lastNames);
