@@ -8,10 +8,10 @@
     <string name="how_many_players">How many players are you looking for ?</string>
     <string name="create">Create Match</string>
     <string name="button_confirmation">OK</string>
-    <string name="match_title">Recherche de joueurs</string>
-    <string name="private_match">Jeu privé ?</string>
-    <string name="variant">Quel variante de jeu ?</string>
-    <string name="validite">Recherche expirée dans ?</string>
+    <string name="match_title">Match Information</string>
+    <string name="private_match">Private Match</string>
+    <string name="variant">Choose the match variant</string>
     <string name="description">Description</string>
     <string name="add_player_text">Add Player</string>
+    <string name="expiration_time_query">Match valid until</string>
 </resources>
