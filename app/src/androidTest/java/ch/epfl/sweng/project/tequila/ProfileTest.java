@@ -1,9 +1,7 @@
 package ch.epfl.sweng.project.tequila;
 
-import org.junit.Assert;
+import junit.framework.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 /**
  * Test for Profile class
@@ -11,7 +9,6 @@ import org.junit.runners.JUnit4;
  * @author Alexis Montavon
  */
 
-@RunWith(JUnit4.class)
 public class ProfileTest {
 
     @Test

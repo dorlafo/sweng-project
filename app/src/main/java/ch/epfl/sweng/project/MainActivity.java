@@ -30,7 +30,6 @@ import ch.epfl.sweng.project.tequila.Profile;
  */
 public final class MainActivity extends AppCompatActivity {
 
-    //TODO: put all this in a file in git-ignore, ask Nicolas/Vinc
     private static JSONObject jObj = null;
     private static String clientID = null;
     private static String clientSecret = null;
@@ -44,16 +43,6 @@ public final class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        try {
-            JSONObject jObj = new JSONObject(loadJSONFromAsset());
-            clientID = jObj.getString("clientID");
-            clientSecret = jObj.getString("clientSecret");
-            redirectUri = jObj.getString("redirectURI");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        config = new OAuth2Config(scopes, clientID, clientSecret, redirectUri);
     }
 
     // Creates Menu on top left corner
@@ -73,6 +62,16 @@ public final class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Start the WebViewActivity to handle the authentication.
             case R.id.menu_login:
+                // Get credentials from Json file
+                try {
+                    JSONObject jObj = new JSONObject(loadJSONFromAsset());
+                    clientID = jObj.getString("clientID");
+                    clientSecret = jObj.getString("clientSecret");
+                    redirectUri = jObj.getString("redirectURI");
+                } catch (JSONException e) {
+                    finish();
+                }
+                config = new OAuth2Config(scopes, clientID, clientSecret, redirectUri);
                 final String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
                 Intent intent = new Intent(this, WebViewActivity.class);
                 intent.setData(Uri.parse(codeRequestUrl));
