@@ -13,6 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.CookieManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import ch.epfl.sweng.project.tequila.AuthClient;
@@ -26,18 +31,29 @@ import ch.epfl.sweng.project.tequila.Profile;
 public final class MainActivity extends AppCompatActivity {
 
     //TODO: put all this in a file in git-ignore, ask Nicolas/Vinc
-    private static String clientID = "5104e0c64dedd33b9bef2b16@epfl.ch";
-    private static String clientSecret = "b9ef07b6c1cae5ae18cf7401a34da9b4";
-    private static String redirectUri = "jassatepfl://login";
+    private static JSONObject jObj = null;
+    private static String clientID = null;
+    private static String clientSecret = null;
+    private static String redirectUri = null;
     private static String[] scopes = {"Tequila.profile"};
-    private static OAuth2Config config = new OAuth2Config(scopes, clientID, clientSecret, redirectUri);
+    private static OAuth2Config config;
     private static final int REQUEST_CODE_AUTHENTICATE = 0;
-    private boolean logedIn = false;
+    private boolean loggedIn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        try {
+            JSONObject jObj = new JSONObject(loadJSONFromAsset());
+            clientID = jObj.getString("clientID");
+            clientSecret = jObj.getString("clientSecret");
+            redirectUri = jObj.getString("redirectURI");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        config = new OAuth2Config(scopes, clientID, clientSecret, redirectUri);
     }
 
     // Creates Menu on top left corner
@@ -69,7 +85,7 @@ public final class MainActivity extends AppCompatActivity {
                 } else {
                     CookieManager.getInstance().removeAllCookies(null);
                 }
-                logedIn = false;
+                loggedIn = false;
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -77,7 +93,7 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(logedIn) {
+        if(loggedIn) {
             menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(true);
         } else {
@@ -135,13 +151,30 @@ public final class MainActivity extends AppCompatActivity {
             try {
                 tokens = AuthServer.fetchTokens(config, params[0]);
                 profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
-                logedIn = true;
+                loggedIn = true;
                 //TODO: Here store in Profile & send to dataBase
             } catch(java.io.IOException e) {
                 Log.e("ERR", "IOException, couldnt fetch token");
             }
             return "profile retrieved";
         }
+    }
+
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("tequila_credentials.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
     public void createMatch(View view)

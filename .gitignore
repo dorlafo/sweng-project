@@ -48,6 +48,12 @@ captures/
 # Keystore files
 *.jks
 
+# Mac DS_Stroe files
+*.DS_Store
+
+# Tequila credentials
+tequila_credentials.json
+
 ### Android Patch ###
 gen-external-apklibs
 
