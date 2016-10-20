@@ -53,6 +53,7 @@ captures/
 
 # Tequila credentials
 tequila_credentials.json
+app/src/main/assets/*
 
 ### Android Patch ###
 gen-external-apklibs
