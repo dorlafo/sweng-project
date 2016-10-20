@@ -1,5 +1,4 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,7 +10,7 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <ImageButton
         android:id="@+id/switch_to_list"
@@ -23,6 +22,6 @@
         android:layout_marginLeft="@dimen/button_left_margin"
         android:background="@android:color/transparent"
         android:onClick="switchToList"
-        android:src="@drawable/ic_list_black_24px"/>
+        android:src="@drawable/ic_list_black_24px" />
 
 </RelativeLayout>

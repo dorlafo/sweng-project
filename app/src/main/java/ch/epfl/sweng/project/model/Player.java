@@ -93,6 +93,7 @@ public class Player {
         public PlayerRank() {
             // TODO get rank of last player
         }
+
     }
 
     public static class PlayerID extends ID {
@@ -102,6 +103,7 @@ public class Player {
 
         public PlayerID() {
         }
+
     }
 
 }

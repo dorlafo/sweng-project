@@ -1,19 +1,19 @@
 package ch.epfl.sweng.project;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
+import ch.epfl.sweng.project.database.MatchDatabaseInterface;
 import ch.epfl.sweng.project.model.Match;
 
 public class CreateMatchActivity extends AppCompatActivity {
+    MatchDatabaseInterface matchDBInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        matchDBInterface = new MatchDatabaseInterface();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_match);
         Spinner spinner = (Spinner) findViewById(R.id.player_num_spinner);
@@ -24,8 +24,7 @@ public class CreateMatchActivity extends AppCompatActivity {
     }
 
     void publishMatch(Match m) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRoot().child("matches");
-        ref.push().setValue(m);
+        matchDBInterface.writeNewMatch(m);
     }
 
 }

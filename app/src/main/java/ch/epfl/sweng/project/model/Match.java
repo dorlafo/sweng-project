@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
 import static ch.epfl.sweng.project.tools.RankOperationsHelper.averageRank;
 
 /**
@@ -44,16 +45,18 @@ public class Match {
         this.players = new ArrayList<>(players);
         this.location = location;
         this.description = description;
+        rank = averageRank(players);
         this.privateMatch = privateMatch;
         this.gameVariant = gameVariant;
         this.expirationTime = expirationTime;
-        rank = averageRank(players);
     }
 
-    public static class MatchRank extends Rank {
-        public MatchRank(int rank) {
-            super(rank);
-        }
+    public Match(List<Player> players,
+                 GPSPoint location,
+                 String description,
+                 boolean privateMatch,
+                 long expirationTime) {
+        this(players, location, description, privateMatch, CLASSIC, expirationTime);
     }
 
     /**
@@ -119,6 +122,12 @@ public class Match {
         return expirationTime;
     }
 
+    public static class MatchRank extends Rank {
+        public MatchRank(int rank) {
+            super(rank);
+        }
+    }
+
     /**
      * GameVariant is an enumeration that represents the various game variant of a match
      */
@@ -127,7 +136,7 @@ public class Match {
 
         private final String variantName;
 
-        private GameVariant(String variantName) {
+        GameVariant(String variantName) {
             this.variantName = variantName;
         }
 

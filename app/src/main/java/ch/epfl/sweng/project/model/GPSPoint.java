@@ -28,6 +28,7 @@ public class GPSPoint {
     public double getLongitude() {
         return longitude;
     }
+
     public LatLng toLatLng() {
         return new LatLng(latitude, longitude);
     }

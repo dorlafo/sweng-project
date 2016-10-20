@@ -23,6 +23,10 @@ public class Rank implements Comparable<Rank> {
         this.rank = rank;
     }
 
+    public int getRank() {
+        return rank;
+    }
+
     /**
      * Provides a string representation for the Rank class
      *
@@ -41,7 +45,4 @@ public class Rank implements Comparable<Rank> {
         return ((Integer) rank).compareTo(o.rank);
     }
 
-    public int getRank() {
-        return this.rank;
-    }
 }
