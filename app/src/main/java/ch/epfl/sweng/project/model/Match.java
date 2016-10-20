@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -182,7 +183,7 @@ public class Match {
             privateMatch = false;
             gameVariant = CLASSIC;
             maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
-            expirationTime = 2 * 3600 * 1000; // 2 hours
+            expirationTime = Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000; // 2 hours after current time
         }
 
         public Builder addPlayer(Player player) {

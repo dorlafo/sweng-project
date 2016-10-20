@@ -42,7 +42,8 @@ public class CreateMatchActivity extends AppCompatActivity implements
         // TODO: add user to player list
         // matchBuilder.addPlayer(currentUser);
 
-        // TODO: set listener for all buttons
+        // TODO: set match location using GPS or maps view
+
         Button createMatch = (Button) findViewById(R.id.create_create_button);
         createMatch.setOnClickListener(this);
 
