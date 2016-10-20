@@ -1,6 +1,5 @@
 package ch.epfl.sweng.project;
 
-import junit.framework.Assert;
 import static junit.framework.Assert.fail;
 import org.junit.Test;
 
@@ -15,7 +14,10 @@ import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.model.Rank;
 
-public final class MatchProviderTest {
+/**
+ * Test class for the MatchDatabaseInterface
+ */
+public final class MatchDatabaseInterfaceTest {
     private static Player player1 = new Player(new Player.PlayerID(1234), "Keeppo", "Kappa", new Rank(1000));
     private static Player player2 = new Player(new Player.PlayerID(4321), "Lisa", "Bob", new Rank(1500));
     private static Player player3 = new Player(new Player.PlayerID(1111), "Stocrate", "Harry", new Rank(753));
@@ -53,4 +55,6 @@ public final class MatchProviderTest {
             fail("Unable to get comfirmation from the server");
         }
     }
+
+    //TODO in Sprint #4: Test the MatchDatabaseInterface using mocks (mockito)
 }

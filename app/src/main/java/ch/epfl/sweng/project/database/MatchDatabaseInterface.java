@@ -44,6 +44,7 @@ public class MatchDatabaseInterface {
 
     /**
      * Provides the set of match stored in the database
+     *
      * @return returns the matches stored in the database as Map with the id of the match as key and the Match object as
      * value
      */
@@ -53,6 +54,7 @@ public class MatchDatabaseInterface {
 
     /**
      * This method let us write a new match to the Firebase database
+     *
      * @param matchToWrite the new match to write
      * @return returns the token of the match that was just written in the database
      */
@@ -64,6 +66,7 @@ public class MatchDatabaseInterface {
 
     /**
      * This method let us delete a match from the Firebase database
+     *
      * @param token the id of the match that should be deleted
      */
     public void deleteMatch(String token) {
@@ -72,6 +75,7 @@ public class MatchDatabaseInterface {
 
     /**
      * This method let us update (write) a match to the database
+     *
      * @param id the id of the match that should be overwrite
      * @param match the data of the match that should be overwrite
      */
