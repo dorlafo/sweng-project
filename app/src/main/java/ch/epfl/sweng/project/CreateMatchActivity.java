@@ -52,6 +52,9 @@ public class CreateMatchActivity extends AppCompatActivity implements
         Button timePickerDialog = (Button) findViewById(R.id.time_picker_button);
         timePickerDialog.setOnClickListener(this);
 
+        Button addPlayer = (Button) findViewById(R.id.add_player_button);
+        addPlayer.setOnClickListener(this);
+
         Switch privacySwitch = (Switch) findViewById(R.id.switch_private);
         privacySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -84,6 +87,9 @@ public class CreateMatchActivity extends AppCompatActivity implements
             case R.id.time_picker_button:
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getSupportFragmentManager(), "timePicker");
+                break;
+            case R.id.add_player_button:
+                // TODO: add player with player provider
                 break;
             default:
                 break;

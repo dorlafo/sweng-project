@@ -13,4 +13,5 @@
     <string name="variant">Quel variante de jeu ?</string>
     <string name="validite">Recherche expirée dans ?</string>
     <string name="description">Description</string>
+    <string name="add_player_text">Add Player</string>
 </resources>
