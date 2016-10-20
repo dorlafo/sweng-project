@@ -6,14 +6,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.database.MatchProvider;
+import ch.epfl.sweng.project.database.MatchDatabaseInterface;
 
 public class CreateMatchActivity extends AppCompatActivity {
-    MatchProvider mProvider;
+    MatchDatabaseInterface matchDBInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mProvider = new MatchProvider();
+        matchDBInterface = new MatchDatabaseInterface();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_match);
         Spinner spinner = (Spinner) findViewById(R.id.player_num_spinner);
@@ -24,7 +24,7 @@ public class CreateMatchActivity extends AppCompatActivity {
     }
 
     void publishMatch(Match m) {
-        mProvider.writeNewMatchToDB(m);
+        matchDBInterface.writeNewMatch(m);
     }
 
 }

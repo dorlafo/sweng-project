@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import ch.epfl.sweng.project.database.MatchProvider;
+import ch.epfl.sweng.project.database.MatchDatabaseInterface;
 //TODO Remove when tests are done
 
 
@@ -13,13 +13,11 @@ import ch.epfl.sweng.project.database.MatchProvider;
  * Your app's main activity.
  */
 public final class MainActivity extends AppCompatActivity {
-    private MatchProvider mProvider; //TODO convention de nommage pour les providers ? "m" pour match puis "Provider". A décider.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mProvider = new MatchProvider();
     }
 
     public void createMatch(View view) {
@@ -29,7 +27,6 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        mProvider.close();
         super.onStop();
     }
 }
