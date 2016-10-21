@@ -5,7 +5,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,44 +16,19 @@ import ch.epfl.sweng.project.model.Player;
 
 public class UserProvider {
     private final DatabaseReference dRef;
-    //private final ChildEventListener playerListener;
     private final Map<String, Player> players;
-    private final ChildEventListener[] playerListeners;
+    private final List<ChildEventListener> playerListeners;
+    //private final ChildEventListener playerListenerInternal;
 
     //UserProvider constructor
     //Make the connection to the user table
-    public UserProvider(ChildEventListener... playerListeners) {
+    public UserProvider(/*ChildEventListener... playerListeners*/) {
         players = new HashMap<>();
         dRef = FirebaseDatabase.getInstance().getInstance().getReference().child("players");
-        //playerListener = new PlayerEventListener();
-        this.playerListeners = playerListeners;
-        for(ChildEventListener cel : this.playerListeners) {
-            dRef.addChildEventListener(cel);
-        }
-
-        /*
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
-                    Player p = playerSnapshot.getValue(Player.class);
-                    System.out.println("Players updated player: " + p);
-                    players.put(p.getID().toString(), p);
-                }
-                // Get Post object and use the values to update the UI
-                //Player p = dataSnapshot.getValue(Player.class);
-                //players.put(dataSnapshot.getKey(), p);
-            }
-
-
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("onCancelled from ValueEventListener");
-            }
-        };
-        dRef.addListenerForSingleValueEvent(postListener);
-        */
+        ChildEventListener playerListenerInternal = new PlayerEventListener();
+        dRef.addChildEventListener(playerListenerInternal);
+        playerListeners = new ArrayList<>();
+        playerListeners.add(playerListenerInternal);
     }
 
     //Close the connection to the user table
@@ -62,6 +36,7 @@ public class UserProvider {
         for(ChildEventListener cel : playerListeners) {
             dRef.removeEventListener(cel);
         }
+        playerListeners.clear();
     }
 
     //Get the user list
@@ -90,19 +65,22 @@ public class UserProvider {
         dRef.getRoot().child(playerID.toString()).removeValue();
     }
 
-    /*private class PlayerEventListener implements ChildEventListener {
+    public void addEventListener(ChildEventListener cel) {
+        playerListeners.add(cel);
+        dRef.addChildEventListener(cel);
+    }
+
+    private class PlayerEventListener implements ChildEventListener {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             Player p = dataSnapshot.getValue(Player.class);
             players.put(dataSnapshot.getKey(), p);
-            System.out.println("PLAYER-EVENT-LISTENER----: ON-CHILD-ADDED");
         }
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             Player p = dataSnapshot.getValue(Player.class);
             players.put(dataSnapshot.getKey(), p);
-            System.out.println("PLAYER-EVENT-LISTENER----: ON-CHILD-cCHANGED");
         }
 
         @Override
@@ -119,5 +97,5 @@ public class UserProvider {
         public void onCancelled(DatabaseError databaseError) {
             //Nothing specific to do
         }
-    }*/
+    }
 }
