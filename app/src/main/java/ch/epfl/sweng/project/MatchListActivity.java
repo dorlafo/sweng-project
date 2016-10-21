@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 import ch.epfl.sweng.project.res.DummyMatchData;
 import ch.epfl.sweng.project.tools.CustomAdapter;
 

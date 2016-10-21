@@ -1,6 +1,5 @@
 package ch.epfl.sweng.project;
 
-import static junit.framework.Assert.fail;
 import org.junit.Test;
 
 import java.security.ProviderException;
@@ -13,6 +12,8 @@ import ch.epfl.sweng.project.model.GPSPoint;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.model.Rank;
+
+import static junit.framework.Assert.fail;
 
 /**
  * Test class for the MatchDatabaseInterface

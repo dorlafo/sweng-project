@@ -37,8 +37,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
-
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.res.DummyMatchData;
 import ch.epfl.sweng.project.tools.MatchStringifier;

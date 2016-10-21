@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,12 +13,14 @@ import static ch.epfl.sweng.project.tools.RankOperationsHelper.averageRank;
  */
 
 public class Match {
+
     private List<Player> players;
     private GPSPoint location;
     private String description;
     private Rank rank;
     private boolean privateMatch;
     private GameVariant gameVariant;
+    private short maxPlayerNumber;
     private long expirationTime;
 
     /**
@@ -48,6 +51,7 @@ public class Match {
         rank = averageRank(players);
         this.privateMatch = privateMatch;
         this.gameVariant = gameVariant;
+        this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
         this.expirationTime = expirationTime;
     }
 
@@ -113,6 +117,10 @@ public class Match {
         return gameVariant;
     }
 
+    public short getMaxPlayerNumber() {
+        return maxPlayerNumber;
+    }
+
     /**
      * Getter for the expiration date of the match
      *
@@ -129,7 +137,16 @@ public class Match {
     }
 
     /**
-     * GameVariant is an enumeration that represents the various game variant of a match
+     * Getter for the creator of the game.
+     *
+     * @return the creator of the game
+     */
+    public Player createdBy() {
+        return players.get(0);
+    }
+
+    /**
+     * GameVariant is an enumeration that represents the various game variants of a match
      */
     public enum GameVariant {
         CLASSIC("Classic");
@@ -140,8 +157,90 @@ public class Match {
             this.variantName = variantName;
         }
 
-        public String getVariantName() {
+        @Override
+        public String toString() {
             return variantName;
+        }
+
+        public short getMaxPlayerNumber() {
+            switch (this) {
+                case CLASSIC:
+                    return 4;
+                default:
+                    return 0;
+            }
+        }
+
+    }
+
+    public static final class Builder {
+
+        private List<Player> players;
+        private GPSPoint location;
+        private String description;
+        private boolean privateMatch;
+        private GameVariant gameVariant;
+        private short maxPlayerNumber;
+        private long expirationTime;
+
+        public Builder() {
+            players = new ArrayList<>();
+            location = new GPSPoint(46.520407, 6.565802); // Esplanade
+            description = "New Match"; // TODO: maybe change this to another default description
+            privateMatch = false;
+            gameVariant = CLASSIC;
+            maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
+            expirationTime = Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000; // 2 hours after current time
+        }
+
+        public Builder addPlayer(Player player) {
+            if (players.size() < maxPlayerNumber) {
+                players.add(player);
+            } else {
+                throw new IllegalArgumentException("Match is full.");
+            }
+            return this;
+        }
+
+        // TODO: add removePlayer method
+
+        public Builder setLocation(GPSPoint location) {
+            this.location = location;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder setPrivacy(boolean privateMatch) {
+            this.privateMatch = privateMatch;
+            return this;
+        }
+
+        public Builder setVariant(GameVariant gameVariant) {
+            this.gameVariant = gameVariant;
+            maxPlayerNumber = gameVariant.getMaxPlayerNumber();
+            return this;
+        }
+
+        public Builder setExpirationTime(long expirationTime) {
+            this.expirationTime = expirationTime;
+            return this;
+        }
+
+        // TODO: check validity of arguments
+        public Match build() throws IllegalArgumentException {
+            if (players.isEmpty()) {
+                throw new IllegalArgumentException("Cannot create match without any player.");
+            } else if (players.size() > maxPlayerNumber) {
+                throw new IllegalStateException("Too many players.");
+            } else {
+                return new Match(players, location, description, privateMatch,
+                        gameVariant, expirationTime);
+            }
+
         }
 
     }

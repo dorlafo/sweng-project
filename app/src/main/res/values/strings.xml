@@ -5,7 +5,14 @@
     <string name="profile">Profile</string>
     <string name="ranking">Ranking</string>
     <string name="stats">Stats</string>
-    <string name="how_many_players">How many players are you looking for ?</string>
+    <string name="create">Create Match</string>
+    <string name="button_confirmation">OK</string>
+    <string name="match_title">Match Information</string>
+    <string name="private_match">Private Match</string>
+    <string name="variant">Match Variant</string>
+    <string name="description">Description</string>
+    <string name="add_player_text">Add Player</string>
+    <string name="expiration_time_query">Match valid until</string>
     <string name="main_map_button">Map</string>
     <string name="main_list_button">Match list</string>
     <string name="snippet_match_rank">Match Rank:&#160;</string>
@@ -16,10 +23,5 @@
     <string name="empty_match_list">No matches are available.</string>
     <string name="permission_denied">Cannot access location</string>
     <string name="request_rationale">Location information is used to improve your matchmaking experience.</string>
-    <string-array name="player_num_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
     <string name="title_activity_maps">Map</string>
 </resources>

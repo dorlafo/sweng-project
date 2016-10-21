@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 public final class MainActivity extends AppCompatActivity {
+    //TODO convention de nommage pour les providers ? "m" pour match puis "Provider". A décider.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
