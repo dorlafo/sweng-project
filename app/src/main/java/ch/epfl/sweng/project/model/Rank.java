@@ -37,7 +37,7 @@ public class Rank implements Averageable<Rank, Rank>, Comparable<Rank> {
      * Provides a string representation for the Rank class
      * @return returns a string representation of the Rank class
      */
-    public String toSring() {
+    public String toString() {
         return Integer.toString(rank);
     }
 
