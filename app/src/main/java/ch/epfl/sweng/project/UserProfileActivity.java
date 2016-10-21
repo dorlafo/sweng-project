@@ -16,6 +16,7 @@ import java.util.List;
 
 import ch.epfl.sweng.project.database.UserProvider;
 import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.model.Rank;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -78,7 +79,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
         mUserProvider.addEventListener(playerListener);
 
-
         setContentView(R.layout.activity_user_profile);
     }
 
@@ -97,7 +97,6 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onDestroy();
         mUserProvider.close();
     }
-
 
     public void viewMenu(View view) {
         mUserProvider.close();
