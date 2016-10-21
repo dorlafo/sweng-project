@@ -1,12 +1,12 @@
 package ch.epfl.sweng.project;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.database.MatchDatabaseInterface;
+import ch.epfl.sweng.project.model.Match;
 
 public class CreateMatchActivity extends AppCompatActivity {
     MatchDatabaseInterface matchDBInterface;

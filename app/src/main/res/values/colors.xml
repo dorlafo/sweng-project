@@ -3,4 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="listactivity_background_color">#E4E4E4</color>
+    <color name="listview_divider_color">#E4E4E4</color>
 </resources>
