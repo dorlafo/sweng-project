@@ -39,15 +39,13 @@
             android:text="@string/player_id_label"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_below="@+id/twProfileTitle"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:id="@+id/twPlayerID"
             android:textSize="18sp"
             android:textAllCaps="false"
             android:textStyle="normal|bold"
             android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
 
     </LinearLayout>
 
@@ -65,11 +63,9 @@
             android:id="@+id/twLastName"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:layout_below="@+id/twLastName"
-            android:layout_alignLeft="@+id/twLastName"
-            android:layout_alignStart="@+id/twLastName"
             android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -86,11 +82,9 @@
             android:id="@+id/twFirstName"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:layout_below="@+id/twLastName"
-            android:layout_alignLeft="@+id/twLastName"
-            android:layout_alignStart="@+id/twLastName"
             android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
 
     </LinearLayout>
 
@@ -105,14 +99,12 @@
             android:text="@string/rank_label"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_below="@+id/twLastName"
-            android:layout_alignLeft="@+id/twLastName"
-            android:layout_alignStart="@+id/twLastName"
             android:id="@+id/twRank"
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -122,9 +114,6 @@
         android:layout_weight="0.16"
         android:layout_gravity="bottom"
         android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:id="@+id/llButton">
 
         <Button

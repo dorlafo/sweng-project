@@ -54,7 +54,7 @@ public final class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private class MatchEventListener implements ChildEventListener {
+    private static class MatchEventListener implements ChildEventListener {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             Match newMatch = dataSnapshot.getValue(Match.class);

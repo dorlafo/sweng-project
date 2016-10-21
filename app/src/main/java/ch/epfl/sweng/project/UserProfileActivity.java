@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import ch.epfl.sweng.project.database.UserProvider;
 import ch.epfl.sweng.project.model.Player;
@@ -19,8 +20,7 @@ import ch.epfl.sweng.project.model.Player;
 public class UserProfileActivity extends AppCompatActivity {
 
     private final String TAG = "UserProfileActivity";
-    private UserProvider up;
-    private ChildEventListener playerListener;
+    private UserProvider mUserProvider;
     private TextView mtwPlayerID;
     private TextView mtwLastName;
     private TextView mtwFirstName;
@@ -31,12 +31,14 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        up = new UserProvider();
+        mUserProvider = new UserProvider();
 
-        playerListener = new ChildEventListener() {
+        //New ChildEventListener that will change the value of the textView according to the current
+        //logged in user
+        ChildEventListener playerListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if(dataSnapshot.getKey().equals(mUserKey)) {
+                if (dataSnapshot.getKey().equals(mUserKey)) {
                     Player p = dataSnapshot.getValue(Player.class);
                     mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
                     mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
@@ -48,7 +50,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if(dataSnapshot.getKey().equals(mUserKey)) {
+                if (dataSnapshot.getKey().equals(mUserKey)) {
                     Player p = dataSnapshot.getValue(Player.class);
                     mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
                     mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
@@ -74,7 +76,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         };
 
-        up.addEventListener(playerListener);
+        mUserProvider.addEventListener(playerListener);
 
 
         setContentView(R.layout.activity_user_profile);
@@ -93,12 +95,12 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        up.close();
+        mUserProvider.close();
     }
 
 
     public void viewMenu(View view) {
-        up.close();
+        mUserProvider.close();
         finish();
     }
 
@@ -110,7 +112,7 @@ public class UserProfileActivity extends AppCompatActivity {
      * @return The random key chosen between the project member sciper
      */
     private String getRandomKey() {
-        ArrayList<String> keyList = new ArrayList<>();
+        List<String> keyList = new ArrayList<>();
         keyList.add("234832");
         keyList.add("249733");
         keyList.add("245433");
