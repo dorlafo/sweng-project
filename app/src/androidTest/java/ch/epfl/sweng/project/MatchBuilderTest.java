@@ -13,6 +13,7 @@ import ch.epfl.sweng.project.model.Player.PlayerID;
 import ch.epfl.sweng.project.model.Rank;
 
 import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
+import static junit.framework.Assert.fail;
 
 public final class MatchBuilderTest {
     private Match.Builder matchBuilder;
@@ -47,9 +48,13 @@ public final class MatchBuilderTest {
     @Test
     public void buildingWithEmptyPlayerListThrowsException() {
         setUp();
-        ExpectedException exception = ExpectedException.none();
-        exception.expect(IllegalArgumentException.class);
-        matchBuilder.build();
+        try {
+            matchBuilder.build();
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            Assert.assertTrue(e.getMessage().equals("Cannot create match without any player."));
+        }
+
     }
 
     @Test
@@ -68,11 +73,14 @@ public final class MatchBuilderTest {
     public void buildingWithTooManyPlayersThrowsException() {
         setUp();
         matchBuilder.addPlayer(amaury).addPlayer(vincenzo)
-                .addPlayer(dorian).addPlayer(alexis).addPlayer(random);
+                .addPlayer(dorian).addPlayer(alexis);
+        try {
+            matchBuilder.addPlayer(random);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            Assert.assertTrue(e.getMessage().equals("Match is full."));
+        }
 
-        ExpectedException exception = ExpectedException.none();
-        exception.expect(IllegalStateException.class);
-        matchBuilder.build();
     }
 
 }

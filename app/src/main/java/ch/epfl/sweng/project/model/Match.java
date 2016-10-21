@@ -20,7 +20,7 @@ public class Match {
     private Rank rank;
     private boolean privateMatch;
     private GameVariant gameVariant;
-    private short maxPlayerNumber;
+    private int maxPlayerNumber;
     private long expirationTime;
 
     /**
@@ -117,7 +117,7 @@ public class Match {
         return gameVariant;
     }
 
-    public short getMaxPlayerNumber() {
+    public int getMaxPlayerNumber() {
         return maxPlayerNumber;
     }
 
@@ -162,7 +162,7 @@ public class Match {
             return variantName;
         }
 
-        public short getMaxPlayerNumber() {
+        public int getMaxPlayerNumber() {
             switch (this) {
                 case CLASSIC:
                     return 4;
@@ -180,7 +180,7 @@ public class Match {
         private String description;
         private boolean privateMatch;
         private GameVariant gameVariant;
-        private short maxPlayerNumber;
+        private int maxPlayerNumber;
         private long expirationTime;
 
         public Builder() {
