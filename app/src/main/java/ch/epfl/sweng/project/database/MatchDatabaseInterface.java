@@ -76,7 +76,7 @@ public class MatchDatabaseInterface {
     /**
      * This method let us update (write) a match to the database
      *
-     * @param id the id of the match that should be overwrite
+     * @param id    the id of the match that should be overwrite
      * @param match the data of the match that should be overwrite
      */
     public void updateMatch(String id, Match match) {
@@ -92,7 +92,7 @@ public class MatchDatabaseInterface {
 
         @Override
         public void onComplete(DatabaseError error, DatabaseReference ref) {
-            if(error != null) {
+            if (error != null) {
                 throw new ProviderException("Firebase operation did not complete");
 
             }
@@ -128,6 +128,7 @@ public class MatchDatabaseInterface {
         }
 
         @Override
-        public void onCancelled(DatabaseError databaseError) { }
+        public void onCancelled(DatabaseError databaseError) {
+        }
     }
 }

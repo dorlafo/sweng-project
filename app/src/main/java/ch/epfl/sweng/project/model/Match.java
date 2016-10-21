@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
+import static ch.epfl.sweng.project.tools.RankOperationsHelper.averageRank;
+
 /**
  * Match is a class that represents
  */
+
 public class Match {
     private List<Player> players;
     private GPSPoint location;
@@ -20,16 +24,16 @@ public class Match {
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase
      */
     public Match() {
-
     }
 
     /**
      * A constructor of the Match class
-     * @param players the list of players that are subscribed to the match
-     * @param location the location of the match
-     * @param description a brief description of the location of the match
-     * @param privateMatch the visibility of the match (public or private)
-     * @param gameVariant the variant of the match
+     *
+     * @param players        the list of players that are subscribed to the match
+     * @param location       the location of the match
+     * @param description    a brief description of the location of the match
+     * @param privateMatch   the visibility of the match (public or private)
+     * @param gameVariant    the variant of the match
      * @param expirationTime the time at which the match expires
      */
     public Match(List<Player> players,
@@ -41,10 +45,10 @@ public class Match {
         this.players = new ArrayList<>(players);
         this.location = location;
         this.description = description;
+        rank = averageRank(players);
         this.privateMatch = privateMatch;
         this.gameVariant = gameVariant;
         this.expirationTime = expirationTime;
-        rank = players.remove(0).average(players);
     }
 
     public Match(List<Player> players,
@@ -52,17 +56,12 @@ public class Match {
                  String description,
                  boolean privateMatch,
                  long expirationTime) {
-        this.players = new ArrayList<>(players);
-        this.location = location;
-        this.description = description;
-        this.privateMatch = privateMatch;
-        this.gameVariant = GameVariant.CLASSIC;
-        this.expirationTime = expirationTime;
-        rank = players.remove(0).average(players);
+        this(players, location, description, privateMatch, CLASSIC, expirationTime);
     }
 
     /**
      * Getter for the players' list of the match
+     *
      * @return returns the players' list of the match
      */
     public List<Player> getPlayers() {
@@ -71,6 +70,7 @@ public class Match {
 
     /**
      * Getter for the location of the match
+     *
      * @return returns the location of the match in GPS format
      */
     public GPSPoint getLocation() {
@@ -79,6 +79,7 @@ public class Match {
 
     /**
      * Getter for the description of the match
+     *
      * @return returns the description of the match
      */
     public String getDescription() {
@@ -87,6 +88,7 @@ public class Match {
 
     /**
      * Getter for the rank of the match
+     *
      * @return returns the rank of the match
      */
     public Rank getRank() {
@@ -95,6 +97,7 @@ public class Match {
 
     /**
      * Getter for the accessibility of the match
+     *
      * @return returns the accessibility of the match
      */
     public boolean isPrivateMatch() {
@@ -103,6 +106,7 @@ public class Match {
 
     /**
      * Getter for the variant of the match
+     *
      * @return returns the variant of the match
      */
     public GameVariant getGameVariant() {
@@ -111,15 +115,34 @@ public class Match {
 
     /**
      * Getter for the expiration date of the match
+     *
      * @return returns the expiration fate of the match
      */
     public long getExpirationTime() {
         return expirationTime;
     }
 
-    /**
-     * GameVariant is an enumaration that represents the various game variant of a match
-     */
-    public enum GameVariant {CLASSIC}
-}
+    public static class MatchRank extends Rank {
+        public MatchRank(int rank) {
+            super(rank);
+        }
+    }
 
+    /**
+     * GameVariant is an enumeration that represents the various game variant of a match
+     */
+    public enum GameVariant {
+        CLASSIC("Classic");
+
+        private final String variantName;
+
+        GameVariant(String variantName) {
+            this.variantName = variantName;
+        }
+
+        public String getVariantName() {
+            return variantName;
+        }
+
+    }
+}

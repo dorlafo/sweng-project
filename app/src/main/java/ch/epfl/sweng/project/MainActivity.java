@@ -90,6 +90,9 @@ public final class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /* Makes the menu show login
+     * or logout depending on state
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(loggedIn) {
@@ -152,11 +155,16 @@ public final class MainActivity extends AppCompatActivity {
                 profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
                 loggedIn = true;
                 //TODO: Here store in Profile & send to dataBase
-            } catch(java.io.IOException e) {
+            } catch (java.io.IOException e) {
                 Log.e("ERR", "IOException, couldnt fetch token");
             }
             return "profile retrieved";
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     public void createMatch(View view) {
@@ -181,8 +189,15 @@ public final class MainActivity extends AppCompatActivity {
         return json;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+
+    public void displayMatchesOnMap(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
     }
+
+    public void displayMatchesInList(View view) {
+        Intent intent = new Intent(this, MatchListActivity.class);
+        startActivity(intent);
+    }
+
 }
