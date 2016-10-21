@@ -43,7 +43,6 @@
         android:imeOptions="actionDone"
         android:inputType="textImeMultiLine"/>
 
-
     <LinearLayout
         android:id="@+id/create_row_privacy"
         android:layout_width="match_parent"

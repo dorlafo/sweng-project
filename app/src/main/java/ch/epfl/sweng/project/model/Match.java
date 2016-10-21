@@ -6,10 +6,12 @@ import java.util.Collections;
 import java.util.List;
 
 import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
+import static ch.epfl.sweng.project.tools.RankOperationsHelper.averageRank;
 
 /**
  * Match is a class that represents
  */
+
 public class Match {
 
     private List<Player> players;
@@ -25,7 +27,6 @@ public class Match {
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase
      */
     public Match() {
-
     }
 
     /**
@@ -47,11 +48,11 @@ public class Match {
         this.players = new ArrayList<>(players);
         this.location = location;
         this.description = description;
+        rank = averageRank(players);
         this.privateMatch = privateMatch;
         this.gameVariant = gameVariant;
         this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
         this.expirationTime = expirationTime;
-        rank = players.remove(0).average(players);
     }
 
     public Match(List<Player> players,
@@ -129,6 +130,12 @@ public class Match {
         return expirationTime;
     }
 
+    public static class MatchRank extends Rank {
+        public MatchRank(int rank) {
+            super(rank);
+        }
+    }
+
     /**
      * Getter for the creator of the game.
      *
@@ -139,14 +146,14 @@ public class Match {
     }
 
     /**
-     * GameVariant is an enumeration that represents the various game variant of a match
+     * GameVariant is an enumeration that represents the various game variants of a match
      */
     public enum GameVariant {
         CLASSIC("Classic");
 
         private final String variantName;
 
-        private GameVariant(String variantName) {
+        GameVariant(String variantName) {
             this.variantName = variantName;
         }
 
@@ -233,6 +240,7 @@ public class Match {
                 return new Match(players, location, description, privateMatch,
                         gameVariant, expirationTime);
             }
+
         }
 
     }

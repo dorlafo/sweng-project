@@ -1,6 +1,8 @@
 package ch.epfl.sweng.project.model;
 
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Class representing a geographical position.
  */
@@ -25,5 +27,9 @@ public class GPSPoint {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public LatLng toLatLng() {
+        return new LatLng(latitude, longitude);
     }
 }

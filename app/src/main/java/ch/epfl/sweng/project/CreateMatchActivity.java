@@ -24,7 +24,7 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-import ch.epfl.sweng.project.database.MatchProvider;
+import ch.epfl.sweng.project.database.MatchDatabaseInterface;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;
 import ch.epfl.sweng.project.tools.TimePickerFragment;
@@ -34,15 +34,17 @@ public class CreateMatchActivity extends AppCompatActivity implements
         OnItemSelectedListener,
         OnTimeSetListener {
 
-    private MatchProvider mProvider;
+    MatchDatabaseInterface matchDBInterface;
     private Match.Builder matchBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_create_match);
 
-        mProvider = new MatchProvider();
+        matchDBInterface = new MatchDatabaseInterface();
         matchBuilder = new Match.Builder();
 
         // TODO: add user to player list
@@ -142,6 +144,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
     }
 
     void publishMatch(Match match) {
-        mProvider.writeNewMatchToDB(match);
+        matchDBInterface.writeNewMatch(match);
     }
 }

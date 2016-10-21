@@ -8,29 +8,26 @@ import org.junit.Test;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public final class MainActivityTest extends
-        ActivityInstrumentationTestCase2<MainActivity> {
+public final class MapsActivityTest extends
+        ActivityInstrumentationTestCase2<MapsActivity> {
 
-    private MainActivity activity;
-
-    public MainActivityTest() {
-        super(MainActivity.class);
+    public MapsActivityTest() {
+        super(MapsActivity.class);
     }
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        activity = getActivity();
     }
 
     @Test
-    public void createMatchButtonSwitchesToCorrectActivity() {
-        onView(withId(R.id.create_match_button)).perform(click());
-        onView(withId(R.id.create_title)).check(matches(isDisplayed()));
+    public void testSwitchToListFromMap() {
+        getActivity();
+        onView(withId(R.id.switch_to_list)).perform(click());
+        onView(withId(android.R.id.list)).check(matches(isEnabled()));
     }
-
 }

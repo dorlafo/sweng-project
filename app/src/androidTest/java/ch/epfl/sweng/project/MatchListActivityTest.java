@@ -11,26 +11,23 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public final class MainActivityTest extends
-        ActivityInstrumentationTestCase2<MainActivity> {
+public final class MatchListActivityTest extends
+        ActivityInstrumentationTestCase2<MatchListActivity> {
 
-    private MainActivity activity;
-
-    public MainActivityTest() {
-        super(MainActivity.class);
+    public MatchListActivityTest() {
+        super(MatchListActivity.class);
     }
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        activity = getActivity();
     }
 
     @Test
-    public void createMatchButtonSwitchesToCorrectActivity() {
-        onView(withId(R.id.create_match_button)).perform(click());
-        onView(withId(R.id.create_title)).check(matches(isDisplayed()));
+    public void testSwitchToMapFromList() {
+        getActivity();
+        onView(withId(R.id.switch_to_map)).perform(click());
+        onView(withId(R.id.switch_to_list)).check(matches(isDisplayed()));
     }
-
 }

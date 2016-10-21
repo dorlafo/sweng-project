@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/listactivity_background_color"
+    tools:context="ch.epfl.sweng.project.MatchListActivity">
+
+    <LinearLayout
+        android:id="@+id/match_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/listview_layout_margin"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@android:color/background_light"
+            android:divider="@color/listview_divider_color"
+            android:dividerHeight="@dimen/listview_divider_height"
+            android:drawSelectorOnTop="true" />
+
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@+id/empty_match_list"
+            android:textAlignment="center"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/switch_to_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="@dimen/button_bottom_margin"
+        android:layout_marginLeft="@dimen/button_left_margin"
+        android:background="@android:color/transparent"
+        android:onClick="switchToMap"
+        android:src="@drawable/ic_map_black_24px"
+        android:visibility="visible" />
+
+</RelativeLayout>
