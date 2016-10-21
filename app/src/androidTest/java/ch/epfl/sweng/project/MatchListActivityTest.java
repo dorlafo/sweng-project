@@ -3,6 +3,8 @@ package ch.epfl.sweng.project;
 import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
 
+import org.junit.Test;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -22,6 +24,7 @@ public final class MatchListActivityTest extends
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
     }
 
+    @Test
     public void testSwitchToMapFromList() {
         getActivity();
         onView(withId(R.id.switch_to_map)).perform(click());

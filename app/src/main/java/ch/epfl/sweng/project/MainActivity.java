@@ -29,6 +29,7 @@ import ch.epfl.sweng.project.tequila.Profile;
  * Your app's main activity.
  */
 public final class MainActivity extends AppCompatActivity {
+    //TODO convention de nommage pour les providers ? "m" pour match puis "Provider". A décider.
 
     private static JSONObject jObj = null;
     private static String clientID = null;

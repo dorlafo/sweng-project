@@ -42,7 +42,7 @@ public final class MatchStringifier {
                 .append(playersToString())
                 .append(newLine)
                 .append(res.getString(R.string.snippet_game_variant))
-                .append(match.getGameVariant().getVariantName())
+                .append(match.getGameVariant().toString())
                 .append(newLine)
                 .append(res.getString(R.string.snippet_expiration_date))
                 .append(dateToStringCustom());
@@ -75,7 +75,7 @@ public final class MatchStringifier {
     }
 
     public String variantToString() {
-        return match.getGameVariant().getVariantName();
+        return match.getGameVariant().toString();
     }
 
 }
