@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
@@ -25,6 +27,13 @@ import ch.epfl.sweng.project.tequila.AuthServer;
 import ch.epfl.sweng.project.tequila.OAuth2Config;
 import ch.epfl.sweng.project.tequila.Profile;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
 /**
  * Your app's main activity.
  */
@@ -39,11 +48,14 @@ public final class MainActivity extends AppCompatActivity {
     private static OAuth2Config config;
     private static final int REQUEST_CODE_AUTHENTICATE = 0;
     private boolean loggedIn = false;
+    private String TAG = "MainActivity";
+    private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fAuth = FirebaseAuth.getInstance();
     }
 
     // Creates Menu on top left corner
@@ -85,7 +97,7 @@ public final class MainActivity extends AppCompatActivity {
                 return true;
             // Log out.
             case R.id.menu_logout:
-                if(android.os.Build.VERSION.SDK_INT < 21) {
+                if (Build.VERSION.SDK_INT < 21) {
                     CookieManager.getInstance().removeAllCookie();
                 } else {
                     CookieManager.getInstance().removeAllCookies(null);
@@ -101,7 +113,7 @@ public final class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(loggedIn) {
+        if (loggedIn) {
             menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(true);
         } else {
@@ -131,7 +143,7 @@ public final class MainActivity extends AppCompatActivity {
                             })
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                   // Do nothing, goes back to MainActivity
+                                    // Do nothing, goes back to MainActivity
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
@@ -160,12 +172,34 @@ public final class MainActivity extends AppCompatActivity {
                 tokens = AuthServer.fetchTokens(config, params[0]);
                 profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
                 loggedIn = true;
-                //TODO: Here store in Profile & send to dataBase
-            } catch (java.io.IOException e) {
+                authenticateWithFirebase(profile);
+            } catch (IOException e) {
                 Log.e("ERR", "IOException, couldnt fetch token");
             }
             return "profile retrieved";
         }
+    }
+
+
+    private void authenticateWithFirebase(final Profile profile) {
+        // TODO: REPLACE SCIPER WITH HASH
+        fAuth.signInWithEmailAndPassword(profile.email, profile.sciper).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d(TAG, "signInWithEmail:onComplete "  + task.isSuccessful());
+                if (!task.isSuccessful()) {
+                    fAuth.createUserWithEmailAndPassword(profile.email, profile.sciper).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            System.out.println("Signup was successfull? " + task.isSuccessful());
+                            UserProfileChangeRequest.Builder newProfile = new UserProfileChangeRequest.Builder();
+                            newProfile.setDisplayName(profile.sciper);
+                            fAuth.getCurrentUser().updateProfile(newProfile.build());
+                        }
+                    });
+                }
+            }
+        });
     }
 
     public void createMatch(View view) {
