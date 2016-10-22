@@ -1,12 +1,9 @@
 # Gradle
-/build
+app/build
 
 # Android Studio
 *.iml
 /local.properties
-/.idea/gradle.xml
-/.idea/workspace.xml
-/.idea/libraries
 /app/app.iml
 /.gradle/*
 
@@ -47,9 +44,15 @@ captures/
 # Keystore files
 *.jks
 
+# Mac DS_Stroe files
+*.DS_Store
+
+# Tequila credentials
+tequila_credentials.json
+app/src/main/assets/*
+
 ### Android Patch ###
 gen-external-apklibs
 
 ## MACOS
 *.DS_Store
-

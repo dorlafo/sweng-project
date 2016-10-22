@@ -54,7 +54,7 @@ public class UserProvider {
     /**
      * Getter for a player with a specific ID
      * @param playerID the ID for the player we want to retrieve
-     * @return A player or NULL if the player is not in the liste
+     * @return A player or NULL if the player is not in the list
      */
     public Player getPlayerWithID(Player.PlayerID playerID) {
         return players.get(playerID.toString());
@@ -98,7 +98,7 @@ public class UserProvider {
     }
 
     /**
-     * EventListener that modify the players hashmap when new data come from database
+     * EventListener that modify the players hash map when new data come from database
      */
     private class PlayerEventListener implements ChildEventListener {
         @Override

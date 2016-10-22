@@ -1,13 +1,9 @@
 package ch.epfl.sweng.project.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Player is class that represents a player
- * It implements the Averageable interface
  */
-public class Player implements Averageable<Player, Rank> {
+public class Player {
     private PlayerID id;
     private String lastName;
     private String firstName;
@@ -24,7 +20,7 @@ public class Player implements Averageable<Player, Rank> {
      * @param id the id of the player (sciper)
      * @param lastName the last name of the player
      * @param firstName the first name of the player
-     * @param rank the rank of the player
+     * @param rank      the rank of the player
      */
     public Player(PlayerID id, String lastName, String firstName, Rank rank) {
         this.id = id;
@@ -33,8 +29,13 @@ public class Player implements Averageable<Player, Rank> {
         this.rank = rank;
     }
 
+    public Player(PlayerID id, String lastName, String firstName) {
+        this(id, lastName, firstName, new PlayerRank(0));
+    }
+
     /**
      * Getter for the id of the player
+     *
      * @return returns the id of the player
      */
     public PlayerID getID() {
@@ -43,6 +44,7 @@ public class Player implements Averageable<Player, Rank> {
 
     /**
      * Getter for the last name of the player
+     *
      * @return returns the last name of the player
      */
     public String getLastName() {
@@ -51,6 +53,7 @@ public class Player implements Averageable<Player, Rank> {
 
     /**
      * Getter for the first name of the player
+     *
      * @return returns the first name of the player
      */
     public String getFirstName() {
@@ -59,6 +62,7 @@ public class Player implements Averageable<Player, Rank> {
 
     /**
      * Getter for the rank of the player
+     *
      * @return returns the rank of the player
      */
     public Rank getRank() {
@@ -67,6 +71,7 @@ public class Player implements Averageable<Player, Rank> {
 
     /**
      * Sets the rank of the player
+     *
      * @param newRank the new value of the rank we have to set
      */
     public void setRank(Rank newRank) {
@@ -74,20 +79,30 @@ public class Player implements Averageable<Player, Rank> {
     }
 
     @Override
-    public Rank average(List<Player> players) {
-        List<Rank> rankList = new ArrayList<>();
+    public String toString() {
+        return firstName + ' ' + lastName;
+    }
 
-        for(Player p: players) {
-            rankList.add(p.getRank());
+
+    public static class PlayerRank extends Rank {
+        public PlayerRank(int rank) {
+            super(rank);
         }
-        Rank firstElem = rankList.remove(0);
-        return firstElem.average(rankList);
+
+        public PlayerRank() {
+            // TODO get rank of last player
+        }
+
     }
 
     public static class PlayerID extends ID {
-        public PlayerID(long sciper) {
-            super(sciper);
+        public PlayerID(long id) {
+            super(id);
         }
-        public PlayerID() {}
+
+        public PlayerID() {
+        }
+
     }
+
 }
