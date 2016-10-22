@@ -17,8 +17,9 @@ public class Player {
 
     /**
      * Constructor of the Player class with no default assignment
-     * @param id the id of the player (sciper)
-     * @param lastName the last name of the player
+     *
+     * @param id        the id of the player (sciper)
+     * @param lastName  the last name of the player
      * @param firstName the first name of the player
      * @param rank      the rank of the player
      */

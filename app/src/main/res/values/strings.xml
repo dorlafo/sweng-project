@@ -11,6 +11,12 @@
     <string name="first_name_label">First name :</string>
     <string name="last_name_label">Last name :</string>
     <string name="rank_label">Rank :</string>
+    <string name="log_in">Log In</string>
+    <string name="log_out">Log Out</string>
+    <string name="auth_failed">Authentication Failed</string>
+    <string name="retry">Retry</string>
+    <string name="retry_message">We weren\'t able to authenticate you. Do you want to retry?</string>
+    <string name="cancel">Cancel</string>
     <string name="create">Create Match</string>
     <string name="button_confirmation">OK</string>
     <string name="match_title">Match Information</string>
