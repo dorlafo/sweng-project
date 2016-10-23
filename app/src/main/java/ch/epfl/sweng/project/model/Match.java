@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
 import static ch.epfl.sweng.project.tools.RankOperationsHelper.averageRank;
@@ -128,6 +129,32 @@ public class Match {
      */
     public long getExpirationTime() {
         return expirationTime;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        } else if (other == null || other.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Match otherMatch = (Match) other;
+
+        return this.players.equals(otherMatch.players) // does order matter?
+                && this.location.equals(otherMatch.location)
+                && this.description.equals(otherMatch.description)
+                // compare rank?
+                && this.privateMatch == otherMatch.privateMatch
+                && this.gameVariant == otherMatch.gameVariant
+                && this.maxPlayerNumber == otherMatch.maxPlayerNumber
+                && this.expirationTime == otherMatch.expirationTime;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(players, location, description, privateMatch,
+                gameVariant, maxPlayerNumber, expirationTime);
     }
 
     public static class MatchRank extends Rank {
