@@ -23,7 +23,7 @@ public final class MatchDatabaseInterfaceTest {
     private static Player player2 = new Player(new Player.PlayerID(4321), "Lisa", "Bob", new Rank(1500));
     private static Player player3 = new Player(new Player.PlayerID(1111), "Stocrate", "Harry", new Rank(753));
     private static Player player4 = new Player(new Player.PlayerID(1111), "Gole", "Jerry", new Rank(2153));
-    private static List<Player> playerList1 = new ArrayList<Player>(Arrays.asList(player1, player2));
+    private static List<Player> playerList1 = new ArrayList<>(Arrays.asList(player1, player2));
     private static GPSPoint location1 = new GPSPoint(40.3, 23.2);
     private static Match match1 = new Match(playerList1, location1, "tout au bout de mes rêves", false, 614430);
 

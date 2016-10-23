@@ -36,7 +36,7 @@ public final class MatchStringifier {
 
         StringBuilder builder = new StringBuilder(
                 res.getString(R.string.snippet_match_rank))
-                .append(match.getRank().toSring())
+                .append(match.getRank().toString())
                 .append(newLine)
                 .append(res.getString(R.string.snippet_player_list))
                 .append(playersToString())
@@ -71,7 +71,7 @@ public final class MatchStringifier {
     }
 
     public String rankToString() {
-        return match.getRank().toSring();
+        return match.getRank().toString();
     }
 
     public String variantToString() {

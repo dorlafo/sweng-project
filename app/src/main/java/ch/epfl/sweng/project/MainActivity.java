@@ -2,11 +2,11 @@ package ch.epfl.sweng.project;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +51,11 @@ public final class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.login_menu, menu);
         return true;
+    }
+
+    public void viewProfile(View view) {
+        Intent intent = new Intent(this, UserProfileActivity.class);
+        startActivity(intent);
     }
 
     /* Handler for menu items
@@ -163,11 +168,6 @@ public final class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
     public void createMatch(View view) {
         Intent intent = new Intent(this, CreateMatchActivity.class);
         startActivity(intent);
@@ -200,5 +200,4 @@ public final class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MatchListActivity.class);
         startActivity(intent);
     }
-
 }

@@ -3,8 +3,14 @@
     <string name="nearby_matches">Nearby Matches</string>
     <string name="create_match">Create Match</string>
     <string name="profile">Profile</string>
+    <string name="menu">Menu</string>
     <string name="ranking">Ranking</string>
     <string name="stats">Stats</string>
+    <string name="profileTitle">Profile</string>
+    <string name="player_id_label">Player id :</string>
+    <string name="first_name_label">First name :</string>
+    <string name="last_name_label">Last name :</string>
+    <string name="rank_label">Rank :</string>
     <string name="log_in">Log In</string>
     <string name="log_out">Log Out</string>
     <string name="auth_failed">Authentication Failed</string>

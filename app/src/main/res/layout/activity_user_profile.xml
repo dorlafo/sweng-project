@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_user_profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.16"
+        android:id="@+id/llTitle">
+
+        <TextView
+            android:text="@string/profileTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/twProfileTitle"
+            android:gravity="center_vertical|center_horizontal"
+            android:textStyle="normal|bold"
+            android:textSize="30sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.16"
+        android:id="@+id/llPlayerID">
+
+        <TextView
+            android:text="@string/player_id_label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/twPlayerID"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textStyle="normal|bold"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.16"
+        android:id="@+id/llLastName">
+
+        <TextView
+            android:text="@string/last_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/twLastName"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.16"
+        android:id="@+id/llFirstName">
+
+        <TextView
+            android:text="@string/first_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/twFirstName"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.16"
+        android:id="@+id/llRank">
+
+        <TextView
+            android:text="@string/rank_label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/twRank"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="0.16"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:id="@+id/llButton">
+
+        <Button
+            android:text="@string/menu"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/menu_button"
+            android:background = "@drawable/roundedbutton"
+            android:onClick="viewMenu"/>
+
+        <Button
+            android:text="@string/ranking"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/ranking_button"
+            android:background = "@drawable/roundedbutton"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp" />
+
+        <Button
+            android:text="@string/stats"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/statistics_button"
+            android:background = "@drawable/roundedbutton" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

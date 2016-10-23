@@ -18,4 +18,8 @@ abstract class ID {
     public long getID() {
         return id;
     }
+
+    public String toString() {
+        return Long.toString(id);
+    }
 }

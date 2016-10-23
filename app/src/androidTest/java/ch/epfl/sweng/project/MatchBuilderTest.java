@@ -3,7 +3,6 @@ package ch.epfl.sweng.project;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.util.Calendar;
 

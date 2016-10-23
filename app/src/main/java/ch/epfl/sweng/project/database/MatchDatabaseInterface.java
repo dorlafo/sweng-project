@@ -60,8 +60,7 @@ public class MatchDatabaseInterface {
      */
     public String writeNewMatch(Match matchToWrite) {
         dRef.push().setValue(matchToWrite, completionListener);
-        String token = dRef.getKey();
-        return token;
+        return dRef.getKey();
     }
 
     /**
