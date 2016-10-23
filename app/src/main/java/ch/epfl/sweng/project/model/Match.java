@@ -165,15 +165,16 @@ public class Match {
         public int getMaxPlayerNumber() {
             switch (this) {
                 case CLASSIC:
-                    return 4;
                 default:
-                    return 0;
+                    return 4;
             }
         }
 
     }
 
     public static final class Builder {
+
+        public static final String DEFAULT_DESCRIPTION = "New Match";
 
         private List<Player> players;
         private GPSPoint location;
@@ -186,7 +187,7 @@ public class Match {
         public Builder() {
             players = new ArrayList<>();
             location = new GPSPoint(46.520407, 6.565802); // Esplanade
-            description = "New Match"; // TODO: maybe change this to another default description
+            description = DEFAULT_DESCRIPTION;
             privateMatch = false;
             gameVariant = CLASSIC;
             maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
@@ -194,10 +195,11 @@ public class Match {
         }
 
         public Builder addPlayer(Player player) {
-            if (players.size() < maxPlayerNumber) {
+            if (players.size() >= maxPlayerNumber) {
+                throw new IllegalStateException("Match is full.");
+            }
+            if (!players.contains(player)) {
                 players.add(player);
-            } else {
-                throw new IllegalArgumentException("Match is full.");
             }
             return this;
         }
@@ -231,16 +233,15 @@ public class Match {
         }
 
         // TODO: check validity of arguments
-        public Match build() throws IllegalArgumentException {
+        public Match build() throws IllegalStateException {
             if (players.isEmpty()) {
-                throw new IllegalArgumentException("Cannot create match without any player.");
+                throw new IllegalStateException("Cannot create match without any player.");
             } else if (players.size() > maxPlayerNumber) {
                 throw new IllegalStateException("Too many players.");
             } else {
                 return new Match(players, location, description, privateMatch,
                         gameVariant, expirationTime);
             }
-
         }
 
     }
