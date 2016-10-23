@@ -2,16 +2,14 @@ package ch.epfl.sweng.project.model;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.model.Player.PlayerID;
-import ch.epfl.sweng.project.model.Rank;
 
 import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertNotEquals;
@@ -34,6 +32,15 @@ public final class MatchBuilderTest {
         matchBuilder.addPlayer(amaury);
         Match match = matchBuilder.build();
 
+        List<Player> players = new ArrayList<>();
+        players.add(amaury);
+        Match defaultMatch = new Match(players, new GPSPoint(46.520407, 6.565802),
+                Match.Builder.DEFAULT_DESCRIPTION, false, CLASSIC,
+                Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000);
+
+        assertEquals(defaultMatch, match);
+
+        /*
         assertFalse(match.getPlayers().isEmpty());
         assertEquals(46.520407, match.getLocation().getLatitude());
         assertEquals(6.565802, match.getLocation().getLongitude());
@@ -44,6 +51,28 @@ public final class MatchBuilderTest {
         assertEquals(4, match.getMaxPlayerNumber());
         assertEquals(Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000,
                 match.getExpirationTime(), 10);
+        */
+    }
+
+    @Test
+    public void builderSetsFieldsCorrectly() {
+        setUp();
+        matchBuilder.addPlayer(amaury);
+
+        GPSPoint newLocation = new GPSPoint(33.02245, 15.04457);
+        String newDescription = "This is gonna be a great match!";
+        long newExpirationTime = Calendar.getInstance().getTimeInMillis()
+                + 24 * 3600 * 1000;
+
+        matchBuilder.setLocation(newLocation).setDescription(newDescription)
+                .setPrivacy(true).setExpirationTime(newExpirationTime);
+
+        Match setMatch = matchBuilder.build();
+
+        assertEquals(newLocation, setMatch.getLocation());
+        assertEquals(newDescription, setMatch.getDescription());
+        assertTrue(setMatch.isPrivateMatch());
+        assertEquals(newExpirationTime, setMatch.getExpirationTime(), 10);
     }
 
     @Test
