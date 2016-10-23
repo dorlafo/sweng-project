@@ -46,7 +46,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
     MatchDatabaseInterface matchDBInterface;
     UserProvider userProvider;
     String currentUserId;
-    Button createMatch;
+    Button createMatchButton;
 
     private Match.Builder matchBuilder;
     private static final String TAG = CreateMatchActivity.class.getSimpleName();
@@ -63,9 +63,9 @@ public class CreateMatchActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_create_match);
         // TODO: set match location using GPS or maps view
 
-        createMatch = (Button) findViewById(R.id.create_create_button);
-        createMatch.setEnabled(false);
-        createMatch.setOnClickListener(this);
+        createMatchButton = (Button) findViewById(R.id.create_create_button);
+        createMatchButton.setEnabled(false);
+        createMatchButton.setOnClickListener(this);
 
         final EditText editText = (EditText) findViewById(R.id.description_match_text);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -168,7 +168,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             if (dataSnapshot.getKey().equals(currentUserId)) {
-                createMatch.setEnabled(true);
+                createMatchButton.setEnabled(true);
             }
         }
 
