@@ -60,6 +60,14 @@ public class UserProvider {
         return players.get(playerID.toString());
     }
 
+    /**
+     * Getter for a player with a specific ID
+     * @param playerID the ID for the player we want to retrieve
+     * @return A player or NULL if the player is not in the list
+     */
+    public Player getPlayerWithID(String playerID) {
+        return players.get(playerID);
+    }
 
     /**
      * Add a player to the database
