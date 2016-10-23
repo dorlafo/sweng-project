@@ -1,7 +1,5 @@
 package ch.epfl.sweng.project;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -12,7 +10,11 @@ import ch.epfl.sweng.project.model.Player.PlayerID;
 import ch.epfl.sweng.project.model.Rank;
 
 import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
+import static org.junit.Assert.assertNotEquals;
 
 public final class MatchBuilderTest {
     private Match.Builder matchBuilder;
@@ -32,15 +34,15 @@ public final class MatchBuilderTest {
         matchBuilder.addPlayer(amaury);
         Match match = matchBuilder.build();
 
-        Assert.assertFalse(match.getPlayers().isEmpty());
-        Assert.assertEquals(46.520407, match.getLocation().getLatitude());
-        Assert.assertEquals(6.565802, match.getLocation().getLongitude());
-        Assert.assertEquals("New Match", match.getDescription());
-        Assert.assertEquals(123, match.getRank().getRank());
-        Assert.assertFalse(match.isPrivateMatch());
-        Assert.assertEquals(CLASSIC, match.getGameVariant());
-        Assert.assertEquals(4, match.getMaxPlayerNumber());
-        Assert.assertEquals(Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000,
+        assertFalse(match.getPlayers().isEmpty());
+        assertEquals(46.520407, match.getLocation().getLatitude());
+        assertEquals(6.565802, match.getLocation().getLongitude());
+        assertEquals(Match.Builder.DEFAULT_DESCRIPTION, match.getDescription());
+        assertEquals(123, match.getRank().getRank());
+        assertFalse(match.isPrivateMatch());
+        assertEquals(CLASSIC, match.getGameVariant());
+        assertEquals(4, match.getMaxPlayerNumber());
+        assertEquals(Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000,
                 match.getExpirationTime(), 10);
     }
 
@@ -49,37 +51,53 @@ public final class MatchBuilderTest {
         setUp();
         try {
             matchBuilder.build();
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            Assert.assertTrue(e.getMessage().equals("Cannot create match without any player."));
+            fail("Expected IllegalStateException");
+        } catch (IllegalStateException e) {
+            assertTrue(e.getMessage().equals("Cannot create match without any player."));
         }
-
     }
 
     @Test
-    public void builderCorrectlyAddsPlayer() {
+    public void builderCorrectlyAddsPlayers() {
         setUp();
         matchBuilder.addPlayer(amaury);
+        matchBuilder.addPlayer(vincenzo);
         Match match = matchBuilder.build();
 
-        Player player = match.getPlayers().get(0);
+        Player player1 = match.getPlayers().get(0);
+        Player player2 = match.getPlayers().get(1);
 
-        Assert.assertEquals("Amaury", player.getFirstName());
-        Assert.assertEquals("Combes", player.getLastName());
+        assertEquals(amaury, player1);
+        assertEquals(vincenzo, player2);
     }
 
     @Test
-    public void buildingWithTooManyPlayersThrowsException() {
+    public void builderDoesNotAddTheSamePlayerTwice() {
+        setUp();
+        matchBuilder.addPlayer(amaury).addPlayer(amaury)
+                .addPlayer(vincenzo).addPlayer(vincenzo);
+        Match match = matchBuilder.build();
+
+        Player player1 = match.getPlayers().get(0);
+        Player player2 = match.getPlayers().get(1);
+
+        assertEquals(2, match.getPlayers().size());
+        assertEquals(amaury, player1);
+        assertNotEquals(amaury, player2);
+        assertEquals(vincenzo, player2);
+    }
+
+    @Test
+    public void addingTooManyPlayersThrowsException() {
         setUp();
         matchBuilder.addPlayer(amaury).addPlayer(vincenzo)
                 .addPlayer(dorian).addPlayer(alexis);
         try {
             matchBuilder.addPlayer(random);
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            Assert.assertTrue(e.getMessage().equals("Match is full."));
+            fail("Expected IllegalStateException");
+        } catch (IllegalStateException e) {
+            assertTrue(e.getMessage().equals("Match is full."));
         }
-
     }
 
 }
