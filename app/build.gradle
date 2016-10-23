@@ -37,6 +37,12 @@ android {
     return void
 }
 
+repositories {
+    maven {
+        url  "http://dl.bintray.com/mockito/maven"
+    }
+}
+
 dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
 
@@ -48,6 +54,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:9.6.1'
     compile 'com.google.firebase:firebase-messaging:9.6.1'
     compile 'com.firebaseui:firebase-ui-database:0.6.1'
+    compile 'org.mockito:mockito-core:2.2.5'
 
     testCompile 'junit:junit:4.12'
 
