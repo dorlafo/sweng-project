@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import ch.epfl.sweng.project.database.UserProvider;
+import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.tequila.AuthClient;
 import ch.epfl.sweng.project.tequila.AuthServer;
 import ch.epfl.sweng.project.tequila.OAuth2Config;
@@ -31,7 +33,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 /**
@@ -48,7 +49,7 @@ public final class MainActivity extends AppCompatActivity {
     private static OAuth2Config config;
     private static final int REQUEST_CODE_AUTHENTICATE = 0;
     private boolean loggedIn = false;
-    private String TAG = "MainActivity";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private FirebaseAuth fAuth;
 
     @Override
@@ -186,15 +187,22 @@ public final class MainActivity extends AppCompatActivity {
         fAuth.signInWithEmailAndPassword(profile.email, profile.sciper).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "signInWithEmail:onComplete "  + task.isSuccessful());
+                Log.d(TAG, "signInWithEmail:onComplete " + task.isSuccessful());
+                fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
                 if (!task.isSuccessful()) {
                     fAuth.createUserWithEmailAndPassword(profile.email, profile.sciper).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            System.out.println("Signup was successfull? " + task.isSuccessful());
-                            UserProfileChangeRequest.Builder newProfile = new UserProfileChangeRequest.Builder();
-                            newProfile.setDisplayName(profile.sciper);
-                            fAuth.getCurrentUser().updateProfile(newProfile.build());
+                            Log.d(TAG, "Signup was successfull? " + task.isSuccessful());
+                            if (task.isSuccessful()) {
+                                UserProvider userProvider = new UserProvider();
+                                userProvider.addPlayer(new Player(
+                                        new Player.PlayerID(Long.parseLong(profile.sciper)),
+                                        profile.lastNames,
+                                        profile.firstNames
+                                ));
+                                userProvider.close();
+                            }
                         }
                     });
                 }
