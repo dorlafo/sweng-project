@@ -25,6 +25,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.Calendar;
 
@@ -43,6 +46,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
     MatchDatabaseInterface matchDBInterface;
     UserProvider userProvider;
     String currentUserId;
+    Button createMatch;
 
     private Match.Builder matchBuilder;
     private static final String TAG = CreateMatchActivity.class.getSimpleName();
@@ -51,6 +55,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userProvider = new UserProvider();
+        userProvider.addEventListener(new ButtonEnabler());
         matchDBInterface = new MatchDatabaseInterface();
         matchBuilder = new Match.Builder();
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
@@ -58,7 +63,8 @@ public class CreateMatchActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_create_match);
         // TODO: set match location using GPS or maps view
 
-        Button createMatch = (Button) findViewById(R.id.create_create_button);
+        createMatch = (Button) findViewById(R.id.create_create_button);
+        createMatch.setEnabled(false);
         createMatch.setOnClickListener(this);
 
         final EditText editText = (EditText) findViewById(R.id.description_match_text);
@@ -104,9 +110,8 @@ public class CreateMatchActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_create_button:
-                assert currentUserId != null;
                 Player currentPlayer = userProvider.getPlayerWithID(currentUserId);
-                assert currentPlayer != null;
+
                 // TODO retrieve gps position
                 //matchBuilder.setLocation(findPosition());
                 matchBuilder.addPlayer(currentPlayer);
@@ -159,4 +164,24 @@ public class CreateMatchActivity extends AppCompatActivity implements
         // TODO: warning or error for time before current time
     }
 
+    private class ButtonEnabler implements ChildEventListener {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            if (dataSnapshot.getKey().equals(currentUserId)) {
+                createMatch.setEnabled(true);
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) { }
+    }
 }
