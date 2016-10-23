@@ -2,9 +2,11 @@ package ch.epfl.sweng.project;
 
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,11 +24,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Calendar;
 
 import ch.epfl.sweng.project.database.MatchDatabaseInterface;
+import ch.epfl.sweng.project.database.UserProvider;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;
+import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.tools.TimePickerFragment;
 
 public class CreateMatchActivity extends AppCompatActivity implements
@@ -35,21 +41,21 @@ public class CreateMatchActivity extends AppCompatActivity implements
         OnTimeSetListener {
 
     MatchDatabaseInterface matchDBInterface;
+    UserProvider userProvider;
+    String currentUserId;
+
     private Match.Builder matchBuilder;
+    private static final String TAG = CreateMatchActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        setContentView(R.layout.activity_create_match);
-
+        userProvider = new UserProvider();
         matchDBInterface = new MatchDatabaseInterface();
         matchBuilder = new Match.Builder();
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
 
-        // TODO: add user to player list
-        // matchBuilder.addPlayer(currentUser);
-
+        setContentView(R.layout.activity_create_match);
         // TODO: set match location using GPS or maps view
 
         Button createMatch = (Button) findViewById(R.id.create_create_button);
@@ -98,7 +104,17 @@ public class CreateMatchActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_create_button:
-                publishMatch(matchBuilder.build());
+                assert currentUserId != null;
+                Player currentPlayer = userProvider.getPlayerWithID(currentUserId);
+                assert currentPlayer != null;
+                // TODO retrieve gps position
+                //matchBuilder.setLocation(findPosition());
+                matchBuilder.addPlayer(currentPlayer);
+                String matchId = matchDBInterface.writeNewMatch(matchBuilder.build());
+                Log.d(TAG, "Pushed match " + matchId + " to database");
+                Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
+                getIntent().putExtra("MATCH_ID", matchId);
+                startActivity(moveToMatchActivity);
                 break;
             case R.id.time_picker_button:
                 DialogFragment newFragment = new TimePickerFragment();
@@ -125,6 +141,11 @@ public class CreateMatchActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar expirationTime = Calendar.getInstance();
         expirationTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -138,12 +159,4 @@ public class CreateMatchActivity extends AppCompatActivity implements
         // TODO: warning or error for time before current time
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    void publishMatch(Match match) {
-        matchDBInterface.writeNewMatch(match);
-    }
 }
