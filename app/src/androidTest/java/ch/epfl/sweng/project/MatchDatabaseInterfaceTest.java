@@ -15,6 +15,7 @@ import ch.epfl.sweng.project.model.Rank;
 
 import static junit.framework.Assert.fail;
 
+
 /**
  * Test class for the MatchDatabaseInterface
  */
