@@ -56,11 +56,12 @@ public class MatchDatabaseInterface {
      * This method let us write a new match to the Firebase database
      *
      * @param matchToWrite the new match to write
-     * @return returns the token of the match that was just written in the database
+     * @return returns the id of the match that was just written in the database
      */
     public String writeNewMatch(Match matchToWrite) {
-        dRef.push().setValue(matchToWrite, completionListener);
-        return dRef.getKey();
+        String key = dRef.push().getKey();
+        dRef.child(key).setValue(matchToWrite, completionListener);
+        return key;
     }
 
     /**
