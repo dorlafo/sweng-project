@@ -5,6 +5,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Objects;
 
+import static java.lang.Double.doubleToLongBits;
+
 /**
  * Class representing a geographical position.
  */
@@ -41,8 +43,8 @@ public class GPSPoint {
         }
 
         GPSPoint otherPoint = (GPSPoint) other;
-        return this.latitude == otherPoint.latitude
-                && this.longitude == otherPoint.longitude;
+        return doubleToLongBits(this.latitude) == doubleToLongBits(otherPoint.latitude)
+                && doubleToLongBits(this.longitude) == doubleToLongBits(otherPoint.longitude);
     }
 
     @Override
