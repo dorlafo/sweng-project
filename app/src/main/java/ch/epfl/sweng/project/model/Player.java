@@ -1,9 +1,13 @@
 package ch.epfl.sweng.project.model;
 
+
+import java.util.Objects;
+
 /**
  * Player is class that represents a player
  */
 public class Player {
+
     private PlayerID id;
     private String lastName;
     private String firstName;
@@ -70,6 +74,31 @@ public class Player {
         return rank;
     }
 
+    @Override
+    public String toString() {
+        return firstName + ' ' + lastName;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        } else if (other == null || other.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Player otherPlayer = (Player) other;
+        return this.id.getID() == otherPlayer.id.getID()
+                && this.lastName.equals(otherPlayer.lastName)
+                && this.firstName.equals(otherPlayer.firstName);
+        // compare rank?
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id.getID(), lastName, firstName);
+    }
+
     /**
      * Sets the rank of the player
      *
@@ -79,13 +108,8 @@ public class Player {
         rank = newRank;
     }
 
-    @Override
-    public String toString() {
-        return firstName + ' ' + lastName;
-    }
-
-
     public static class PlayerRank extends Rank {
+
         public PlayerRank(int rank) {
             super(rank);
         }
@@ -97,6 +121,7 @@ public class Player {
     }
 
     public static class PlayerID extends ID {
+
         public PlayerID(long id) {
             super(id);
         }
