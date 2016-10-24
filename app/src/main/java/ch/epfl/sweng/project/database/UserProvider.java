@@ -25,7 +25,7 @@ public class UserProvider {
      */
     public UserProvider() {
         players = new HashMap<>();
-        dRef = FirebaseDatabase.getInstance().getInstance().getReference().child("players");
+        dRef = FirebaseDatabase.getInstance().getReference("players");
         ChildEventListener playerListenerInternal = new PlayerEventListener();
         dRef.addChildEventListener(playerListenerInternal);
         playerListeners = new ArrayList<>();
