@@ -33,7 +33,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Your app's main activity.
@@ -104,6 +106,8 @@ public final class MainActivity extends AppCompatActivity {
                     CookieManager.getInstance().removeAllCookies(null);
                 }
                 loggedIn = false;
+                // TODO: Uncomment following line when UserProfile and creatematch activities will be hidden for unauthed users
+                //FirebaseAuth.getInstance().signOut();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -188,20 +192,32 @@ public final class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Log.d(TAG, "signInWithEmail:onComplete " + task.isSuccessful());
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
+                }
                 if (!task.isSuccessful()) {
                     fAuth.createUserWithEmailAndPassword(profile.email, profile.sciper).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             Log.d(TAG, "Signup was successfull? " + task.isSuccessful());
                             if (task.isSuccessful()) {
-                                UserProvider userProvider = new UserProvider();
+                                //UserProvider userProvider = new UserProvider();
+                                FirebaseDatabase.getInstance().getReference().child("players")
+                                        .child(profile.sciper).setValue(new Player(
+                                        new Player.PlayerID(Long.parseLong(profile.sciper)),
+                                        profile.lastNames,
+                                        profile.firstNames
+                                ));
+                                        /*
                                 userProvider.addPlayer(new Player(
                                         new Player.PlayerID(Long.parseLong(profile.sciper)),
                                         profile.lastNames,
                                         profile.firstNames
                                 ));
+                                */
                                 fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
-                                userProvider.close();
+                                //userProvider.close();
                             }
                         }
                     });
