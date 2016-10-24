@@ -22,7 +22,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import ch.epfl.sweng.project.database.MatchDatabaseInterface;
 import ch.epfl.sweng.project.model.Match;
@@ -90,6 +93,10 @@ public class CreateMatchActivity extends AppCompatActivity implements
         ImageButton timePickerDialog = (ImageButton) findViewById(R.id.time_picker_button);
         timePickerDialog.setOnClickListener(this);
 
+        Calendar defaultExpirationDate = Calendar.getInstance();
+        defaultExpirationDate.add(Calendar.HOUR_OF_DAY, 2);
+        displayCurrentExpirationDate(defaultExpirationDate);
+
         Button addPlayer = (Button) findViewById(R.id.add_player_button);
         addPlayer.setOnClickListener(this);
 
@@ -151,6 +158,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
         final Calendar currentTime = Calendar.getInstance();
 
         if (expirationTime.compareTo(currentTime) > 0) {
+            displayCurrentExpirationDate(expirationTime);
             matchBuilder.setExpirationTime(expirationTime.getTimeInMillis());
         }
         // TODO: warning or error for time before current time
@@ -164,4 +172,13 @@ public class CreateMatchActivity extends AppCompatActivity implements
     void publishMatch(Match match) {
         matchDBInterface.writeNewMatch(match);
     }
+
+    private void displayCurrentExpirationDate(Calendar calendar) {
+        TextView currentExpirationDate =
+                (TextView) findViewById(R.id.current_expiration_time);
+        DateFormat dateFormat = new SimpleDateFormat(
+                getString(R.string.create_date_format), Locale.FRENCH);
+        currentExpirationDate.setText(dateFormat.format(calendar.getTimeInMillis()));
+    }
+
 }
