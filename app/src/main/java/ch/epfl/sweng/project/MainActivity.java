@@ -188,7 +188,6 @@ public final class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Log.d(TAG, "signInWithEmail:onComplete " + task.isSuccessful());
-                fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
                 if (!task.isSuccessful()) {
                     fAuth.createUserWithEmailAndPassword(profile.email, profile.sciper).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -201,6 +200,7 @@ public final class MainActivity extends AppCompatActivity {
                                         profile.lastNames,
                                         profile.firstNames
                                 ));
+                                fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
                                 userProvider.close();
                             }
                         }
