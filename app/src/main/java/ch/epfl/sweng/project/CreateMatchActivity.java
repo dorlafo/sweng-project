@@ -60,12 +60,30 @@ public class CreateMatchActivity extends AppCompatActivity implements
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    matchBuilder.setDescription(v.getText().toString());
+                    String description = v.getText().toString();
+                    if (description.length() == 0) {
+                        matchBuilder.setDescription(Match.Builder.DEFAULT_DESCRIPTION);
+                    } else {
+                        matchBuilder.setDescription(description);
+                    }
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
                     return true;
                 }
                 return false;
+            }
+        });
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String description = ((TextView) v).getText().toString();
+                    if (description.length() == 0) {
+                        matchBuilder.setDescription(Match.Builder.DEFAULT_DESCRIPTION);
+                    } else {
+                        matchBuilder.setDescription(description);
+                    }
+                }
             }
         });
 
