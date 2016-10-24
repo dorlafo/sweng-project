@@ -1,14 +1,19 @@
 package ch.epfl.sweng.project;
 
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,23 +24,45 @@ import ch.epfl.sweng.project.model.Player;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private final String TAG = "UserProfileActivity";
-    private UserProvider mUserProvider;
+    private final String TAG = UserProfileActivity.class.getSimpleName();
+    //private UserProvider mUserProvider;
     private TextView mtwPlayerID;
     private TextView mtwLastName;
     private TextView mtwFirstName;
     private TextView mtwPlayerRank;
-    private String mUserKey = getRandomKey();
+    //private String mUserKey = getRandomKey();
+    String sciper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
 
-        mUserProvider = new UserProvider();
+        //mUserProvider = new UserProvider();
 
         //New ChildEventListener that will change the value of the textView according to the current
         //logged in user
+        FirebaseDatabase.getInstance().getReference()
+                .child("players")
+                .child(sciper)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Player p = dataSnapshot.getValue(Player.class);
+                        mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
+                        mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
+                        mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
+                        mtwPlayerRank.setText(mtwPlayerRank.getText() + " " + p.getRank().toString());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+        /*
         ChildEventListener playerListener = new ChildEventListener() {
+
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.getKey().equals(mUserKey)) {
@@ -77,6 +104,7 @@ public class UserProfileActivity extends AppCompatActivity {
         };
 
         mUserProvider.addEventListener(playerListener);
+        */
 
         setContentView(R.layout.activity_user_profile);
     }
@@ -94,11 +122,11 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mUserProvider.close();
+        //mUserProvider.close();
     }
 
     public void viewMenu(View view) {
-        mUserProvider.close();
+        //mUserProvider.close();
         finish();
     }
 
@@ -107,8 +135,10 @@ public class UserProfileActivity extends AppCompatActivity {
      * Private method to get a random user profile id
      * This is use for demo ONLY, the real key will come from
      * the Tequila login
+     *
      * @return The random key chosen between the project member sciper
      */
+    /*
     private String getRandomKey() {
         List<String> keyList = new ArrayList<>();
         keyList.add("234832");
@@ -120,5 +150,5 @@ public class UserProfileActivity extends AppCompatActivity {
         Collections.shuffle(keyList);
         Log.d(TAG, "Chosen key is " + keyList.get(0));
         return keyList.get(0);
-    }
+    }*/
 }
