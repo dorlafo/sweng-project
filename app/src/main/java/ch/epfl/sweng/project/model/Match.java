@@ -202,7 +202,14 @@ public class Match {
             return this;
         }
 
-        // TODO: add removePlayer method
+        public Builder removePlayer(Player player) {
+            if (players.contains(player)) {
+                players.remove(player);
+            } else {
+                throw new IllegalArgumentException("Trying to remove non-existing player.");
+            }
+            return this;
+        }
 
         public Builder setLocation(GPSPoint location) {
             this.location = location;
