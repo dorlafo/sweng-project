@@ -70,7 +70,7 @@ public class MatchDatabaseInterface {
      * @param token the id of the match that should be deleted
      */
     public void deleteMatch(String token) {
-        dRef.getRoot().child(token).removeValue(completionListener);
+        dRef.child(token).removeValue(completionListener);
     }
 
     /**
