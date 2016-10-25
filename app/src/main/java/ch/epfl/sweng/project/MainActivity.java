@@ -209,6 +209,8 @@ public final class MainActivity extends AppCompatActivity {
                                         profile.lastNames,
                                         profile.firstNames
                                 ));
+                                Player p = new Player(new Player.PlayerID(Long.parseLong(profile.sciper)), profile.lastNames, profile.firstNames);
+                                FirebaseDatabase.getInstance().getReference("players").child(p.getID().toString()).setValue(p);
                                         /*
                                 userProvider.addPlayer(new Player(
                                         new Player.PlayerID(Long.parseLong(profile.sciper)),
