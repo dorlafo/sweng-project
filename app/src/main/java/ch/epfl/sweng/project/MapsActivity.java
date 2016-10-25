@@ -10,7 +10,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -20,11 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -39,6 +33,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.res.DummyMatchData;
+import ch.epfl.sweng.project.tools.LocationProvider;
+import ch.epfl.sweng.project.tools.LocationProviderListener;
 import ch.epfl.sweng.project.tools.MatchStringifier;
 
 /**
@@ -49,18 +45,12 @@ import ch.epfl.sweng.project.tools.MatchStringifier;
  * @author Nicolas Phan Van
  */
 public class MapsActivity extends FragmentActivity implements
-        OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        OnMapReadyCallback, LocationProviderListener {
 
     private static final int MY_LOCATION_REQUEST_CODE = 39;
-    private final long LOCATION_UPDATE_INTERVAL = 1000;
-    private final long LOCATION_FASTEST_INTERVAL = 1000;
 
     private GoogleMap matchMap;
-    private GoogleApiClient googleApiClient;
-    private LocationRequest locationRequest;
+    private LocationProvider locationProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,29 +62,22 @@ public class MapsActivity extends FragmentActivity implements
         }
 
         createMap();
-        buildGoogleApiClient();
-        createLocationRequest();
+
+        locationProvider = new LocationProvider(this);
+        locationProvider.setProviderListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         createMap();
-        googleApiClient.connect();
+        locationProvider.connectGoogleApiClient();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        stopLocationUpdates();
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        locationProvider.stopLocationUpdates();
     }
 
     @Override
@@ -139,7 +122,6 @@ public class MapsActivity extends FragmentActivity implements
 
         // TODO: change to use real matches
         // displayNearbyMatches(new ArrayList<Match>());
-        // displayNearbyMatches(new ArrayList<Match>(MainActivity.matches.values()));
         displayNearbyMatches(DummyMatchData.dummyMatches());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -150,24 +132,6 @@ public class MapsActivity extends FragmentActivity implements
             }
         } else {
             matchMap.setMyLocationEnabled(true);
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        handleNewLocation(location);
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            if (location != null) {
-                handleNewLocation(location);
-            }
-            startLocationUpdates();
         }
     }
 
@@ -189,16 +153,6 @@ public class MapsActivity extends FragmentActivity implements
                     Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show();
                 }
         }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
     public void switchToList(View view) {
@@ -233,30 +187,8 @@ public class MapsActivity extends FragmentActivity implements
         }
     }
 
-    private void createLocationRequest() {
-        locationRequest = LocationRequest.create()
-                .setInterval(LOCATION_UPDATE_INTERVAL)
-                .setFastestInterval(LOCATION_FASTEST_INTERVAL)
-                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-    }
-
-    private void startLocationUpdates() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi
-                    .requestLocationUpdates(googleApiClient, locationRequest, this);
-        }
-    }
-
-    private void stopLocationUpdates() {
-        if (googleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
-            googleApiClient.disconnect();
-        }
-    }
-
-    private void handleNewLocation(Location location) {
+    @Override
+    public void onLocationChanged(Location location) {
         LatLng userCoordinates = new LatLng(location.getLatitude(),
                 location.getLongitude());
 
@@ -279,4 +211,5 @@ public class MapsActivity extends FragmentActivity implements
             }
         }
     }
+
 }
