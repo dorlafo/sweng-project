@@ -2,32 +2,14 @@ package ch.epfl.sweng.project;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.webkit.CookieManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-
-import ch.epfl.sweng.project.database.UserProvider;
-import ch.epfl.sweng.project.model.Player;
-import ch.epfl.sweng.project.tequila.AuthClient;
-import ch.epfl.sweng.project.tequila.AuthServer;
-import ch.epfl.sweng.project.tequila.OAuth2Config;
-import ch.epfl.sweng.project.tequila.Profile;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,105 +19,62 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * Your app's main activity.
- */
-public final class MainActivity extends AppCompatActivity {
-    //TODO convention de nommage pour les providers ? "m" pour match puis "Provider". A décider.
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    /*private static JSONObject jObj = null;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+
+import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.tequila.AuthClient;
+import ch.epfl.sweng.project.tequila.AuthServer;
+import ch.epfl.sweng.project.tequila.OAuth2Config;
+import ch.epfl.sweng.project.tequila.Profile;
+
+public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = LoginActivity.class.getSimpleName();
+
     private static String clientID = null;
     private static String clientSecret = null;
     private static String redirectUri = null;
     private static String[] scopes = {"Tequila.profile"};
     private static OAuth2Config config;
     private static final int REQUEST_CODE_AUTHENTICATE = 0;
-    private boolean loggedIn = false;*/
-    private static final String TAG = MainActivity.class.getSimpleName();
+
     private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         fAuth = FirebaseAuth.getInstance();
-        //If not logged in : Show login screen
-        showLogin();
     }
 
     @Override
     public void onBackPressed() {
-        //DO NOTHING -> it will disable the back button
+        //DO NOTHING -> it disables the back button
     }
 
-    // Creates Menu on top left corner
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.login_menu, menu);
-        return true;
-    }
-
-    /* Handler for menu items
-     * Usage of deprecated method because the new one require
-     * a minimum of android 21, we set minimum android 15
-     */
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            /*
-            // Start the WebViewActivity to handle the authentication.
-            case R.id.menu_login:
-                // Get credentials from Json file
-                try {
-                    JSONObject jObj = new JSONObject(loadJSONFromAsset());
-                    clientID = jObj.getString("clientID");
-                    clientSecret = jObj.getString("clientSecret");
-                    redirectUri = jObj.getString("redirectURI");
-                } catch (JSONException e) {
-                    finish();
-                }
-                config = new OAuth2Config(scopes, clientID, clientSecret, redirectUri);
-                final String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
-                Intent intent = new Intent(this, WebViewActivity.class);
-                intent.setData(Uri.parse(codeRequestUrl));
-                startActivityForResult(intent, REQUEST_CODE_AUTHENTICATE);
-                //showlogin() PAS ICI !
-                return true;
-            */
-            // Log out.
-            case R.id.menu_logout:
-                if (Build.VERSION.SDK_INT < 21) {
-                    CookieManager.getInstance().removeAllCookie();
-                } else {
-                    CookieManager.getInstance().removeAllCookies(null);
-                }
-                //loggedIn = false;
-                // TODO: Uncomment following line when UserProfile and creatematch activities will be hidden for unauthed users
-                FirebaseAuth.getInstance().signOut();
-                showLogin();
-                return true;
+    public void login(View view) {
+        // Get credentials from Json file
+        try {
+            JSONObject jObj = new JSONObject(loadJSONFromAsset());
+            clientID = jObj.getString("clientID");
+            clientSecret = jObj.getString("clientSecret");
+            redirectUri = jObj.getString("redirectURI");
+        } catch (JSONException e) {
+            finish();
         }
-        return super.onOptionsItemSelected(item);
+        config = new OAuth2Config(scopes, clientID, clientSecret, redirectUri);
+        final String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+        Intent intent = new Intent(this, WebViewActivity.class);
+        intent.setData(Uri.parse(codeRequestUrl));
+        startActivityForResult(intent, REQUEST_CODE_AUTHENTICATE);
     }
 
-    /* Makes the menu show login
-     * or logout depending on state
-     */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        if(fAuth.getCurrentUser() != null) {
-        //if (loggedIn) {
-            menu.getItem(0).setVisible(false);
-            menu.getItem(1).setVisible(true);
-        } else {
-            menu.getItem(0).setVisible(true);
-            menu.getItem(1).setVisible(false);
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -143,20 +82,20 @@ public final class MainActivity extends AppCompatActivity {
                 if (resultCode != RESULT_OK || data == null) {
                     // Opens dialog box to alert user of the authentication fail
                     // Allows user to cancel or retry
-                    new AlertDialog.Builder(MainActivity.this)
+                    new AlertDialog.Builder(LoginActivity.this)
                             .setTitle(R.string.auth_failed)
                             .setMessage(R.string.retry_message)
                             .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     final String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
-                                    Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, WebViewActivity.class);
                                     intent.setData(Uri.parse(codeRequestUrl));
                                     startActivityForResult(intent, REQUEST_CODE_AUTHENTICATE);
                                 }
                             })
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // Do nothing, goes back to MainActivity
+                                    // Do nothing, goes back to LoginActivity
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
@@ -170,13 +109,13 @@ public final class MainActivity extends AppCompatActivity {
                 }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }*/
+        //finish();
+    }
 
-    /*
     /* Fetched token from Tequila server using AuthServer methods
-     * Stores the user profile in Profile object
-     * Execute HttpUrlConnection on a separated async thread
-     /
+    * Stores the user profile in Profile object
+    * Execute HttpUrlConnection on a separated async thread
+    */
     //TODO: Store profile in profile Objet -> Voir avec Dorian
     private class FetchTokens extends AsyncTask<String, Void, String> {
         @Override
@@ -186,26 +125,41 @@ public final class MainActivity extends AppCompatActivity {
             try {
                 tokens = AuthServer.fetchTokens(config, params[0]);
                 profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
-                loggedIn = true;
+                //loggedIn = true;
                 authenticateWithFirebase(profile);
-                //pas ici ??
-                //showLogin();
             } catch (IOException e) {
                 Log.e("ERR", "IOException, couldn't fetch token");
             }
             return "profile retrieved";
         }
-    }
-    */
 
-    private void showLogin() {
-        if(fAuth.getCurrentUser() == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+        @Override
+        protected void onPostExecute(String result) {
+            finish();
         }
     }
 
-    /*
+    /**
+     * Load Tequila credentials from file
+     * @return
+     */
+    private String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("tequila_credentials.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            //TODO: On devrait pas retourner json ici ???? (Pour Alexis)
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
     private void authenticateWithFirebase(final Profile profile) {
         // TODO: REPLACE SCIPER WITH HASH
         fAuth.signInWithEmailAndPassword(profile.email, profile.sciper).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -237,56 +191,22 @@ public final class MainActivity extends AppCompatActivity {
                                         profile.lastNames,
                                         profile.firstNames
                                 ));
-                                /
+                                */
                                 fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
                                 //userProvider.close();
                             }
                         }
                     });
                 }
-                //ICI ?
-                showLogin();
+                //ICI ? OUI!
+
             }
+
         });
-    }
-    */
-
-    /*
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open("tequila_credentials.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-    */
-
-    public void createMatch(View view) {
-        Intent intent = new Intent(this, CreateMatchActivity.class);
+        /*
+        Intent intent = new Intent(this, MainActivity.class);
+        finish();  //Kill the activity from which you will go to next activity
         startActivity(intent);
-    }
-
-    public void viewProfile(View view) {
-        Intent intent = new Intent(this, UserProfileActivity.class);
-        startActivity(intent);
-    }
-
-    public void displayMatchesOnMap(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
-    }
-
-    public void displayMatchesInList(View view) {
-        Intent intent = new Intent(this, MatchListActivity.class);
-        startActivity(intent);
+         */
     }
 }
