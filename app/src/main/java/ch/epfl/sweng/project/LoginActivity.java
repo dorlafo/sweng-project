@@ -105,11 +105,9 @@ public class LoginActivity extends AppCompatActivity {
                     // Get the token.
                     String code = AuthClient.extractCode(data.getStringExtra("url"));
                     new FetchTokens().execute(code);
-                    //showLogin() PAS ICI!
                 }
         }
         super.onActivityResult(requestCode, resultCode, data);
-        //finish();
     }
 
     /* Fetched token from Tequila server using AuthServer methods
@@ -119,13 +117,18 @@ public class LoginActivity extends AppCompatActivity {
     //TODO: Store profile in profile Objet -> Voir avec Dorian
     private class FetchTokens extends AsyncTask<String, Void, String> {
         @Override
+        protected void onPreExecute() {
+            findViewById(R.id.login_button).setVisibility(View.GONE);
+            findViewById(R.id.login_text_view).setVisibility(View.GONE);
+        }
+
+        @Override
         protected String doInBackground(String... params) {
             Map<String, String> tokens;
             Profile profile;
             try {
                 tokens = AuthServer.fetchTokens(config, params[0]);
                 profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
-                //loggedIn = true;
                 authenticateWithFirebase(profile);
             } catch (IOException e) {
                 Log.e("ERR", "IOException, couldn't fetch token");

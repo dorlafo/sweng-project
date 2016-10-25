@@ -36,4 +36,5 @@
     <string name="permission_denied">Cannot access location</string>
     <string name="request_rationale">Location information is used to improve your matchmaking experience.</string>
     <string name="title_activity_maps">Map</string>
+    <string name="login_welcoming_text">Welcome to Jass@EPFL !\nTo use this app you need to\nlogin with your EPFL account</string>
 </resources>
