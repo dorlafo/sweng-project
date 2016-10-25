@@ -201,15 +201,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 }
-                //ICI ? OUI!
-
             }
 
         });
-        /*
-        Intent intent = new Intent(this, MainActivity.class);
-        finish();  //Kill the activity from which you will go to next activity
-        startActivity(intent);
-         */
     }
 }

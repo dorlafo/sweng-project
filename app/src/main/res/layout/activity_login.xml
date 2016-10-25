@@ -11,7 +11,7 @@
     tools:context="ch.epfl.sweng.project.LoginActivity">
 
     <Button
-        android:text="Login"
+        android:text="@string/login_button_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
