@@ -1,6 +1,9 @@
 package ch.epfl.sweng.project.model;
 
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Objects;
@@ -53,6 +56,7 @@ public class GPSPoint {
                 && doubleToLongBits(this.longitude) == doubleToLongBits(otherPoint.longitude);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
         return Objects.hash(latitude, longitude);

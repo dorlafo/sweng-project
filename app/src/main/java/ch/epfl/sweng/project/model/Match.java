@@ -1,6 +1,9 @@
 package ch.epfl.sweng.project.model;
 
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -169,6 +172,7 @@ public class Match {
                 && Math.abs(this.expirationTime - otherMatch.expirationTime) < 60 * 1000;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
         return Objects.hash(players, location, description, privateMatch,

@@ -1,6 +1,9 @@
 package ch.epfl.sweng.project.model;
 
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.util.Objects;
 
 /**
@@ -107,6 +110,7 @@ public class Player {
         // compare rank?
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
         return Objects.hash(id.getID(), lastName, firstName);
