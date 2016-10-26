@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,14 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.res.DummyMatchData;
@@ -120,9 +129,8 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
 
-        // TODO: change to use real matches
-        // displayNearbyMatches(new ArrayList<Match>());
-        displayNearbyMatches(DummyMatchData.dummyMatches());
+        //displayNearbyMatches(DummyMatchData.dummyMatches());
+        displayNearbyMatches();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -153,6 +161,15 @@ public class MapsActivity extends FragmentActivity implements
                     Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show();
                 }
         }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        LatLng userCoordinates = new LatLng(location.getLatitude(),
+                location.getLongitude());
+
+        matchMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+                new CameraPosition(userCoordinates, 15f, 0f, 0f)));
     }
 
     public void switchToList(View view) {
@@ -187,18 +204,8 @@ public class MapsActivity extends FragmentActivity implements
         }
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        LatLng userCoordinates = new LatLng(location.getLatitude(),
-                location.getLongitude());
-
-        matchMap.animateCamera(CameraUpdateFactory.newCameraPosition(
-                new CameraPosition(userCoordinates, 15f, 0f, 0f)));
-    }
-
     private void displayNearbyMatches(Iterable<Match> matches) {
-        MatchStringifier stringifier = new MatchStringifier(this);
-
+        MatchStringifier stringifier = new MatchStringifier(MapsActivity.this);
         for (Match match : matches) {
             if (!match.isPrivateMatch()) {
                 stringifier.setMatch(match);
@@ -210,6 +217,54 @@ public class MapsActivity extends FragmentActivity implements
                                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             }
         }
+    }
+
+    private void displayNearbyMatches() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("matches");
+
+        ref.addChildEventListener(new ChildEventListener() {
+            private final Map<String, Marker> markers = new HashMap<String, Marker>();
+            private final MatchStringifier stringifier = new MatchStringifier(MapsActivity.this);
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Match m = dataSnapshot.getValue(Match.class);
+                markers.put(dataSnapshot.getKey(), createMarker(m));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                markers.get(dataSnapshot.getKey()).remove();
+                markers.put(dataSnapshot.getKey(), createMarker(dataSnapshot.getValue(Match.class)));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                markers.get(dataSnapshot.getKey()).remove();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                markers.get(dataSnapshot.getKey()).remove();
+                markers.put(dataSnapshot.getKey(), createMarker(dataSnapshot.getValue(Match.class)));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+            private Marker createMarker(Match m) {
+                stringifier.setMatch(m);
+                return matchMap.addMarker(new MarkerOptions()
+                        .position(m.getLocation().toLatLng())
+                        .title(m.getDescription())
+                        .snippet(stringifier.markerSnippet())
+                        .icon(BitmapDescriptorFactory
+                                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            }
+        });
+
     }
 
 }

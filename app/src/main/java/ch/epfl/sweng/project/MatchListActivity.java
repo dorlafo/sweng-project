@@ -4,11 +4,10 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import ch.epfl.sweng.project.res.DummyMatchData;
-import ch.epfl.sweng.project.tools.CustomAdapter;
+
+import ch.epfl.sweng.project.tools.MatchListAdapter;
 
 /**
  * Activity displaying matches as a scrolling list.
@@ -16,21 +15,20 @@ import ch.epfl.sweng.project.tools.CustomAdapter;
  * @author Nicolas Phan Van
  */
 public class MatchListActivity extends ListActivity {
+    MatchListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
 
+        setContentView(R.layout.activity_list);
         ListView listView = (ListView) findViewById(android.R.id.list);
         listView.setEmptyView(findViewById(android.R.id.empty));
 
         // TODO: fix empty list and filter private matches
+        mAdapter = new MatchListAdapter(this);
 
-        //BaseAdapter customAdapter = new CustomAdapter(this, new ArrayList<Match>(MainActivity.matches.values()));
-        BaseAdapter customAdapter = new CustomAdapter(this, DummyMatchData.dummyMatches());
-
-        listView.setAdapter(customAdapter);
+        listView.setAdapter(mAdapter);
     }
 
     @Override
@@ -41,5 +39,11 @@ public class MatchListActivity extends ListActivity {
     public void switchToMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAdapter.cleanup();
     }
 }

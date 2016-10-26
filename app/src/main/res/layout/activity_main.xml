@@ -20,12 +20,14 @@
         android:text="@string/nearby_matches"
         android:textColor="@android:color/black"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:id="@+id/main_title_textview" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="294dp"
-        android:layout_weight="0.90">
+        android:layout_weight="0.90"
+        android:id="@+id/main_match_scroll_view">
         <!-- Add match list Object -->
     </ScrollView>
 
@@ -60,7 +62,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.16"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/main_menu_lin_layout">
 
         <Button
             android:id="@+id/profile_button"

@@ -1,6 +1,8 @@
 package ch.epfl.sweng.project.database;
 
 
+import android.util.Log;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,11 +58,12 @@ public class MatchDatabaseInterface {
      * This method let us write a new match to the Firebase database
      *
      * @param matchToWrite the new match to write
-     * @return returns the token of the match that was just written in the database
+     * @return returns the id of the match that was just written in the database
      */
     public String writeNewMatch(Match matchToWrite) {
-        dRef.push().setValue(matchToWrite, completionListener);
-        return dRef.getKey();
+        String key = dRef.push().getKey();
+        dRef.child(key).setValue(matchToWrite, completionListener);
+        return key;
     }
 
     /**
@@ -69,7 +72,7 @@ public class MatchDatabaseInterface {
      * @param token the id of the match that should be deleted
      */
     public void deleteMatch(String token) {
-        dRef.getRoot().child(token).removeValue(completionListener);
+        dRef.child(token).removeValue(completionListener);
     }
 
     /**
@@ -93,7 +96,6 @@ public class MatchDatabaseInterface {
         public void onComplete(DatabaseError error, DatabaseReference ref) {
             if (error != null) {
                 throw new ProviderException("Firebase operation did not complete");
-
             }
         }
 

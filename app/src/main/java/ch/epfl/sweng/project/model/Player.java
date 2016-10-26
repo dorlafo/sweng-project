@@ -139,6 +139,10 @@ public class Player {
             super(id);
         }
 
+        public PlayerID(String textId) {
+            super(Long.parseLong(textId));
+        }
+
         public PlayerID() {
         }
 
