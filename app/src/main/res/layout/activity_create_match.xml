@@ -122,7 +122,7 @@
             android:id="@+id/time_picker_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/background_light"
+            android:background="#FAFAFA"
             android:src="@drawable/ic_access_time_black_36px"/>
 
     </LinearLayout>
