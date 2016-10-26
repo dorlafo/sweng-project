@@ -148,7 +148,7 @@ public class Match {
                 && this.privateMatch == otherMatch.privateMatch
                 && this.gameVariant == otherMatch.gameVariant
                 && this.maxPlayerNumber == otherMatch.maxPlayerNumber
-                && this.expirationTime == otherMatch.expirationTime;
+                && Math.abs(this.expirationTime - otherMatch.expirationTime) < 60 * 1000;
     }
 
     @Override
