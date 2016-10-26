@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -28,8 +29,10 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import ch.epfl.sweng.project.database.MatchDatabaseInterface;
+import ch.epfl.sweng.project.model.GPSPoint;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;
+import ch.epfl.sweng.project.tools.LocationProvider;
 import ch.epfl.sweng.project.tools.TimePickerFragment;
 
 public class CreateMatchActivity extends AppCompatActivity implements
@@ -39,6 +42,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
 
     MatchDatabaseInterface matchDBInterface;
     private Match.Builder matchBuilder;
+    private LocationProvider locationProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,14 @@ public class CreateMatchActivity extends AppCompatActivity implements
 
         matchDBInterface = new MatchDatabaseInterface();
         matchBuilder = new Match.Builder();
+
+        // TODO: make user choose location
+        locationProvider = new LocationProvider(this);
+        Location currentLocation = locationProvider.getLastLocation();
+        if (currentLocation != null) {
+            matchBuilder.setLocation(new GPSPoint(currentLocation.getLatitude(),
+                    currentLocation.getLongitude()));
+        }
 
         // TODO: add user to player list
         // matchBuilder.addPlayer(currentUser);
@@ -120,6 +132,18 @@ public class CreateMatchActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        locationProvider.connectGoogleApiClient();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        locationProvider.stopLocationUpdates();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_create_button:
@@ -180,5 +204,4 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 getString(R.string.create_date_format), Locale.FRENCH);
         currentExpirationDate.setText(dateFormat.format(calendar.getTimeInMillis()));
     }
-
 }
