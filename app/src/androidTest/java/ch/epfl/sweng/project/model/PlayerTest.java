@@ -5,9 +5,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;
 
-import ch.epfl.sweng.project.model.Player;
-import ch.epfl.sweng.project.model.Rank;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotSame;

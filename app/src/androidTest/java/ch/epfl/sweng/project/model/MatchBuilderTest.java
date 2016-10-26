@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project.model;
 
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertNotEquals;
 
 public final class MatchBuilderTest {
+
     private Match.Builder matchBuilder;
     private Player amaury = new Player(new PlayerID(1), "Combes", "Amaury", new Rank(123));
     private Player vincenzo = new Player(new PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
@@ -39,19 +41,6 @@ public final class MatchBuilderTest {
                 Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000);
 
         assertEquals(defaultMatch, match);
-
-        /*
-        assertFalse(match.getPlayers().isEmpty());
-        assertEquals(46.520407, match.getLocation().getLatitude());
-        assertEquals(6.565802, match.getLocation().getLongitude());
-        assertEquals(Match.Builder.DEFAULT_DESCRIPTION, match.getDescription());
-        assertEquals(123, match.getRank().getRank());
-        assertFalse(match.isPrivateMatch());
-        assertEquals(CLASSIC, match.getGameVariant());
-        assertEquals(4, match.getMaxPlayerNumber());
-        assertEquals(Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000,
-                match.getExpirationTime(), 10);
-        */
     }
 
     @Test

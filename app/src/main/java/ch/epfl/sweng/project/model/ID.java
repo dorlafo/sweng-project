@@ -1,10 +1,11 @@
 package ch.epfl.sweng.project.model;
 
+
 /**
  * @author Amaury Combes
  */
-
 abstract class ID {
+
     private long id;
 
     public ID() {
@@ -19,7 +20,9 @@ abstract class ID {
         return id;
     }
 
+    @Override
     public String toString() {
         return Long.toString(id);
     }
+
 }

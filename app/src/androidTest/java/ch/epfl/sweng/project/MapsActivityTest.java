@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+
 import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -30,4 +31,5 @@ public final class MapsActivityTest extends
         onView(withId(R.id.switch_to_list)).perform(click());
         onView(withId(android.R.id.list)).check(matches(isEnabled()));
     }
+
 }

@@ -15,6 +15,12 @@ public class GPSPoint {
     private double latitude;
     private double longitude;
 
+    /**
+     * Constructs a new GPSPoint with the given coordinates.
+     *
+     * @param latitude  The latitude of the point
+     * @param longitude The longitude of the point
+     */
     public GPSPoint(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -52,6 +58,12 @@ public class GPSPoint {
         return Objects.hash(latitude, longitude);
     }
 
+    /**
+     * Converts and returns the instance of GPSPoint to a
+     * {@link com.google.android.gms.maps.model.LatLng LatLng}.
+     *
+     * @return The LatLng with the same coordinates as the GPSPoint
+     */
     public LatLng toLatLng() {
         return new LatLng(latitude, longitude);
     }

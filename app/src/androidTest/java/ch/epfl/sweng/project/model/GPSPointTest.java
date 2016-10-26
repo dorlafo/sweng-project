@@ -5,8 +5,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;
 
-import ch.epfl.sweng.project.model.GPSPoint;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotSame;

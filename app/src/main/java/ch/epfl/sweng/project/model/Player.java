@@ -4,7 +4,8 @@ package ch.epfl.sweng.project.model;
 import java.util.Objects;
 
 /**
- * Player is class that represents a player
+ * Class representing a player, identified by his/her name, sciper ID,
+ * and rank in the scoreboard.
  */
 public class Player {
 
@@ -20,12 +21,12 @@ public class Player {
     }
 
     /**
-     * Constructor of the Player class with no default assignment
+     * Constructs a new Player.
      *
-     * @param id        the id of the player (sciper)
-     * @param lastName  the last name of the player
-     * @param firstName the first name of the player
-     * @param rank      the rank of the player
+     * @param id        The ID of the player (sciper)
+     * @param lastName  The last name of the player
+     * @param firstName The first name of the player
+     * @param rank      The rank of the player
      */
     public Player(PlayerID id, String lastName, String firstName, Rank rank) {
         this.id = id;
@@ -34,46 +35,58 @@ public class Player {
         this.rank = rank;
     }
 
+    /**
+     * Constructs a new Player with a default rank.
+     *
+     * @param id        The ID of the player (sciper)
+     * @param lastName  The last name of the player
+     * @param firstName The first name of the player
+     */
     public Player(PlayerID id, String lastName, String firstName) {
         this(id, lastName, firstName, new PlayerRank(0));
     }
 
     /**
-     * Getter for the id of the player
+     * Getter for the ID of the player.
      *
-     * @return returns the id of the player
+     * @return The ID of the player
      */
     public PlayerID getID() {
         return id;
     }
 
     /**
-     * Getter for the last name of the player
+     * Getter for the last name of the player.
      *
-     * @return returns the last name of the player
+     * @return The last name of the player
      */
     public String getLastName() {
         return lastName;
     }
 
     /**
-     * Getter for the first name of the player
+     * Getter for the first name of the player.
      *
-     * @return returns the first name of the player
+     * @return The first name of the player
      */
     public String getFirstName() {
         return firstName;
     }
 
     /**
-     * Getter for the rank of the player
+     * Getter for the rank of the player.
      *
-     * @return returns the rank of the player
+     * @return The rank of the player
      */
     public Rank getRank() {
         return rank;
     }
 
+    /**
+     * Returns the string representation of a player as his/her full name.
+     *
+     * @return The full name of the player
+     */
     @Override
     public String toString() {
         return firstName + ' ' + lastName;
@@ -100,9 +113,9 @@ public class Player {
     }
 
     /**
-     * Sets the rank of the player
+     * Sets the rank of the player.
      *
-     * @param newRank the new value of the rank we have to set
+     * @param newRank The new value of the rank
      */
     public void setRank(Rank newRank) {
         rank = newRank;
