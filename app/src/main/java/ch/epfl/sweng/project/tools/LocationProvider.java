@@ -22,6 +22,7 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
     private final Context context;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
+    private Location lastLocation;
 
     public LocationProvider(Context context) {
         this.context = context;
@@ -34,9 +35,9 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            if (location != null) {
-                notifyListener(location);
+            lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if (lastLocation != null) {
+                notifyListener(lastLocation);
             }
             startLocationUpdates();
         }
@@ -49,7 +50,8 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
 
     @Override
     public void onLocationChanged(Location location) {
-        notifyListener(location);
+        lastLocation = location;
+        notifyListener(lastLocation);
     }
 
     public void setProviderListener(LocationProviderListener providerListener) {
@@ -65,6 +67,10 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
             googleApiClient.disconnect();
         }
+    }
+
+    public Location getLastLocation() {
+        return lastLocation;
     }
 
     private synchronized void buildGoogleApiClient() {
