@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project.tools;
 
+
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
@@ -11,9 +12,8 @@ import android.text.format.DateFormat;
 import java.util.Calendar;
 
 /**
- * @author Nicolas Phan Van
+ * TimePicker used to choose an hour in the day.
  */
-
 public final class TimePickerFragment extends DialogFragment {
 
     @NonNull

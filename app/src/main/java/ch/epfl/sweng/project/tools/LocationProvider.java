@@ -15,6 +15,14 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+/**
+ * Utility class that provides methods to access the current location.
+ * <br>
+ * Can be used in two ways: either implement the
+ * {@link ch.epfl.sweng.project.tools.LocationProviderListener LocationProviderListener}
+ * interface to get real-time notifications when the location changes, or use the
+ * {@link #getLastLocation()} method to get the current location.
+ */
 public final class LocationProvider implements ConnectionCallbacks, LocationListener {
 
     private LocationProviderListener providerListener;
@@ -24,6 +32,11 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
     private LocationRequest locationRequest;
     private Location lastLocation;
 
+    /**
+     * Constructs a new LocationProvider with the given context.
+     *
+     * @param context The context using the provider
+     */
     public LocationProvider(Context context) {
         this.context = context;
         buildGoogleApiClient();
@@ -54,14 +67,25 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
         notifyListener(lastLocation);
     }
 
+    /**
+     * Sets a listener for this LocationProvider.
+     *
+     * @param providerListener The listener
+     */
     public void setProviderListener(LocationProviderListener providerListener) {
         this.providerListener = providerListener;
     }
 
+    /**
+     * Manually connects the googleApiClient to enable access to location services.
+     */
     public void connectGoogleApiClient() {
         googleApiClient.connect();
     }
 
+    /**
+     * Stops location updates and disconnects the googleApiClient.
+     */
     public void stopLocationUpdates() {
         if (googleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
@@ -69,10 +93,18 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
         }
     }
 
+    /**
+     * Returns the current location of the user.
+     *
+     * @return The current location
+     */
     public Location getLastLocation() {
         return lastLocation;
     }
 
+    /**
+     * Builds a new googleApiClient to provide access to location services.
+     */
     private synchronized void buildGoogleApiClient() {
         googleApiClient = new GoogleApiClient.Builder(context)
                 .addConnectionCallbacks(this)
@@ -87,6 +119,10 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 
+    /**
+     * Starts the location updates, notifying the provider whenever
+     * the location changes.
+     */
     private void startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -96,6 +132,11 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
         }
     }
 
+    /**
+     * Call to the provider's listener to provide new location.
+     *
+     * @param location The updated current location
+     */
     private void notifyListener(Location location) {
         if (providerListener != null) {
             providerListener.onLocationChanged(location);

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project.tools;
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import ch.epfl.sweng.project.model.Match;
  * @author Nicolas Phan Van
  */
 public class CustomAdapter extends BaseAdapter {
+
     private final Context context;
     private final List<Match> matches;
 
@@ -69,4 +71,5 @@ public class CustomAdapter extends BaseAdapter {
 
         return convertView;
     }
+
 }
