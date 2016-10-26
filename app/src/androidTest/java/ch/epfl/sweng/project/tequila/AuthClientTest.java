@@ -10,7 +10,8 @@ import org.junit.Test;
  * @author Alexis Montavon
  */
 
-public class AuthClientTest {
+public class
+AuthClientTest {
 
     @Test
     public void createRightRequestUrl() {
