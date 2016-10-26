@@ -1,6 +1,8 @@
 package ch.epfl.sweng.project.database;
 
 
+import android.util.Log;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -94,7 +96,6 @@ public class MatchDatabaseInterface {
         public void onComplete(DatabaseError error, DatabaseReference ref) {
             if (error != null) {
                 throw new ProviderException("Firebase operation did not complete");
-
             }
         }
 
