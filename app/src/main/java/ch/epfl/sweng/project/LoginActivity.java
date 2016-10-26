@@ -179,7 +179,6 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             Log.d(TAG, "Signup was successfull? " + task.isSuccessful());
                             if (task.isSuccessful()) {
-                                //UserProvider userProvider = new UserProvider();
                                 FirebaseDatabase.getInstance().getReference().child("players")
                                         .child(profile.sciper).setValue(new Player(
                                         new Player.PlayerID(Long.parseLong(profile.sciper)),
@@ -188,15 +187,7 @@ public class LoginActivity extends AppCompatActivity {
                                 ));
                                 Player p = new Player(new Player.PlayerID(Long.parseLong(profile.sciper)), profile.lastNames, profile.firstNames);
                                 FirebaseDatabase.getInstance().getReference("players").child(p.getID().toString()).setValue(p);
-                                        /*
-                                userProvider.addPlayer(new Player(
-                                        new Player.PlayerID(Long.parseLong(profile.sciper)),
-                                        profile.lastNames,
-                                        profile.firstNames
-                                ));
-                                */
                                 fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
-                                //userProvider.close();
                             }
                         }
                     });

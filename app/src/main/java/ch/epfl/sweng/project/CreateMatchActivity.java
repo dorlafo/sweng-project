@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,8 +33,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
-import ch.epfl.sweng.project.database.MatchDatabaseInterface;
-import ch.epfl.sweng.project.database.UserProvider;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;
 import ch.epfl.sweng.project.model.Player;
@@ -46,8 +43,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
         OnItemSelectedListener,
         OnTimeSetListener {
 
-    //MatchDatabaseInterface matchDBInterface;
-    //UserProvider userProvider;
     Button createMatchButton;
 
     private Match.Builder matchBuilder;
@@ -56,9 +51,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //userProvider = new UserProvider();
-        //userProvider.addEventListener(new ButtonEnabler());
-        //matchDBInterface = new MatchDatabaseInterface();
         matchBuilder = new Match.Builder();
 
         setContentView(R.layout.activity_create_match);
@@ -129,12 +121,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_create_button:
-                //Player currentPlayer = userProvider.getPlayerWithID(currentUserId);
-                //Player currentPlayer =
                 // TODO: retrieve gps position
-                //matchBuilder.setLocation(findPosition());
-                //matchBuilder.addPlayer(currentPlayer);
-                //String matchId = matchDBInterface.writeNewMatch(matchBuilder.build());
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("matches");
                 String matchId = ref.push().getKey();
                 ref.child(matchId).setValue(matchBuilder.build());
@@ -185,27 +172,4 @@ public class CreateMatchActivity extends AppCompatActivity implements
         }
         // TODO: warning or error for time before current time
     }
-
-    /*
-    private class ButtonEnabler implements ChildEventListener {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            if (dataSnapshot.getKey().equals(currentUserId)) {
-                createMatchButton.setEnabled(true);
-            }
-        }
-
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {}
-
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) { }
-    }
-    */
 }
