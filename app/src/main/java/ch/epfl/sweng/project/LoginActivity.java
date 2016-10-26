@@ -10,8 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -155,7 +157,6 @@ public class LoginActivity extends AppCompatActivity {
             is.read(buffer);
             is.close();
             json = new String(buffer, "UTF-8");
-            //TODO: On devrait pas retourner json ici ???? (Pour Alexis)
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
@@ -165,35 +166,35 @@ public class LoginActivity extends AppCompatActivity {
 
     private void authenticateWithFirebase(final Profile profile) {
         // TODO: REPLACE SCIPER WITH HASH
-        fAuth.signInWithEmailAndPassword(profile.email, profile.sciper).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "signInWithEmail:onComplete " + task.isSuccessful());
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                if (currentUser != null) {
-                    fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
-                }
-                if (!task.isSuccessful()) {
-                    fAuth.createUserWithEmailAndPassword(profile.email, profile.sciper).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Log.d(TAG, "Signup was successfull? " + task.isSuccessful());
-                            if (task.isSuccessful()) {
-                                FirebaseDatabase.getInstance().getReference().child("players")
-                                        .child(profile.sciper).setValue(new Player(
-                                        new Player.PlayerID(Long.parseLong(profile.sciper)),
-                                        profile.lastNames,
-                                        profile.firstNames
-                                ));
-                                Player p = new Player(new Player.PlayerID(Long.parseLong(profile.sciper)), profile.lastNames, profile.firstNames);
-                                FirebaseDatabase.getInstance().getReference("players").child(p.getID().toString()).setValue(p);
-                                fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
-                            }
+        fAuth.signInWithEmailAndPassword(profile.email, profile.sciper)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithEmail:onComplete " + task.isSuccessful());
+                        if(task.isSuccessful()) {
+                            Log.d(TAG, "updating Profile...");
+                            fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
                         }
-                    });
-                }
-            }
-
-        });
+                        else {
+                            Log.d(TAG, "task.isSuccessful() is false");
+                            fAuth.createUserWithEmailAndPassword(profile.email, profile.sciper)
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            Log.d(TAG, "Signup was successfull? " + task.isSuccessful());
+                                            if (task.isSuccessful()) {
+                                                FirebaseDatabase.getInstance().getReference().child("players")
+                                                        .child(profile.sciper).setValue(new Player(
+                                                        new Player.PlayerID(Long.parseLong(profile.sciper)),
+                                                        profile.lastNames,
+                                                        profile.firstNames
+                                                ));
+                                                fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
+                                            }
+                                        }
+                            });
+                        }
+                    }
+                });
     }
 }
