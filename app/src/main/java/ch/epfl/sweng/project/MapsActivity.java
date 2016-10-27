@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -46,6 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.project.model.Match;
+import ch.epfl.sweng.project.res.DummyMatchData;
 import ch.epfl.sweng.project.tools.MatchStringifier;
 
 /**
@@ -141,10 +143,11 @@ public class MapsActivity extends FragmentActivity implements
             @Override
             public void onInfoWindowClick(Marker marker) {
                 // TODO: make clicking on the info window join the match
+                System.out.print(marker.getTag().toString());
             }
         });
 
-        //displayNearbyMatches(DummyMatchData.dummyMatches());
+        //displayNearbyMatches(DummyMatchData.dummyMatches()); Do not touch
         displayNearbyMatches();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -274,12 +277,13 @@ public class MapsActivity extends FragmentActivity implements
         for (Match match : matches) {
             if (!match.isPrivateMatch()) {
                 stringifier.setMatch(match);
-                matchMap.addMarker(new MarkerOptions()
+                Marker marker = matchMap.addMarker(new MarkerOptions()
                         .position(match.getLocation().toLatLng())
                         .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                marker.setTag(match.getMatchID());
             }
         }
     }
@@ -321,12 +325,14 @@ public class MapsActivity extends FragmentActivity implements
 
             private Marker createMarker(Match m) {
                 stringifier.setMatch(m);
-                return matchMap.addMarker(new MarkerOptions()
+                Marker marker =  matchMap.addMarker(new MarkerOptions()
                         .position(m.getLocation().toLatLng())
                         .title(m.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                marker.setTag(m.getMatchID());
+                return marker;
             }
         });
 

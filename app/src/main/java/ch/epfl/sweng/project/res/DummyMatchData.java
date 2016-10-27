@@ -57,7 +57,7 @@ public class DummyMatchData {
         List<Player> match7Players = new ArrayList<>();
 
         Match match1 = new Match(match1Players, rolexCoord,
-                "Rolex", false, CLASSIC, new Date().getTime(), "");
+                "Rolex", false, CLASSIC, new Date().getTime(), "bobo");
         Match match2 = new Match(match2Players, BCCoord,
                 "BC", false, CLASSIC, new Date(100, 12, 25).getTime(), "");
         Match match3 = new Match(match3Players, COCoord,
