@@ -26,9 +26,9 @@ import ch.epfl.sweng.project.tools.MatchListAdapter;
  * @author Nicolas Phan Van
  */
 public class MatchListActivity extends ListActivity {
-    MatchListAdapter mAdapter;
-    String sciper;
-    Player player;
+    private MatchListAdapter mAdapter;
+    private String sciper;
+    private Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
