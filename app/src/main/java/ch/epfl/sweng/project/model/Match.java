@@ -22,6 +22,7 @@ public class Match {
     private GameVariant gameVariant;
     private int maxPlayerNumber;
     private long expirationTime;
+    private String matchID;
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase
@@ -44,7 +45,8 @@ public class Match {
                  String description,
                  boolean privateMatch,
                  GameVariant gameVariant,
-                 long expirationTime) {
+                 long expirationTime,
+                 String matchID) {
         this.players = new ArrayList<>(players);
         this.location = location;
         this.description = description;
@@ -53,14 +55,16 @@ public class Match {
         this.gameVariant = gameVariant;
         this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
         this.expirationTime = expirationTime;
+        this.matchID = matchID;
     }
 
     public Match(List<Player> players,
                  GPSPoint location,
                  String description,
                  boolean privateMatch,
-                 long expirationTime) {
-        this(players, location, description, privateMatch, CLASSIC, expirationTime);
+                 long expirationTime,
+                 String matchID) {
+        this(players, location, description, privateMatch, CLASSIC, expirationTime, matchID);
     }
 
     /**
@@ -70,6 +74,18 @@ public class Match {
      */
     public List<Player> getPlayers() {
         return Collections.unmodifiableList(players);
+    }
+
+    /**
+     * Add player to match
+     */
+    // TODO: Check player pas dedans une fois qu'on a code Nicolas
+    public void addPlayer(Player player) throws IllegalStateException {
+        if (players.size() < maxPlayerNumber) {
+            players.add(player);
+        } else {
+            throw new IllegalStateException("Match is full.");
+        }
     }
 
     /**
@@ -146,6 +162,10 @@ public class Match {
     }
 
     /**
+     * MatchID getter
+     */
+    public String getMatchID() { return matchID;}
+    /**
      * GameVariant is an enumeration that represents the various game variants of a match
      */
     public enum GameVariant {
@@ -182,6 +202,7 @@ public class Match {
         private GameVariant gameVariant;
         private int maxPlayerNumber;
         private long expirationTime;
+        private String matchID;
 
         public Builder() {
             players = new ArrayList<>();
@@ -230,6 +251,11 @@ public class Match {
             return this;
         }
 
+        public Builder setMatchID(String matchID) {
+            this.matchID = matchID;
+            return this;
+        }
+
         // TODO: check validity of arguments
         public Match build() throws IllegalArgumentException {
             if (players.isEmpty()) {
@@ -238,7 +264,7 @@ public class Match {
                 throw new IllegalStateException("Too many players.");
             } else {
                 return new Match(players, location, description, privateMatch,
-                        gameVariant, expirationTime);
+                        gameVariant, expirationTime, matchID);
             }
 
         }

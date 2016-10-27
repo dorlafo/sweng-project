@@ -57,20 +57,20 @@ public class DummyMatchData {
         List<Player> match7Players = new ArrayList<>();
 
         Match match1 = new Match(match1Players, rolexCoord,
-                "Rolex", false, CLASSIC, new Date().getTime());
+                "Rolex", false, CLASSIC, new Date().getTime(), "bobo");
         Match match2 = new Match(match2Players, BCCoord,
-                "BC", false, CLASSIC, new Date(100, 12, 25).getTime());
+                "BC", false, CLASSIC, new Date(100, 12, 25).getTime(), "");
         Match match3 = new Match(match3Players, COCoord,
-                "CO", false, CLASSIC, new Date(120, 1, 1).getTime());
+                "CO", false, CLASSIC, new Date(120, 1, 1).getTime(), "");
         Match match4 = new Match(match4Players, swissTechCoord,
-                "SwissTech", true, CLASSIC, new Date(300, 31, 12).getTime());
+                "SwissTech", true, CLASSIC, new Date(300, 31, 12).getTime(), "");
         Match match5 = new Match(match5Players, CECoord,
-                "CE", false, CLASSIC, new Date(300, 31, 12).getTime());
+                "CE", false, CLASSIC, new Date(300, 31, 12).getTime(), "");
         Match match6 = new Match(match6Players, flonCoord,
-                "Flon", false, CLASSIC, new Date(300, 31, 12).getTime());
+                "Flon", false, CLASSIC, new Date(300, 31, 12).getTime(), "");
         Match match7 = new Match(match7Players, lemanCoord,
                 "Cette String est beaucoup trop longue, je me demande si l'affichage va foirer???",
-                false, CLASSIC, new Date(300, 31, 12).getTime());
+                false, CLASSIC, new Date(300, 31, 12).getTime(), "");
 
         List<Match> matches = new ArrayList<>();
         matches.add(match1);

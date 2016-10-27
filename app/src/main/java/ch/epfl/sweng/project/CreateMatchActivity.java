@@ -124,7 +124,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 // TODO: retrieve gps position
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("matches");
                 String matchId = ref.push().getKey();
-                ref.child(matchId).setValue(matchBuilder.build());
+                ref.child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
                 Log.d(TAG, "Pushed match " + matchId + " to database");
                 Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
                 getIntent().putExtra("MATCH_ID", matchId);
