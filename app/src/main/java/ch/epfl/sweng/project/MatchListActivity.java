@@ -65,11 +65,15 @@ public class MatchListActivity extends ListActivity {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         player = dataSnapshot.getValue(Player.class);
-                                        match.addPlayer(player);
-                                        ref.child(matchID).setValue(match);
-                                        Intent moveToMatchActivity = new Intent(MatchListActivity.this, MatchActivity.class);
-                                        getIntent().putExtra("MATCH_ID", matchID);
-                                        startActivity(moveToMatchActivity);
+                                        try {
+                                            match.addPlayer(player);
+                                            ref.child("matches").child(matchID).setValue(match);
+                                            Intent moveToMatchActivity = new Intent(MatchListActivity.this, MatchActivity.class);
+                                            getIntent().putExtra("MATCH_ID", matchID);
+                                            startActivity(moveToMatchActivity);
+                                        } catch(IllegalStateException e) {
+                                            sendErrorMessage("Sorry, desired match is full");
+                                        }
                                     }
 
                                     @Override
@@ -98,5 +102,12 @@ public class MatchListActivity extends ListActivity {
     protected void onDestroy() {
         super.onDestroy();
         mAdapter.cleanup();
+    }
+
+    protected void sendErrorMessage(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.match_is_full)
+                .setMessage(message)
+                .show();
     }
 }

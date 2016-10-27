@@ -41,4 +41,6 @@
     <string name="join_match">Join Match</string>
     <string name="join_message">Do you want to join this match ?</string>
     <string name="join">Join!</string>
+    <string name="ok">OK</string>
+    <string name="match_is_full">Match is full!</string>
 </resources>
