@@ -3,7 +3,6 @@ package ch.epfl.sweng.project;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Player;
-import ch.epfl.sweng.project.tequila.AuthClient;
 import ch.epfl.sweng.project.tools.MatchListAdapter;
 
 /**
@@ -55,9 +53,9 @@ public class MatchListActivity extends ListActivity {
                 .setMessage(R.string.join_message)
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                        Match match = mAdapter.getItem(position);
-                        String matchID = match.getMatchID();
+                        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                        final Match match = mAdapter.getItem(position);
+                        final String matchID = match.getMatchID();
                         sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                         FirebaseDatabase.getInstance().getReference()
                                 .child("players")
@@ -67,6 +65,11 @@ public class MatchListActivity extends ListActivity {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         player = dataSnapshot.getValue(Player.class);
+                                        match.addPlayer(player);
+                                        ref.child(matchID).setValue(match);
+                                        Intent moveToMatchActivity = new Intent(MatchListActivity.this, MatchActivity.class);
+                                        getIntent().putExtra("MATCH_ID", matchID);
+                                        startActivity(moveToMatchActivity);
                                     }
 
                                     @Override
@@ -74,11 +77,7 @@ public class MatchListActivity extends ListActivity {
 
                                     }
                                 });
-                        match.addPlayer(player);
-                        ref.child(matchID).setValue(match);
-                        Intent moveToMatchActivity = new Intent(MatchListActivity.this, MatchActivity.class);
-                        getIntent().putExtra("MATCH_ID", matchID);
-                        startActivity(moveToMatchActivity);
+
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
