@@ -46,8 +46,8 @@ public class MatchListActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, final int position, long id) {
-        // Opens dialog box to alert user of the authentication fail
-        // Allows user to cancel or retry
+        // Opens dialog box to ask user if he wants to join match
+        // Allows user to cancel or accept
         new AlertDialog.Builder(this)
                 .setTitle(R.string.join_match)
                 .setMessage(R.string.join_message)
@@ -104,6 +104,10 @@ public class MatchListActivity extends ListActivity {
         mAdapter.cleanup();
     }
 
+    /*
+     * Handles IllegalStateException
+     * Sends Error message to User and go back to MatchListActivity
+     */
     protected void sendErrorMessage(String message) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.match_is_full)
