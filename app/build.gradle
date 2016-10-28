@@ -85,7 +85,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.android.support:design:24.2.1'
 
-    compile 'org.mockito:mockito-core:2.2.5'
+    androidTestCompile 'org.mockito:mockito-core:2.2.9'
 
     testCompile 'junit:junit:4.12'
     androidTestCompile 'junit:junit:4.12'
