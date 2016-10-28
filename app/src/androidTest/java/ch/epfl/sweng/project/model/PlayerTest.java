@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotEquals;
 public final class PlayerTest {
 
     private final Player amaury = new Player(new Player.PlayerID(1), "Combes", "Amaury", new Rank(123));
-    private final Player vincenzo = new Player(new Player.PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
+    private final Player vincenzo = new Player(new Player.PlayerID(2), "Bazzucchi", "Vincenzo");
 
     @Test
     public void equalsReturnsFalseWhenComparingWithNull() {

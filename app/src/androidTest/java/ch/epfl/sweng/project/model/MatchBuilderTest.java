@@ -9,7 +9,6 @@ import java.util.List;
 
 import ch.epfl.sweng.project.model.Player.PlayerID;
 
-import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
@@ -37,8 +36,8 @@ public final class MatchBuilderTest {
         List<Player> players = new ArrayList<>();
         players.add(amaury);
         Match defaultMatch = new Match(players, new GPSPoint(46.520407, 6.565802),
-                Match.Builder.DEFAULT_DESCRIPTION, false, CLASSIC,
-                Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000);
+                Match.Builder.DEFAULT_DESCRIPTION, false, Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000,
+                Match.Builder.DEFAULT_ID);
 
         assertEquals(defaultMatch, match);
     }
@@ -54,14 +53,17 @@ public final class MatchBuilderTest {
                 + 24 * 3600 * 1000;
 
         matchBuilder.setLocation(newLocation).setDescription(newDescription)
-                .setPrivacy(true).setExpirationTime(newExpirationTime);
+                .setPrivacy(true).setExpirationTime(newExpirationTime)
+                .setMatchID("new match id");
 
         Match setMatch = matchBuilder.build();
 
         assertEquals(newLocation, setMatch.getLocation());
         assertEquals(newDescription, setMatch.getDescription());
         assertTrue(setMatch.isPrivateMatch());
+        assertEquals(4, setMatch.getMaxPlayerNumber());
         assertEquals(newExpirationTime, setMatch.getExpirationTime(), 10);
+        assertEquals("new match id", setMatch.getMatchID());
     }
 
     @Test

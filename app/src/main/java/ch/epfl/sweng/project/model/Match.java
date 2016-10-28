@@ -263,6 +263,7 @@ public class Match {
     public static final class Builder {
 
         public static final String DEFAULT_DESCRIPTION = "New Match";
+        public static final String DEFAULT_ID = "Default Match ID";
 
         private List<Player> players;
         private GPSPoint location;
@@ -284,7 +285,7 @@ public class Match {
             gameVariant = CLASSIC;
             maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
             expirationTime = Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000; // 2 hours after current time
-            matchID = "";
+            matchID = DEFAULT_ID;
         }
 
         /**
