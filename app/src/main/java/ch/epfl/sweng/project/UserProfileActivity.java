@@ -17,20 +17,26 @@ import ch.epfl.sweng.project.model.Player;
 public class UserProfileActivity extends AppCompatActivity {
 
     private final String TAG = UserProfileActivity.class.getSimpleName();
-    private TextView mtwPlayerID;
-    private TextView mtwLastName;
-    private TextView mtwFirstName;
-    private TextView mtwPlayerRank;
+    public static TextView mtwPlayerID;
+    public static TextView mtwLastName;
+    public static TextView mtwFirstName;
+    public static TextView mtwPlayerRank;
     String sciper;
+
+    private DatabaseReference dRef = FirebaseDatabase.getInstance().getReference();
+
+    public void setReference(DatabaseReference newDRef) {
+        dRef = newDRef;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        //sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
 
         //New ChildEventListener that will change the value of the textView according to the current
         //logged in user
-        FirebaseDatabase.getInstance().getReference()
+        dRef
                 .child("players")
                 .child(sciper)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
