@@ -177,21 +177,13 @@ public class Match {
 
         Match otherMatch = (Match) other;
 
-        return this.players.equals(otherMatch.players) // does order matter?
-                && this.location.equals(otherMatch.location)
-                && this.description.equals(otherMatch.description)
-                // compare rank?
-                && this.privateMatch == otherMatch.privateMatch
-                && this.gameVariant == otherMatch.gameVariant
-                && this.maxPlayerNumber == otherMatch.maxPlayerNumber
-                && Math.abs(this.expirationTime - otherMatch.expirationTime) < 60 * 1000;
+        return this.matchID.equals(otherMatch.matchID);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-        return Objects.hash(players, location, description, privateMatch,
-                gameVariant, maxPlayerNumber, expirationTime);
+        return Objects.hash(matchID);
     }
 
     /**
