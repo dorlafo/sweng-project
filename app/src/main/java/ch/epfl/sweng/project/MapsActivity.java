@@ -3,6 +3,7 @@ package ch.epfl.sweng.project;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -31,17 +33,19 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.res.DummyMatchData;
+import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.tools.LocationProvider;
 import ch.epfl.sweng.project.tools.LocationProviderListener;
 import ch.epfl.sweng.project.tools.MatchStringifier;
@@ -50,8 +54,6 @@ import ch.epfl.sweng.project.tools.MatchStringifier;
  * Activity displaying matches as markers on a Google Maps Fragment.
  * <p>
  * Clicking on a marker displays the match information.
- *
- * @author Nicolas Phan Van
  */
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback, LocationProviderListener {
@@ -60,6 +62,9 @@ public class MapsActivity extends FragmentActivity implements
 
     private GoogleMap matchMap;
     private LocationProvider locationProvider;
+    private String sciper;
+    private Player player;
+    private Match match;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,12 +129,65 @@ public class MapsActivity extends FragmentActivity implements
         });
         matchMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
             @Override
-            public void onInfoWindowClick(Marker marker) {
-                // TODO: make clicking on the info window join the match
+            public void onInfoWindowClick(final Marker marker) {
+                new AlertDialog.Builder(MapsActivity.this)
+                        .setTitle(R.string.join_match)
+                        .setMessage(R.string.join_message)
+                        .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                                final String matchID = marker.getTag().toString();
+                                ref.child("matches").child(matchID)
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                match = dataSnapshot.getValue(Match.class);
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                                FirebaseDatabase.getInstance().getReference()
+                                        .child("players")
+                                        .child(sciper)
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                player = dataSnapshot.getValue(Player.class);
+                                                try {
+                                                    match.addPlayer(player);
+                                                    ref.child("matches").child(matchID).setValue(match);
+                                                    Intent moveToMatchActivity = new Intent(MapsActivity.this, MatchActivity.class);
+                                                    getIntent().putExtra("MATCH_ID", matchID);
+                                                    startActivity(moveToMatchActivity);
+                                                } catch (IllegalStateException e) {
+                                                    sendErrorMessage("Sorry, desired match is full");
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing, goes back to ListMatchActivity
+                            }
+                        })
+                        .show();
             }
         });
 
-        //displayNearbyMatches(DummyMatchData.dummyMatches());
+        //displayNearbyMatches(DummyMatchData.dummyMatches()); Do not touch
         displayNearbyMatches();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -177,6 +235,17 @@ public class MapsActivity extends FragmentActivity implements
         startActivity(intent);
     }
 
+    /*
+     * Handles IllegalStateException
+     * Sends Error message to User and go back to MatchListActivity
+     */
+    protected void sendErrorMessage(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.match_is_full)
+                .setMessage(message)
+                .show();
+    }
+
     private void createMap() {
         if (matchMap == null) {
             SupportMapFragment mapFragment =
@@ -209,12 +278,13 @@ public class MapsActivity extends FragmentActivity implements
         for (Match match : matches) {
             if (!match.isPrivateMatch()) {
                 stringifier.setMatch(match);
-                matchMap.addMarker(new MarkerOptions()
+                Marker marker = matchMap.addMarker(new MarkerOptions()
                         .position(match.getLocation().toLatLng())
                         .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                marker.setTag(match.getMatchID());
             }
         }
     }
@@ -223,7 +293,7 @@ public class MapsActivity extends FragmentActivity implements
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("matches");
 
         ref.addChildEventListener(new ChildEventListener() {
-            private final Map<String, Marker> markers = new HashMap<String, Marker>();
+            private final Map<String, Marker> markers = new HashMap<>();
             private final MatchStringifier stringifier = new MatchStringifier(MapsActivity.this);
 
             @Override
@@ -256,15 +326,16 @@ public class MapsActivity extends FragmentActivity implements
 
             private Marker createMarker(Match m) {
                 stringifier.setMatch(m);
-                return matchMap.addMarker(new MarkerOptions()
+                Marker marker = matchMap.addMarker(new MarkerOptions()
                         .position(m.getLocation().toLatLng())
                         .title(m.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                marker.setTag(m.getMatchID());
+                return marker;
             }
         });
-
     }
 
 }

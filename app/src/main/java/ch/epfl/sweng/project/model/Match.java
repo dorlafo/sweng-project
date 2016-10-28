@@ -29,6 +29,7 @@ public class Match {
     private GameVariant gameVariant;
     private int maxPlayerNumber;
     private long expirationTime;
+    private String matchID;
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase.
@@ -45,13 +46,15 @@ public class Match {
      * @param privateMatch   The visibility of the match (public or private)
      * @param gameVariant    The variant of the match
      * @param expirationTime The time at which the match expires (in milliseconds after epoch)
+     * @param matchID        The unique firebase ID of the match
      */
     public Match(List<Player> players,
                  GPSPoint location,
                  String description,
                  boolean privateMatch,
                  GameVariant gameVariant,
-                 long expirationTime) {
+                 long expirationTime,
+                 String matchID) {
         this.players = new ArrayList<>(players);
         this.location = location;
         this.description = description;
@@ -60,6 +63,7 @@ public class Match {
         this.gameVariant = gameVariant;
         this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
         this.expirationTime = expirationTime;
+        this.matchID = matchID;
     }
 
     /**
@@ -70,13 +74,15 @@ public class Match {
      * @param description    A brief description of the match (detailed location...)
      * @param privateMatch   The visibility of the match (public or private)
      * @param expirationTime The time at which the match expires (in milliseconds after epoch)
+     * @param matchID        The unique firebase ID of the match
      */
     public Match(List<Player> players,
                  GPSPoint location,
                  String description,
                  boolean privateMatch,
-                 long expirationTime) {
-        this(players, location, description, privateMatch, CLASSIC, expirationTime);
+                 long expirationTime,
+                 String matchID) {
+        this(players, location, description, privateMatch, CLASSIC, expirationTime, matchID);
     }
 
     /**
@@ -152,6 +158,15 @@ public class Match {
         return expirationTime;
     }
 
+    /**
+     * Getter for the firebase ID of the match.
+     *
+     * @return The firebase ID of the match
+     */
+    public String getMatchID() {
+        return matchID;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -179,12 +194,6 @@ public class Match {
                 gameVariant, maxPlayerNumber, expirationTime);
     }
 
-    public static class MatchRank extends Rank {
-        public MatchRank(int rank) {
-            super(rank);
-        }
-    }
-
     /**
      * Getter for the creator of the match, its first player.
      *
@@ -192,6 +201,32 @@ public class Match {
      */
     public Player createdBy() {
         return players.get(0);
+    }
+
+    /**
+     * Adds the given player to the match.
+     * <p>
+     * Adding a player that is already present in the match does nothing,
+     * and adding a player if the match if full throws an exception.
+     *
+     * @param player The player to add to the match
+     * @throws IllegalStateException When the match is full
+     */
+    public void addPlayer(Player player) throws IllegalStateException {
+        if (players.size() >= maxPlayerNumber) {
+            throw new IllegalStateException("Match is full.");
+        }
+        if (!players.contains(player)) {
+            players.add(player);
+        }
+    }
+
+    public static class MatchRank extends Rank {
+
+        public MatchRank(int rank) {
+            super(rank);
+        }
+
     }
 
     /**
@@ -244,6 +279,7 @@ public class Match {
         private GameVariant gameVariant;
         private int maxPlayerNumber;
         private long expirationTime;
+        private String matchID;
 
         /**
          * Constructs a new match builder with default values, but with an empty player list.
@@ -256,6 +292,7 @@ public class Match {
             gameVariant = CLASSIC;
             maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
             expirationTime = Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000; // 2 hours after current time
+            matchID = "";
         }
 
         /**
@@ -313,6 +350,11 @@ public class Match {
             return this;
         }
 
+        public Builder setMatchID(String matchID) {
+            this.matchID = matchID;
+            return this;
+        }
+
         /**
          * Builds and returns the match.
          * <p>
@@ -330,7 +372,7 @@ public class Match {
                 throw new IllegalStateException("Too many players.");
             } else {
                 return new Match(players, location, description, privateMatch,
-                        gameVariant, expirationTime);
+                        gameVariant, expirationTime, matchID);
             }
         }
 

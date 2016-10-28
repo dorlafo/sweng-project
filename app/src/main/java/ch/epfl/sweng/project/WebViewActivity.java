@@ -3,8 +3,8 @@ package ch.epfl.sweng.project;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -41,12 +41,12 @@ public class WebViewActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 // Terminates WebView activity after retrieving
                 // redirect URI if all went well
-                if(url.contains("?code=")) {
+                if (url.contains("?code=")) {
                     Intent result = new Intent();
                     result.putExtra("url", url);
                     setResult(RESULT_OK, result);
                     finish();
-                } else if(url.contains("error=")) {
+                } else if (url.contains("error=")) {
                     Intent result = new Intent();
                     result.putExtra("url", url);
                     setResult(RESULT_CANCELED, result);
@@ -62,7 +62,7 @@ public class WebViewActivity extends AppCompatActivity {
             @Override
             @SuppressWarnings("deprecation")
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if(url.startsWith("jassatepfl:")) {
+                if (url.startsWith("jassatepfl:")) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(url));
                     view.getContext().startActivity(intent);
@@ -73,4 +73,5 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
     }
+
 }

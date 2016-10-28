@@ -11,6 +11,7 @@ import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.model.Match;
 
 public class MatchListAdapter extends FirebaseListAdapter<Match> {
+
     private final Activity activity;
 
     public MatchListAdapter(Activity activity) {
@@ -35,4 +36,5 @@ public class MatchListAdapter extends FirebaseListAdapter<Match> {
         variant.setText(stringifier.variantToString());
         expirationDate.setText(stringifier.dateToStringCustom());
     }
+
 }

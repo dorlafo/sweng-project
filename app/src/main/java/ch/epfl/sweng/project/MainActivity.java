@@ -1,9 +1,9 @@
 package ch.epfl.sweng.project;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Build;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,11 +11,8 @@ import android.webkit.CookieManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-
-/**
- * Your app's main activity.
- */
 public final class MainActivity extends AppCompatActivity {
+
     private FirebaseAuth fAuth;
 
     @Override
@@ -63,16 +60,6 @@ public final class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Launch the LoginActivity if the user is not yet logged in
-     */
-    private void showLogin() {
-        if(fAuth.getCurrentUser() == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
-    }
-
     public void createMatch(View view) {
         Intent intent = new Intent(this, CreateMatchActivity.class);
         startActivity(intent);
@@ -80,6 +67,7 @@ public final class MainActivity extends AppCompatActivity {
 
     /**
      * Launch the UserProfileActivity then the Profile button is clicked
+     *
      * @param view Required param
      */
     public void viewProfile(View view) {
@@ -96,4 +84,15 @@ public final class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MatchListActivity.class);
         startActivity(intent);
     }
+
+    /**
+     * Launch the LoginActivity if the user is not yet logged in
+     */
+    private void showLogin() {
+        if (fAuth.getCurrentUser() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+    }
+
 }

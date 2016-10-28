@@ -17,8 +17,6 @@ import ch.epfl.sweng.project.model.Match;
  * Custom {@link android.widget.Adapter Adapter} used to display
  * matches in the {@link android.widget.ListView ListView} of
  * {@link ch.epfl.sweng.project.MatchListActivity MatchListActivity}.
- *
- * @author Nicolas Phan Van
  */
 public class CustomAdapter extends BaseAdapter {
 

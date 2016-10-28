@@ -16,8 +16,6 @@ import ch.epfl.sweng.project.model.Player;
 /**
  * Helper Class providing methods to "stringify" the different
  * fields of a {@link ch.epfl.sweng.project.model.Match Match}.
- *
- * @author Nicolas Phan Van
  */
 public final class MatchStringifier {
 

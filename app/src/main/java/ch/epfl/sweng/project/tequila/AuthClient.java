@@ -3,23 +3,22 @@ package ch.epfl.sweng.project.tequila;
 
 /**
  * Client code for Tequila authentication
+ * <p>
+ * This code was taken from the example of Solal Pirelli:
+ * https://github.com/sweng-epfl/tequila-sample/tree/master/src/main/java/ch/epfl/sweng/tequila
  *
  * @author Alexis Montavon
- *
- * This code was taken from the example of Solal Pirelli:
- *   https://github.com/sweng-epfl/tequila-sample/tree/master/src/main/java/ch/epfl/sweng/tequila
  */
-
 public final class AuthClient {
 
     public static String createCodeRequestUrl(OAuth2Config config) {
 
         String allScopes = "";
-        for(String scope : config.scopes) {
+        for (String scope : config.scopes) {
             allScopes = scope + ',';
         }
         if (allScopes.endsWith(",")) {
-            allScopes = allScopes.substring(0, allScopes.length()-1);
+            allScopes = allScopes.substring(0, allScopes.length() - 1);
         }
         return "https://tequila.epfl.ch/cgi-bin/OAuth2IdP/auth" +
                 "?response_type=code" +
@@ -32,4 +31,5 @@ public final class AuthClient {
         String marker = "code=";
         return redirectUri.substring(redirectUri.indexOf(marker) + marker.length());
     }
+
 }
