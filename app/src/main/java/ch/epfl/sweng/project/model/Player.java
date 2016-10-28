@@ -104,7 +104,7 @@ public class Player {
         }
 
         Player otherPlayer = (Player) other;
-        return this.id.getID() == otherPlayer.id.getID()
+        return this.id.equals(otherPlayer.id)
                 && this.lastName.equals(otherPlayer.lastName)
                 && this.firstName.equals(otherPlayer.firstName);
         // compare rank?
@@ -113,7 +113,7 @@ public class Player {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-        return Objects.hash(id.getID(), lastName, firstName);
+        return Objects.hash(id, lastName, firstName);
     }
 
     /**
