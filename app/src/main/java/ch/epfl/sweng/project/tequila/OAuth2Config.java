@@ -2,13 +2,12 @@ package ch.epfl.sweng.project.tequila;
 
 /**
  * Configuration for an OAuth2 client.
+ * <p>
+ * This code was taken from the example of Solal Pirelli:
+ * https://github.com/sweng-epfl/tequila-sample/tree/master/src/main/java/ch/epfl/sweng/tequila
  *
  * @author Alexis Montavon
- *
- * This code was taken from the example of Solal Pirelli:
- *   https://github.com/sweng-epfl/tequila-sample/tree/master/src/main/java/ch/epfl/sweng/tequila
  */
-
 public final class OAuth2Config {
 
     /**
@@ -43,4 +42,5 @@ public final class OAuth2Config {
         this.clientSecret = clientSecret;
         this.redirectUri = redirectUri;
     }
+
 }

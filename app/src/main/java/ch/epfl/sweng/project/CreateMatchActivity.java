@@ -1,8 +1,10 @@
 package ch.epfl.sweng.project;
 
+
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -31,11 +33,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
+import ch.epfl.sweng.project.model.GPSPoint;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;
 import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.tools.LocationProvider;
 import ch.epfl.sweng.project.tools.TimePickerFragment;
 
 public class CreateMatchActivity extends AppCompatActivity implements
@@ -43,18 +50,26 @@ public class CreateMatchActivity extends AppCompatActivity implements
         OnItemSelectedListener,
         OnTimeSetListener {
 
+    private static final String TAG = CreateMatchActivity.class.getSimpleName();
+
     Button createMatchButton;
 
     private Match.Builder matchBuilder;
-    private static final String TAG = CreateMatchActivity.class.getSimpleName();
+    private LocationProvider locationProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_create_match);
         matchBuilder = new Match.Builder();
 
-        setContentView(R.layout.activity_create_match);
-        // TODO: set match location using GPS or maps view
+        // TODO: make user choose location
+        locationProvider = new LocationProvider(this);
+        Location currentLocation = locationProvider.getLastLocation();
+        if (currentLocation != null) {
+            matchBuilder.setLocation(new GPSPoint(currentLocation.getLatitude(),
+                    currentLocation.getLongitude()));
+        }
 
         createMatchButton = (Button) findViewById(R.id.create_create_button);
         createMatchButton.setEnabled(false);
@@ -65,7 +80,10 @@ public class CreateMatchActivity extends AppCompatActivity implements
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    matchBuilder.setDescription(v.getText().toString());
+                    String description = v.getText().toString();
+                    if (description.length() != 0) {
+                        matchBuilder.setDescription(description);
+                    }
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
                     return true;
@@ -73,9 +91,24 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 return false;
             }
         });
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String description = ((TextView) v).getText().toString();
+                    if (description.length() != 0) {
+                        matchBuilder.setDescription(description);
+                    }
+                }
+            }
+        });
 
         ImageButton timePickerDialog = (ImageButton) findViewById(R.id.time_picker_button);
         timePickerDialog.setOnClickListener(this);
+
+        Calendar defaultExpirationDate = Calendar.getInstance();
+        defaultExpirationDate.add(Calendar.HOUR_OF_DAY, 2);
+        displayCurrentExpirationDate(defaultExpirationDate);
 
         Button addPlayer = (Button) findViewById(R.id.add_player_button);
         addPlayer.setOnClickListener(this);
@@ -100,21 +133,16 @@ public class CreateMatchActivity extends AppCompatActivity implements
         addCurrentUserToBuilder();
     }
 
-    private void addCurrentUserToBuilder() {
-        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        FirebaseDatabase.getInstance().getReference().child("players").child(currentUserId).
-                addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        matchBuilder.addPlayer(dataSnapshot.getValue(Player.class));
-                        createMatchButton.setEnabled(true);
-                    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        locationProvider.connectGoogleApiClient();
+    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+    @Override
+    public void onPause() {
+        super.onPause();
+        locationProvider.stopLocationUpdates();
     }
 
     @Override
@@ -155,11 +183,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar expirationTime = Calendar.getInstance();
         expirationTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -168,8 +191,40 @@ public class CreateMatchActivity extends AppCompatActivity implements
         final Calendar currentTime = Calendar.getInstance();
 
         if (expirationTime.compareTo(currentTime) > 0) {
+            displayCurrentExpirationDate(expirationTime);
             matchBuilder.setExpirationTime(expirationTime.getTimeInMillis());
         }
         // TODO: warning or error for time before current time
     }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    private void addCurrentUserToBuilder() {
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        FirebaseDatabase.getInstance().getReference().child("players").child(currentUserId).
+                addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        matchBuilder.addPlayer(dataSnapshot.getValue(Player.class));
+                        createMatchButton.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void displayCurrentExpirationDate(Calendar calendar) {
+        TextView currentExpirationDate =
+                (TextView) findViewById(R.id.current_expiration_time);
+        DateFormat dateFormat = new SimpleDateFormat(
+                getString(R.string.create_date_format), Locale.FRENCH);
+        currentExpirationDate.setText(dateFormat.format(calendar.getTimeInMillis()));
+    }
+
 }

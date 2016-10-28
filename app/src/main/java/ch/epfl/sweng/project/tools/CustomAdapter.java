@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project.tools;
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,9 @@ import ch.epfl.sweng.project.model.Match;
  * Custom {@link android.widget.Adapter Adapter} used to display
  * matches in the {@link android.widget.ListView ListView} of
  * {@link ch.epfl.sweng.project.MatchListActivity MatchListActivity}.
- *
- * @author Nicolas Phan Van
  */
 public class CustomAdapter extends BaseAdapter {
+
     private final Context context;
     private final List<Match> matches;
 
@@ -69,4 +69,5 @@ public class CustomAdapter extends BaseAdapter {
 
         return convertView;
     }
+
 }

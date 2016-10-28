@@ -1,7 +1,7 @@
 package ch.epfl.sweng.project;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -64,4 +64,5 @@ public class UserProfileActivity extends AppCompatActivity {
     public void viewMenu(View view) {
         finish();
     }
+
 }

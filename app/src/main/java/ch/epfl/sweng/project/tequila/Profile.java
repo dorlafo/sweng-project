@@ -2,13 +2,12 @@ package ch.epfl.sweng.project.tequila;
 
 /**
  * Tequila user profile information.
+ * <p>
+ * This code was taken from the example of Solal Pirelli:
+ * https://github.com/sweng-epfl/tequila-sample/tree/master/src/main/java/ch/epfl/sweng/tequila
  *
  * @author Alexis Montavon
- *
- * This code was taken from the example of Solal Pirelli:
- *   https://github.com/sweng-epfl/tequila-sample/tree/master/src/main/java/ch/epfl/sweng/tequila
  */
-
 public final class Profile {
 
     /**
@@ -44,4 +43,5 @@ public final class Profile {
         this.firstNames = firstNames;
         this.lastNames = lastNames;
     }
+
 }

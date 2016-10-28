@@ -1,19 +1,19 @@
 package ch.epfl.sweng.project.tequila;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Interface for authentication on a server.
+ * <p>
+ * This code was taken from the example of Solal Pirelli:
+ * https://github.com/sweng-epfl/tequila-sample/tree/master/src/main/java/ch/epfl/sweng/tequila
  *
  * @author Alexis Montavon
- *
- * This code was taken from the example of Solal Pirelli:
- *   https://github.com/sweng-epfl/tequila-sample/tree/master/src/main/java/ch/epfl/sweng/tequila
  */
-
 public final class AuthServer {
 
     public static Map<String, String> fetchTokens(OAuth2Config config, String code) throws IOException {
@@ -77,4 +77,5 @@ public final class AuthServer {
         @SerializedName("Username")
         public String gaspar;
     }
+
 }

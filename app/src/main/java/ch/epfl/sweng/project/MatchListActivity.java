@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ListView;
-
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -22,10 +22,9 @@ import ch.epfl.sweng.project.tools.MatchListAdapter;
 
 /**
  * Activity displaying matches as a scrolling list.
- *
- * @author Nicolas Phan Van
  */
 public class MatchListActivity extends ListActivity {
+
     private MatchListAdapter mAdapter;
     private String sciper;
     private Player player;
@@ -60,7 +59,7 @@ public class MatchListActivity extends ListActivity {
                         FirebaseDatabase.getInstance().getReference()
                                 .child("players")
                                 .child(sciper)
-                                .addListenerForSingleValueEvent(new ValueEventListener(){
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
 
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -71,7 +70,7 @@ public class MatchListActivity extends ListActivity {
                                             Intent moveToMatchActivity = new Intent(MatchListActivity.this, MatchActivity.class);
                                             getIntent().putExtra("MATCH_ID", matchID);
                                             startActivity(moveToMatchActivity);
-                                        } catch(IllegalStateException e) {
+                                        } catch (IllegalStateException e) {
                                             sendErrorMessage("Sorry, desired match is full");
                                         }
                                     }
@@ -114,4 +113,5 @@ public class MatchListActivity extends ListActivity {
                 .setMessage(message)
                 .show();
     }
+
 }

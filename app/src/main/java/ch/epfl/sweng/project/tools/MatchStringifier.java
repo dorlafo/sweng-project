@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project.tools;
 
+
 import android.content.Context;
 import android.content.res.Resources;
 
@@ -15,21 +16,39 @@ import ch.epfl.sweng.project.model.Player;
 /**
  * Helper Class providing methods to "stringify" the different
  * fields of a {@link ch.epfl.sweng.project.model.Match Match}.
- *
- * @author Nicolas Phan Van
  */
 public final class MatchStringifier {
+
     private final Context context;
     private Match match;
 
+    /**
+     * Constructs a new Stringifier.
+     * <br>
+     * Do not forget to set a Match!
+     *
+     * @param context The context using the stringifier
+     */
     public MatchStringifier(Context context) {
         this.context = context;
     }
 
+    /**
+     * Sets the Match to stringify.
+     *
+     * @param match The Match
+     */
     public void setMatch(Match match) {
         this.match = match;
     }
 
+    /**
+     * Builds and returns a String representation of all useful
+     * fields of a Match to be used in a googleMaps
+     * {@link com.google.android.gms.maps.model.Marker Marker}.
+     *
+     * @return The Marker snippet
+     */
     public String markerSnippet() {
         Resources res = context.getResources();
         String newLine = System.getProperty("line.separator");
@@ -50,6 +69,12 @@ public final class MatchStringifier {
         return builder.toString();
     }
 
+    /**
+     * Converts and returns the expiration date of a Match
+     * to a human readable date and time.
+     *
+     * @return The expiration date, in the form dd/MM/yyyy HH:mm:ss
+     */
     public String dateToStringCustom() {
         DateFormat dateFormat = new SimpleDateFormat(
                 context.getResources().getString(R.string.date_format),
@@ -57,6 +82,11 @@ public final class MatchStringifier {
         return dateFormat.format(match.getExpirationTime());
     }
 
+    /**
+     * Returns the String representation of the list of players of the Match
+     *
+     * @return The list of players
+     */
     public String playersToString() {
         StringBuilder builder = new StringBuilder();
         Iterator<Player> playerIterator = match.getPlayers().iterator();

@@ -1,17 +1,24 @@
 package ch.epfl.sweng.project.model;
 
+
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
 import static ch.epfl.sweng.project.tools.RankOperationsHelper.averageRank;
 
 /**
- * Match is a class that represents
+ * Class representing a match between {@link ch.epfl.sweng.project.model.Player players}.
+ * Its rank is the mean of the ranks of the players in the match.
+ * A match has an expiration date (the time before it is no longer available), and can be
+ * private.
  */
-
 public class Match {
 
     private List<Player> players;
@@ -25,20 +32,21 @@ public class Match {
     private String matchID;
 
     /**
-     * Default constructor required for calls to DataSnapshot.getValue when using Firebase
+     * Default constructor required for calls to DataSnapshot.getValue when using Firebase.
      */
     public Match() {
     }
 
     /**
-     * A constructor of the Match class
+     * Constructs a Match with a given variant.
      *
-     * @param players        the list of players that are subscribed to the match
-     * @param location       the location of the match
-     * @param description    a brief description of the location of the match
-     * @param privateMatch   the visibility of the match (public or private)
-     * @param gameVariant    the variant of the match
-     * @param expirationTime the time at which the match expires
+     * @param players        The list of players in the match
+     * @param location       The location of the match
+     * @param description    A brief description of the match (detailed location...)
+     * @param privateMatch   The visibility of the match (public or private)
+     * @param gameVariant    The variant of the match
+     * @param expirationTime The time at which the match expires (in milliseconds after epoch)
+     * @param matchID        The unique firebase ID of the match
      */
     public Match(List<Player> players,
                  GPSPoint location,
@@ -58,6 +66,16 @@ public class Match {
         this.matchID = matchID;
     }
 
+    /**
+     * Constructs a Match with default variant (Classic).
+     *
+     * @param players        The list of players in the match
+     * @param location       The location of the match
+     * @param description    A brief description of the match (detailed location...)
+     * @param privateMatch   The visibility of the match (public or private)
+     * @param expirationTime The time at which the match expires (in milliseconds after epoch)
+     * @param matchID        The unique firebase ID of the match
+     */
     public Match(List<Player> players,
                  GPSPoint location,
                  String description,
@@ -68,107 +86,149 @@ public class Match {
     }
 
     /**
-     * Getter for the players' list of the match
+     * Getter for the players' list of the match.
      *
-     * @return returns the players' list of the match
+     * @return The players' list of the match
      */
     public List<Player> getPlayers() {
         return Collections.unmodifiableList(players);
     }
 
     /**
-     * Add player to match
-     */
-    // TODO: Check player pas dedans une fois qu'on a code Nicolas
-    public void addPlayer(Player player) throws IllegalStateException {
-        if (players.size() < maxPlayerNumber) {
-            players.add(player);
-        } else {
-            throw new IllegalStateException("Match is full.");
-        }
-    }
-
-    /**
-     * Getter for the location of the match
+     * Getter for the location of the match.
      *
-     * @return returns the location of the match in GPS format
+     * @return The location of the match in GPS format
      */
     public GPSPoint getLocation() {
         return location;
     }
 
     /**
-     * Getter for the description of the match
+     * Getter for the description of the match.
      *
-     * @return returns the description of the match
+     * @return The description of the match
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Getter for the rank of the match
+     * Getter for the rank of the match.
      *
-     * @return returns the rank of the match
+     * @return The rank of the match
      */
     public Rank getRank() {
         return rank;
     }
 
     /**
-     * Getter for the accessibility of the match
+     * Getter for the visibility of the match.
      *
-     * @return returns the accessibility of the match
+     * @return The visibility of the match
      */
     public boolean isPrivateMatch() {
         return privateMatch;
     }
 
     /**
-     * Getter for the variant of the match
+     * Getter for the variant of the match.
      *
-     * @return returns the variant of the match
+     * @return The variant of the match
      */
     public GameVariant getGameVariant() {
         return gameVariant;
     }
 
+    /**
+     * Getter for the maximum number of players allowed in
+     * the match, determined by the variant.
+     *
+     * @return The maximum number of players
+     */
     public int getMaxPlayerNumber() {
         return maxPlayerNumber;
     }
 
     /**
-     * Getter for the expiration date of the match
+     * Getter for the expiration date of the match.
      *
-     * @return returns the expiration fate of the match
+     * @return The expiration date of the match, in milliseconds from epoch
      */
     public long getExpirationTime() {
         return expirationTime;
     }
 
-    public static class MatchRank extends Rank {
-        public MatchRank(int rank) {
-            super(rank);
+    /**
+     * Getter for the firebase ID of the match.
+     *
+     * @return The firebase ID of the match
+     */
+    public String getMatchID() {
+        return matchID;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        } else if (other == null || other.getClass() != this.getClass()) {
+            return false;
         }
+
+        Match otherMatch = (Match) other;
+
+        return this.matchID.equals(otherMatch.matchID);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+        return Objects.hash(matchID);
     }
 
     /**
-     * Getter for the creator of the game.
+     * Getter for the creator of the match, its first player.
      *
-     * @return the creator of the game
+     * @return The creator of the match
      */
     public Player createdBy() {
         return players.get(0);
     }
 
     /**
-     * MatchID getter
+     * Adds the given player to the match.
+     * <p>
+     * Adding a player that is already present in the match does nothing,
+     * and adding a player if the match if full throws an exception.
+     *
+     * @param player The player to add to the match
+     * @throws IllegalStateException When the match is full
      */
-    public String getMatchID() { return matchID;}
+    public void addPlayer(Player player) throws IllegalStateException {
+        if (players.size() >= maxPlayerNumber) {
+            throw new IllegalStateException("Match is full.");
+        }
+        if (!players.contains(player)) {
+            players.add(player);
+        }
+    }
+
+    public static class MatchRank extends Rank {
+
+        public MatchRank(int rank) {
+            super(rank);
+        }
+
+    }
+
     /**
-     * GameVariant is an enumeration that represents the various game variants of a match
+     * The different variants of a Jass game.
+     * <li>{@link #CLASSIC}</li>
      */
     public enum GameVariant {
+        /**
+         * Classic Jass game, with 4 players.
+         */
         CLASSIC("Classic");
 
         private final String variantName;
@@ -182,18 +242,28 @@ public class Match {
             return variantName;
         }
 
+        /**
+         * Returns the max number of players allowed in the current variant.
+         *
+         * @return The max number of players
+         */
         public int getMaxPlayerNumber() {
             switch (this) {
                 case CLASSIC:
-                    return 4;
                 default:
-                    return 0;
+                    return 4;
             }
         }
 
     }
 
+    /**
+     * Builder for the Match class.
+     */
     public static final class Builder {
+
+        public static final String DEFAULT_DESCRIPTION = "New Match";
+        public static final String DEFAULT_ID = "Default Match ID";
 
         private List<Player> players;
         private GPSPoint location;
@@ -204,21 +274,35 @@ public class Match {
         private long expirationTime;
         private String matchID;
 
+        /**
+         * Constructs a new match builder with default values, but with an empty player list.
+         */
         public Builder() {
             players = new ArrayList<>();
             location = new GPSPoint(46.520407, 6.565802); // Esplanade
-            description = "New Match"; // TODO: maybe change this to another default description
+            description = DEFAULT_DESCRIPTION;
             privateMatch = false;
             gameVariant = CLASSIC;
             maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
             expirationTime = Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000; // 2 hours after current time
+            matchID = DEFAULT_ID;
         }
 
+        /**
+         * Adds the given player to the player list.
+         * <p>
+         * Adding a player that is already present in the list does nothing,
+         * and adding a player if the match if full throws an exception.
+         *
+         * @param player The player to add to the match
+         * @return The updated builder
+         */
         public Builder addPlayer(Player player) {
-            if (players.size() < maxPlayerNumber) {
+            if (players.size() >= maxPlayerNumber) {
+                throw new IllegalStateException("Match is full.");
+            }
+            if (!players.contains(player)) {
                 players.add(player);
-            } else {
-                throw new IllegalArgumentException("Match is full.");
             }
             return this;
         }
@@ -240,6 +324,14 @@ public class Match {
             return this;
         }
 
+        /**
+         * Sets the game variant to the given value.
+         * <p>
+         * Changes the max player number according to the new variant.
+         *
+         * @param gameVariant The new game variant
+         * @return The updated builder
+         */
         public Builder setVariant(GameVariant gameVariant) {
             this.gameVariant = gameVariant;
             maxPlayerNumber = gameVariant.getMaxPlayerNumber();
@@ -256,18 +348,27 @@ public class Match {
             return this;
         }
 
-        // TODO: check validity of arguments
-        public Match build() throws IllegalArgumentException {
+        /**
+         * Builds and returns the match.
+         * <p>
+         * Building a match with an empty player list or with more players than allowed
+         * throws an exception
+         *
+         * @return The new match
+         * @throws IllegalStateException If building with no players or too many players
+         */
+        public Match build() throws IllegalStateException {
+            // TODO: check validity of arguments
             if (players.isEmpty()) {
-                throw new IllegalArgumentException("Cannot create match without any player.");
+                throw new IllegalStateException("Cannot create match without any player.");
             } else if (players.size() > maxPlayerNumber) {
                 throw new IllegalStateException("Too many players.");
             } else {
                 return new Match(players, location, description, privateMatch,
                         gameVariant, expirationTime, matchID);
             }
-
         }
 
     }
+
 }

@@ -13,13 +13,12 @@ import java.util.Scanner;
 
 /**
  * Utilities for to HTTP requests.
+ * <p>
+ * This code was taken from the example of Solal Pirelli:
+ * https://github.com/sweng-epfl/tequila-sample/tree/master/src/main/java/ch/epfl/sweng/tequila
  *
  * @author Alexis Montavon
- *
- * This code was taken from the example of Solal Pirelli:
- *   https://github.com/sweng-epfl/tequila-sample/tree/master/src/main/java/ch/epfl/sweng/tequila
  */
-
 public final class HttpUtils {
 
     public static String urlEncode(String value) {
@@ -45,4 +44,5 @@ public final class HttpUtils {
             }
         }
     }
+
 }
