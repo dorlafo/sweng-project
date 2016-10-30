@@ -31,7 +31,7 @@ import ch.epfl.sweng.project.tequila.AuthServer;
 import ch.epfl.sweng.project.tequila.OAuth2Config;
 import ch.epfl.sweng.project.tequila.Profile;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 

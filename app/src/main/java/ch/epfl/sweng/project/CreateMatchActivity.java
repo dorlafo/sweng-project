@@ -45,7 +45,7 @@ import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.tools.LocationProvider;
 import ch.epfl.sweng.project.tools.TimePickerFragment;
 
-public class CreateMatchActivity extends AppCompatActivity implements
+public class CreateMatchActivity extends BaseActivity implements
         OnClickListener,
         OnItemSelectedListener,
         OnTimeSetListener {
