@@ -18,9 +18,9 @@ import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.tools.DatabaseUtils;
 
-
-public class MatchActivity extends AppCompatActivity {
-
+public class MatchActivity extends BaseActivity {
+    private String matchId;
+    private final static String TAG = MatchActivity.class.getSimpleName();
     private Match match;
     private Player player;
 
