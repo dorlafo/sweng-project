@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project.modules;
+package ch.epfl.sweng.project.dagger.modules;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 
 /**
  * DebugDataModule is module (i.e. a class that defines a set of providers which are the method
- * annotated with @Provides)
+ * annotated with @Provides). The providers can provide their objects in normal mod or mocked mod.
  */
 @Module
 public final class DebugDataModule {
