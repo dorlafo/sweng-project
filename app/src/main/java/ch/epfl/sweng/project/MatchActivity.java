@@ -3,7 +3,7 @@ package ch.epfl.sweng.project;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MatchActivity extends AppCompatActivity {
+public class MatchActivity extends BaseActivity {
     private String matchId;
     private final static String TAG = MatchActivity.class.getSimpleName();
 

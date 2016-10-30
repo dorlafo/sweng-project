@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 /**
  * Your app's main activity.
  */
-public final class MainActivity extends AppCompatActivity {
+public final class MainActivity extends BaseActivity {
     private FirebaseAuth fAuth;
 
     @Override

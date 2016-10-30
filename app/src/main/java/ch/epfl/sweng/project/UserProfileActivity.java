@@ -22,7 +22,7 @@ import java.util.List;
 import ch.epfl.sweng.project.database.UserProvider;
 import ch.epfl.sweng.project.model.Player;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class UserProfileActivity extends BaseActivity {
 
     private final String TAG = UserProfileActivity.class.getSimpleName();
     public static TextView mtwPlayerID;
