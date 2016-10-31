@@ -44,6 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.project.error.ErrorHandlerUtils;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.tools.LocationProvider;
@@ -166,7 +167,9 @@ public class MapsActivity extends FragmentActivity implements
                                                     getIntent().putExtra("MATCH_ID", matchID);
                                                     startActivity(moveToMatchActivity);
                                                 } catch (IllegalStateException e) {
-                                                    sendErrorMessage("Sorry, desired match is full");
+                                                    ErrorHandlerUtils.sendErrorMessage(MapsActivity.this, R.string.match_is_full, "Sorry, desired match is full");
+                                                } catch (IllegalAccessException a) {
+                                                    ErrorHandlerUtils.sendErrorMessage(MapsActivity.this, R.string.cannot_join_match, "You are already signed into that Match");
                                                 }
                                             }
 
@@ -233,17 +236,6 @@ public class MapsActivity extends FragmentActivity implements
     public void switchToList(View view) {
         Intent intent = new Intent(this, MatchListActivity.class);
         startActivity(intent);
-    }
-
-    /*
-     * Handles IllegalStateException
-     * Sends Error message to User and go back to MatchListActivity
-     */
-    protected void sendErrorMessage(String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.match_is_full)
-                .setMessage(message)
-                .show();
     }
 
     private void createMap() {

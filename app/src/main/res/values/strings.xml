@@ -44,4 +44,6 @@
     <string name="join">Join!</string>
     <string name="ok">OK</string>
     <string name="match_is_full">Match is full!</string>
+    <string name="cannot_join_match">Can\'t join Match</string>
+    <string name="error">Error!</string>
 </resources>
