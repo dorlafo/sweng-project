@@ -10,7 +10,6 @@ import android.view.View;
 import android.webkit.CookieManager;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 public final class MainActivity extends AppCompatActivity {
 
@@ -22,7 +21,6 @@ public final class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fAuth = FirebaseAuth.getInstance();
-        //System.out.println(FirebaseInstanceId.getInstance().getToken());
         //Show login screen if not logged in
         showLogin();
     }

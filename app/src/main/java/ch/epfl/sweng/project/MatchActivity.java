@@ -14,15 +14,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import ch.epfl.sweng.project.error.ErrorHandlerUtils;
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.tools.DatabaseUtils;
 
 public class MatchActivity extends AppCompatActivity {
 
     private String matchID;
-    private String sciper;
-    private Player player;
     private Match match;
 
     @Override
@@ -37,7 +34,6 @@ public class MatchActivity extends AppCompatActivity {
         Intent startIntent = getIntent();
         String intentAction = startIntent.getAction();
         matchID = startIntent.getStringExtra("matchId");
-        sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         if(intentAction != null) {
             switch(intentAction) {
                 case "matchfull":
@@ -55,36 +51,17 @@ public class MatchActivity extends AppCompatActivity {
                             .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                                    sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                                     ref.child("matches").child(matchID)
                                             .addListenerForSingleValueEvent(new ValueEventListener() {
 
                                                 @Override
                                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                                     match = dataSnapshot.getValue(Match.class);
-                                                }
-
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-                                                    Log.e("ERROR-DATABASE", databaseError.toString());
-                                                }
-                                            });
-                                    ref.child("players").child(sciper)
-                                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    player = dataSnapshot.getValue(Player.class);
-                                                    try {
-                                                        match.addPlayer(player);
-                                                        ref.child("matches").child(matchID).setValue(match);
-                                                        Intent moveToMatchActivity = new Intent(MatchActivity.this, MatchActivity.class);
-                                                        getIntent().putExtra("MATCH_ID", matchID);
-                                                        startActivity(moveToMatchActivity);
-                                                    } catch (IllegalStateException e) {
-                                                        ErrorHandlerUtils.sendErrorMessage(MatchActivity.this, R.string.match_is_full, "Sorry, desired match is full");
-                                                    } catch (IllegalAccessException a) {
-                                                        ErrorHandlerUtils.sendErrorMessage(MatchActivity.this, R.string.cannot_join_match, "You are already signed into that Match");
-                                                    }
+                                                    DatabaseUtils.addPlayerToMatch(MatchActivity.this,
+                                                            ref,
+                                                            matchID,
+                                                            FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                                            match);
                                                 }
 
                                                 @Override

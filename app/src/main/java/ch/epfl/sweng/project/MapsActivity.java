@@ -45,9 +45,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.project.error.ErrorHandlerUtils;
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.tools.DatabaseUtils;
 import ch.epfl.sweng.project.tools.LocationProvider;
 import ch.epfl.sweng.project.tools.LocationProviderListener;
 import ch.epfl.sweng.project.tools.MatchStringifier;
@@ -64,8 +63,6 @@ public class MapsActivity extends FragmentActivity implements
 
     private GoogleMap matchMap;
     private LocationProvider locationProvider;
-    private String sciper;
-    private Player player;
     private Match match;
 
     @Override
@@ -129,6 +126,10 @@ public class MapsActivity extends FragmentActivity implements
                 return infoWindow;
             }
         });
+        /**
+         * When click on one game, opens AlertDialog
+         * Provides oppotunity to join match or cancel.
+         */
         matchMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(final Marker marker) {
@@ -145,33 +146,11 @@ public class MapsActivity extends FragmentActivity implements
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 match = dataSnapshot.getValue(Match.class);
-                                            }
-
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-                                                Log.e("ERROR-DATABASE", databaseError.toString());
-                                            }
-                                        });
-                                sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                                FirebaseDatabase.getInstance().getReference()
-                                        .child("players")
-                                        .child(sciper)
-                                        .addListenerForSingleValueEvent(new ValueEventListener() {
-
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                player = dataSnapshot.getValue(Player.class);
-                                                try {
-                                                    match.addPlayer(player);
-                                                    ref.child("matches").child(matchID).setValue(match);
-                                                    Intent moveToMatchActivity = new Intent(MapsActivity.this, MatchActivity.class);
-                                                    getIntent().putExtra("MATCH_ID", matchID);
-                                                    startActivity(moveToMatchActivity);
-                                                } catch (IllegalStateException e) {
-                                                    ErrorHandlerUtils.sendErrorMessage(MapsActivity.this, R.string.match_is_full, "Sorry, desired match is full");
-                                                } catch (IllegalAccessException a) {
-                                                    ErrorHandlerUtils.sendErrorMessage(MapsActivity.this, R.string.cannot_join_match, "You are already signed into that Match");
-                                                }
+                                                DatabaseUtils.addPlayerToMatch(MapsActivity.this,
+                                                        ref,
+                                                        matchID,
+                                                        FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                                        match);
                                             }
 
                                             @Override
