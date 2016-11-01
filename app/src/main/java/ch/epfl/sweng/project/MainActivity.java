@@ -3,6 +3,7 @@ package ch.epfl.sweng.project;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.webkit.CookieManager;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public final class MainActivity extends AppCompatActivity {
 
@@ -21,6 +23,7 @@ public final class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fAuth = FirebaseAuth.getInstance();
+        System.out.println(FirebaseInstanceId.getInstance().getToken());
         //Show login screen if not logged in
         showLogin();
     }
@@ -58,6 +61,18 @@ public final class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent startIntent = getIntent();
+        String intentAction = startIntent.getAction();
+        if(intentAction.equals("matchexpired")) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.match_expired)
+                    .show();
+        }
     }
 
     public void createMatch(View view) {

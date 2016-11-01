@@ -37,7 +37,7 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-        NotificationMessages msgType = DEFAULT_MSG;
+        NotificationMessages msgType;
         Map<String, String> msgData = remoteMessage.getData();
 
         // Check if message contains a data payload otherwise this isn't one of our notifications.
@@ -56,26 +56,29 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
      * Create and show a simple notification containing the received FCM message.
      * Redirects User depending on the msgType.
      *
-     * @param messageBody FCM message body received.
+     * @param msgData FCM message datas.
      * @param msgType NotificationMessage type.
      */
     private void sendNotification(NotificationMessages msgType, Map<String, String> msgData) {
         Intent intent;
         switch(msgType) {
             case MATCH_FULL:
-                intent = new Intent(this, MatchActivity.class);
+                intent = new Intent(this, MatchActivity.class).setAction("matchfull")
+                        .putExtra("matchId", msgData.get("matchId"));
                 break;
             case MATCH_EXPIRED:
-                intent = new Intent(this, MainActivity.class);
+                intent = new Intent(this, MainActivity.class).setAction("matchexpired")
+                        .putExtra("matchId", msgData.get("matchId"));
                 break;
             case PLAYER_JOINED:
-                intent = new Intent(this, MatchActivity.class);
+                intent = new Intent(this, MatchActivity.class).setAction("playerjoined")
+                        .putExtra("matchId", msgData.get("matchId"))
+                        .putExtra("sciper", msgData.get("sciper"));
                 break;
             case PLAYER_LEFT:
-                intent = new Intent(this, MatchActivity.class);
-                break;
-            case PLAYER_REJECTED_INV:
-                intent = new Intent(this, MatchActivity.class);
+                intent = new Intent(this, MatchActivity.class).setAction("playerleft")
+                        .putExtra("matchId", msgData.get("matchId"))
+                        .putExtra("sciper", msgData.get("sciper"));
                 break;
             case PLAYER_INVITED_YOU:
                 intent = new Intent(this, MatchActivity.class).setAction("invite")
@@ -121,8 +124,6 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
                 return PLAYER_JOINED;
             case "playerleft":
                 return PLAYER_LEFT;
-            case "playerreject":
-                return PLAYER_REJECTED_INV;
             case "invite":
                 return PLAYER_INVITED_YOU;
             default:

@@ -43,7 +43,6 @@ public class DatabaseUtils {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Player player = dataSnapshot.getValue(Player.class);
-                        System.out.println(player);
                         try {
                             match.addPlayer(player);
                             ref.child("matches").child(matchID).setValue(match);
@@ -63,4 +62,4 @@ public class DatabaseUtils {
                     }
                 });
     }
-}
+ }

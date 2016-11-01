@@ -15,12 +15,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.model.Match;
+import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.tools.DatabaseUtils;
 
 public class MatchActivity extends AppCompatActivity {
 
-    private String matchID;
     private Match match;
+    private Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +34,53 @@ public class MatchActivity extends AppCompatActivity {
         super.onResume();
         Intent startIntent = getIntent();
         String intentAction = startIntent.getAction();
-        matchID = startIntent.getStringExtra("matchId");
+        final String matchID = startIntent.getStringExtra("matchId");
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         if(intentAction != null) {
             switch(intentAction) {
                 case "matchfull":
+                    new AlertDialog.Builder(this)
+                            .setTitle(R.string.match_is_full)
+                            .setMessage(R.string.start_game)
+                            .show();
                     break;
                 case "playerjoined":
+                    ref.child("players")
+                            .child(startIntent.getStringExtra("sciper"))
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    player = dataSnapshot.getValue(Player.class);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.e("ERROR-DATABASE", databaseError.toString());
+                                }
+                            });
+                    new AlertDialog.Builder(this)
+                            .setTitle(R.string.player_joined)
+                            .setMessage(player.getFirstName() + " has join the match")
+                            .show();
                     break;
                 case "playerleft":
-                    break;
-                case "reject":
+                    ref.child("players")
+                            .child(startIntent.getStringExtra("sciper"))
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    player = dataSnapshot.getValue(Player.class);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.e("ERROR-DATABASE", databaseError.toString());
+                                }
+                            });
+                    new AlertDialog.Builder(this)
+                            .setTitle(R.string.player_left)
+                            .setMessage(player.getFirstName() + " has left the match")
+                            .show();
                     break;
                 case "invite":
                     new AlertDialog.Builder(this)
