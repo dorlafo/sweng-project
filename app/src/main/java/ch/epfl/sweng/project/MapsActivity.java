@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -148,7 +149,7 @@ public class MapsActivity extends FragmentActivity implements
 
                                             @Override
                                             public void onCancelled(DatabaseError databaseError) {
-
+                                                Log.e("ERROR-DATABASE", databaseError.toString());
                                             }
                                         });
                                 sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
@@ -175,7 +176,7 @@ public class MapsActivity extends FragmentActivity implements
 
                                             @Override
                                             public void onCancelled(DatabaseError databaseError) {
-
+                                                Log.e("ERROR-DATABASE", databaseError.toString());
                                             }
                                         });
 

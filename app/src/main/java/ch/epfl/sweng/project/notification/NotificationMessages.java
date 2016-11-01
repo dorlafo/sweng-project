@@ -11,7 +11,7 @@ public enum NotificationMessages {
     MATCH_EXPIRED,
     PLAYER_JOINED,
     PLAYER_LEFT,
-    PLAYER_ACCEPTED_INV,
     PLAYER_REJECTED_INV,
+    PLAYER_INVITED_YOU,
     DEFAULT_MSG
 }

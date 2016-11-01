@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -57,8 +58,7 @@ public class MatchListActivity extends ListActivity {
                         final Match match = mAdapter.getItem(position);
                         final String matchID = match.getMatchID();
                         sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                        FirebaseDatabase.getInstance().getReference()
-                                .child("players")
+                        ref.child("players")
                                 .child(sciper)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -80,7 +80,7 @@ public class MatchListActivity extends ListActivity {
 
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
-
+                                        Log.e("ERROR-DATABASE", databaseError.toString());
                                     }
                                 });
 
