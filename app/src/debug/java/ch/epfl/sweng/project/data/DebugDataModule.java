@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project.dagger.modules;
+package ch.epfl.sweng.project.data;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
