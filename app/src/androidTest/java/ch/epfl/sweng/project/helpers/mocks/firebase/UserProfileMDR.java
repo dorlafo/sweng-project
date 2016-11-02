@@ -25,10 +25,6 @@ public class UserProfileMDR extends MockedDatabaseReference {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Player p = new Player(new Player.PlayerID(211603), "Michel", "Jean", new Rank(1000));
-                UserProfileActivity.mtwPlayerID.setText(UserProfileActivity.mtwPlayerID.getText() + " " + p.getID().toString());
-                UserProfileActivity.mtwLastName.setText(UserProfileActivity.mtwLastName.getText() + " " + p.getLastName());
-                UserProfileActivity.mtwFirstName.setText(UserProfileActivity.mtwFirstName.getText() + " " + p.getFirstName());
-                UserProfileActivity.mtwPlayerRank.setText(UserProfileActivity.mtwPlayerRank.getText() + " " + p.getRank().toString());
             }
 
             @Override
