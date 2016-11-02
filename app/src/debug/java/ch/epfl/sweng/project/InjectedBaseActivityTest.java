@@ -10,7 +10,7 @@ import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
 
 public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
     @Inject
-    protected DBReferenceWrapper dbRefW;
+    protected DBReferenceWrapper dbRefWrapped;
 
     public InjectedBaseActivityTest(Class activityClass) {
         super(activityClass);
