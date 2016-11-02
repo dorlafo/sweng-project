@@ -2,8 +2,6 @@ package ch.epfl.sweng.project;
 
 import android.app.Application;
 
-import ch.epfl.sweng.project.dagger.components.Graph;
-
 public class App extends Application {
     private static App sInstance;
     private Graph graph;
