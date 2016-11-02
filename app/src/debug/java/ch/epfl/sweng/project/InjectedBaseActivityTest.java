@@ -6,9 +6,11 @@ import com.google.firebase.database.DatabaseReference;
 
 import javax.inject.Inject;
 
+import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
+
 public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
     @Inject
-    DatabaseReference dbRef;
+    protected DBReferenceWrapper dbRefW;
 
     public InjectedBaseActivityTest(Class activityClass) {
         super(activityClass);

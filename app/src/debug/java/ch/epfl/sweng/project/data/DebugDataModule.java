@@ -5,6 +5,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import javax.inject.Singleton;
 
+import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
 import dagger.Module;
 import dagger.Provides;
 
@@ -31,11 +32,11 @@ public final class DebugDataModule {
      * @return returns a DatabaseReference that can be mocked or not
      */
     @Provides @Singleton
-    public DatabaseReference provideDBReference() {
+    public DBReferenceWrapper provideDBReference() {
         if(mockMode) {
-            return mock(DatabaseReference.class);
+            return mock(DBReferenceWrapper.class);
         } else {
-            return FirebaseDatabase.getInstance().getReference();
+            return new DBReferenceWrapper(FirebaseDatabase.getInstance().getReference());
         }
     }
 }
