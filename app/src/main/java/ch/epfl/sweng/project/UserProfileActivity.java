@@ -30,7 +30,7 @@ public class UserProfileActivity extends BaseActivity {
 
         //New ChildEventListener that will change the value of the textView according to the current
         //logged in user
-        FirebaseDatabase.getInstance().getReference()
+        dbRefWrapped
                 .child("players")
                 .child(sciper)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
