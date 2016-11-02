@@ -7,9 +7,11 @@ import com.google.firebase.database.DatabaseReference;
 
 import javax.inject.Inject;
 
+import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
+
 public abstract class BaseActivity extends AppCompatActivity {
     @Inject
-    DatabaseReference dbRef;
+    DBReferenceWrapper dbRefWrapped;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,8 +19,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         App.getInstance().graph().inject(this);
     }
 
-    protected DatabaseReference getDbRef() {
-        return dbRef;
+    protected DBReferenceWrapper getDbRef() {
+        return dbRefWrapped;
     }
 
 }
