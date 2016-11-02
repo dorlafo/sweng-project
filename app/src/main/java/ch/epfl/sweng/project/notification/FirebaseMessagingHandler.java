@@ -63,25 +63,25 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
         Intent intent;
         switch(msgType) {
             case MATCH_FULL:
-                intent = new Intent(this, MatchActivity.class).setAction("matchfull")
+                intent = new Intent(this, MatchActivity.class).putExtra("notif", "matchfull")
                         .putExtra("matchId", msgData.get("matchId"));
                 break;
             case MATCH_EXPIRED:
-                intent = new Intent(this, MainActivity.class).setAction("matchexpired")
+                intent = new Intent(this, MainActivity.class).putExtra("notif", "matchexpired")
                         .putExtra("matchId", msgData.get("matchId"));
                 break;
             case PLAYER_JOINED:
-                intent = new Intent(this, MatchActivity.class).setAction("playerjoined")
+                intent = new Intent(this, MatchActivity.class).putExtra("notif", "playerjoined")
                         .putExtra("matchId", msgData.get("matchId"))
                         .putExtra("sciper", msgData.get("sciper"));
                 break;
             case PLAYER_LEFT:
-                intent = new Intent(this, MatchActivity.class).setAction("playerleft")
+                intent = new Intent(this, MatchActivity.class).putExtra("notif", "playerleft")
                         .putExtra("matchId", msgData.get("matchId"))
                         .putExtra("sciper", msgData.get("sciper"));
                 break;
             case PLAYER_INVITED_YOU:
-                intent = new Intent(this, MatchActivity.class).setAction("invite")
+                intent = new Intent(this, MatchActivity.class).putExtra("notif", "invite")
                         .putExtra("matchId", msgData.get("matchId"))
                         .putExtra("sciper", msgData.get("by"));
                 break;

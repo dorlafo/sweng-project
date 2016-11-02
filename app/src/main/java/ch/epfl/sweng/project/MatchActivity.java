@@ -33,16 +33,17 @@ public class MatchActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Intent startIntent = getIntent();
-        String intentAction = startIntent.getAction();
         final String matchID = startIntent.getStringExtra("matchId");
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        if(intentAction != null) {
-            switch(intentAction) {
+        if(startIntent.hasExtra("notif")) {
+            switch(startIntent.getExtras().getString("notif")) {
                 case "matchfull":
                     new AlertDialog.Builder(this)
                             .setTitle(R.string.match_is_full)
                             .setMessage(R.string.start_game)
                             .show();
+                    startIntent.removeExtra("notif");
+                    startIntent.removeExtra("matchId");
                     break;
                 case "playerjoined":
                     ref.child("players")
@@ -62,6 +63,9 @@ public class MatchActivity extends AppCompatActivity {
                             .setTitle(R.string.player_joined)
                             .setMessage(player.getFirstName() + " has join the match")
                             .show();
+                    startIntent.removeExtra("notif");
+                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("sciper");
                     break;
                 case "playerleft":
                     ref.child("players")
@@ -81,6 +85,9 @@ public class MatchActivity extends AppCompatActivity {
                             .setTitle(R.string.player_left)
                             .setMessage(player.getFirstName() + " has left the match")
                             .show();
+                    startIntent.removeExtra("notif");
+                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("sciper");
                     break;
                 case "invite":
                     new AlertDialog.Builder(this)
@@ -116,6 +123,9 @@ public class MatchActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
+                    startIntent.removeExtra("notif");
+                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("sciper");
                     break;
                 default:
                     break;
