@@ -14,10 +14,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 
-public final class UserProfileActivityTest extends ActivityInstrumentationTestCase2<UserProfileActivity> {
-    UserProfileMDR uPMDR = new UserProfileMDR();
+public final class UserProfileActivityTest extends InjectedBaseActivityTest {
+
     public UserProfileActivityTest() {
         super(UserProfileActivity.class);
     }
@@ -25,13 +27,11 @@ public final class UserProfileActivityTest extends ActivityInstrumentationTestCa
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+        getActivity();
     }
 
     @Test
     public void testProfileIsDisplayedCorrectly() {
-        UserProfileActivity activity = getActivity();
-        activity.setReference(uPMDR.provideMockedDatabaseReference());
-        assertEquals(activity.mtwPlayerID.getText(), 211603);
+        when(dbRef.child(anyString())).thenReturn(dbRef);
     }
 }
