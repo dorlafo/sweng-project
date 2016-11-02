@@ -67,7 +67,7 @@ public final class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         Intent startIntent = getIntent();
-        if(startIntent.hasExtra("notif") && startIntent.getExtras().getString("notif").equals("matchexpired")) {
+        if(startIntent.hasExtra("notif") && startIntent.getStringExtra("notif").equals("matchexpired")) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.match_expired)
                     .show();

@@ -33,15 +33,28 @@ public class MatchActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Intent startIntent = getIntent();
-        final String matchID = startIntent.getStringExtra("matchId");
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         if(startIntent.hasExtra("notif")) {
-            switch(startIntent.getExtras().getString("notif")) {
+            final String matchID = startIntent.getStringExtra("matchId");
+            switch(startIntent.getStringExtra("notif")) {
                 case "matchfull":
-                    new AlertDialog.Builder(this)
-                            .setTitle(R.string.match_is_full)
-                            .setMessage(R.string.start_game)
-                            .show();
+                    ref.child("matches").child(startIntent.getStringExtra("matchId"))
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Match match = dataSnapshot.getValue(Match.class);
+                                    new AlertDialog.Builder(MatchActivity.this)
+                                            .setTitle(R.string.match_is_full)
+                                            .setMessage("Match: " + match.getDescription())
+                                            .show();
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.e("ERROR-DATABASE", databaseError.toString());
+                                }
+                            });
                     startIntent.removeExtra("notif");
                     startIntent.removeExtra("matchId");
                     break;
@@ -52,6 +65,10 @@ public class MatchActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     player = dataSnapshot.getValue(Player.class);
+                                    new AlertDialog.Builder(MatchActivity.this)
+                                            .setTitle(R.string.player_joined)
+                                            .setMessage(player.getFirstName() + " has join the match")
+                                            .show();
                                 }
 
                                 @Override
@@ -59,10 +76,7 @@ public class MatchActivity extends AppCompatActivity {
                                     Log.e("ERROR-DATABASE", databaseError.toString());
                                 }
                             });
-                    new AlertDialog.Builder(this)
-                            .setTitle(R.string.player_joined)
-                            .setMessage(player.getFirstName() + " has join the match")
-                            .show();
+
                     startIntent.removeExtra("notif");
                     startIntent.removeExtra("matchId");
                     startIntent.removeExtra("sciper");
@@ -74,6 +88,10 @@ public class MatchActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     player = dataSnapshot.getValue(Player.class);
+                                    new AlertDialog.Builder(MatchActivity.this)
+                                            .setTitle(R.string.player_left)
+                                            .setMessage(player.getFirstName() + " has left the match")
+                                            .show();
                                 }
 
                                 @Override
@@ -81,10 +99,7 @@ public class MatchActivity extends AppCompatActivity {
                                     Log.e("ERROR-DATABASE", databaseError.toString());
                                 }
                             });
-                    new AlertDialog.Builder(this)
-                            .setTitle(R.string.player_left)
-                            .setMessage(player.getFirstName() + " has left the match")
-                            .show();
+
                     startIntent.removeExtra("notif");
                     startIntent.removeExtra("matchId");
                     startIntent.removeExtra("sciper");
