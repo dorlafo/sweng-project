@@ -17,11 +17,11 @@ import static org.junit.Assert.assertNotEquals;
 public final class MatchBuilderTest {
 
     private Match.Builder matchBuilder;
-    private Player amaury = new Player(new PlayerID(1), "Combes", "Amaury", new Rank(123));
-    private Player vincenzo = new Player(new PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
-    private Player dorian = new Player(new PlayerID(3), "Laforest", "Dorian", new Rank(567));
-    private Player alexis = new Player(new PlayerID(4), "Montavon", "Alexis", new Rank(789));
-    private Player random = new Player(new PlayerID(5), "Smith", "John", new Rank(7));
+    private final Player amaury = new Player(new PlayerID(1), "Combes", "Amaury", new Rank(123));
+    private final Player vincenzo = new Player(new PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
+    private final Player dorian = new Player(new PlayerID(3), "Laforest", "Dorian", new Rank(567));
+    private final Player alexis = new Player(new PlayerID(4), "Montavon", "Alexis", new Rank(789));
+    private final Player random = new Player(new PlayerID(5), "Smith", "John", new Rank(7));
 
     public void setUp() {
         matchBuilder = new Match.Builder();

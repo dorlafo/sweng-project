@@ -24,7 +24,7 @@ import com.google.android.gms.location.LocationServices;
 public final class LocationProvider implements ConnectionCallbacks, LocationListener {
 
     private LocationProviderListener providerListener;
-    private PermissionHandler permissionHandler;
+    private final PermissionHandler permissionHandler;
 
     private final Activity activity;
     private GoogleApiClient googleApiClient;

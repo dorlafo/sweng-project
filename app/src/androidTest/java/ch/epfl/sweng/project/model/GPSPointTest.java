@@ -11,6 +11,7 @@ import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
 
+@SuppressWarnings({"EqualsBetweenInconvertibleTypes", "EqualsWithItself", "ObjectEqualsNull"})
 public final class GPSPointTest {
 
     private final GPSPoint firstPoint = new GPSPoint(46, 6);

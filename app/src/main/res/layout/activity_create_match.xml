@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_create_match"
@@ -54,7 +55,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:text="@string/private_match"
             android:textSize="@dimen/create_text_size"/>
@@ -63,7 +64,7 @@
             android:id="@+id/switch_private"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"/>
 
     </RelativeLayout>
@@ -78,7 +79,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:text="@string/variant"
             android:textSize="@dimen/create_text_size"/>
@@ -87,7 +88,7 @@
             android:id="@+id/variant_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"/>
 
     </RelativeLayout>
@@ -123,6 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FAFAFA"
+            android:contentDescription="@string/icon_description_time_picker"
             android:src="@drawable/ic_access_time_black_36px"/>
 
     </LinearLayout>

@@ -265,7 +265,7 @@ public class Match {
         public static final String DEFAULT_DESCRIPTION = "New Match";
         public static final String DEFAULT_ID = "Default Match ID";
 
-        private List<Player> players;
+        private final List<Player> players;
         private GPSPoint location;
         private String description;
         private boolean privateMatch;

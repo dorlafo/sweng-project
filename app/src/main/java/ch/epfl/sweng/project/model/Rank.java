@@ -1,6 +1,8 @@
 package ch.epfl.sweng.project.model;
 
 
+import android.support.annotation.NonNull;
+
 /**
  * Class that represents a rank in a competition system.
  * It implements the Comparable interface.
@@ -44,7 +46,7 @@ public class Rank implements Comparable<Rank> {
     }
 
     @Override
-    public int compareTo(Rank o) {
+    public int compareTo(@NonNull Rank o) {
         return ((Integer) rank).compareTo(o.rank);
     }
 
