@@ -17,6 +17,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +27,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.notification.JassTokenService;
 import ch.epfl.sweng.project.tequila.AuthClient;
 import ch.epfl.sweng.project.tequila.AuthServer;
 import ch.epfl.sweng.project.tequila.OAuth2Config;
@@ -129,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                 tokens = AuthServer.fetchTokens(config, params[0]);
                 profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
                 authenticateWithFirebase(profile);
+                JassTokenService.registerWithServer(profile.sciper, FirebaseInstanceId.getInstance().getToken());
             } catch (IOException e) {
                 Log.e("ERR", "IOException, couldn't fetch token");
             }
