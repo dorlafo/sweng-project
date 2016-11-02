@@ -52,6 +52,10 @@ repositories {
     maven {
         url "http://dl.bintray.com/mockito/maven"
     }
+
+    maven {
+        url "https://jitpack.io"
+    }
 }
 
 dependencies {
@@ -62,6 +66,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.google.dagger:dagger:2.7'
+    apt 'com.google.dagger:dagger-compiler:2.7'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.google.firebase:firebase-core:9.6.1'
     compile 'com.google.firebase:firebase-database:9.6.1'
@@ -71,13 +76,17 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:9.6.1'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.android.support:design:24.2.1'
+
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+
     testCompile 'junit:junit:4.12'
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
-    apt 'com.google.dagger:dagger-compiler:2.7'
-    debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
-    debugCompile 'com.google.dexmaker:dexmaker:1.0'
-    debugCompile 'org.mockito:mockito-core:2.2.9'
+
+    //debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
+    //debugCompile 'com.google.dexmaker:dexmaker:1.0'
+    debugCompile 'com.github.blueapron:dexmaker:2.0'
+    debugCompile 'org.mockito:mockito-core:2.1.0'
 }
 
 // Do not change the below code unless you're sure you know what you're doing
