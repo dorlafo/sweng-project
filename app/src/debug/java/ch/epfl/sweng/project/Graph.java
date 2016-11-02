@@ -1,10 +1,8 @@
-package ch.epfl.sweng.project.dagger.components;
+package ch.epfl.sweng.project;
 
 import javax.inject.Singleton;
 
-import ch.epfl.sweng.project.BaseActivity;
-import ch.epfl.sweng.project.InjectedBaseActivityTest;
-import ch.epfl.sweng.project.dagger.modules.DebugDataModule;
+import ch.epfl.sweng.project.data.DebugDataModule;
 import dagger.Component;
 
 @Singleton
