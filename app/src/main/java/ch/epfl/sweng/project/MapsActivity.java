@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
@@ -179,11 +178,7 @@ public class MapsActivity extends FragmentActivity implements
         //displayNearbyMatches(DummyMatchData.dummyMatches()); Do not touch
         displayNearbyMatches();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (locationProvider.locationPermissionIsGranted()) {
-                matchMap.setMyLocationEnabled(true);
-            }
-        } else {
+        if (locationProvider.locationPermissionIsGranted()) {
             matchMap.setMyLocationEnabled(true);
         }
     }
