@@ -22,7 +22,7 @@
     </service>
 
     <service
-        android:name=".MyFirebaseInstanceIDService">
+        android:name="ch.epfl.sweng.project.notification.JassTokenService">
         <intent-filter>
             <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
         </intent-filter>
