@@ -2,12 +2,10 @@ package ch.epfl.sweng.project.tools;
 
 
 import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
+import android.app.Activity;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -26,28 +24,34 @@ import com.google.android.gms.location.LocationServices;
 public final class LocationProvider implements ConnectionCallbacks, LocationListener {
 
     private LocationProviderListener providerListener;
+    private PermissionHandler permissionHandler;
 
-    private final Context context;
+    private final Activity activity;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
     private Location lastLocation;
 
     /**
-     * Constructs a new LocationProvider with the given context.
+     * Constructs a new LocationProvider with the given activity.
      *
-     * @param context The context using the provider
+     * @param activity The activity using the provider
      */
-    public LocationProvider(Context context) {
-        this.context = context;
+    public LocationProvider(Activity activity) {
+        this.activity = activity;
+
+        permissionHandler = new PermissionHandler(activity, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionHandler.chamallowIsHere()) {
+            permissionHandler.requestPermission();
+        }
+
         buildGoogleApiClient();
         createLocationRequest();
     }
 
     @Override
+    @SuppressWarnings({"MissingPermission"})
     public void onConnected(@Nullable Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (permissionHandler.isPermissionGranted()) {
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (lastLocation != null) {
                 notifyListener(lastLocation);
@@ -102,11 +106,15 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
         return lastLocation;
     }
 
+    public boolean locationPermissionIsGranted() {
+        return permissionHandler.isPermissionGranted();
+    }
+
     /**
      * Builds a new googleApiClient to provide access to location services.
      */
     private synchronized void buildGoogleApiClient() {
-        googleApiClient = new GoogleApiClient.Builder(context)
+        googleApiClient = new GoogleApiClient.Builder(activity)
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)
                 .build();
@@ -123,10 +131,9 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
      * Starts the location updates, notifying the provider whenever
      * the location changes.
      */
+    @SuppressWarnings({"MissingPermission"})
     private void startLocationUpdates() {
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (permissionHandler.isPermissionGranted()) {
             LocationServices.FusedLocationApi
                     .requestLocationUpdates(googleApiClient, locationRequest, this);
         }

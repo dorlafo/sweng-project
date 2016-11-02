@@ -6,12 +6,13 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import ch.epfl.sweng.project.R;
 
-public final class PermissionHandler implements ActivityCompat.OnRequestPermissionsResultCallback {
+public final class PermissionHandler implements OnRequestPermissionsResultCallback {
 
     public static final int PERMISSION_REQUEST_CODE = 789654;
 

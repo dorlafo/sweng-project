@@ -11,7 +11,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:weightSum="1"
-    tools:context="ch.epfl.sweng.project.MainActivity">
+    tools:activity="ch.epfl.sweng.project.MainActivity">
 
     <TextView
         android:layout_width="match_parent"
