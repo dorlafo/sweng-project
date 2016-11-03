@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -193,8 +194,10 @@ public class CreateMatchActivity extends AppCompatActivity implements
         if (expirationTime.compareTo(currentTime) > 0) {
             displayCurrentExpirationDate(expirationTime);
             matchBuilder.setExpirationTime(expirationTime.getTimeInMillis());
+        } else {
+            Toast invalidTimeToast = Toast.makeText(this, R.string.create_toast_invalid_time, Toast.LENGTH_SHORT);
+            invalidTimeToast.show();
         }
-        // TODO: warning or error for time before current time
     }
 
     @Override
