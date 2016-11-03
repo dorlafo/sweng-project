@@ -48,5 +48,6 @@
     <string name="icon_description_map_to_list">Switches to the list view.</string>
     <string name="icon_description_list_to_map">Switches to the map view.</string>
     <string name="icon_description_time_picker">Displays a time picker.</string>
+    <string name="icon_description_date_picker">Displays a date picker.</string>
     <string name="create_toast_invalid_time">Invalid hour: you cannot go back in time!</string>
 </resources>

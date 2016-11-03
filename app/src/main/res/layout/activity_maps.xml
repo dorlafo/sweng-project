@@ -23,6 +23,6 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/icon_description_map_to_list"
         android:onClick="switchToList"
-        android:src="@drawable/ic_list_black_24px"/>
+        android:src="@drawable/ic_list_black"/>
 
 </RelativeLayout>

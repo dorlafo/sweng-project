@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -43,20 +45,23 @@ import ch.epfl.sweng.project.model.GPSPoint;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;
 import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.tools.DatePickerFragment;
 import ch.epfl.sweng.project.tools.LocationProvider;
 import ch.epfl.sweng.project.tools.TimePickerFragment;
 
 public class CreateMatchActivity extends AppCompatActivity implements
         OnClickListener,
         OnItemSelectedListener,
-        OnTimeSetListener {
+        OnTimeSetListener,
+        OnDateSetListener {
 
     private static final String TAG = CreateMatchActivity.class.getSimpleName();
 
-    Button createMatchButton;
+    private Button createMatchButton;
 
     private Match.Builder matchBuilder;
     private LocationProvider locationProvider;
+    private Calendar matchCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +112,12 @@ public class CreateMatchActivity extends AppCompatActivity implements
         ImageButton timePickerDialog = (ImageButton) findViewById(R.id.time_picker_button);
         timePickerDialog.setOnClickListener(this);
 
-        Calendar defaultExpirationDate = Calendar.getInstance();
-        defaultExpirationDate.add(Calendar.HOUR_OF_DAY, 2);
-        displayCurrentExpirationDate(defaultExpirationDate);
+        matchCalendar = Calendar.getInstance();
+        matchCalendar.add(Calendar.HOUR_OF_DAY, 2);
+        displayCurrentExpirationDate();
+
+        ImageButton datePickerDialog = (ImageButton) findViewById(R.id.date_picker_button);
+        datePickerDialog.setOnClickListener(this);
 
         Button addPlayer = (Button) findViewById(R.id.add_player_button);
         addPlayer.setOnClickListener(this);
@@ -150,7 +158,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_create_button:
-                // TODO: retrieve gps position
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("matches");
                 String matchId = ref.push().getKey();
                 ref.child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
@@ -160,8 +167,12 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 startActivity(moveToMatchActivity);
                 break;
             case R.id.time_picker_button:
-                DialogFragment newFragment = new TimePickerFragment();
-                newFragment.show(getSupportFragmentManager(), "timePicker");
+                DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+                break;
+            case R.id.date_picker_button:
+                DialogFragment datePickerFragment = new DatePickerFragment();
+                datePickerFragment.show(getSupportFragmentManager(), "datePicker");
                 break;
             case R.id.add_player_button:
                 // TODO: add player with player provider
@@ -185,15 +196,38 @@ public class CreateMatchActivity extends AppCompatActivity implements
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Calendar expirationTime = Calendar.getInstance();
-        expirationTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        expirationTime.set(Calendar.MINUTE, minute);
+        Calendar tempCalendar = (Calendar) matchCalendar.clone();
+        tempCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        tempCalendar.set(Calendar.MINUTE, minute);
 
         final Calendar currentTime = Calendar.getInstance();
 
-        if (expirationTime.compareTo(currentTime) > 0) {
-            displayCurrentExpirationDate(expirationTime);
-            matchBuilder.setExpirationTime(expirationTime.getTimeInMillis());
+        if (tempCalendar.compareTo(currentTime) > 0) {
+            matchCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            matchCalendar.set(Calendar.MINUTE, minute);
+            matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
+            displayCurrentExpirationDate();
+        } else {
+            Toast invalidTimeToast = Toast.makeText(this, R.string.create_toast_invalid_time, Toast.LENGTH_SHORT);
+            invalidTimeToast.show();
+        }
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar tempCalendar = (Calendar) matchCalendar.clone();
+        tempCalendar.set(Calendar.YEAR, year);
+        tempCalendar.set(Calendar.MONTH, month);
+        tempCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        final Calendar currentTime = Calendar.getInstance();
+
+        if (tempCalendar.compareTo(currentTime) > 0) {
+            matchCalendar.set(Calendar.YEAR, year);
+            matchCalendar.set(Calendar.MONTH, month);
+            matchCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
+            displayCurrentExpirationDate();
         } else {
             Toast invalidTimeToast = Toast.makeText(this, R.string.create_toast_invalid_time, Toast.LENGTH_SHORT);
             invalidTimeToast.show();
@@ -222,12 +256,11 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 });
     }
 
-    private void displayCurrentExpirationDate(Calendar calendar) {
+    private void displayCurrentExpirationDate() {
         TextView currentExpirationDate =
                 (TextView) findViewById(R.id.current_expiration_time);
         DateFormat dateFormat = new SimpleDateFormat(
                 getString(R.string.create_date_format), Locale.FRENCH);
-        currentExpirationDate.setText(dateFormat.format(calendar.getTimeInMillis()));
+        currentExpirationDate.setText(dateFormat.format(matchCalendar.getTimeInMillis()));
     }
-
 }
