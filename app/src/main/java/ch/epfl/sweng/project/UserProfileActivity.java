@@ -26,7 +26,7 @@ public class UserProfileActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        sciper = fAuth.getCurrentUser().getDisplayName();
 
         //New ChildEventListener that will change the value of the textView according to the current
         //logged in user

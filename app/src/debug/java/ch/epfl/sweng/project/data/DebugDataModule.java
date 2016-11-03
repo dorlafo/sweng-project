@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project.data;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,6 +38,15 @@ public final class DebugDataModule {
             return mock(DBReferenceWrapper.class);
         } else {
             return new DBReferenceWrapper(FirebaseDatabase.getInstance().getReference());
+        }
+    }
+
+    @Provides @Singleton
+    public FirebaseAuth provideDBAuth() {
+        if(mockMode) {
+            return mock(FirebaseAuth.class);
+        } else {
+            return FirebaseAuth.getInstance();
         }
     }
 }

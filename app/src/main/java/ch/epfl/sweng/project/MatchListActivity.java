@@ -11,6 +11,8 @@ import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.tools.DatabaseUtils;
 import ch.epfl.sweng.project.tools.MatchListAdapter;
@@ -18,7 +20,7 @@ import ch.epfl.sweng.project.tools.MatchListAdapter;
 /**
  * Activity displaying matches as a scrolling list.
  */
-public class MatchListActivity extends ListActivity {
+public class MatchListActivity extends BaseListActivity {
 
     private MatchListAdapter mAdapter;
 
@@ -45,9 +47,10 @@ public class MatchListActivity extends ListActivity {
                 .setMessage(R.string.join_message)
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        //final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                         final Match match = mAdapter.getItem(position);
                         DatabaseUtils.addPlayerToMatch(MatchListActivity.this,
-                                FirebaseDatabase.getInstance().getReference(),
+                                dbRefWrapped,
                                 match.getMatchID(),
                                 FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
                                 match);

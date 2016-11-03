@@ -39,6 +39,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import ch.epfl.sweng.project.error.ErrorHandlerUtils;
+import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
 import ch.epfl.sweng.project.model.GPSPoint;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;
@@ -151,7 +152,7 @@ public class CreateMatchActivity extends BaseActivity implements
         switch (v.getId()) {
             case R.id.create_create_button:
                 // TODO: retrieve gps position
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("matches");
+                DBReferenceWrapper ref = dbRefWrapped.child("matches");
                 String matchId = ref.push().getKey();
                 ref.child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
                 Log.d(TAG, "Pushed match " + matchId + " to database");
@@ -204,8 +205,8 @@ public class CreateMatchActivity extends BaseActivity implements
     }
 
     private void addCurrentUserToBuilder() {
-        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        FirebaseDatabase.getInstance().getReference().child("players").child(currentUserId).
+        String currentUserId = fAuth.getCurrentUser().getDisplayName();
+        dbRefWrapped.child("players").child(currentUserId).
                 addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

@@ -44,14 +44,16 @@ public class LoginActivity extends BaseActivity {
     private static OAuth2Config config;
     private static final int REQUEST_CODE_AUTHENTICATE = 0;
 
-    private FirebaseAuth fAuth;
+    //TODO remove
+    //private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        fAuth = FirebaseAuth.getInstance();
+        //TODO remove
+        //fAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -183,7 +185,7 @@ public class LoginActivity extends BaseActivity {
                                         public void onComplete(@NonNull Task<AuthResult> task) {
                                             Log.d(TAG, "Signup was successfull? " + task.isSuccessful());
                                             if (task.isSuccessful()) {
-                                                FirebaseDatabase.getInstance().getReference().child("players")
+                                                dbRefWrapped.child("players")
                                                         .child(profile.sciper).setValue(new Player(
                                                         new Player.PlayerID(Long.parseLong(profile.sciper)),
                                                         profile.lastNames,

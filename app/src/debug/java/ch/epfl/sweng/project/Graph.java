@@ -11,6 +11,10 @@ public interface Graph {
 
     void inject(BaseActivity activity);
 
+    void inject(BaseListActivity activity);
+
+    void inject(BaseFragmentActivity activity);
+
     void inject(InjectedBaseActivityTest test);
 
     public final static class Initializer {

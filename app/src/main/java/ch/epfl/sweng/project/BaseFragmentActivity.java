@@ -1,16 +1,16 @@
 package ch.epfl.sweng.project;
 
-import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 
 import javax.inject.Inject;
 
 import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public class BaseFragmentActivity extends FragmentActivity {
     @Inject
     DBReferenceWrapper dbRefWrapped;
     @Inject
@@ -25,6 +25,4 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected DBReferenceWrapper getDbRef() {
         return dbRefWrapped;
     }
-
 }
-

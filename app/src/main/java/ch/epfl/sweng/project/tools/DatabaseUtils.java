@@ -11,6 +11,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.MatchActivity;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
 import ch.epfl.sweng.project.error.ErrorHandlerUtils;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Player;
@@ -33,7 +34,7 @@ public class DatabaseUtils {
      * @param match The match to add player to.
      */
     public static void addPlayerToMatch(final Context context,
-                                 final DatabaseReference ref,
+                                 final DBReferenceWrapper ref,
                                  final String matchID,
                                  final String sciper,
                                  final Match match) {

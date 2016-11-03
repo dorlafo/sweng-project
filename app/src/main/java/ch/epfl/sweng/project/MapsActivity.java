@@ -45,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.tools.DatabaseUtils;
 import ch.epfl.sweng.project.tools.LocationProvider;
@@ -56,7 +57,7 @@ import ch.epfl.sweng.project.tools.MatchStringifier;
  * <p>
  * Clicking on a marker displays the match information.
  */
-public class MapsActivity extends FragmentActivity implements
+public class MapsActivity extends BaseFragmentActivity implements
         OnMapReadyCallback, LocationProviderListener {
 
     private static final int MY_LOCATION_REQUEST_CODE = 39;
@@ -138,16 +139,17 @@ public class MapsActivity extends FragmentActivity implements
                         .setMessage(R.string.join_message)
                         .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                                //TODO remove this
+                                //final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                 final String matchID = marker.getTag().toString();
-                                ref.child("matches").child(matchID)
+                                dbRefWrapped.child("matches").child(matchID)
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
 
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 match = dataSnapshot.getValue(Match.class);
                                                 DatabaseUtils.addPlayerToMatch(MapsActivity.this,
-                                                        ref,
+                                                        dbRefWrapped,
                                                         matchID,
                                                         FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
                                                         match);
@@ -158,7 +160,6 @@ public class MapsActivity extends FragmentActivity implements
                                                 Log.e("ERROR-DATABASE", databaseError.toString());
                                             }
                                         });
-
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -262,7 +263,7 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     private void displayNearbyMatches() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("matches");
+        DBReferenceWrapper ref = dbRefWrapped.child("matches");
 
         ref.addChildEventListener(new ChildEventListener() {
             private final Map<String, Marker> markers = new HashMap<>();
