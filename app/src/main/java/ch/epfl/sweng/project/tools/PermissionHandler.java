@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project.tools;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -48,7 +49,7 @@ public final class PermissionHandler implements OnRequestPermissionsResultCallba
     public void requestPermission() {
         if (ContextCompat.checkSelfPermission(callingActivity, permission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(callingActivity, permission)) {
-                Snackbar.make(callingActivity.findViewById(android.R.id.content), R.string.request_rationale, Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(callingActivity.findViewById(android.R.id.content), permissionRationaleResId(), Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.ok, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -66,6 +67,15 @@ public final class PermissionHandler implements OnRequestPermissionsResultCallba
 
     public boolean isPermissionGranted() {
         return !chamallowIsHere() || (chamallowIsHere() && permissionGranted);
+    }
+
+    private int permissionRationaleResId() {
+        switch (permission) {
+            case Manifest.permission.ACCESS_FINE_LOCATION:
+                return R.string.request_location_rationale;
+            default:
+                return R.string.request_unknown_permission;
+        }
     }
 
 }

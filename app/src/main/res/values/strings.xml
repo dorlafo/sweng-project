@@ -35,7 +35,8 @@
     <string name="create_date_format">dd/MM HH:mm</string>
     <string name="empty_match_list">No matches are available.</string>
     <string name="permission_denied">Cannot access location</string>
-    <string name="request_rationale">Location information is used to improve your matchmaking experience.</string>
+    <string name="request_location_rationale">Location information is used to improve your matchmaking experience.</string>
+    <string name="request_unknown_permission">Unknown Permission</string>
     <string name="title_activity_maps">Map</string>
     <string name="login_welcoming_text">Welcome to Jass@EPFL !\nTo use this app you need to\nlogin with your EPFL account</string>
     <string name="login_button_text">Login</string>
