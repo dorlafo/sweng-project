@@ -14,9 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * Class implementing registration to notification server
+ */
 public class JassTokenService extends FirebaseInstanceIdService {
     public static final String SERVER_URL = "http://vps333923.ovh.net";
 
@@ -28,6 +30,12 @@ public class JassTokenService extends FirebaseInstanceIdService {
         }
     }
 
+    /**
+     * Registration with notification server
+     *
+     * @param sciper User sciper to register
+     * @param refreshedToken Refresh token to send
+     */
     public static void registerWithServer(String sciper, String refreshedToken) {
         JsonObject data = new JsonObject();
         data.addProperty("sciper", sciper);

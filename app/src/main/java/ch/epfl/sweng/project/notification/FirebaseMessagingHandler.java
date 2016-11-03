@@ -112,7 +112,7 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
      * Get the notification message's type
      *
      * @param msgType The data Type of the message
-     * @return NotificationMessages, The message type
+     * @return NotificationMessages The message type
      */
     private NotificationMessages getMsgType(String msgType) {
         switch(msgType) {

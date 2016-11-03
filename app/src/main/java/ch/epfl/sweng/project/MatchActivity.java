@@ -18,6 +18,7 @@ import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.tools.DatabaseUtils;
 
+
 public class MatchActivity extends AppCompatActivity {
 
     private Match match;
@@ -34,6 +35,10 @@ public class MatchActivity extends AppCompatActivity {
         super.onResume();
         Intent startIntent = getIntent();
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+        /* Notification onClick handler.
+         * Will display dialog Box depending on the notification received.
+         */
         if(startIntent.hasExtra("notif")) {
             final String matchID = startIntent.getStringExtra("matchId");
             switch(startIntent.getStringExtra("notif")) {

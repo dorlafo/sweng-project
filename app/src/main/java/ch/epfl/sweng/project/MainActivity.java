@@ -67,6 +67,9 @@ public final class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         Intent startIntent = getIntent();
+
+        // Notification onClick handler.
+        // Can not display match name because it doesn't exists anymore.
         if(startIntent.hasExtra("notif") && startIntent.getStringExtra("notif").equals("matchexpired")) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.match_expired)
