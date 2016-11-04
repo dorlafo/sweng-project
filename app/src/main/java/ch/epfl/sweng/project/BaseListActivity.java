@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
 
-public class BaseListActivity extends ListActivity {
+public abstract class BaseListActivity extends ListActivity {
     @Inject
     DBReferenceWrapper dbRefWrapped;
     @Inject

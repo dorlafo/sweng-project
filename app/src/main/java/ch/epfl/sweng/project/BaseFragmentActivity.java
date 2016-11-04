@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
 
-public class BaseFragmentActivity extends FragmentActivity {
+public abstract class BaseFragmentActivity extends FragmentActivity {
     @Inject
     DBReferenceWrapper dbRefWrapped;
     @Inject
