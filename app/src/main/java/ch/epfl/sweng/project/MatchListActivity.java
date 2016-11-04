@@ -4,10 +4,14 @@ package ch.epfl.sweng.project;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,10 +40,16 @@ public class MatchListActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_list);
-        ListView listView = (ListView) findViewById(android.R.id.list);
-        listView.setEmptyView(findViewById(android.R.id.empty));
 
-        // TODO: fix empty list
+        TextView emptyList = new TextView(this);
+        emptyList.setText(R.string.empty_match_list);
+        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        emptyList.setTextColor(Color.BLACK);
+
+        ListView listView = (ListView) findViewById(android.R.id.list);
+        ((ViewGroup) listView.getParent()).addView(emptyList);
+        listView.setEmptyView(emptyList);
+
         mAdapter = new MatchListAdapter(this);
 
         listView.setAdapter(mAdapter);

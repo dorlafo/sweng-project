@@ -8,7 +8,7 @@
     android:background="@color/listactivity_background_color"
     tools:activity="ch.epfl.sweng.project.MatchListActivity">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/match_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,21 +17,14 @@
 
         <ListView
             android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@android:color/background_light"
             android:divider="@color/listview_divider_color"
             android:dividerHeight="@dimen/listview_divider_height"
             android:drawSelectorOnTop="true"/>
 
-        <TextView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@+id/empty_match_list"
-            android:textAlignment="center"
-            android:visibility="gone"/>
-    </LinearLayout>
+    </FrameLayout>
 
     <ImageButton
         android:id="@+id/switch_to_map"
