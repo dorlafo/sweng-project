@@ -29,6 +29,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,6 +70,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
         OnDateSetListener {
 
     private static final String TAG = CreateMatchActivity.class.getSimpleName();
+    private final int PLACE_PICKER_REQUEST = 27;
 
     private Button createMatchButton;
 
@@ -76,14 +83,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_match);
         matchBuilder = new Match.Builder();
-
-        // TODO: make user choose location
-        locationProvider = new LocationProvider(this);
-        Location currentLocation = locationProvider.getLastLocation();
-        if (currentLocation != null) {
-            matchBuilder.setLocation(new GPSPoint(currentLocation.getLatitude(),
-                    currentLocation.getLongitude()));
-        }
 
         createMatchButton = (Button) findViewById(R.id.create_create_button);
         createMatchButton.setEnabled(false);
@@ -151,6 +150,21 @@ public class CreateMatchActivity extends AppCompatActivity implements
         variantSpinner.setAdapter(variantAdapter);
         variantSpinner.setOnItemSelectedListener(this);
 
+        // Place picker
+        ImageButton placePickerButton = (ImageButton) findViewById(R.id.create_place_picker_button);
+        placePickerButton.setEnabled(false);
+        placePickerButton.setOnClickListener(this);
+
+        locationProvider = new LocationProvider(this);
+        if (locationProvider.locationPermissionIsGranted()) {
+            Location currentLocation = locationProvider.getLastLocation();
+            if (currentLocation != null) {
+                matchBuilder.setLocation(new GPSPoint(currentLocation.getLatitude(),
+                        currentLocation.getLongitude()));
+            }
+            placePickerButton.setEnabled(true);
+        }
+
         addCurrentUserToBuilder();
     }
 
@@ -189,8 +203,27 @@ public class CreateMatchActivity extends AppCompatActivity implements
             case R.id.add_player_button:
                 // TODO: add player with player provider
                 break;
+            case R.id.create_place_picker_button:
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), this, 0);
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    Toast.makeText(this, R.string.error_play_services_not_available, Toast.LENGTH_LONG).show();
+                }
+                break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
+            Place place = PlacePicker.getPlace(this, data);
+            LatLng location = place.getLatLng();
+            matchBuilder.setLocation(new GPSPoint(location.latitude, location.longitude));
         }
     }
 

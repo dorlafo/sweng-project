@@ -44,12 +44,15 @@
     <string name="join_message">Do you want to join this match ?</string>
     <string name="join">Join!</string>
     <string name="ok">OK</string>
+    <string name="create_choose_location">Pick the match location</string>
     <string name="error_cannot_join">Error : cannot join match</string>
     <string name="error_match_full">Match is full.</string>
+    <string name="error_play_services_not_available">Google Play Services is not available.</string>
     <string name="icon_description_map_to_list">Switches to the list view.</string>
     <string name="icon_description_list_to_map">Switches to the map view.</string>
     <string name="icon_description_time_picker">Displays a time picker.</string>
     <string name="icon_description_date_picker">Displays a date picker.</string>
+    <string name="icon_description_place_picker">Displays a place picker.</string>
     <string name="create_toast_invalid_hour">Invalid hour: you cannot go back in time!</string>
     <string name="create_toast_invalid_date">Invalid date: you cannot go back in time!</string>
 </resources>
