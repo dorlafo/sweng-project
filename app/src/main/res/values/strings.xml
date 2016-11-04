@@ -35,7 +35,7 @@
     <string name="create_date_format">dd/MM HH:mm</string>
     <string name="empty_match_list">No matches are available.</string>
     <string name="permission_denied">Cannot access location</string>
-    <string name="request_location_rationale">Location information is used to improve your matchmaking experience.</string>
+    <string name="request_location_rationale">Jass@EPFL needs to access your location to find matches near you.</string>
     <string name="request_unknown_permission">Unknown Permission</string>
     <string name="title_activity_maps">Map</string>
     <string name="login_welcoming_text">Welcome to Jass@EPFL !\nTo use this app you need to\nlogin with your EPFL account</string>
@@ -49,5 +49,6 @@
     <string name="icon_description_list_to_map">Switches to the map view.</string>
     <string name="icon_description_time_picker">Displays a time picker.</string>
     <string name="icon_description_date_picker">Displays a date picker.</string>
-    <string name="create_toast_invalid_time">Invalid hour: you cannot go back in time!</string>
+    <string name="create_toast_invalid_hour">Invalid hour: you cannot go back in time!</string>
+    <string name="create_toast_invalid_date">Invalid date: you cannot go back in time!</string>
 </resources>

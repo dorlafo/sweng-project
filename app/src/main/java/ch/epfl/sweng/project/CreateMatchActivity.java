@@ -208,29 +208,44 @@ public class CreateMatchActivity extends AppCompatActivity implements
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
-            Toast invalidTimeToast = Toast.makeText(this, R.string.create_toast_invalid_time, Toast.LENGTH_SHORT);
-            invalidTimeToast.show();
+            Toast invalidHourToast = Toast.makeText(this, R.string.create_toast_invalid_hour, Toast.LENGTH_SHORT);
+            invalidHourToast.show();
         }
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar tempCalendar = (Calendar) matchCalendar.clone();
-        tempCalendar.set(Calendar.YEAR, year);
-        tempCalendar.set(Calendar.MONTH, month);
-        tempCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
         final Calendar currentTime = Calendar.getInstance();
+        int currentYear = currentTime.get(Calendar.YEAR);
+        int currentMonth = currentTime.get(Calendar.MONTH);
+        int currentDay = currentTime.get(Calendar.DAY_OF_MONTH);
 
-        if (tempCalendar.compareTo(currentTime) > 0) {
-            matchCalendar.set(Calendar.YEAR, year);
-            matchCalendar.set(Calendar.MONTH, month);
-            matchCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        if (year == currentYear && month == currentMonth && dayOfMonth == currentDay) {
+            matchCalendar.set(year, month, dayOfMonth);
+
+            int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+            int currentMinute = currentTime.get(Calendar.MINUTE);
+
+            if (matchCalendar.get(Calendar.HOUR_OF_DAY) < currentHour
+                    || (matchCalendar.get(Calendar.HOUR_OF_DAY) == currentHour
+                    && matchCalendar.get(Calendar.MINUTE) < currentMinute)) {
+                matchCalendar.set(Calendar.HOUR_OF_DAY, currentTime.get(Calendar.HOUR_OF_DAY));
+                matchCalendar.set(Calendar.MINUTE, currentTime.get(Calendar.MINUTE));
+            }
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
-            Toast invalidTimeToast = Toast.makeText(this, R.string.create_toast_invalid_time, Toast.LENGTH_SHORT);
-            invalidTimeToast.show();
+            Calendar tempCalendar = (Calendar) matchCalendar.clone();
+            tempCalendar.set(year, month, dayOfMonth);
+
+            if (tempCalendar.compareTo(currentTime) > 0) {
+                matchCalendar.set(year, month, dayOfMonth);
+                matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
+                displayCurrentExpirationDate();
+            } else {
+                Toast invalidDateToast = Toast.makeText(this, R.string.create_toast_invalid_date, Toast.LENGTH_SHORT);
+                invalidDateToast.show();
+            }
         }
     }
 
@@ -263,4 +278,5 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 getString(R.string.create_date_format), Locale.FRENCH);
         currentExpirationDate.setText(dateFormat.format(matchCalendar.getTimeInMillis()));
     }
+
 }
