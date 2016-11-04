@@ -16,17 +16,15 @@ import ch.epfl.sweng.project.R;
 
 public final class PermissionHandler implements OnRequestPermissionsResultCallback {
 
-    public static final int PERMISSION_REQUEST_CODE = 789654;
+    public static final int PERMISSION_REQUEST_CODE = 8;
 
     private final Activity callingActivity;
     private final String permission;
-    private boolean permissionGranted;
 
     public PermissionHandler(Activity callingActivity,
                              String permission) {
         this.callingActivity = callingActivity;
         this.permission = permission;
-        this.permissionGranted = false;
     }
 
     @Override
@@ -37,7 +35,6 @@ public final class PermissionHandler implements OnRequestPermissionsResultCallba
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    permissionGranted = true;
                 }
         }
     }
@@ -49,7 +46,7 @@ public final class PermissionHandler implements OnRequestPermissionsResultCallba
     public void requestPermission() {
         if (ContextCompat.checkSelfPermission(callingActivity, permission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(callingActivity, permission)) {
-                Snackbar.make(callingActivity.findViewById(android.R.id.content), permissionRationaleResId(), Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(callingActivity.findViewById(android.R.id.content), permissionRationaleResId(), Snackbar.LENGTH_LONG)
                         .setAction(R.string.ok, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -66,7 +63,8 @@ public final class PermissionHandler implements OnRequestPermissionsResultCallba
     }
 
     public boolean isPermissionGranted() {
-        return !chamallowIsHere() || (chamallowIsHere() && permissionGranted);
+        return !chamallowIsHere() ||
+                ContextCompat.checkSelfPermission(callingActivity, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     private int permissionRationaleResId() {
