@@ -22,6 +22,8 @@ import ch.epfl.sweng.project.tools.MatchListAdapter;
 
 /**
  * Activity displaying matches as a scrolling list.
+ * <br>
+ * Clicking on a list item prompts the user to join the match.
  */
 public class MatchListActivity extends ListActivity {
 
@@ -60,7 +62,6 @@ public class MatchListActivity extends ListActivity {
                                 .child("players")
                                 .child(sciper)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
-
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         player = dataSnapshot.getValue(Player.class);
@@ -71,7 +72,7 @@ public class MatchListActivity extends ListActivity {
                                             getIntent().putExtra("MATCH_ID", matchID);
                                             startActivity(moveToMatchActivity);
                                         } catch (IllegalStateException e) {
-                                            sendErrorMessage("Sorry, desired match is full");
+                                            sendErrorMessage(R.string.error_match_full);
                                         }
                                     }
 
@@ -80,21 +81,15 @@ public class MatchListActivity extends ListActivity {
 
                                     }
                                 });
-
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing, goes back to ListMatchActivity
+                        // Do nothing, goes back to MatchListActivity
                     }
                 })
                 .show();
         super.onListItemClick(l, v, position, id);
-    }
-
-    public void switchToMap(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -103,14 +98,21 @@ public class MatchListActivity extends ListActivity {
         mAdapter.cleanup();
     }
 
-    /*
-     * Handles IllegalStateException
-     * Sends Error message to User and go back to MatchListActivity
+    public void switchToMap(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Handles IllegalStateException.
+     * Sends Error message to User and goes back to MatchListActivity.
+     *
+     * @param resId The id of the error message
      */
-    protected void sendErrorMessage(String message) {
+    protected void sendErrorMessage(int resId) {
         new AlertDialog.Builder(this)
-                .setTitle(R.string.match_is_full)
-                .setMessage(message)
+                .setTitle(R.string.error_cannot_join)
+                .setMessage(resId)
                 .show();
     }
 

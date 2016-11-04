@@ -45,8 +45,9 @@ import ch.epfl.sweng.project.tools.MatchStringifier;
 
 /**
  * Activity displaying matches as markers on a Google Maps Fragment.
- * <p>
- * Clicking on a marker displays the match information.
+ * <br>
+ * Clicking on a marker displays the match information and clicking on
+ * the information window prompts the user to join the match.
  */
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback, LocationProviderListener {
@@ -127,7 +128,6 @@ public class MapsActivity extends FragmentActivity implements
                                 final String matchID = marker.getTag().toString();
                                 ref.child("matches").child(matchID)
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
-
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 match = dataSnapshot.getValue(Match.class);
@@ -143,7 +143,6 @@ public class MapsActivity extends FragmentActivity implements
                                         .child("players")
                                         .child(sciper)
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
-
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 player = dataSnapshot.getValue(Player.class);
@@ -154,7 +153,7 @@ public class MapsActivity extends FragmentActivity implements
                                                     getIntent().putExtra("MATCH_ID", matchID);
                                                     startActivity(moveToMatchActivity);
                                                 } catch (IllegalStateException e) {
-                                                    sendErrorMessage("Sorry, desired match is full");
+                                                    sendErrorMessage(R.string.error_match_full);
                                                 }
                                             }
 
@@ -163,19 +162,17 @@ public class MapsActivity extends FragmentActivity implements
 
                                             }
                                         });
-
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing, goes back to ListMatchActivity
+                                // Do nothing, goes back to MapsActivity
                             }
                         })
                         .show();
             }
         });
 
-        //displayNearbyMatches(DummyMatchData.dummyMatches()); Do not touch
         displayNearbyMatches();
 
         if (locationProvider.locationPermissionIsGranted()) {
@@ -197,22 +194,23 @@ public class MapsActivity extends FragmentActivity implements
         startActivity(intent);
     }
 
-    /*
-     * Handles IllegalStateException
-     * Sends Error message to User and go back to MatchListActivity
+    /**
+     * Handles IllegalStateException.
+     * Sends Error message to User and goes back to MapsActivity.
+     *
+     * @param resId The id of the error message
      */
-    protected void sendErrorMessage(String message) {
+    protected void sendErrorMessage(int resId) {
         new AlertDialog.Builder(this)
-                .setTitle(R.string.match_is_full)
-                .setMessage(message)
+                .setTitle(R.string.error_cannot_join)
+                .setMessage(resId)
                 .show();
     }
 
     private void createMap() {
         if (matchMap == null) {
-            SupportMapFragment mapFragment =
-                    (SupportMapFragment) getSupportFragmentManager()
-                            .findFragmentById(R.id.map);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         }
     }
@@ -268,15 +266,15 @@ public class MapsActivity extends FragmentActivity implements
 
             }
 
-            private Marker createMarker(Match m) {
-                stringifier.setMatch(m);
+            private Marker createMarker(Match match) {
+                stringifier.setMatch(match);
                 Marker marker = matchMap.addMarker(new MarkerOptions()
-                        .position(m.getLocation().toLatLng())
-                        .title(m.getDescription())
+                        .position(match.getLocation().toLatLng())
+                        .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                marker.setTag(m.getMatchID());
+                marker.setTag(match.getMatchID());
                 return marker;
             }
         });

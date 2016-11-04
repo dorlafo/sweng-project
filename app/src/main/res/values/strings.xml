@@ -44,7 +44,8 @@
     <string name="join_message">Do you want to join this match ?</string>
     <string name="join">Join!</string>
     <string name="ok">OK</string>
-    <string name="match_is_full">Match is full!</string>
+    <string name="error_cannot_join">Error : cannot join match</string>
+    <string name="error_match_full">Match is full.</string>
     <string name="icon_description_map_to_list">Switches to the list view.</string>
     <string name="icon_description_list_to_map">Switches to the map view.</string>
     <string name="icon_description_time_picker">Displays a time picker.</string>
