@@ -107,7 +107,6 @@ public class Player {
         return this.id.equals(otherPlayer.id)
                 && this.lastName.equals(otherPlayer.lastName)
                 && this.firstName.equals(otherPlayer.firstName);
-        // compare rank?
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

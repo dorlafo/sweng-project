@@ -14,13 +14,23 @@ import android.view.View;
 
 import ch.epfl.sweng.project.R;
 
+/**
+ * Utility class used to request a permission and to check the state of
+ * that permission.
+ */
 public final class PermissionHandler implements OnRequestPermissionsResultCallback {
 
-    public static final int PERMISSION_REQUEST_CODE = 8;
+    public static final int PERMISSION_REQUEST_CODE = 33;
 
     private final Activity callingActivity;
     private final String permission;
 
+    /**
+     * Constructs a new PermissionHandler for the given permission.
+     *
+     * @param callingActivity The activity requesting the permission
+     * @param permission      The requested permission
+     */
     public PermissionHandler(Activity callingActivity,
                              String permission) {
         this.callingActivity = callingActivity;
@@ -39,10 +49,21 @@ public final class PermissionHandler implements OnRequestPermissionsResultCallba
         }
     }
 
+    /**
+     * Checks the current version of Android.
+     *
+     * @return true if the current version of Android is Marshmallow or greater,
+     * false otherwise
+     */
     public boolean chamallowIsHere() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
+    /**
+     * Requests the permission and if it has previously been denied by the user
+     * displays a {@link android.support.design.widget.Snackbar Snackbar}
+     * explaining why the permission is needed and prompting the user to grant it.
+     */
     public void requestPermission() {
         if (ContextCompat.checkSelfPermission(callingActivity, permission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(callingActivity, permission)) {
@@ -62,6 +83,13 @@ public final class PermissionHandler implements OnRequestPermissionsResultCallba
         }
     }
 
+    /**
+     * Checks whether the permission has been granted.
+     *
+     * @return true if the current system version is lower than Marshmallow
+     * (no runtime permission needed) or the runtime permission has been granted,
+     * false otherwise.
+     */
     public boolean isPermissionGranted() {
         return !chamallowIsHere() ||
                 ContextCompat.checkSelfPermission(callingActivity, permission) == PackageManager.PERMISSION_GRANTED;

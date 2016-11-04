@@ -106,6 +106,13 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
         return lastLocation;
     }
 
+    /**
+     * Checks whether the ACCESS_FINE_LOCATION permission has been granted.
+     *
+     * @return true if the current system version is lower than Marshmallow
+     * (no runtime permission needed) or the runtime permission has been granted,
+     * false otherwise.
+     */
     public boolean locationPermissionIsGranted() {
         return permissionHandler.isPermissionGranted();
     }
