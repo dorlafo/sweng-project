@@ -49,6 +49,14 @@ import ch.epfl.sweng.project.tools.DatePickerFragment;
 import ch.epfl.sweng.project.tools.LocationProvider;
 import ch.epfl.sweng.project.tools.TimePickerFragment;
 
+/**
+ * Activity used to create a match.
+ * <br>
+ * The current user is automatically added to the match.
+ * The creation options are: inputting a short description of the match,
+ * manually adding a player, choosing the match location, if it will be
+ * private or not, its variant, and its expiration date.
+ */
 public class CreateMatchActivity extends AppCompatActivity implements
         OnClickListener,
         OnItemSelectedListener,
@@ -81,6 +89,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
         createMatchButton.setEnabled(false);
         createMatchButton.setOnClickListener(this);
 
+        // Description input
         final EditText editText = (EditText) findViewById(R.id.description_match_text);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -109,19 +118,22 @@ public class CreateMatchActivity extends AppCompatActivity implements
             }
         });
 
+        // Date and time pickers
         ImageButton timePickerDialog = (ImageButton) findViewById(R.id.time_picker_button);
         timePickerDialog.setOnClickListener(this);
+
+        ImageButton datePickerDialog = (ImageButton) findViewById(R.id.date_picker_button);
+        datePickerDialog.setOnClickListener(this);
 
         matchCalendar = Calendar.getInstance();
         matchCalendar.add(Calendar.HOUR_OF_DAY, 2);
         displayCurrentExpirationDate();
 
-        ImageButton datePickerDialog = (ImageButton) findViewById(R.id.date_picker_button);
-        datePickerDialog.setOnClickListener(this);
-
+        // Add player
         Button addPlayer = (Button) findViewById(R.id.add_player_button);
         addPlayer.setOnClickListener(this);
 
+        // Private match
         Switch privacySwitch = (Switch) findViewById(R.id.switch_private);
         privacySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -130,12 +142,12 @@ public class CreateMatchActivity extends AppCompatActivity implements
             }
         });
 
-        Spinner variantSpinner = (Spinner) findViewById(R.id.variant_spinner);
-
+        // Variant
         ArrayAdapter<GameVariant> variantAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, GameVariant.values());
         variantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        Spinner variantSpinner = (Spinner) findViewById(R.id.variant_spinner);
         variantSpinner.setAdapter(variantAdapter);
         variantSpinner.setOnItemSelectedListener(this);
 
@@ -195,6 +207,11 @@ public class CreateMatchActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar tempCalendar = (Calendar) matchCalendar.clone();
         tempCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -208,7 +225,8 @@ public class CreateMatchActivity extends AppCompatActivity implements
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
-            Toast invalidHourToast = Toast.makeText(this, R.string.create_toast_invalid_hour, Toast.LENGTH_SHORT);
+            Toast invalidHourToast = Toast.makeText(this,
+                    R.string.create_toast_invalid_hour, Toast.LENGTH_SHORT);
             invalidHourToast.show();
         }
     }
@@ -243,21 +261,17 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
                 displayCurrentExpirationDate();
             } else {
-                Toast invalidDateToast = Toast.makeText(this, R.string.create_toast_invalid_date, Toast.LENGTH_SHORT);
+                Toast invalidDateToast = Toast.makeText(this,
+                        R.string.create_toast_invalid_date, Toast.LENGTH_SHORT);
                 invalidDateToast.show();
             }
         }
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
     private void addCurrentUserToBuilder() {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        FirebaseDatabase.getInstance().getReference().child("players").child(currentUserId).
-                addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("players").child(currentUserId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         matchBuilder.addPlayer(dataSnapshot.getValue(Player.class));
@@ -272,10 +286,8 @@ public class CreateMatchActivity extends AppCompatActivity implements
     }
 
     private void displayCurrentExpirationDate() {
-        TextView currentExpirationDate =
-                (TextView) findViewById(R.id.current_expiration_time);
-        DateFormat dateFormat = new SimpleDateFormat(
-                getString(R.string.create_date_format), Locale.FRENCH);
+        TextView currentExpirationDate = (TextView) findViewById(R.id.current_expiration_time);
+        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.create_date_format), Locale.FRENCH);
         currentExpirationDate.setText(dateFormat.format(matchCalendar.getTimeInMillis()));
     }
 
