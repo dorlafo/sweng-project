@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -45,7 +46,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.tools.DatabaseUtils;
 import ch.epfl.sweng.project.tools.LocationProvider;
 import ch.epfl.sweng.project.tools.LocationProviderListener;
 import ch.epfl.sweng.project.tools.MatchStringifier;
@@ -62,8 +63,6 @@ public class MapsActivity extends FragmentActivity implements
 
     private GoogleMap matchMap;
     private LocationProvider locationProvider;
-    private String sciper;
-    private Player player;
     private Match match;
 
     @Override
@@ -127,6 +126,10 @@ public class MapsActivity extends FragmentActivity implements
                 return infoWindow;
             }
         });
+        /**
+         * When click on one game, opens AlertDialog
+         * Provides oppotunity to join match or cancel.
+         */
         matchMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(final Marker marker) {
@@ -143,36 +146,16 @@ public class MapsActivity extends FragmentActivity implements
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 match = dataSnapshot.getValue(Match.class);
+                                                DatabaseUtils.addPlayerToMatch(MapsActivity.this,
+                                                        ref,
+                                                        matchID,
+                                                        FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                                        match);
                                             }
 
                                             @Override
                                             public void onCancelled(DatabaseError databaseError) {
-
-                                            }
-                                        });
-                                sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                                FirebaseDatabase.getInstance().getReference()
-                                        .child("players")
-                                        .child(sciper)
-                                        .addListenerForSingleValueEvent(new ValueEventListener() {
-
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                player = dataSnapshot.getValue(Player.class);
-                                                try {
-                                                    match.addPlayer(player);
-                                                    ref.child("matches").child(matchID).setValue(match);
-                                                    Intent moveToMatchActivity = new Intent(MapsActivity.this, MatchActivity.class);
-                                                    getIntent().putExtra("MATCH_ID", matchID);
-                                                    startActivity(moveToMatchActivity);
-                                                } catch (IllegalStateException e) {
-                                                    sendErrorMessage("Sorry, desired match is full");
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-
+                                                Log.e("ERROR-DATABASE", databaseError.toString());
                                             }
                                         });
 
@@ -233,17 +216,6 @@ public class MapsActivity extends FragmentActivity implements
     public void switchToList(View view) {
         Intent intent = new Intent(this, MatchListActivity.class);
         startActivity(intent);
-    }
-
-    /*
-     * Handles IllegalStateException
-     * Sends Error message to User and go back to MatchListActivity
-     */
-    protected void sendErrorMessage(String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.match_is_full)
-                .setMessage(message)
-                .show();
     }
 
     private void createMap() {

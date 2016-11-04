@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ch.epfl.sweng.project.error.ErrorHandlerUtils;
 import ch.epfl.sweng.project.model.GPSPoint;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;
@@ -208,7 +209,13 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        matchBuilder.addPlayer(dataSnapshot.getValue(Player.class));
+                        try {
+                            matchBuilder.addPlayer(dataSnapshot.getValue(Player.class));
+                        } catch(IllegalStateException e) {
+                            ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this, R.string.match_is_full, "Sorry, desired match is full");
+                        } catch(IllegalAccessException a) {
+                            ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this, R.string.cannot_join_match, "You are already signed into that Match");
+                        }
                         createMatchButton.setEnabled(true);
                     }
 

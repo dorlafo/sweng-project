@@ -44,4 +44,10 @@
     <string name="join">Join!</string>
     <string name="ok">OK</string>
     <string name="match_is_full">Match is full!</string>
+    <string name="cannot_join_match">Can\'t join Match</string>
+    <string name="error">Error!</string>
+    <string name="start_game">All players have join! The game can start!</string>
+    <string name="player_joined">A new player has join your game!</string>
+    <string name="player_left">A player left you game</string>
+    <string name="match_expired">Your match has expired</string>
 </resources>

@@ -30,7 +30,13 @@ public final class MatchBuilderTest {
     @Test
     public void defaultMatchBuilderHasCorrectValues() {
         setUp();
-        matchBuilder.addPlayer(amaury);
+        try {
+            matchBuilder.addPlayer(amaury);
+        } catch(IllegalStateException e) {
+            fail();
+        } catch(IllegalAccessException a) {
+            fail();
+        }
         Match match = matchBuilder.build();
 
         List<Player> players = new ArrayList<>();
@@ -45,7 +51,14 @@ public final class MatchBuilderTest {
     @Test
     public void builderSetsFieldsCorrectly() {
         setUp();
-        matchBuilder.addPlayer(amaury);
+        try {
+            matchBuilder.addPlayer(amaury);
+        } catch(IllegalStateException e) {
+            fail();
+        } catch(IllegalAccessException a) {
+            fail();
+        }
+
 
         GPSPoint newLocation = new GPSPoint(33.02245, 15.04457);
         String newDescription = "This is gonna be a great match!";
@@ -80,8 +93,15 @@ public final class MatchBuilderTest {
     @Test
     public void builderCorrectlyAddsPlayers() {
         setUp();
-        matchBuilder.addPlayer(amaury);
-        matchBuilder.addPlayer(vincenzo);
+        try {
+            matchBuilder.addPlayer(amaury);
+            matchBuilder.addPlayer(vincenzo);
+        } catch(IllegalStateException e) {
+            fail();
+        } catch(IllegalAccessException a) {
+            fail();
+        }
+
         Match match = matchBuilder.build();
 
         Player player1 = match.getPlayers().get(0);
@@ -94,29 +114,35 @@ public final class MatchBuilderTest {
     @Test
     public void builderDoesNotAddTheSamePlayerTwice() {
         setUp();
-        matchBuilder.addPlayer(amaury).addPlayer(amaury)
-                .addPlayer(vincenzo).addPlayer(vincenzo);
-        Match match = matchBuilder.build();
-
-        Player player1 = match.getPlayers().get(0);
-        Player player2 = match.getPlayers().get(1);
-
-        assertEquals(2, match.getPlayers().size());
-        assertEquals(amaury, player1);
-        assertNotEquals(amaury, player2);
-        assertEquals(vincenzo, player2);
+        try {
+            matchBuilder.addPlayer(amaury).addPlayer(amaury)
+                    .addPlayer(vincenzo).addPlayer(vincenzo);
+        } catch(IllegalStateException e) {
+            fail();
+        } catch(IllegalAccessException a) {
+            assertTrue(a.getMessage().equals("Player already in that Match"));
+        }
     }
 
     @Test
     public void addingTooManyPlayersThrowsException() {
         setUp();
-        matchBuilder.addPlayer(amaury).addPlayer(vincenzo)
-                .addPlayer(dorian).addPlayer(alexis);
+        try {
+            matchBuilder.addPlayer(amaury).addPlayer(vincenzo)
+                    .addPlayer(dorian).addPlayer(alexis);
+        } catch(IllegalStateException e) {
+            fail();
+        } catch(IllegalAccessException a) {
+            fail();
+        }
+
         try {
             matchBuilder.addPlayer(random);
             fail("Expected IllegalStateException");
-        } catch (IllegalStateException e) {
+        } catch(IllegalStateException e) {
             assertTrue(e.getMessage().equals("Match is full."));
+        } catch(IllegalAccessException a) {
+            fail();
         }
     }
 
