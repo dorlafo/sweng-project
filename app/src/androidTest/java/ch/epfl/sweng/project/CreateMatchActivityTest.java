@@ -30,6 +30,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -73,8 +75,8 @@ public final class CreateMatchActivityTest extends
     @Test
     public void testTimePickerSetsTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY, 1);
-        setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+        calendar.add(HOUR_OF_DAY, 1);
+        setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         onView(withId(R.id.current_expiration_time))
                 .check(matches(withText(dateFormat.format(calendar.getTimeInMillis()))));
     }
@@ -82,8 +84,8 @@ public final class CreateMatchActivityTest extends
     @Test
     public void testTimePickerDisplaysToastForInvalidTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY, -1);
-        setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+        calendar.add(HOUR_OF_DAY, -1);
+        setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         onView(withText(R.string.create_toast_invalid_hour)).inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
     }

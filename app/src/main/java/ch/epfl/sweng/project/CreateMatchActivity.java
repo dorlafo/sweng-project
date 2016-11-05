@@ -55,6 +55,9 @@ import ch.epfl.sweng.project.tools.DatePickerFragment;
 import ch.epfl.sweng.project.tools.LocationProvider;
 import ch.epfl.sweng.project.tools.TimePickerFragment;
 
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
+
 /**
  * Activity used to create a match.
  * <br>
@@ -127,7 +130,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
         datePickerDialog.setOnClickListener(this);
 
         matchCalendar = Calendar.getInstance();
-        matchCalendar.add(Calendar.HOUR_OF_DAY, 2);
+        matchCalendar.add(HOUR_OF_DAY, 2);
         displayCurrentExpirationDate();
 
         // Add player
@@ -163,7 +166,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 matchBuilder.setLocation(new GPSPoint(currentLocation.getLatitude(),
                         currentLocation.getLongitude()));
             }
-            placePickerButton.setEnabled(true);
         }
 
         addCurrentUserToBuilder();
@@ -173,6 +175,9 @@ public class CreateMatchActivity extends AppCompatActivity implements
     public void onResume() {
         super.onResume();
         locationProvider.connectGoogleApiClient();
+        if (locationProvider.locationPermissionIsGranted()) {
+            placePickerButton.setEnabled(true);
+        }
     }
 
     @Override
@@ -250,14 +255,14 @@ public class CreateMatchActivity extends AppCompatActivity implements
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar tempCalendar = (Calendar) matchCalendar.clone();
-        tempCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        tempCalendar.set(Calendar.MINUTE, minute);
+        tempCalendar.set(HOUR_OF_DAY, hourOfDay);
+        tempCalendar.set(MINUTE, minute);
 
         final Calendar currentTime = Calendar.getInstance();
 
         if (tempCalendar.compareTo(currentTime) > 0) {
-            matchCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            matchCalendar.set(Calendar.MINUTE, minute);
+            matchCalendar.set(HOUR_OF_DAY, hourOfDay);
+            matchCalendar.set(MINUTE, minute);
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
@@ -277,14 +282,14 @@ public class CreateMatchActivity extends AppCompatActivity implements
         if (year == currentYear && month == currentMonth && dayOfMonth == currentDay) {
             matchCalendar.set(year, month, dayOfMonth);
 
-            int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-            int currentMinute = currentTime.get(Calendar.MINUTE);
+            int currentHour = currentTime.get(HOUR_OF_DAY);
+            int currentMinute = currentTime.get(MINUTE);
 
-            if (matchCalendar.get(Calendar.HOUR_OF_DAY) < currentHour
-                    || (matchCalendar.get(Calendar.HOUR_OF_DAY) == currentHour
-                    && matchCalendar.get(Calendar.MINUTE) < currentMinute)) {
-                matchCalendar.set(Calendar.HOUR_OF_DAY, currentTime.get(Calendar.HOUR_OF_DAY));
-                matchCalendar.set(Calendar.MINUTE, currentTime.get(Calendar.MINUTE));
+            if (matchCalendar.get(HOUR_OF_DAY) < currentHour
+                    || (matchCalendar.get(HOUR_OF_DAY) == currentHour
+                    && matchCalendar.get(MINUTE) < currentMinute)) {
+                matchCalendar.set(HOUR_OF_DAY, currentTime.get(HOUR_OF_DAY));
+                matchCalendar.set(MINUTE, currentTime.get(MINUTE));
             }
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
