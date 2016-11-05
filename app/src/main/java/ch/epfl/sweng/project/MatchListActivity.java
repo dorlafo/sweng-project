@@ -14,14 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.model.Match;
-import ch.epfl.sweng.project.model.Player;
+import ch.epfl.sweng.project.tools.DatabaseUtils;
 import ch.epfl.sweng.project.tools.MatchListAdapter;
 
 /**
@@ -32,8 +28,6 @@ import ch.epfl.sweng.project.tools.MatchListAdapter;
 public class MatchListActivity extends ListActivity {
 
     private MatchListAdapter mAdapter;
-    private String sciper;
-    private Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,33 +58,13 @@ public class MatchListActivity extends ListActivity {
                 .setMessage(R.string.join_message)
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                         final Match match = mAdapter.getItem(position);
-                        final String matchID = match.getMatchID();
-                        sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                        FirebaseDatabase.getInstance().getReference()
-                                .child("players")
-                                .child(sciper)
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        player = dataSnapshot.getValue(Player.class);
-                                        try {
-                                            match.addPlayer(player);
-                                            ref.child("matches").child(matchID).setValue(match);
-                                            Intent moveToMatchActivity = new Intent(MatchListActivity.this, MatchActivity.class);
-                                            getIntent().putExtra("MATCH_ID", matchID);
-                                            startActivity(moveToMatchActivity);
-                                        } catch (IllegalStateException e) {
-                                            sendErrorMessage(R.string.error_match_full);
-                                        }
-                                    }
 
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
+                        DatabaseUtils.addPlayerToMatch(MatchListActivity.this,
+                                FirebaseDatabase.getInstance().getReference(),
+                                match.getMatchID(),
+                                FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                match);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -111,19 +85,6 @@ public class MatchListActivity extends ListActivity {
     public void switchToMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
-    }
-
-    /**
-     * Handles IllegalStateException.
-     * Sends Error message to User and goes back to MatchListActivity.
-     *
-     * @param resId The id of the error message
-     */
-    protected void sendErrorMessage(int resId) {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.error_cannot_join)
-                .setMessage(resId)
-                .show();
     }
 
 }

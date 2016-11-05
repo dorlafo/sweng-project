@@ -22,8 +22,15 @@ public final class MatchTest {
     private final Player random = new Player(new Player.PlayerID(5), "Smith", "John", new Rank(7));
 
     public Match.Builder defaultBuilder() {
-
-        return new Match.Builder().addPlayer(amaury).addPlayer(vincenzo);
+        Match.Builder match = null;
+        try {
+            match = new Match.Builder().addPlayer(amaury).addPlayer(vincenzo);
+        } catch(IllegalStateException e) {
+            fail();
+        } catch(IllegalAccessException a) {
+            fail();
+        }
+        return match;
     }
 
     @Test
@@ -90,8 +97,13 @@ public final class MatchTest {
     @Test
     public void matchAddsPlayer() {
         Match match = defaultBuilder().build();
-        match.addPlayer(alexis);
-
+        try {
+            match.addPlayer(alexis);
+        } catch(IllegalStateException e) {
+            fail();
+        } catch(IllegalAccessException a) {
+            fail();
+        }
         assertEquals(3, match.getPlayers().size());
         assertEquals(alexis, match.getPlayers().get(2));
     }
@@ -99,8 +111,15 @@ public final class MatchTest {
     @Test
     public void matchDoesNotAddTheSamePlayerTwice() {
         Match match = defaultBuilder().build();
-        match.addPlayer(vincenzo);
-        match.addPlayer(alexis);
+
+        try {
+            match.addPlayer(alexis);
+            match.addPlayer(vincenzo);
+        } catch(IllegalStateException e) {
+            fail();
+        } catch(IllegalAccessException a) {
+            assertEquals("Player already in that Match", a.getMessage());
+        }
 
         assertEquals(3, match.getPlayers().size());
         assertNotEquals(vincenzo, match.getPlayers().get(2));
@@ -110,14 +129,22 @@ public final class MatchTest {
     @Test
     public void addingTooManyPlayersThrowsException() {
         Match match = defaultBuilder().build();
-        match.addPlayer(alexis);
-        match.addPlayer(dorian);
+        try {
+            match.addPlayer(alexis);
+            match.addPlayer(dorian);
+        } catch(IllegalStateException e) {
+            fail();
+        } catch(IllegalAccessException a) {
+            fail();
+        }
 
         try {
             match.addPlayer(random);
             fail("Expected IllegalStateException");
-        } catch (IllegalStateException e) {
+        } catch(IllegalStateException e) {
             assertEquals("Match is full.", e.getMessage());
+        } catch(IllegalAccessException a) {
+            fail();
         }
     }
 

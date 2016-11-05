@@ -202,14 +202,17 @@ public class Match {
      * and adding a player if the match if full throws an exception.
      *
      * @param player The player to add to the match
-     * @throws IllegalStateException When the match is full
+     * @throws IllegalStateException  When the match is full
+     * @throws IllegalAccessException When the player is already in the match
      */
-    public void addPlayer(Player player) throws IllegalStateException {
+    public void addPlayer(Player player) throws IllegalStateException, IllegalAccessException {
         if (players.size() >= maxPlayerNumber) {
             throw new IllegalStateException("Match is full.");
         }
         if (!players.contains(player)) {
             players.add(player);
+        } else {
+            throw new IllegalAccessException("Player already in that Match.");
         }
     }
 
@@ -297,12 +300,14 @@ public class Match {
          * @param player The player to add to the match
          * @return The updated builder
          */
-        public Builder addPlayer(Player player) {
+        public Builder addPlayer(Player player) throws IllegalStateException, IllegalAccessException {
             if (players.size() >= maxPlayerNumber) {
                 throw new IllegalStateException("Match is full.");
             }
             if (!players.contains(player)) {
                 players.add(player);
+            } else {
+                throw new IllegalAccessException("Player already in that Match.");
             }
             return this;
         }
