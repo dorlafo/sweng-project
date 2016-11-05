@@ -73,6 +73,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
     private final int PLACE_PICKER_REQUEST = 27;
 
     private Button createMatchButton;
+    private ImageButton placePickerButton;
 
     private Match.Builder matchBuilder;
     private LocationProvider locationProvider;
@@ -83,6 +84,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_match);
         matchBuilder = new Match.Builder();
+        locationProvider = new LocationProvider(this);
 
         createMatchButton = (Button) findViewById(R.id.create_create_button);
         createMatchButton.setEnabled(false);
@@ -151,11 +153,10 @@ public class CreateMatchActivity extends AppCompatActivity implements
         variantSpinner.setOnItemSelectedListener(this);
 
         // Place picker
-        ImageButton placePickerButton = (ImageButton) findViewById(R.id.create_place_picker_button);
+        placePickerButton = (ImageButton) findViewById(R.id.create_place_picker_button);
         placePickerButton.setEnabled(false);
         placePickerButton.setOnClickListener(this);
 
-        locationProvider = new LocationProvider(this);
         if (locationProvider.locationPermissionIsGranted()) {
             Location currentLocation = locationProvider.getLastLocation();
             if (currentLocation != null) {
@@ -207,6 +208,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
                     startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+                    placePickerButton.setEnabled(false);
                 } catch (GooglePlayServicesRepairableException e) {
                     GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), this, 0);
                 } catch (GooglePlayServicesNotAvailableException e) {
@@ -224,6 +226,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
             Place place = PlacePicker.getPlace(this, data);
             LatLng location = place.getLatLng();
             matchBuilder.setLocation(new GPSPoint(location.latitude, location.longitude));
+            placePickerButton.setEnabled(true);
         }
     }
 
