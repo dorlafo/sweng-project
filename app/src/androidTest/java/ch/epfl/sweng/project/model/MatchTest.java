@@ -25,9 +25,7 @@ public final class MatchTest {
         Match.Builder match = null;
         try {
             match = new Match.Builder().addPlayer(amaury).addPlayer(vincenzo);
-        } catch(IllegalStateException e) {
-            fail();
-        } catch(IllegalAccessException a) {
+        } catch (IllegalStateException | IllegalAccessException e) {
             fail();
         }
         return match;
@@ -99,9 +97,7 @@ public final class MatchTest {
         Match match = defaultBuilder().build();
         try {
             match.addPlayer(alexis);
-        } catch(IllegalStateException e) {
-            fail();
-        } catch(IllegalAccessException a) {
+        } catch (IllegalStateException | IllegalAccessException e) {
             fail();
         }
         assertEquals(3, match.getPlayers().size());
@@ -115,10 +111,10 @@ public final class MatchTest {
         try {
             match.addPlayer(alexis);
             match.addPlayer(vincenzo);
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             fail();
-        } catch(IllegalAccessException a) {
-            assertEquals("Player already in that Match", a.getMessage());
+        } catch (IllegalAccessException a) {
+            assertEquals("Player already in that Match.", a.getMessage());
         }
 
         assertEquals(3, match.getPlayers().size());
@@ -132,18 +128,16 @@ public final class MatchTest {
         try {
             match.addPlayer(alexis);
             match.addPlayer(dorian);
-        } catch(IllegalStateException e) {
-            fail();
-        } catch(IllegalAccessException a) {
+        } catch (IllegalStateException | IllegalAccessException e) {
             fail();
         }
 
         try {
             match.addPlayer(random);
             fail("Expected IllegalStateException");
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             assertEquals("Match is full.", e.getMessage());
-        } catch(IllegalAccessException a) {
+        } catch (IllegalAccessException a) {
             fail();
         }
     }
