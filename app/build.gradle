@@ -6,7 +6,7 @@ android {
     buildToolsVersion '24.0.3'
 
     defaultConfig {
-        applicationId "ch.epfl.sweng.project"
+        applicationId "ch.epfl.sweng.jassatepfl"
         minSdkVersion 19
         targetSdkVersion 24
 

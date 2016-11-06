@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/listactivity_background_color"
-    tools:context="ch.epfl.sweng.project.MatchListActivity">
+    tools:context="ch.epfl.sweng.jassatepfl.MatchListActivity">
 
     <LinearLayout
         android:id="@+id/match_list_view"
