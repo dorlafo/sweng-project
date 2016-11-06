@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/listactivity_background_color"
-    tools:activity="ch.epfl.sweng.project.MatchListActivity">
+    tools:context="ch.epfl.sweng.jassatepfl.MatchListActivity">
 
     <FrameLayout
         android:id="@+id/match_list_view"
