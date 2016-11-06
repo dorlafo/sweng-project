@@ -45,7 +45,7 @@
     <string name="join">Join!</string>
     <string name="ok">OK</string>
     <string name="create_choose_location">Pick the match location</string>
-    <string name="error_cannot_join">Error : cannot join match</string>
+    <string name="error_cannot_join">Cannot join match</string>
     <string name="error_match_full">Match is full.</string>
     <string name="error_already_in_match">You are already signed into that match.</string>
     <string name="error">Error!</string>
@@ -57,6 +57,7 @@
     <string name="icon_description_place_picker">Displays a place picker.</string>
     <string name="create_toast_invalid_hour">Invalid hour: you cannot go back in time!</string>
     <string name="create_toast_invalid_date">Invalid date: you cannot go back in time!</string>
+    <string name="create_toast_no_connection">No connection to Firebase.</string>
     <string name="start_game">All players have join! The game can start!</string>
     <string name="player_joined">A new player has joined your game!</string>
     <string name="player_left">A player left you game</string>

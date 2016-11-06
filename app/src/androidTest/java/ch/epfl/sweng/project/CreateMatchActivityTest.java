@@ -30,8 +30,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.project.model.Match.GameVariant.CLASSIC;
+import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -90,17 +93,42 @@ public final class CreateMatchActivityTest extends
                 .check(matches(isDisplayed()));
     }
 
-    /* Not working because the layout of the material date picker is different
     @Test
     public void testDatePickerSetsDate() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
+        calendar.add(HOUR_OF_DAY, 2);
+        calendar.add(DAY_OF_MONTH, 1);
+        setDate(calendar.get(YEAR), calendar.get(MONTH),
+                calendar.get(DAY_OF_MONTH));
         onView(withId(R.id.current_expiration_time))
                 .check(matches(withText(dateFormat.format(calendar.getTimeInMillis()))));
     }
-    */
+
+    @Test
+    public void testDatePickerDisplaysToastForInvalidDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(HOUR_OF_DAY, 2);
+        calendar.add(DAY_OF_MONTH, -1);
+        setDate(calendar.get(YEAR), calendar.get(MONTH),
+                calendar.get(DAY_OF_MONTH));
+        onView(withText(R.string.create_toast_invalid_date)).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testDatePickerSetsHourWhenConflictWithCurrentHour() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(MONTH, 3);
+        setDate(calendar.get(YEAR), calendar.get(MONTH),
+                calendar.get(DAY_OF_MONTH));
+        calendar.add(HOUR_OF_DAY, -3);
+        setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
+        calendar = Calendar.getInstance();
+        setDate(calendar.get(YEAR), calendar.get(MONTH),
+                calendar.get(DAY_OF_MONTH));
+        onView(withId(R.id.current_expiration_time))
+                .check(matches(withText(dateFormat.format(calendar.getTimeInMillis()))));
+    }
 
     /* Not working because we need to use intentsTestRule, but it will probably not work with Jenkins
     @Test
@@ -123,7 +151,7 @@ public final class CreateMatchActivityTest extends
     private void setDate(int year, int month, int dayOfMonth) {
         onView(withId(R.id.date_picker_button)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
-                .perform(PickerActions.setDate(year, month, dayOfMonth));
+                .perform(PickerActions.setDate(year, month + 1, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
     }
 
