@@ -1,21 +1,13 @@
 package ch.epfl.sweng.project;
 
-import android.support.test.InstrumentationRegistry;
-import android.test.ActivityInstrumentationTestCase2;
-
 import org.junit.Test;
 
-import ch.epfl.sweng.project.helpers.mocks.firebase.UserProfileMDR;
-
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
 
 public final class UserProfileActivityTest extends InjectedBaseActivityTest {
@@ -32,6 +24,6 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testProfileIsDisplayedCorrectly() {
-        when(dbRef.child(anyString())).thenReturn(dbRef);
+        verify(dbRefWrapped).child("players");
     }
 }

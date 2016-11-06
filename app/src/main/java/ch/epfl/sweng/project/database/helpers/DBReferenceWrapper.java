@@ -1,15 +1,9 @@
-package ch.epfl.sweng.project.database.tools;
+package ch.epfl.sweng.project.database.helpers;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 /**
  * DBReferenceWrapper is class that just wrap a DatabaseReference and reproduce all its methods
