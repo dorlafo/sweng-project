@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Project</string>
+    <string name="app_name">Jass@EPFL</string>
     <string name="nearby_matches">Nearby Matches</string>
     <string name="create_match">Create Match</string>
     <string name="profile">Profile</string>
