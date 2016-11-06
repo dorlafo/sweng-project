@@ -1,14 +1,13 @@
 package ch.epfl.sweng.project;
 
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import javax.inject.Inject;
 
-import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
+import ch.epfl.sweng.project.database.helpers.DBReferenceWrapper;
 
 public abstract class BaseFragmentActivity extends FragmentActivity {
     @Inject

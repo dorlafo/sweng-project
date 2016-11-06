@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,11 +25,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
@@ -39,7 +35,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import ch.epfl.sweng.project.error.ErrorHandlerUtils;
-import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
+import ch.epfl.sweng.project.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.project.model.GPSPoint;
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Match.GameVariant;

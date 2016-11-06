@@ -4,11 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 
 import javax.inject.Inject;
 
-import ch.epfl.sweng.project.database.tools.DBReferenceWrapper;
+import ch.epfl.sweng.project.database.helpers.DBReferenceWrapper;
 
 public abstract class BaseActivity extends AppCompatActivity {
     @Inject
