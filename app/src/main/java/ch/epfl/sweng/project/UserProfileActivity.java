@@ -66,8 +66,6 @@ public class UserProfileActivity extends BaseActivity {
     @Override
     public void onStart() {
         super.onStart();
-
-
     }
 
     public void viewMenu(View view) {
