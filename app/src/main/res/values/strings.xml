@@ -44,4 +44,11 @@
     <string name="join">Join!</string>
     <string name="ok">OK</string>
     <string name="match_is_full">Match is full!</string>
+    <string name="enrolled_match_list">My match</string>
+    <string name="match_variant">Match variant : </string>
+    <string name="match_description">Match description : </string>
+    <string name="match_players">Match players : </string>
+    <string name="no_match">Sorry but you are currently enrolled in no match...</string>
+    <string name="start_match">Start Match</string>
+    <string name="leave_match">Leave Match</string>
 </resources>

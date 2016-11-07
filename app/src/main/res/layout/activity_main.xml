@@ -32,6 +32,13 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/main_enrolled_match_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="displayEnrolledMatches"
+        android:text="@string/enrolled_match_list"/>
+
+    <Button
         android:id="@+id/main_list_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

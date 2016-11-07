@@ -10,4 +10,96 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ch.epfl.sweng.project.MatchActivity">
 
+    <LinearLayout
+        android:id="@+id/match_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/match_variant"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/match_variant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="22sp"/>
+
+        </LinearLayout>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/match_description"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/match_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center" />
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/match_players"
+            android:textSize="22sp" />
+
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@android:color/background_light"
+            android:divider="@color/listview_divider_color"
+            android:dividerHeight="1dp"
+            android:drawSelectorOnTop="true" />
+
+        <Button
+            android:id="@+id/match_leave"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_match"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:onClick="leaveMatch"
+            />
+
+        <Button
+            android:id="@+id/match_start"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_match"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:onClick="startMatch"
+            />
+
+
+
+        <TextView
+            android:id="@+id/no_match"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/no_match"
+            android:textAlignment="center"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+
+
 </RelativeLayout>
