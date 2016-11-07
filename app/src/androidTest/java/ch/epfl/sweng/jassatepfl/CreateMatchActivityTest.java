@@ -78,6 +78,7 @@ public final class CreateMatchActivityTest extends
     @Test
     public void testTimePickerSetsTime() {
         Calendar calendar = Calendar.getInstance();
+        calendar.add(HOUR_OF_DAY, 1);
         calendar.add(MINUTE, 5);
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         onView(withId(R.id.current_expiration_time))
@@ -87,8 +88,9 @@ public final class CreateMatchActivityTest extends
     @Test
     public void testTimePickerDisplaysToastForInvalidTime() {
         Calendar calendar = Calendar.getInstance();
+        int currentHour = calendar.get(HOUR_OF_DAY);
         calendar.add(MINUTE, -5);
-        setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
+        setTime(currentHour == 23 ? 0 : currentHour, calendar.get(MINUTE));
         onView(withText(R.string.create_toast_invalid_hour)).inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
     }
