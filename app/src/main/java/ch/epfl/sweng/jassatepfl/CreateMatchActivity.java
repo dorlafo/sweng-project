@@ -288,13 +288,13 @@ public class CreateMatchActivity extends AppCompatActivity implements
             if (matchCalendar.get(HOUR_OF_DAY) < currentHour
                     || (matchCalendar.get(HOUR_OF_DAY) == currentHour
                     && matchCalendar.get(MINUTE) < currentMinute)) {
-                matchCalendar.set(HOUR_OF_DAY, currentTime.get(HOUR_OF_DAY));
-                matchCalendar.set(MINUTE, currentTime.get(MINUTE));
+                matchCalendar.set(HOUR_OF_DAY, currentHour);
+                matchCalendar.set(MINUTE, currentMinute);
             }
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
-            Calendar tempCalendar = (Calendar) matchCalendar.clone();
+            Calendar tempCalendar = Calendar.getInstance();
             tempCalendar.set(year, month, dayOfMonth);
 
             if (tempCalendar.compareTo(currentTime) > 0) {
