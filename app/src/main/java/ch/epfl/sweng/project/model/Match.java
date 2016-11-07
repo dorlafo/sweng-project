@@ -307,7 +307,24 @@ public class Match {
             return this;
         }
 
-        // TODO: add removePlayer method
+        /**
+         * Removes the given player to the player list.
+         * <p>
+         * Removing a player that is not present throws an exception,
+         *
+         *
+         * @param player The player to remove from the match
+         * @return The updated builder
+         */
+        public Builder removePlayer(Player player) {
+            if (players.contains(player)) {
+                players.remove(player);
+            }
+            else  {
+                throw new IllegalStateException("Player not in match");
+            }
+            return this;
+        }
 
         public Builder setLocation(GPSPoint location) {
             this.location = location;
