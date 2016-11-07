@@ -96,6 +96,7 @@ public final class CreateMatchActivityTest extends
     @Test
     public void testDatePickerSetsDate() {
         Calendar calendar = Calendar.getInstance();
+        calendar.add(HOUR_OF_DAY, 1);
         calendar.add(DAY_OF_MONTH, 3);
         calendar.add(MONTH, 1);
         setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
@@ -120,6 +121,7 @@ public final class CreateMatchActivityTest extends
         int currentDay = calendar.get(HOUR_OF_DAY);
         calendar.add(DAY_OF_MONTH, 6);
         setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
+        calendar.add(HOUR_OF_DAY, -1);
         calendar.add(MINUTE, -5);
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         setDate(currentYear, currentMonth, currentDay);
