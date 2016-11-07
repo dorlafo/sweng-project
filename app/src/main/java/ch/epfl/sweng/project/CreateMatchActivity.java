@@ -155,7 +155,15 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 ref.child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
                 Log.d(TAG, "Pushed match " + matchId + " to database");
                 Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
+
+                /*
+                j'ose pas trop tout casser mais à mon avis c'est pas getIntent(), mais moveToMatchActivity...
+                Dans le doute je laisse les 2
+                TODO régler cette histoire de intent pour match activity
+                 */
+
                 getIntent().putExtra("MATCH_ID", matchId);
+                moveToMatchActivity.putExtra("MATCH_ID", matchId);
                 startActivity(moveToMatchActivity);
                 break;
             case R.id.time_picker_button:
