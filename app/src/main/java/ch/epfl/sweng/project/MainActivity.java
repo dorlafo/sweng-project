@@ -65,6 +65,10 @@ public final class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void showEnrolledMatch(View view){
+        Intent intent = new Intent(this, CreateMatchActivity.class);
+    }
+
     /**
      * Launch the UserProfileActivity then the Profile button is clicked
      *
@@ -82,6 +86,11 @@ public final class MainActivity extends AppCompatActivity {
 
     public void displayMatchesInList(View view) {
         Intent intent = new Intent(this, MatchListActivity.class);
+        startActivity(intent);
+    }
+
+    public void displayEnrolledMatches(View view) {
+        Intent intent = new Intent(this, MatchActivity.class);
         startActivity(intent);
     }
 
