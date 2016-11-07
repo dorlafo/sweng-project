@@ -256,15 +256,14 @@ public class CreateMatchActivity extends AppCompatActivity implements
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Calendar tempCalendar = (Calendar) matchCalendar.clone();
+        Calendar tempCalendar = Calendar.getInstance();
         tempCalendar.set(HOUR_OF_DAY, hourOfDay);
         tempCalendar.set(MINUTE, minute);
 
         final Calendar currentTime = Calendar.getInstance();
 
         if (tempCalendar.compareTo(currentTime) > 0) {
-            matchCalendar.set(HOUR_OF_DAY, hourOfDay);
-            matchCalendar.set(MINUTE, minute);
+            matchCalendar.setTimeInMillis(tempCalendar.getTimeInMillis());
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
