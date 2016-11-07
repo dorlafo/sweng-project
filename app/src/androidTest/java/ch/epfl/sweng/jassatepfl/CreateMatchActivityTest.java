@@ -118,10 +118,9 @@ public final class CreateMatchActivityTest extends
         Calendar calendar = Calendar.getInstance();
         int currentYear = calendar.get(YEAR);
         int currentMonth = calendar.get(MONTH);
-        int currentDay = calendar.get(HOUR_OF_DAY);
+        int currentDay = calendar.get(DAY_OF_MONTH);
         calendar.add(DAY_OF_MONTH, 6);
         setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
-        calendar.add(HOUR_OF_DAY, -1);
         calendar.add(MINUTE, -5);
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         setDate(currentYear, currentMonth, currentDay);
