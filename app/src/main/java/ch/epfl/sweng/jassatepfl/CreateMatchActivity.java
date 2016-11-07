@@ -56,8 +56,11 @@ import ch.epfl.sweng.jassatepfl.tools.DatePickerFragment;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
 
+import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 
 /**
  * Activity used to create a match.
@@ -256,7 +259,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Calendar tempCalendar = Calendar.getInstance();
+        Calendar tempCalendar = (Calendar) matchCalendar.clone();
         tempCalendar.set(HOUR_OF_DAY, hourOfDay);
         tempCalendar.set(MINUTE, minute);
 
@@ -275,9 +278,9 @@ public class CreateMatchActivity extends AppCompatActivity implements
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         final Calendar currentTime = Calendar.getInstance();
-        int currentYear = currentTime.get(Calendar.YEAR);
-        int currentMonth = currentTime.get(Calendar.MONTH);
-        int currentDay = currentTime.get(Calendar.DAY_OF_MONTH);
+        int currentYear = currentTime.get(YEAR);
+        int currentMonth = currentTime.get(MONTH);
+        int currentDay = currentTime.get(DAY_OF_MONTH);
 
         if (year == currentYear && month == currentMonth && dayOfMonth == currentDay) {
             matchCalendar.set(year, month, dayOfMonth);
