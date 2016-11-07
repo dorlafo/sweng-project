@@ -110,8 +110,7 @@ public final class CreateMatchActivityTest extends
         calendar.add(HOUR_OF_DAY, 1);
         calendar.add(DAY_OF_MONTH, 3);
         calendar.add(MONTH, 1);
-        setDate(calendar.get(YEAR), calendar.get(MONTH),
-                calendar.get(DAY_OF_MONTH));
+        setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         onView(withId(R.id.current_expiration_time))
                 .check(matches(withText(dateFormat.format(calendar.getTimeInMillis()))));
     }
@@ -121,8 +120,7 @@ public final class CreateMatchActivityTest extends
         Calendar calendar = Calendar.getInstance();
         calendar.add(HOUR_OF_DAY, 1);
         calendar.add(DAY_OF_MONTH, -5);
-        setDate(calendar.get(YEAR), calendar.get(MONTH),
-                calendar.get(DAY_OF_MONTH));
+        setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         onView(withText(R.string.create_toast_invalid_date)).inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
     }
@@ -134,15 +132,15 @@ public final class CreateMatchActivityTest extends
         int currentMonth = calendar.get(MONTH);
         int currentDay = calendar.get(HOUR_OF_DAY);
         calendar.add(HOUR_OF_DAY, 1);
-        calendar.add(MONTH, 3);
-        setDate(calendar.get(YEAR), calendar.get(MONTH),
-                calendar.get(DAY_OF_MONTH));
+        calendar.add(DAY_OF_MONTH, 6);
+        setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         if (calendar.get(HOUR_OF_DAY) >= 1) {
             calendar.add(HOUR_OF_DAY, -1);
         }
         calendar.add(MINUTE, -5);
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         setDate(currentYear, currentMonth, currentDay);
+        calendar = Calendar.getInstance();
         onView(withId(R.id.current_expiration_time))
                 .check(matches(withText(dateFormat.format(calendar.getTimeInMillis()))));
     }
