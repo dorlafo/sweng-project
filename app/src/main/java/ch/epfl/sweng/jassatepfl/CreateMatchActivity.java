@@ -131,7 +131,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
         datePickerDialog.setOnClickListener(this);
 
         matchCalendar = Calendar.getInstance();
-        matchCalendar.add(HOUR_OF_DAY, 2);
+        matchCalendar.add(HOUR_OF_DAY, 1);
         displayCurrentExpirationDate();
 
         // Add player
@@ -319,9 +319,11 @@ public class CreateMatchActivity extends AppCompatActivity implements
                             try {
                                 matchBuilder.addPlayer(dataSnapshot.getValue(Player.class));
                             } catch (IllegalStateException e) {
-                                ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this, R.string.error_cannot_join, R.string.error_match_full);
+                                ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
+                                        R.string.error_cannot_join, R.string.error_match_full);
                             } catch (IllegalAccessException a) {
-                                ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this, R.string.error_cannot_join, R.string.error_already_in_match);
+                                ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
+                                        R.string.error_cannot_join, R.string.error_already_in_match);
                             }
                             createMatchButton.setEnabled(true);
                         }

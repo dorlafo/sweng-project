@@ -287,7 +287,7 @@ public class Match {
             privateMatch = false;
             gameVariant = CLASSIC;
             maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
-            expirationTime = Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000; // 2 hours after current time
+            expirationTime = Calendar.getInstance().getTimeInMillis() + 1 * 3600 * 1000; // 1 hour after current time
             matchID = DEFAULT_ID;
         }
 
