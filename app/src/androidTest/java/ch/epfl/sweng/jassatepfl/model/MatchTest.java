@@ -142,4 +142,18 @@ public final class MatchTest {
         }
     }
 
+    @Test
+    public void hasParticipantReturnsTrueIfPlayerIsInMatch() {
+        Match match = defaultBuilder().build();
+        assertTrue(match.hasParticipant(vincenzo));
+        assertTrue(match.hasParticipant(amaury));
+    }
+
+    @Test
+    public void hasParticipantReturnsFalseIfPlayerIsNotInMatch() {
+        Match match = defaultBuilder().build();
+        assertFalse(match.hasParticipant(null));
+        assertFalse(match.hasParticipant(dorian));
+    }
+
 }
