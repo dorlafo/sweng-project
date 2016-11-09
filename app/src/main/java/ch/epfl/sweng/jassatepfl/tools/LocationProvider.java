@@ -23,23 +23,23 @@ import com.google.android.gms.location.LocationServices;
  */
 public final class LocationProvider implements ConnectionCallbacks, LocationListener {
 
-    private LocationProviderListener providerListener;
+    private final Activity callingActivity;
     private final PermissionHandler permissionHandler;
 
-    private final Activity activity;
+    private LocationProviderListener providerListener;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
     private Location lastLocation;
 
     /**
-     * Constructs a new LocationProvider with the given activity.
+     * Constructs a new LocationProvider with the given callingActivity.
      *
-     * @param activity The activity using the provider
+     * @param callingActivity The callingActivity using the provider
      */
-    public LocationProvider(Activity activity) {
-        this.activity = activity;
+    public LocationProvider(Activity callingActivity) {
+        this.callingActivity = callingActivity;
 
-        permissionHandler = new PermissionHandler(activity, Manifest.permission.ACCESS_FINE_LOCATION);
+        permissionHandler = new PermissionHandler(callingActivity, Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionHandler.chamallowIsHere()) {
             permissionHandler.requestPermission();
         }
@@ -56,7 +56,6 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
             if (lastLocation != null) {
                 notifyListener(lastLocation);
             }
-            startLocationUpdates();
         }
     }
 
@@ -85,6 +84,18 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
      */
     public void connectGoogleApiClient() {
         googleApiClient.connect();
+    }
+
+    /**
+     * Starts the location updates, notifying the provider whenever
+     * the location changes.
+     */
+    @SuppressWarnings({"MissingPermission"})
+    public void startLocationUpdates() {
+        if (permissionHandler.permissionIsGranted()) {
+            LocationServices.FusedLocationApi
+                    .requestLocationUpdates(googleApiClient, locationRequest, this);
+        }
     }
 
     /**
@@ -121,7 +132,7 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
      * Builds a new googleApiClient to provide access to location services.
      */
     private synchronized void buildGoogleApiClient() {
-        googleApiClient = new GoogleApiClient.Builder(activity)
+        googleApiClient = new GoogleApiClient.Builder(callingActivity)
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)
                 .build();
@@ -129,21 +140,9 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
 
     private void createLocationRequest() {
         locationRequest = LocationRequest.create()
-                .setInterval(5000)
-                .setFastestInterval(1000)
+                .setInterval(15000)
+                .setFastestInterval(5000)
                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-    }
-
-    /**
-     * Starts the location updates, notifying the provider whenever
-     * the location changes.
-     */
-    @SuppressWarnings({"MissingPermission"})
-    private void startLocationUpdates() {
-        if (permissionHandler.permissionIsGranted()) {
-            LocationServices.FusedLocationApi
-                    .requestLocationUpdates(googleApiClient, locationRequest, this);
-        }
     }
 
     /**

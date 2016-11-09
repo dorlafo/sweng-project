@@ -25,14 +25,14 @@
         <!--
             App Activities
         -->
-        <activity android:name="ch.epfl.sweng.jassatepfl.MainActivity">
+        <callingActivity android:name="ch.epfl.sweng.jassatepfl.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity android:name="ch.epfl.sweng.jassatepfl.UserProfileActivity"/>
-        <activity
+        </callingActivity>
+        <callingActivity android:name="ch.epfl.sweng.jassatepfl.UserProfileActivity"/>
+        <callingActivity
             android:name="ch.epfl.sweng.jassatepfl.WebViewActivity"
             android:label="@string/app_name">
             <intent-filter>
@@ -45,14 +45,14 @@
                     android:host="login"
                     android:scheme="jassatepfl"/>
             </intent-filter>
-        </activity>
-        <activity android:name="ch.epfl.sweng.jassatepfl.CreateMatchActivity"/>
-        <activity android:name="ch.epfl.sweng.jassatepfl.MatchListActivity"/>
-        <activity
+        </callingActivity>
+        <callingActivity android:name="ch.epfl.sweng.jassatepfl.CreateMatchActivity"/>
+        <callingActivity android:name="ch.epfl.sweng.jassatepfl.MatchListActivity"/>
+        <callingActivity
             android:name="ch.epfl.sweng.jassatepfl.MapsActivity"
             android:label="@string/title_activity_maps"/>
-        <activity android:name="ch.epfl.sweng.jassatepfl.MatchActivity"/>
-        <activity android:name="ch.epfl.sweng.jassatepfl.LoginActivity"/>
+        <callingActivity android:name="ch.epfl.sweng.jassatepfl.MatchActivity"/>
+        <callingActivity android:name="ch.epfl.sweng.jassatepfl.LoginActivity"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
