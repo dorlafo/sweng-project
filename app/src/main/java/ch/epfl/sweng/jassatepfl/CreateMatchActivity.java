@@ -91,7 +91,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_match);
         matchBuilder = new Match.Builder();
-        locationProvider = new LocationProvider(this);
+        locationProvider = new LocationProvider(this, false);
 
         createMatchButton = (Button) findViewById(R.id.create_create_button);
         createMatchButton.setEnabled(false);

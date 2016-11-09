@@ -48,7 +48,7 @@ import ch.epfl.sweng.jassatepfl.tools.LocationProviderListener;
 import ch.epfl.sweng.jassatepfl.tools.MatchStringifier;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_MAGENTA;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_ORANGE;
 
 /**
  * Activity displaying matches as markers on a Google Maps Fragment.
@@ -71,7 +71,7 @@ public class MapsActivity extends FragmentActivity implements
         setContentView(R.layout.activity_maps);
         createMap();
 
-        locationProvider = new LocationProvider(this);
+        locationProvider = new LocationProvider(this, true);
         locationProvider.setProviderListener(this);
 
         try {
@@ -97,12 +97,6 @@ public class MapsActivity extends FragmentActivity implements
     protected void onResume() {
         super.onResume();
         locationProvider.connectGoogleApiClient();
-        locationProvider.startLocationUpdates();
-
-        if (userLastLocation != null) {
-            matchMap.animateCamera(CameraUpdateFactory.newCameraPosition(
-                    new CameraPosition(userLastLocation, 15f, 0f, 0f)));
-        }
     }
 
     @Override
@@ -126,7 +120,6 @@ public class MapsActivity extends FragmentActivity implements
                 return null;
             }
 
-            // TODO: layout for this
             @Override
             public View getInfoContents(Marker marker) {
                 Context context = MapsActivity.this;
@@ -198,6 +191,11 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
+        if (userLastLocation == null) {
+            matchMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+                    new CameraPosition(new LatLng(location.getLatitude(),
+                            location.getLongitude()), 15f, 0f, 0f)));
+        }
         userLastLocation = new LatLng(location.getLatitude(), location.getLongitude());
     }
 
@@ -216,7 +214,7 @@ public class MapsActivity extends FragmentActivity implements
 
     private void displayNearbyMatches() {
         Query ref = FirebaseDatabase.getInstance().getReference("matches")
-                .child("privateMatch").equalTo("false");
+                .orderByChild("privateMatch").equalTo(false);
 
         ref.addChildEventListener(new ChildEventListener() {
             private final Map<String, Marker> markers = new HashMap<>();
@@ -257,7 +255,7 @@ public class MapsActivity extends FragmentActivity implements
                         .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory.defaultMarker(
-                                match.hasParticipant(currentUser) ? HUE_MAGENTA : HUE_BLUE)));
+                                match.hasParticipant(currentUser) ? HUE_ORANGE : HUE_BLUE)));
                 marker.setTag(match.getMatchID());
                 return marker;
             }
