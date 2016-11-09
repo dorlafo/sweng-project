@@ -202,16 +202,17 @@ public class Match {
      * and adding a player if the match if full throws an exception.
      *
      * @param player The player to add to the match
-     * @throws IllegalStateException When the match is full
+     * @throws IllegalStateException  When the match is full
+     * @throws IllegalAccessException When the player is already in the match
      */
     public void addPlayer(Player player) throws IllegalStateException, IllegalAccessException {
         if (players.size() >= maxPlayerNumber) {
             throw new IllegalStateException("Match is full.");
         }
-        if(!players.contains(player)) {
+        if (!players.contains(player)) {
             players.add(player);
         } else {
-            throw new IllegalAccessException("Player already in that Match");
+            throw new IllegalAccessException("Player already in that Match.");
         }
     }
 
@@ -267,7 +268,7 @@ public class Match {
         public static final String DEFAULT_DESCRIPTION = "New Match";
         public static final String DEFAULT_ID = "Default Match ID";
 
-        private List<Player> players;
+        private final List<Player> players;
         private GPSPoint location;
         private String description;
         private boolean privateMatch;
@@ -286,7 +287,7 @@ public class Match {
             privateMatch = false;
             gameVariant = CLASSIC;
             maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
-            expirationTime = Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000; // 2 hours after current time
+            expirationTime = Calendar.getInstance().getTimeInMillis() + 1 * 3600 * 1000; // 1 hour after current time
             matchID = DEFAULT_ID;
         }
 
@@ -303,10 +304,10 @@ public class Match {
             if (players.size() >= maxPlayerNumber) {
                 throw new IllegalStateException("Match is full.");
             }
-            if(!players.contains(player)) {
+            if (!players.contains(player)) {
                 players.add(player);
             } else {
-                throw new IllegalAccessException("Player already in that Match");
+                throw new IllegalAccessException("Player already in that Match.");
             }
             return this;
         }

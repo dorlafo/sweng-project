@@ -12,16 +12,15 @@ import ch.epfl.sweng.jassatepfl.model.Player.PlayerID;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
-import static org.junit.Assert.assertNotEquals;
 
 public final class MatchBuilderTest {
 
     private Match.Builder matchBuilder;
-    private Player amaury = new Player(new PlayerID(1), "Combes", "Amaury", new Rank(123));
-    private Player vincenzo = new Player(new PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
-    private Player dorian = new Player(new PlayerID(3), "Laforest", "Dorian", new Rank(567));
-    private Player alexis = new Player(new PlayerID(4), "Montavon", "Alexis", new Rank(789));
-    private Player random = new Player(new PlayerID(5), "Smith", "John", new Rank(7));
+    private final Player amaury = new Player(new PlayerID(1), "Combes", "Amaury", new Rank(123));
+    private final Player vincenzo = new Player(new PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
+    private final Player dorian = new Player(new PlayerID(3), "Laforest", "Dorian", new Rank(567));
+    private final Player alexis = new Player(new PlayerID(4), "Montavon", "Alexis", new Rank(789));
+    private final Player random = new Player(new PlayerID(5), "Smith", "John", new Rank(7));
 
     public void setUp() {
         matchBuilder = new Match.Builder();
@@ -32,9 +31,7 @@ public final class MatchBuilderTest {
         setUp();
         try {
             matchBuilder.addPlayer(amaury);
-        } catch(IllegalStateException e) {
-            fail();
-        } catch(IllegalAccessException a) {
+        } catch (IllegalStateException | IllegalAccessException e) {
             fail();
         }
         Match match = matchBuilder.build();
@@ -53,9 +50,7 @@ public final class MatchBuilderTest {
         setUp();
         try {
             matchBuilder.addPlayer(amaury);
-        } catch(IllegalStateException e) {
-            fail();
-        } catch(IllegalAccessException a) {
+        } catch (IllegalStateException | IllegalAccessException e) {
             fail();
         }
 
@@ -96,9 +91,7 @@ public final class MatchBuilderTest {
         try {
             matchBuilder.addPlayer(amaury);
             matchBuilder.addPlayer(vincenzo);
-        } catch(IllegalStateException e) {
-            fail();
-        } catch(IllegalAccessException a) {
+        } catch (IllegalStateException | IllegalAccessException e) {
             fail();
         }
 
@@ -117,10 +110,10 @@ public final class MatchBuilderTest {
         try {
             matchBuilder.addPlayer(amaury).addPlayer(amaury)
                     .addPlayer(vincenzo).addPlayer(vincenzo);
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             fail();
-        } catch(IllegalAccessException a) {
-            assertTrue(a.getMessage().equals("Player already in that Match"));
+        } catch (IllegalAccessException a) {
+            assertTrue(a.getMessage().equals("Player already in that Match."));
         }
     }
 
@@ -130,18 +123,16 @@ public final class MatchBuilderTest {
         try {
             matchBuilder.addPlayer(amaury).addPlayer(vincenzo)
                     .addPlayer(dorian).addPlayer(alexis);
-        } catch(IllegalStateException e) {
-            fail();
-        } catch(IllegalAccessException a) {
+        } catch (IllegalStateException | IllegalAccessException e) {
             fail();
         }
 
         try {
             matchBuilder.addPlayer(random);
             fail("Expected IllegalStateException");
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             assertTrue(e.getMessage().equals("Match is full."));
-        } catch(IllegalAccessException a) {
+        } catch (IllegalAccessException a) {
             fail();
         }
     }

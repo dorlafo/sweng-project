@@ -1,27 +1,20 @@
 package ch.epfl.sweng.jassatepfl;
 
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -53,13 +46,12 @@ import ch.epfl.sweng.jassatepfl.tools.MatchStringifier;
 
 /**
  * Activity displaying matches as markers on a Google Maps Fragment.
- * <p>
- * Clicking on a marker displays the match information.
+ * <br>
+ * Clicking on a marker displays the match information and clicking on
+ * the information window prompts the user to join the match.
  */
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback, LocationProviderListener {
-
-    private static final int MY_LOCATION_REQUEST_CODE = 39;
 
     private GoogleMap matchMap;
     private LocationProvider locationProvider;
@@ -69,10 +61,6 @@ public class MapsActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkLocationPermission();
-        }
 
         createMap();
 
@@ -94,6 +82,7 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     @Override
+    @SuppressWarnings({"MissingPermission"})
     public void onMapReady(GoogleMap googleMap) {
         matchMap = googleMap;
         matchMap.getUiSettings().setZoomControlsEnabled(true);
@@ -142,7 +131,6 @@ public class MapsActivity extends FragmentActivity implements
                                 final String matchID = marker.getTag().toString();
                                 ref.child("matches").child(matchID)
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
-
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 match = dataSnapshot.getValue(Match.class);
@@ -158,49 +146,21 @@ public class MapsActivity extends FragmentActivity implements
                                                 Log.e("ERROR-DATABASE", databaseError.toString());
                                             }
                                         });
-
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing, goes back to ListMatchActivity
+                                // Do nothing, goes back to MapsActivity
                             }
                         })
                         .show();
             }
         });
 
-        //displayNearbyMatches(DummyMatchData.dummyMatches()); Do not touch
         displayNearbyMatches();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                matchMap.setMyLocationEnabled(true);
-            }
-        } else {
+        if (locationProvider.locationPermissionIsGranted()) {
             matchMap.setMyLocationEnabled(true);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case MY_LOCATION_REQUEST_CODE:
-                if (permissions.length == 1 &&
-                        permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-                        matchMap.setMyLocationEnabled(true);
-                    }
-                } else {
-                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show();
-                }
         }
     }
 
@@ -220,28 +180,9 @@ public class MapsActivity extends FragmentActivity implements
 
     private void createMap() {
         if (matchMap == null) {
-            SupportMapFragment mapFragment =
-                    (SupportMapFragment) getSupportFragmentManager()
-                            .findFragmentById(R.id.map);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-        }
-    }
-
-    private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Toast.makeText(this, R.string.request_rationale, Toast.LENGTH_LONG).show();
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_LOCATION_REQUEST_CODE);
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_LOCATION_REQUEST_CODE);
-            }
         }
     }
 
@@ -296,15 +237,15 @@ public class MapsActivity extends FragmentActivity implements
 
             }
 
-            private Marker createMarker(Match m) {
-                stringifier.setMatch(m);
+            private Marker createMarker(Match match) {
+                stringifier.setMatch(match);
                 Marker marker = matchMap.addMarker(new MarkerOptions()
-                        .position(m.getLocation().toLatLng())
-                        .title(m.getDescription())
+                        .position(match.getLocation().toLatLng())
+                        .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                marker.setTag(m.getMatchID());
+                marker.setTag(match.getMatchID());
                 return marker;
             }
         });
