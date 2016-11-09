@@ -16,7 +16,8 @@ public class MatchListAdapter extends FirebaseListAdapter<Match> {
 
     public MatchListAdapter(Activity activity) {
         super(activity, Match.class, R.layout.match_list_row,
-                FirebaseDatabase.getInstance().getReference("matches"));
+                FirebaseDatabase.getInstance().getReference("matches")
+                        .child("privateMatch").equalTo("false"));
         this.activity = activity;
     }
 
