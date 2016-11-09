@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,10 +40,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.LocationProviderListener;
 import ch.epfl.sweng.jassatepfl.tools.MatchStringifier;
+
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_MAGENTA;
 
 /**
  * Activity displaying matches as markers on a Google Maps Fragment.
@@ -57,6 +62,7 @@ public class MapsActivity extends FragmentActivity implements
     private LocationProvider locationProvider;
     private Match match;
     private LatLng userLastLocation;
+    private Player currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,24 @@ public class MapsActivity extends FragmentActivity implements
 
         locationProvider = new LocationProvider(this);
         locationProvider.setProviderListener(this);
+
+        try {
+            FirebaseDatabase.getInstance().getReference().child("players")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getDisplayName())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            currentUser = dataSnapshot.getValue(Player.class);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
+        } catch (NullPointerException e) {
+            Toast.makeText(this, R.string.create_toast_no_connection, Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     @Override
@@ -101,6 +125,7 @@ public class MapsActivity extends FragmentActivity implements
                 return null;
             }
 
+            // TODO: layout for this
             @Override
             public View getInfoContents(Marker marker) {
                 Context context = MapsActivity.this;
@@ -147,7 +172,7 @@ public class MapsActivity extends FragmentActivity implements
                                                 DatabaseUtils.addPlayerToMatch(MapsActivity.this,
                                                         ref,
                                                         matchID,
-                                                        FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                                        currentUser.getID().toString(), // TODO: handle case when this is null
                                                         match);
                                             }
 
@@ -229,8 +254,8 @@ public class MapsActivity extends FragmentActivity implements
                         .position(match.getLocation().toLatLng())
                         .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
-                        .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        .icon(BitmapDescriptorFactory.defaultMarker(
+                                match.hasParticipant(currentUser) ? HUE_MAGENTA : HUE_BLUE)));
                 marker.setTag(match.getMatchID());
                 return marker;
             }
