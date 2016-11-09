@@ -56,12 +56,12 @@ public class MapsActivity extends FragmentActivity implements
     private GoogleMap matchMap;
     private LocationProvider locationProvider;
     private Match match;
+    private LatLng userLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
         createMap();
 
         locationProvider = new LocationProvider(this);
@@ -71,8 +71,13 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        createMap();
         locationProvider.connectGoogleApiClient();
+        locationProvider.startLocationUpdates();
+
+        if (userLastLocation != null) {
+            matchMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+                    new CameraPosition(userLastLocation, 15f, 0f, 0f)));
+        }
     }
 
     @Override
@@ -86,6 +91,10 @@ public class MapsActivity extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         matchMap = googleMap;
         matchMap.getUiSettings().setZoomControlsEnabled(true);
+        if (locationProvider.locationPermissionIsGranted()) {
+            matchMap.setMyLocationEnabled(true);
+        }
+
         matchMap.setInfoWindowAdapter(new InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
@@ -115,6 +124,7 @@ public class MapsActivity extends FragmentActivity implements
                 return infoWindow;
             }
         });
+
         /**
          * When click on one game, opens AlertDialog
          * Provides oppotunity to join match or cancel.
@@ -158,19 +168,11 @@ public class MapsActivity extends FragmentActivity implements
         });
 
         displayNearbyMatches();
-
-        if (locationProvider.locationPermissionIsGranted()) {
-            matchMap.setMyLocationEnabled(true);
-        }
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        LatLng userCoordinates = new LatLng(location.getLatitude(),
-                location.getLongitude());
-
-        matchMap.animateCamera(CameraUpdateFactory.newCameraPosition(
-                new CameraPosition(userCoordinates, 15f, 0f, 0f)));
+        userLastLocation = new LatLng(location.getLatitude(), location.getLongitude());
     }
 
     public void switchToList(View view) {
@@ -183,22 +185,6 @@ public class MapsActivity extends FragmentActivity implements
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-        }
-    }
-
-    private void displayNearbyMatches(Iterable<Match> matches) {
-        MatchStringifier stringifier = new MatchStringifier(MapsActivity.this);
-        for (Match match : matches) {
-            if (!match.isPrivateMatch()) {
-                stringifier.setMatch(match);
-                Marker marker = matchMap.addMarker(new MarkerOptions()
-                        .position(match.getLocation().toLatLng())
-                        .title(match.getDescription())
-                        .snippet(stringifier.markerSnippet())
-                        .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                marker.setTag(match.getMatchID());
-            }
         }
     }
 
