@@ -10,30 +10,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ch.epfl.sweng.jassatepfl.InvitePlayerToMatchActivity">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/match_list_view"
         android:layout_width="match_parent"
-        android:layout_height="390dp"
+        android:layout_height="450dp"
         android:layout_margin="@dimen/listview_layout_margin"
         android:orientation="vertical">
 
         <ListView
             android:id="@android:id/list"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@android:color/background_light"
             android:divider="@color/listview_divider_color"
             android:dividerHeight="@dimen/listview_divider_height"
-            android:drawSelectorOnTop="true"
-            android:layout_height="fill_parent" />
+            android:drawSelectorOnTop="true" />
 
-        <TextView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@+id/empty_match_list"
-            android:textAlignment="textStart"
-            android:visibility="gone" />
-    </LinearLayout>
+    </FrameLayout>
 
     <Button
         android:text="@string/invite"

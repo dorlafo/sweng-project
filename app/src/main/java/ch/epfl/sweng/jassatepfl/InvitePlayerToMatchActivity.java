@@ -2,18 +2,22 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,15 +48,24 @@ public class InvitePlayerToMatchActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_player_to_match);
+        TextView emptyList = new TextView(this);
+        emptyList.setText(R.string.search_player_list);
+        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        emptyList.setTextColor(Color.BLACK);
+        emptyList.setTextSize(20);
         playerListView = (ListView)findViewById(android.R.id.list);
-        playerListView.setEmptyView(findViewById(android.R.id.empty));
+        ((ViewGroup) playerListView.getParent()).addView(emptyList);
+        playerListView.setEmptyView(emptyList);
+
+
         playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView , View view , int position ,long arg3) {
                 final Player player = adapter.getItem(position);
                 new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
                         .setTitle(R.string.invite_player_text)
-                        .setMessage(R.string.invite_player_message + " " + player.getFirstName() + " " + player.getLastName())
+                        .setMessage(R.string.invite_player_message)
+                        .setMessage(" " + player.getFirstName() + " " + player.getLastName())
                         .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 playerToAdd.add(player);

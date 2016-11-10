@@ -57,4 +57,5 @@
     <string name="invite_player_text">Invite Player</string>
     <string name="invite_player_message">Do you want to invite this player</string>
     <string name="invite">Invite</string>
+    <string name="search_player_list">Search players, add them and click on Invite</string>
 </resources>
