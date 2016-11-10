@@ -6,9 +6,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -28,24 +26,6 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
     @Test
     public void testCantShowProfileIfLoggedOff() {
         onView(withId(R.id.login_button)).check(matches(withText(R.string.login_button_text)));
-    }
-
-    @Test
-    public void testSwitchToMatchListActivity() {
-        onView(withId(R.id.main_list_button)).perform(click());
-        onView(withId(R.id.switch_to_map)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testCreateMatchButtonSwitchesToCorrectActivity() {
-        onView(withId(R.id.create_match_button)).perform(click());
-        onView(withId(R.id.create_title)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testSwitchToMapsActivity() {
-        onView(withId(R.id.main_map_button)).perform(click());
-        onView(withId(R.id.switch_to_list)).check(matches(isDisplayed()));
     }
 
     /*
