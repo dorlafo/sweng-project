@@ -2,6 +2,7 @@ package ch.epfl.sweng.jassatepfl;
 
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,8 +13,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.webkit.CookieManager;
 
-public class NavigationDrawerActivity extends AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth;
+
+public abstract class NavigationDrawerActivity extends AppCompatActivity
         implements OnNavigationItemSelectedListener {
 
     protected DrawerLayout drawer;
@@ -67,7 +71,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 intent = new Intent(this, UserProfileActivity.class);
                 break;
             case R.id.nav_logout:
-                // TODO: implement logout / reenable login
+                // Use of deprecated method because the new one requires
+                // at least android 21, we set minimum android 19
+                if (Build.VERSION.SDK_INT < 21) {
+                    CookieManager.getInstance().removeAllCookie();
+                } else {
+                    CookieManager.getInstance().removeAllCookies(null);
+                }
+                //Sign out from Firebase
+                FirebaseAuth.getInstance().signOut();
+                //Show login activity
+                intent = new Intent(this, LoginActivity.class);
                 break;
         }
 
