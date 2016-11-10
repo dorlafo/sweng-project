@@ -64,7 +64,6 @@ public class InvitePlayerToMatchActivity extends AppCompatActivity implements
                 final Player player = adapter.getItem(position);
                 new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
                         .setTitle(R.string.invite_player_text)
-                        .setMessage(R.string.invite_player_message)
                         .setMessage(" " + player.getFirstName() + " " + player.getLastName())
                         .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
