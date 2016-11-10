@@ -3,7 +3,7 @@ package ch.epfl.sweng.jassatepfl.constants;
 
 public enum AppActivity {
 
-    MAIN("Welcome Screen"), CREATE_MATCH("Create Match"),
+    MAIN("Home"), CREATE_MATCH("Create Match"),
     MAPS("Match Map"), MATCH_LIST("Match List"),
     USER_PROFILE("Profile");
 
