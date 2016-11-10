@@ -28,6 +28,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.notification.JassTokenService;
+import ch.epfl.sweng.jassatepfl.server.ServerInterface;
 import ch.epfl.sweng.jassatepfl.tequila.AuthClient;
 import ch.epfl.sweng.jassatepfl.tequila.AuthServer;
 import ch.epfl.sweng.jassatepfl.tequila.OAuth2Config;
@@ -131,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                 tokens = AuthServer.fetchTokens(config, params[0]);
                 profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
                 authenticateWithFirebase(profile);
-                JassTokenService.registerWithServer(profile.sciper, FirebaseInstanceId.getInstance().getToken());
+                ServerInterface.getInstance().registerSciperToken(profile.sciper, FirebaseInstanceId.getInstance().getToken());
             } catch (IOException e) {
                 Log.e("ERR", "IOException, couldn't fetch token");
             }

@@ -47,6 +47,7 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.GameVariant;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.notification.JassTokenService;
+import ch.epfl.sweng.jassatepfl.server.ServerInterface;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
 
@@ -290,7 +291,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
             // Send invite to added players
             if (playersToAdd.size() > 1) {
                 for (int i = 1; i < playersToAdd.size(); i++) {
-                    JassTokenService.sendInvite(playersToAdd.get(i).getID().toString(), params[0]);
+                    ServerInterface.getInstance().invitePlayer(playersToAdd.get(i).getID().toString(), params[0]);
                 }
             }
             return "";
