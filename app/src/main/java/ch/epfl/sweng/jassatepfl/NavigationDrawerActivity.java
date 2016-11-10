@@ -1,6 +1,7 @@
 package ch.epfl.sweng.jassatepfl;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -81,24 +82,32 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent intent = null;
 
-        switch(id) {
+        switch (id) {
             case R.id.nav_main:
+                intent = new Intent(this, MainActivity.class);
                 break;
             case R.id.nav_create:
+                intent = new Intent(this, CreateMatchActivity.class);
                 break;
             case R.id.nav_maps:
+                intent = new Intent(this, MapsActivity.class);
                 break;
             case R.id.nav_list:
+                intent = new Intent(this, MatchListActivity.class);
                 break;
             case R.id.nav_profile:
+                intent = new Intent(this, UserProfileActivity.class);
                 break;
             case R.id.nav_logout:
+                // TODO: implement logout / reenable login
                 break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        startActivity(intent);
         return true;
     }
 
