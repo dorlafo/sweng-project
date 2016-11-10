@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project.data;
+package ch.epfl.sweng.project.debug.data;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -11,12 +11,12 @@ import org.mockito.stubbing.Answer;
 
 import javax.inject.Singleton;
 
-import ch.epfl.sweng.project.local.reference.DBRefWrapMock;
+import ch.epfl.sweng.project.debug.local.reference.DBRefWrapMock;
 import ch.epfl.sweng.project.database.helpers.DBReferenceWrapper;
-import ch.epfl.sweng.project.local.database.Leaf;
-import ch.epfl.sweng.project.local.database.Node;
-import ch.epfl.sweng.project.local.database.Root;
-import ch.epfl.sweng.project.local.database.TreeNode;
+import ch.epfl.sweng.project.debug.local.database.Leaf;
+import ch.epfl.sweng.project.debug.local.database.Node;
+import ch.epfl.sweng.project.debug.local.database.Root;
+import ch.epfl.sweng.project.debug.local.database.TreeNode;
 import ch.epfl.sweng.project.model.Player;
 import ch.epfl.sweng.project.model.Rank;
 import dagger.Module;
@@ -81,12 +81,12 @@ public final class DebugDataModule {
     private void fillDB(DBRefWrapMock dbRef) {
         Root root = (Root) dbRef.getCurrentNode();
         TreeNode nodeAdded = root.addChild("players");
-        nodeAdded.addChild("123456").setData(new Player(new Player.PlayerID("123456"), "Test", "Jean Pierre", new Rank(1000)));
+        nodeAdded.addChild("696969").setData(new Player(new Player.PlayerID("123456"), "Le Bricoleur", "Bob", new Rank(1000)));
     }
 
     private void addMockedBehaviorAuth(FirebaseAuth fAuth) {
         FirebaseUser fUser = mock(FirebaseUser.class);
-        when(fUser.getDisplayName()).thenReturn("123456");
+        when(fUser.getDisplayName()).thenReturn("696969");
         when(fAuth.getCurrentUser()).thenReturn(fUser);
     }
 

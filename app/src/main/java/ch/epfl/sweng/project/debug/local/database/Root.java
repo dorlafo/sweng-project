@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project.local.database;
+package ch.epfl.sweng.project.debug.local.database;
 
 import java.util.HashSet;
 import java.util.Set;
