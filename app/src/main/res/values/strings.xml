@@ -62,4 +62,10 @@
     <string name="player_joined">A new player has joined your game!</string>
     <string name="player_left">A player left you game</string>
     <string name="match_expired">Your match has expired</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
