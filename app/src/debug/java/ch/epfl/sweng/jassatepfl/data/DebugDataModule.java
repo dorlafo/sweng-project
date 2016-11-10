@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project.data;
+package ch.epfl.sweng.jassatepfl.data;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -11,14 +11,14 @@ import org.mockito.stubbing.Answer;
 
 import javax.inject.Singleton;
 
-import ch.epfl.sweng.project.local.reference.DBRefWrapMock;
-import ch.epfl.sweng.project.database.helpers.DBReferenceWrapper;
-import ch.epfl.sweng.project.local.database.Leaf;
-import ch.epfl.sweng.project.local.database.Node;
-import ch.epfl.sweng.project.local.database.Root;
-import ch.epfl.sweng.project.local.database.TreeNode;
-import ch.epfl.sweng.project.model.Player;
-import ch.epfl.sweng.project.model.Rank;
+import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.model.Rank;
+import ch.epfl.sweng.jassatepfl.local.reference.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
+import ch.epfl.sweng.jassatepfl.local.database.Leaf;
+import ch.epfl.sweng.jassatepfl.local.database.Node;
+import ch.epfl.sweng.jassatepfl.local.database.Root;
+import ch.epfl.sweng.jassatepfl.local.database.TreeNode;
 import dagger.Module;
 import dagger.Provides;
 

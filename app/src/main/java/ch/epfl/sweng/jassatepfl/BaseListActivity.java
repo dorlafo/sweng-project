@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import javax.inject.Inject;
 
-import ch.epfl.sweng.project.database.helpers.DBReferenceWrapper;
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 
 public abstract class BaseListActivity extends ListActivity {
     @Inject

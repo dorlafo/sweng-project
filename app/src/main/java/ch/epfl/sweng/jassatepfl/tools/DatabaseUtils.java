@@ -13,7 +13,7 @@ import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.project.database.helpers.DBReferenceWrapper;
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 
 /**
  * Utils fonctions to retrieve/add from/to Database

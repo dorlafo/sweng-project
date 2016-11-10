@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,11 +34,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
@@ -70,7 +66,7 @@ import static java.util.Calendar.YEAR;
  * manually adding a player, choosing the match location, if it will be
  * private or not, its variant, and its expiration date.
  */
-public class CreateMatchActivity extends AppCompatActivity implements
+public class CreateMatchActivity extends BaseActivity implements
         OnClickListener,
         OnItemSelectedListener,
         OnTimeSetListener,
@@ -194,9 +190,8 @@ public class CreateMatchActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_create_button:
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("matches");
-                String matchId = ref.push().getKey();
-                ref.child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
+                String matchId = dbRefWrapped.child("matches").push().getKey();
+                dbRefWrapped.child("matches").child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
                 Log.d(TAG, "Pushed match " + matchId + " to database");
                 Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
                 getIntent().putExtra("MATCH_ID", matchId);
@@ -313,8 +308,8 @@ public class CreateMatchActivity extends AppCompatActivity implements
 
     private void addCurrentUserToBuilder() {
         try {
-            String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-            FirebaseDatabase.getInstance().getReference().child("players").child(currentUserId)
+            String currentUserId = fAuth.getCurrentUser().getDisplayName();
+            dbRefWrapped.child("players").child(currentUserId)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

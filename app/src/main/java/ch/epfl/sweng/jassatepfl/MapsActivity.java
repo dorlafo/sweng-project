@@ -40,8 +40,7 @@ import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.LocationProviderListener;
 import ch.epfl.sweng.jassatepfl.tools.MatchStringifier;
-import ch.epfl.sweng.project.BaseFragmentActivity;
-import ch.epfl.sweng.project.database.helpers.DBReferenceWrapper;
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 
 /**
  * Activity displaying matches as markers on a Google Maps Fragment.

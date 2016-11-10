@@ -1,7 +1,6 @@
-package ch.epfl.sweng.project.local.database;
+package ch.epfl.sweng.jassatepfl.local.database;
 
 
-import java.util.Collections;
 import java.util.Set;
 
 /**

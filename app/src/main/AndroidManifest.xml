@@ -90,8 +90,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-        <activity android:name=".BaseListActivity" />
-        <activity android:name=".BaseFragmentActivity"></activity>
     </application>
 
 </manifest>

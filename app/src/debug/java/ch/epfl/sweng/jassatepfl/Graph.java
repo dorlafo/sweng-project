@@ -1,8 +1,9 @@
-package ch.epfl.sweng.project;
+package ch.epfl.sweng.jassatepfl;
 
 import javax.inject.Singleton;
 
-import ch.epfl.sweng.project.data.DebugDataModule;
+import ch.epfl.sweng.jassatepfl.DaggerGraph;
+import ch.epfl.sweng.jassatepfl.data.DebugDataModule;
 import dagger.Component;
 
 /**

@@ -2,8 +2,6 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.app.Application;
 
-import ch.epfl.sweng.project.Graph;
-
 public class App extends Application {
     private static App sInstance;
     private Graph graph;

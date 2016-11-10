@@ -6,9 +6,6 @@ import org.junit.Test;
 
 import java.lang.reflect.Field;
 
-import ch.epfl.sweng.jassatepfl.UserProfileActivity;
-import ch.epfl.sweng.project.InjectedBaseActivityTest;
-
 import static org.mockito.Mockito.verify;
 
 /**
