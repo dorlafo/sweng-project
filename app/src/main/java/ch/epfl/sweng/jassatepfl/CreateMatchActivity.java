@@ -409,8 +409,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
 
     /**
      * Helper method to display expiration date as string.
-     *
-     * @param calendar Calendar to display
      */
     private void displayCurrentExpirationDate() {
         TextView currentExpirationDate = (TextView) findViewById(R.id.current_expiration_time);
