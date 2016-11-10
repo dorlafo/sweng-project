@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,7 +25,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +44,7 @@ import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
 
-public class CreateMatchActivity extends AppCompatActivity implements
+public class CreateMatchActivity extends BaseActivity implements
         OnClickListener,
         OnItemSelectedListener,
         OnTimeSetListener {
@@ -204,7 +202,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
     }
 
     private void addCurrentUserToBuilder() {
-        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        String currentUserId = getUserSciper();
         FirebaseDatabase.getInstance().getReference().child("players").child(currentUserId).
                 addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

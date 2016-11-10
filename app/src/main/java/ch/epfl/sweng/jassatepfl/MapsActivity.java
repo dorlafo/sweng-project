@@ -53,7 +53,6 @@ import ch.epfl.sweng.jassatepfl.tools.MatchStringifier;
 
 /**
  * Activity displaying matches as markers on a Google Maps Fragment.
- * <p>
  * Clicking on a marker displays the match information.
  */
 public class MapsActivity extends FragmentActivity implements
@@ -65,10 +64,15 @@ public class MapsActivity extends FragmentActivity implements
     private LocationProvider locationProvider;
     private Match match;
 
+    private FirebaseAuth fAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        fAuth = FirebaseAuth.getInstance();
+        showLogin();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -78,6 +82,16 @@ public class MapsActivity extends FragmentActivity implements
 
         locationProvider = new LocationProvider(this);
         locationProvider.setProviderListener(this);
+    }
+
+    /**
+     * Launch the LoginActivity if the user is not yet logged in
+     */
+    private void showLogin() {
+        if (fAuth.getCurrentUser() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -309,5 +323,4 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
     }
-
 }

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth fAuth;
 
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,25 +59,89 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        // Check if user is already logged in
+        if (fAuth.getCurrentUser() != null) {
+            onAuthSuccess();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         //DO NOTHING -> it disables the back button
     }
 
     public void login(View view) {
-        // Get credentials from Json file
-        try {
-            JSONObject jObj = new JSONObject(loadJSONFromAsset());
-            clientID = jObj.getString("clientID");
-            clientSecret = jObj.getString("clientSecret");
-            redirectUri = jObj.getString("redirectURI");
-        } catch (JSONException e) {
-            finish();
-        }
-        config = new OAuth2Config(scopes, clientID, clientSecret, redirectUri);
+        config = getOAuth2Config();
         final String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+
         Intent intent = new Intent(this, WebViewActivity.class);
         intent.setData(Uri.parse(codeRequestUrl));
         startActivityForResult(intent, REQUEST_CODE_AUTHENTICATE);
+    }
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setMessage("Loading...");
+        }
+
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+    //TODO: REPLACE SCIPER WITH HASH
+    private void signIn(final Profile profile) {
+        Log.d(TAG, "signIn");
+
+        fAuth.signInWithEmailAndPassword(profile.email, profile.sciper)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signIn:onComplete:" + task.isSuccessful());
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "signIn:success");
+                            onAuthSuccess();
+                        } else {
+                            Log.d(TAG, "signIn:failure,goto:signUp");
+                            signUp(profile);
+                        }
+                    }
+                });
+    }
+
+    //TODO: REPLACE SCIPER WITH HASH
+    private void signUp(final Profile profile) {
+        Log.d(TAG, "signUp");
+
+        fAuth.createUserWithEmailAndPassword(profile.email, profile.sciper)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
+                        if (task.isSuccessful()) {
+                            //Adding the user to the database
+                            FirebaseDatabase.getInstance().getReference().child("players")
+                                    .child(profile.sciper).setValue(new Player(
+                                    new Player.PlayerID(Long.parseLong(profile.sciper)),
+                                    profile.lastNames,
+                                    profile.firstNames
+                            ));
+                            fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
+                            onAuthSuccess();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Sign Up Failed",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -105,49 +173,61 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     // Get the token.
                     String code = AuthClient.extractCode(data.getStringExtra("url"));
+                    Log.d(TAG, "1234:beforeExecute");
                     new FetchTokens().execute(code);
+                    Log.d(TAG, "1234:afterExecute");
                 }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
     /* Fetched token from Tequila server using AuthServer methods
     * Stores the user profile in Profile object
     * Execute HttpUrlConnection on a separated async thread
     */
-    //TODO: Store profile in profile Objet -> Voir avec Dorian
     private class FetchTokens extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
+            Log.d(TAG, "1234:onExecute:onPreExecute");
             findViewById(R.id.login_button).setVisibility(View.GONE);
             findViewById(R.id.login_text_view).setVisibility(View.GONE);
+            showProgressDialog();
         }
 
         @Override
         protected String doInBackground(String... params) {
+            Log.d(TAG, "1234:onExecute:doInBackground");
             Map<String, String> tokens;
             Profile profile;
             try {
                 tokens = AuthServer.fetchTokens(config, params[0]);
                 profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
-                authenticateWithFirebase(profile);
+                signIn(profile);
                 JassTokenService.registerWithServer(profile.sciper, FirebaseInstanceId.getInstance().getToken());
             } catch (IOException e) {
+                //TODO: Handle exception
                 Log.e("ERR", "IOException, couldn't fetch token");
             }
             return "profile retrieved";
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-            finish();
-        }
     }
 
+
+    private void onAuthSuccess() {
+        // Go to MainActivity
+        hideProgressDialog();
+        Log.d(TAG, "hideProgressDialog:true");
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
+    }
+
+    //TODO: Place those 2 utilitmethods outside
+    //............................ UTILITY METHOD TO BE PLACED OUTSIDE .............................
     /**
      * Load Tequila credentials from file
      *
-     * @return
+     * @return String containing the tequila_credentials
      */
     private String loadJSONFromAsset() {
         String json = null;
@@ -159,43 +239,28 @@ public class LoginActivity extends AppCompatActivity {
             is.close();
             json = new String(buffer, "UTF-8");
         } catch (IOException ex) {
+            //TODO: Handle the exception
             ex.printStackTrace();
             return null;
         }
         return json;
     }
 
-    private void authenticateWithFirebase(final Profile profile) {
-        // TODO: REPLACE SCIPER WITH HASH
-        fAuth.signInWithEmailAndPassword(profile.email, profile.sciper)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete " + task.isSuccessful());
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "updating Profile...");
-                            fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
-                        } else {
-                            Log.d(TAG, "task.isSuccessful() is false");
-                            fAuth.createUserWithEmailAndPassword(profile.email, profile.sciper)
-                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            Log.d(TAG, "Signup was successfull? " + task.isSuccessful());
-                                            if (task.isSuccessful()) {
-                                                FirebaseDatabase.getInstance().getReference().child("players")
-                                                        .child(profile.sciper).setValue(new Player(
-                                                        new Player.PlayerID(Long.parseLong(profile.sciper)),
-                                                        profile.lastNames,
-                                                        profile.firstNames
-                                                ));
-                                                fAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(profile.sciper).build());
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                });
-    }
+    /**
+     * Get the OAuth2Config from the JSON file
+     * @return the OAuth2Config
+     */
+    private OAuth2Config getOAuth2Config() {
+        try {
+            JSONObject jObj = new JSONObject(loadJSONFromAsset());
+            clientID = jObj.getString("clientID");
+            clientSecret = jObj.getString("clientSecret");
+            redirectUri = jObj.getString("redirectURI");
+        } catch (JSONException e) {
+            //TODO: Handle the exception
+            e.printStackTrace();
+        }
 
+        return new OAuth2Config(scopes, clientID, clientSecret, redirectUri);
+    }
 }

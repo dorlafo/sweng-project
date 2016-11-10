@@ -4,10 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,7 +18,7 @@ import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 
-public class MatchActivity extends AppCompatActivity {
+public class MatchActivity extends BaseActivity {
 
     private Match match;
     private Player player;
@@ -28,6 +27,11 @@ public class MatchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
     }
 
     @Override
@@ -125,7 +129,7 @@ public class MatchActivity extends AppCompatActivity {
                                                     DatabaseUtils.addPlayerToMatch(MatchActivity.this,
                                                             ref,
                                                             matchID,
-                                                            FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                                            getUserSciper(),
                                                             match);
                                                 }
 
