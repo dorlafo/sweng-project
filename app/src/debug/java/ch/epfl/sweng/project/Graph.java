@@ -1,11 +1,8 @@
-package ch.epfl.sweng.project.debug;
+package ch.epfl.sweng.project;
 
 import javax.inject.Singleton;
-import ch.epfl.sweng.project.BaseActivity;
-import ch.epfl.sweng.project.BaseFragmentActivity;
-import ch.epfl.sweng.project.BaseListActivity;
-import ch.epfl.sweng.project.InjectedBaseActivityTest;
-import ch.epfl.sweng.project.debug.data.DebugDataModule;
+
+import ch.epfl.sweng.project.data.DebugDataModule;
 import dagger.Component;
 
 /**
@@ -48,4 +45,5 @@ public interface Graph {
             return DaggerGraph.builder().debugDataModule(new DebugDataModule(mockMode)).build();
         }
     }
+
 }

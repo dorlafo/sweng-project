@@ -40,18 +40,16 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
         verify(dbRefWrapped).child("players");
     }
 
-
     /**
      * This test verifies that the assignment to the text view is correct
-     * This is an example that uses java reflection in order to access private fields
      */
     @Test
     public void testUserProfileActivity() {
         try {
-            Field f = act.getClass().getDeclaredField("mtwFirstName");
+            Field f = act.getClass().getDeclaredField("mtwPlayerID");
             f.setAccessible(true);
             TextView tView = (TextView) f.get(act);
-            assertEquals("First name : Bob", tView.getText().toString());
+            assertEquals("Player id : 123456", tView.getText().toString());
         } catch (Exception e) {
             fail();
         }
