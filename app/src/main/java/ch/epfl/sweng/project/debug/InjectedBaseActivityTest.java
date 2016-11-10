@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project;
+package ch.epfl.sweng.project.debug;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import javax.inject.Inject;
 
+import ch.epfl.sweng.project.App;
 import ch.epfl.sweng.project.database.helpers.DBReferenceWrapper;
 
 public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {

@@ -93,8 +93,8 @@ dependencies {
 
     //debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
     //debugCompile 'com.google.dexmaker:dexmaker:1.0'
-    debugCompile 'com.github.blueapron:dexmaker:2.0'
-    debugCompile 'org.mockito:mockito-core:2.1.0'
+    compile 'com.github.blueapron:dexmaker:2.0'
+    compile 'org.mockito:mockito-core:2.1.0'
 }
 
 // Do not change the below code unless you're sure you know what you're doing
