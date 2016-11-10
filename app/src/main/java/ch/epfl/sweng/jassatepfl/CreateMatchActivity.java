@@ -164,6 +164,14 @@ public class CreateMatchActivity extends AppCompatActivity implements
         placePickerButton.setEnabled(false);
         placePickerButton.setOnClickListener(this);
 
+        if (locationProvider.locationPermissionIsGranted()) {
+            Location currentLocation = locationProvider.getLastLocation();
+            if (currentLocation != null) {
+                matchBuilder.setLocation(new GPSPoint(currentLocation.getLatitude(),
+                        currentLocation.getLongitude()));
+            }
+        }
+
         addCurrentUserToBuilder();
     }
 
@@ -173,12 +181,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
         locationProvider.connectGoogleApiClient();
         if (locationProvider.locationPermissionIsGranted()) {
             placePickerButton.setEnabled(true);
-
-            Location currentLocation = locationProvider.getLastLocation();
-            if (currentLocation != null) {
-                matchBuilder.setLocation(new GPSPoint(currentLocation.getLatitude(),
-                        currentLocation.getLongitude()));
-            }
         }
     }
 
