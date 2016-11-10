@@ -1,4 +1,4 @@
-package ch.epfl.sweng.jassatepfl.data;
+package ch.epfl.sweng.jassatepfl.injections;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -13,12 +13,12 @@ import javax.inject.Singleton;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;
-import ch.epfl.sweng.jassatepfl.local.reference.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
-import ch.epfl.sweng.jassatepfl.local.database.Leaf;
-import ch.epfl.sweng.jassatepfl.local.database.Node;
-import ch.epfl.sweng.jassatepfl.local.database.Root;
-import ch.epfl.sweng.jassatepfl.local.database.TreeNode;
+import ch.epfl.sweng.jassatepfl.database.local.Leaf;
+import ch.epfl.sweng.jassatepfl.database.local.Node;
+import ch.epfl.sweng.jassatepfl.database.local.Root;
+import ch.epfl.sweng.jassatepfl.database.local.TreeNode;
 import dagger.Module;
 import dagger.Provides;
 

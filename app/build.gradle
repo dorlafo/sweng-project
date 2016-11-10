@@ -63,9 +63,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     compile 'com.google.dagger:dagger:2.7'
     apt 'com.google.dagger:dagger-compiler:2.7'
     compile 'com.android.support:appcompat-v7:24.2.1'
@@ -90,12 +87,9 @@ dependencies {
     androidTestCompile 'junit:junit:4.12'
 
 
-    debugCompile 'com.github.blueapron:dexmaker:2.0'
-    debugCompile 'org.mockito:mockito-core:2.1.0'
+    compile 'com.github.blueapron:dexmaker:2.0'
+    compile 'org.mockito:mockito-core:2.1.0'
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
     androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2', {
         exclude group: 'com.android.support'

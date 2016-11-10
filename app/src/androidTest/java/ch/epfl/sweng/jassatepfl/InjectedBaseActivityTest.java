@@ -10,11 +10,6 @@ import ch.epfl.sweng.jassatepfl.App;
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 
 public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
-    @Inject
-    protected DBReferenceWrapper dbRefWrapped;
-
-    @Inject
-    FirebaseAuth fAuth;
 
     public InjectedBaseActivityTest(Class activityClass) {
         super(activityClass);
@@ -25,7 +20,6 @@ public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
         super.setUp();
         App app = (App) getInstrumentation().getTargetContext().getApplicationContext();
         app.setMockMode(true);
-        app.graph().inject(this);
     }
     @Override
     protected void tearDown() throws Exception {

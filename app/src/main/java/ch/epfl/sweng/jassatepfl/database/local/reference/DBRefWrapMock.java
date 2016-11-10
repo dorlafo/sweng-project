@@ -1,4 +1,4 @@
-package ch.epfl.sweng.jassatepfl.local.reference;
+package ch.epfl.sweng.jassatepfl.database.local.reference;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
@@ -6,8 +6,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
-import ch.epfl.sweng.jassatepfl.local.database.Node;
-import ch.epfl.sweng.jassatepfl.local.database.Root;
+import ch.epfl.sweng.jassatepfl.database.local.Node;
+import ch.epfl.sweng.jassatepfl.database.local.Root;
 
 import static org.mockito.ArgumentMatchers.any;
 

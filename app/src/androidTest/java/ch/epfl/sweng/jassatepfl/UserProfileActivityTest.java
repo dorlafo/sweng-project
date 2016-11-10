@@ -25,15 +25,6 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
         act = (UserProfileActivity) getActivity();
     }
 
-
-    /**
-     * This test verifies that the method child gets called
-     */
-    @Test
-    public void testMethodChildIsCalledOnRef() {
-        verify(dbRefWrapped).child("players");
-    }
-
     /**
      * This test verifies that the assignment to the text view is correct
      */

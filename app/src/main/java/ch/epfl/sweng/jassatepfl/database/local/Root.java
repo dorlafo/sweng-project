@@ -1,4 +1,4 @@
-package ch.epfl.sweng.jassatepfl.local.database;
+package ch.epfl.sweng.jassatepfl.database.local;
 
 import java.util.HashSet;
 import java.util.Set;

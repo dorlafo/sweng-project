@@ -1,9 +1,11 @@
-package ch.epfl.sweng.jassatepfl;
+package ch.epfl.sweng.jassatepfl.injections;
 
 import javax.inject.Singleton;
 
-import ch.epfl.sweng.jassatepfl.DaggerGraph;
-import ch.epfl.sweng.jassatepfl.data.DebugDataModule;
+import ch.epfl.sweng.jassatepfl.BaseActivity;
+import ch.epfl.sweng.jassatepfl.BaseFragmentActivity;
+import ch.epfl.sweng.jassatepfl.BaseListActivity;
+import ch.epfl.sweng.jassatepfl.injections.DaggerGraph;
 import dagger.Component;
 
 /**
@@ -31,12 +33,6 @@ public interface Graph {
      * @param activity the activity which will be injected
      */
     void inject(BaseFragmentActivity activity);
-
-    /**
-     * Injects providers return values to the InjectedBaseActivityTest
-     * @param testActivity the test activity which will be injected
-     */
-    void inject(InjectedBaseActivityTest testActivity);
 
     /**
      * Initializer of the graph
