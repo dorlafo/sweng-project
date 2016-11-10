@@ -18,14 +18,14 @@
             android:id="@+id/nav_list"
             android:icon="@drawable/ic_list_black"
             android:title="@string/navigation_drawer_match_list"/>
-        <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_account_circle_black"
-            android:title="@string/navigation_drawer_user_profile"/>
     </group>
 
-    <item android:title="@string/action_settings">
+    <item android:title="@string/navigation_drawer_user">
         <menu>
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_account_circle_black"
+                android:title="@string/navigation_drawer_user_profile"/>
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_highlight_off_black"
