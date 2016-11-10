@@ -1,6 +1,10 @@
 package ch.epfl.sweng.project;
 
+import android.widget.TextView;
+
 import org.junit.Test;
+
+import java.lang.reflect.Field;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -14,6 +18,8 @@ import static org.mockito.Mockito.verify;
  * UserProfileActivityTest show an example of mock usage
  */
 public final class UserProfileActivityTest extends InjectedBaseActivityTest {
+    UserProfileActivity act;
+
 
     public UserProfileActivityTest() {
         super(UserProfileActivity.class);
@@ -22,7 +28,7 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        getActivity();
+        act = (UserProfileActivity) getActivity();
     }
 
 
@@ -32,5 +38,20 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testMethodChildIsCalledOnRef() {
         verify(dbRefWrapped).child("players");
+    }
+
+    /**
+     * This test verifies that the assignment to the text view is correct
+     */
+    @Test
+    public void testUserProfileActivity() {
+        try {
+            Field f = act.getClass().getDeclaredField("mtwPlayerID");
+            f.setAccessible(true);
+            TextView tView = (TextView) f.get(act);
+            assertEquals("Player id : 123456", tView.getText().toString());
+        } catch (Exception e) {
+            fail();
+        }
     }
 }
