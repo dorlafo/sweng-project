@@ -36,7 +36,7 @@
             android:layout_centerHorizontal="true"/>
 
         <Button
-            android:id="@+id/mainMapButton"
+            android:id="@+id/main_map_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/main_space_match_display_delimiter"
