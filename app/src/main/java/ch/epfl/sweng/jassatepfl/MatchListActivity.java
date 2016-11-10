@@ -4,19 +4,26 @@ package ch.epfl.sweng.jassatepfl;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
 
 /**
  * Activity displaying matches as a scrolling list.
+ * <br>
+ * Clicking on a list item prompts the user to join the match.
  */
 public class MatchListActivity extends ListActivity {
 
@@ -27,10 +34,16 @@ public class MatchListActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_list);
-        ListView listView = (ListView) findViewById(android.R.id.list);
-        listView.setEmptyView(findViewById(android.R.id.empty));
 
-        // TODO: fix empty list
+        TextView emptyList = new TextView(this);
+        emptyList.setText(R.string.empty_match_list);
+        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        emptyList.setTextColor(Color.BLACK);
+
+        ListView listView = (ListView) findViewById(android.R.id.list);
+        ((ViewGroup) listView.getParent()).addView(emptyList);
+        listView.setEmptyView(emptyList);
+
         mAdapter = new MatchListAdapter(this);
 
         listView.setAdapter(mAdapter);
@@ -46,6 +59,7 @@ public class MatchListActivity extends ListActivity {
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         final Match match = mAdapter.getItem(position);
+
                         DatabaseUtils.addPlayerToMatch(MatchListActivity.this,
                                 FirebaseDatabase.getInstance().getReference(),
                                 match.getMatchID(),
@@ -55,22 +69,22 @@ public class MatchListActivity extends ListActivity {
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing, goes back to ListMatchActivity
+                        // Do nothing, goes back to MatchListActivity
                     }
                 })
                 .show();
         super.onListItemClick(l, v, position, id);
     }
 
-    public void switchToMap(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mAdapter.cleanup();
+    }
+
+    public void switchToMap(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
     }
 
 }

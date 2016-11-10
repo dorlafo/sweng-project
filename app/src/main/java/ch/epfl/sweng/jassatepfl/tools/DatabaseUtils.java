@@ -27,16 +27,16 @@ public class DatabaseUtils {
      * Add player to match on the database.
      *
      * @param context The context where the method is called.
-     * @param ref Database reference
+     * @param ref     Database reference
      * @param matchID The matchID to add player to.
-     * @param sciper The player sciper
-     * @param match The match to add player to.
+     * @param sciper  The player sciper
+     * @param match   The match to add player to.
      */
     public static void addPlayerToMatch(final Context context,
-                                 final DatabaseReference ref,
-                                 final String matchID,
-                                 final String sciper,
-                                 final Match match) {
+                                        final DatabaseReference ref,
+                                        final String matchID,
+                                        final String sciper,
+                                        final Match match) {
         ref.child("players")
                 .child(sciper)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -50,9 +50,9 @@ public class DatabaseUtils {
                             moveToMatchActivity.putExtra("MATCH_ID", matchID);
                             context.startActivity(moveToMatchActivity);
                         } catch (IllegalStateException e) {
-                            ErrorHandlerUtils.sendErrorMessage(context, R.string.match_is_full, "Sorry, desired match is full");
+                            ErrorHandlerUtils.sendErrorMessage(context, R.string.error_cannot_join, R.string.error_match_full);
                         } catch (IllegalAccessException a) {
-                            ErrorHandlerUtils.sendErrorMessage(context, R.string.cannot_join_match, "You are already signed into that Match");
+                            ErrorHandlerUtils.sendErrorMessage(context, R.string.error_cannot_join, R.string.error_already_in_match);
                         }
                     }
 
@@ -62,4 +62,4 @@ public class DatabaseUtils {
                     }
                 });
     }
- }
+}

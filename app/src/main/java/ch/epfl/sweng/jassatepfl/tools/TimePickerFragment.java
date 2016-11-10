@@ -16,8 +16,8 @@ import java.util.Calendar;
  */
 public final class TimePickerFragment extends DialogFragment {
 
-    @NonNull
     @Override
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);

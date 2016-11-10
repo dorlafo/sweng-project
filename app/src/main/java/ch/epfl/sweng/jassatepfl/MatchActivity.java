@@ -50,7 +50,7 @@ public class MatchActivity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Match match = dataSnapshot.getValue(Match.class);
                                     new AlertDialog.Builder(MatchActivity.this)
-                                            .setTitle(R.string.match_is_full)
+                                            .setTitle(R.string.error_match_full)
                                             .setMessage("Match: " + match.getDescription())
                                             .show();
                                 }
