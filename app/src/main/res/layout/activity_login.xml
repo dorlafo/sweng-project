@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
@@ -8,28 +10,28 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ch.epfl.sweng.project.LoginActivity">
+    tools:context="ch.epfl.sweng.jassatepfl.LoginActivity">
 
     <Button
-        android:text="@string/login_button_text"
+        android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="112dp"
-        android:id="@+id/login_button"
-        android:onClick="login" />
+        android:onClick="login"
+        android:text="@string/login_button_text"/>
 
     <TextView
-        android:text="@string/login_welcoming_text"
+        android:id="@+id/login_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/login_text_view"
-        android:textStyle="normal|bold"
-        android:textSize="24sp"
         android:layout_above="@+id/login_button"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="17dp"
-        android:gravity="center_vertical|center_horizontal" />
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/login_welcoming_text"
+        android:textSize="24sp"
+        android:textStyle="normal|bold"/>
+
 </RelativeLayout>

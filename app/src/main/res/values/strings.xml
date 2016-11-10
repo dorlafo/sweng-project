@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Project</string>
+    <string name="app_name">Jass@EPFL</string>
     <string name="nearby_matches">Nearby Matches</string>
     <string name="create_match">Create Match</string>
     <string name="profile">Profile</string>
@@ -35,7 +35,8 @@
     <string name="create_date_format">dd/MM HH:mm</string>
     <string name="empty_match_list">No matches are available.</string>
     <string name="permission_denied">Cannot access location</string>
-    <string name="request_rationale">Location information is used to improve your matchmaking experience.</string>
+    <string name="request_location_rationale">Jass@EPFL needs to access your location to find matches near you.</string>
+    <string name="request_unknown_permission">Unknown Permission</string>
     <string name="title_activity_maps">Map</string>
     <string name="login_welcoming_text">Welcome to Jass@EPFL !\nTo use this app you need to\nlogin with your EPFL account</string>
     <string name="login_button_text">Login</string>
@@ -43,11 +44,22 @@
     <string name="join_message">Do you want to join this match ?</string>
     <string name="join">Join!</string>
     <string name="ok">OK</string>
-    <string name="match_is_full">Match is full!</string>
-    <string name="cannot_join_match">Can\'t join Match</string>
+    <string name="create_choose_location">Pick the match location</string>
+    <string name="error_cannot_join">Cannot join match</string>
+    <string name="error_match_full">Match is full.</string>
+    <string name="error_already_in_match">You are already signed into that match.</string>
     <string name="error">Error!</string>
+    <string name="error_play_services_not_available">Google Play Services is not available.</string>
+    <string name="icon_description_map_to_list">Switches to the list view.</string>
+    <string name="icon_description_list_to_map">Switches to the map view.</string>
+    <string name="icon_description_time_picker">Displays a time picker.</string>
+    <string name="icon_description_date_picker">Displays a date picker.</string>
+    <string name="icon_description_place_picker">Displays a place picker.</string>
+    <string name="create_toast_invalid_hour">Invalid hour: you cannot go back in time!</string>
+    <string name="create_toast_invalid_date">Invalid date: you cannot go back in time!</string>
+    <string name="create_toast_no_connection">No connection to Firebase.</string>
     <string name="start_game">All players have join! The game can start!</string>
-    <string name="player_joined">A new player has join your game!</string>
+    <string name="player_joined">A new player has joined your game!</string>
     <string name="player_left">A player left you game</string>
     <string name="match_expired">Your match has expired</string>
 </resources>

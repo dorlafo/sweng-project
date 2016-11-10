@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ch.epfl.sweng.project">
+          package="ch.epfl.sweng.jassatepfl">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-
     <!--
         App's Permissions
     -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
@@ -27,35 +26,34 @@
         <!--
             App Activities
         -->
-        <activity android:name=".MainActivity">
+        <activity android:name="ch.epfl.sweng.jassatepfl.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".UserProfileActivity" />
+        <activity android:name="ch.epfl.sweng.jassatepfl.UserProfileActivity"/>
         <activity
-            android:name=".WebViewActivity"
+            android:name="ch.epfl.sweng.jassatepfl.WebViewActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="login"
-                    android:scheme="jassatepfl" />
+                    android:scheme="jassatepfl"/>
             </intent-filter>
         </activity>
-        <activity android:name=".CreateMatchActivity" />
-        <activity android:name=".MatchListActivity" />
+        <activity android:name="ch.epfl.sweng.jassatepfl.CreateMatchActivity"/>
+        <activity android:name="ch.epfl.sweng.jassatepfl.MatchListActivity"/>
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".MatchActivity" />
-        <activity android:name=".LoginActivity"></activity>
+            android:name="ch.epfl.sweng.jassatepfl.MapsActivity"
+            android:label="@string/title_activity_maps"/>
+        <activity android:name="ch.epfl.sweng.jassatepfl.MatchActivity"/>
+        <activity android:name="ch.epfl.sweng.jassatepfl.LoginActivity"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -67,26 +65,27 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key"/>
+
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
              See README(https://goo.gl/l4GJaQ) for more.
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_stat_ic_notification" />
+            android:resource="@drawable/ic_stat_ic_notification"/>
 
         <!--
         App required serviced
         -->
         <service
-            android:name=".notification.FirebaseMessagingHandler">
+            android:name="ch.epfl.sweng.jassatepfl.notification.FirebaseMessagingHandler">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
         <service
-            android:name="ch.epfl.sweng.project.notification.JassTokenService">
+            android:name="ch.epfl.sweng.jassatepfl.notification.JassTokenService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
