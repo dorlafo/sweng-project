@@ -64,7 +64,7 @@ public final class CreateMatchActivityTest extends
 
     @Test
     public void testInputDescription() {
-        onView(withId(R.id.description_match_text)).check(matches(withHint(R.string.description)));
+        onView(withId(R.id.description_match_text)).check(matches(withHint(R.string.create_field_description)));
         onView(withId(R.id.description_match_text)).perform(typeText("Hello World"));
         onView(withId(R.id.description_match_text)).check(matches(withText("Hello World")));
     }
@@ -91,7 +91,7 @@ public final class CreateMatchActivityTest extends
         int currentHour = calendar.get(HOUR_OF_DAY);
         calendar.add(MINUTE, -5);
         setTime(currentHour == 23 ? 0 : currentHour, calendar.get(MINUTE));
-        onView(withText(R.string.create_toast_invalid_hour)).inRoot(new ToastMatcher())
+        onView(withText(R.string.toast_invalid_hour)).inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
     }
 
@@ -111,7 +111,7 @@ public final class CreateMatchActivityTest extends
         Calendar calendar = Calendar.getInstance();
         calendar.add(DAY_OF_MONTH, -5);
         setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
-        onView(withText(R.string.create_toast_invalid_date)).inRoot(new ToastMatcher())
+        onView(withText(R.string.toast_invalid_date)).inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
     }
 

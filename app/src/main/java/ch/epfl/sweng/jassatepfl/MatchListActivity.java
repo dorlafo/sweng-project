@@ -36,7 +36,7 @@ public class MatchListActivity extends ListActivity {
         setContentView(R.layout.activity_list);
 
         TextView emptyList = new TextView(this);
-        emptyList.setText(R.string.empty_match_list);
+        emptyList.setText(R.string.list_empty_list);
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         emptyList.setTextColor(Color.BLACK);
 
@@ -54,9 +54,9 @@ public class MatchListActivity extends ListActivity {
         // Opens dialog box to ask user if he wants to join match
         // Allows user to cancel or accept
         new AlertDialog.Builder(this)
-                .setTitle(R.string.join_match)
-                .setMessage(R.string.join_message)
-                .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
+                .setTitle(R.string.dialog_join_match)
+                .setMessage(R.string.dialog_join_message)
+                .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         final Match match = mAdapter.getItem(position);
 
@@ -67,7 +67,7 @@ public class MatchListActivity extends ListActivity {
                                 match);
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing, goes back to MatchListActivity
                     }

@@ -69,7 +69,7 @@ public final class PermissionHandler implements OnRequestPermissionsResultCallba
         if (ContextCompat.checkSelfPermission(callingActivity, permission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(callingActivity, permission)) {
                 Snackbar.make(callingActivity.findViewById(android.R.id.content), permissionRationaleResId(), Snackbar.LENGTH_LONG)
-                        .setAction(R.string.ok, new View.OnClickListener() {
+                        .setAction(R.string.dialog_ok, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 ActivityCompat.requestPermissions(

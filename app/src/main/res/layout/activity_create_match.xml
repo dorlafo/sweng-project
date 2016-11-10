@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/create_row_margin"
         android:gravity="center"
-        android:text="@string/match_title"
+        android:text="@string/create_title"
         android:textSize="20sp"/>
 
     <Button
@@ -30,7 +30,7 @@
         android:layout_below="@+id/create_title"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/create_row_margin"
-        android:text="@string/add_player_text"/>
+        android:text="@string/create_button_text_add_player"/>
 
 
     <EditText
@@ -40,7 +40,7 @@
         android:layout_below="@+id/add_player_button"
         android:layout_marginBottom="@dimen/create_row_margin"
         android:ems="10"
-        android:hint="@string/description"
+        android:hint="@string/create_field_description"
         android:imeOptions="actionDone"
         android:inputType="textImeMultiLine"/>
 
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:text="@string/private_match"
+            android:text="@string/create_field_private_match"
             android:textSize="@dimen/create_text_size"/>
 
         <Switch
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:text="@string/variant"
+            android:text="@string/create_field_variant"
             android:textSize="@dimen/create_text_size"/>
 
         <Spinner
@@ -105,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="@string/expiration_time_query"
+            android:text="@string/create_field_expiration_time"
             android:textAlignment="center"
             android:textSize="@dimen/create_text_size"/>
 
@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:text="@string/create_choose_location"
+            android:text="@string/create_field_location"
             android:textAlignment="center"
             android:textSize="@dimen/create_text_size"/>
 
@@ -182,6 +182,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/create"/>
+        android:text="@string/create_button_text_create"/>
 
 </RelativeLayout>

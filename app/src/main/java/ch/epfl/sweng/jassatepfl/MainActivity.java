@@ -38,7 +38,7 @@ public final class MainActivity extends NavigationDrawerActivity {
         // Can not display match name because it doesn't exists anymore.
         if (startIntent.hasExtra("notif") && startIntent.getStringExtra("notif").equals("matchexpired")) {
             new AlertDialog.Builder(this)
-                    .setTitle(R.string.match_expired)
+                    .setTitle(R.string.notification_match_expired)
                     .show();
             startIntent.removeExtra("notif");
             startIntent.removeExtra("matchId");

@@ -270,7 +270,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
-            Toast.makeText(this, R.string.create_toast_invalid_hour, Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.toast_invalid_hour, Toast.LENGTH_SHORT)
                     .show();
         }
     }
@@ -305,7 +305,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
                 displayCurrentExpirationDate();
             } else {
-                Toast.makeText(this, R.string.create_toast_invalid_date, Toast.LENGTH_SHORT)
+                Toast.makeText(this, R.string.toast_invalid_date, Toast.LENGTH_SHORT)
                         .show();
             }
         }
@@ -337,7 +337,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
                     });
         } catch (NullPointerException e) {
             /* Commented out out due to conflict with tests that check that a toast is displayed
-            Toast.makeText(this, R.string.create_toast_no_connection, Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
                     .show();
             */
         }
@@ -345,7 +345,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
 
     private void displayCurrentExpirationDate() {
         TextView currentExpirationDate = (TextView) findViewById(R.id.current_expiration_time);
-        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.create_date_format), Locale.FRENCH);
+        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.date_format_match_creation), Locale.FRENCH);
         currentExpirationDate.setText(dateFormat.format(matchCalendar.getTimeInMillis()));
     }
 

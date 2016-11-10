@@ -88,7 +88,7 @@ public class MapsActivity extends FragmentActivity implements
                         }
                     });
         } catch (NullPointerException e) {
-            Toast.makeText(this, R.string.create_toast_no_connection, Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
                     .show();
         }
     }
@@ -152,9 +152,9 @@ public class MapsActivity extends FragmentActivity implements
             @Override
             public void onInfoWindowClick(final Marker marker) {
                 new AlertDialog.Builder(MapsActivity.this)
-                        .setTitle(R.string.join_match)
-                        .setMessage(R.string.join_message)
-                        .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.dialog_join_match)
+                        .setMessage(R.string.dialog_join_message)
+                        .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                 final String matchID = marker.getTag().toString();
@@ -177,7 +177,7 @@ public class MapsActivity extends FragmentActivity implements
                                         });
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Do nothing, goes back to MapsActivity
                             }

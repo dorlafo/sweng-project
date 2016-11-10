@@ -71,7 +71,7 @@ public class MatchActivity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     player = dataSnapshot.getValue(Player.class);
                                     new AlertDialog.Builder(MatchActivity.this)
-                                            .setTitle(R.string.player_joined)
+                                            .setTitle(R.string.notification_player_joined)
                                             .setMessage(player.getFirstName() + " has join the match")
                                             .show();
                                 }
@@ -94,7 +94,7 @@ public class MatchActivity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     player = dataSnapshot.getValue(Player.class);
                                     new AlertDialog.Builder(MatchActivity.this)
-                                            .setTitle(R.string.player_left)
+                                            .setTitle(R.string.notification_player_left)
                                             .setMessage(player.getFirstName() + " has left the match")
                                             .show();
                                 }
@@ -111,9 +111,9 @@ public class MatchActivity extends AppCompatActivity {
                     break;
                 case "invite":
                     new AlertDialog.Builder(this)
-                            .setTitle(R.string.join_match)
-                            .setMessage(R.string.join_message)
-                            .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
+                            .setTitle(R.string.dialog_join_match)
+                            .setMessage(R.string.dialog_join_message)
+                            .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                     ref.child("matches").child(matchID)
@@ -137,7 +137,7 @@ public class MatchActivity extends AppCompatActivity {
 
                                 }
                             })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Do nothing, goes back to ListMatchActivity
                                 }

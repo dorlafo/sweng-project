@@ -84,9 +84,9 @@ public class LoginActivity extends AppCompatActivity {
                     // Opens dialog box to alert user of the authentication fail
                     // Allows user to cancel or retry
                     new AlertDialog.Builder(LoginActivity.this)
-                            .setTitle(R.string.auth_failed)
-                            .setMessage(R.string.retry_message)
-                            .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
+                            .setTitle(R.string.error_auth_failed)
+                            .setMessage(R.string.error_retry_message)
+                            .setPositiveButton(R.string.dialog_retry, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     final String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
                                     Intent intent = new Intent(LoginActivity.this, WebViewActivity.class);
@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                                     startActivityForResult(intent, REQUEST_CODE_AUTHENTICATE);
                                 }
                             })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Do nothing, goes back to LoginActivity
                                 }
