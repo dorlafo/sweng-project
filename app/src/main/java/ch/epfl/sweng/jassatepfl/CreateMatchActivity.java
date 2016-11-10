@@ -5,6 +5,7 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
@@ -43,9 +46,16 @@ import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.GameVariant;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.notification.JassTokenService;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
 
+/**
+ * Activity allowing user to create a new match,
+ * invite players to it, and push this match in the Database.
+ *
+ * @author Nicolas Phan Van
+ */
 public class CreateMatchActivity extends AppCompatActivity implements
         OnClickListener,
         OnItemSelectedListener,
@@ -57,6 +67,8 @@ public class CreateMatchActivity extends AppCompatActivity implements
 
     private Match.Builder matchBuilder;
     private LocationProvider locationProvider;
+    private static int ADD_PLAYER_REQUEST = 0;
+    private List<Player> playersToAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +143,15 @@ public class CreateMatchActivity extends AppCompatActivity implements
         variantSpinner.setAdapter(variantAdapter);
         variantSpinner.setOnItemSelectedListener(this);
 
+        //TODO: Doesn't show players... --> fix this
+        ListView playersLV = (ListView)findViewById(android.R.id.list);
+        playersLV.setEmptyView(findViewById(android.R.id.empty));
+        playersToAdd = matchBuilder.getPlayerList();
+        ArrayAdapter<Player> playerArrayAdapter = new ArrayAdapter<Player>(this,
+                R.layout.player_list_element, playersToAdd);
+        playerArrayAdapter.setNotifyOnChange(true);
+        playersLV.setAdapter(playerArrayAdapter);
+
         addCurrentUserToBuilder();
     }
 
@@ -155,6 +176,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 String matchId = ref.push().getKey();
                 ref.child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
                 Log.d(TAG, "Pushed match " + matchId + " to database");
+                new InvitePlayer().execute(matchId);
                 Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
                 getIntent().putExtra("MATCH_ID", matchId);
                 startActivity(moveToMatchActivity);
@@ -164,10 +186,38 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 newFragment.show(getSupportFragmentManager(), "timePicker");
                 break;
             case R.id.add_player_button:
-                // TODO: add player with player provider
+                Intent addPlayerIntent = new Intent(this, InvitePlayerToMatchActivity.class);
+                startActivityForResult(addPlayerIntent, ADD_PLAYER_REQUEST);
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Add all players sent by InvitePlayerToMatchActivity
+        if (requestCode == ADD_PLAYER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                int playerNum = data.getIntExtra("players_added", 0);
+                for(int i = 0; i < playerNum; i++) {
+                    String sciper = data.getStringExtra("player" + i);
+                    FirebaseDatabase.getInstance().getReference().child("players")
+                            .child(sciper)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Player player = dataSnapshot.getValue(Player.class);
+                                    playersToAdd.add(player);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.e("ERROR-DATABASE", databaseError.toString());
+                                }
+                            });
+                }
+            }
         }
     }
 
@@ -200,7 +250,8 @@ public class CreateMatchActivity extends AppCompatActivity implements
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        // Necessary for implementation of OnItemSelected interface
+        // Never used, do nothing.
     }
 
     private void addCurrentUserToBuilder() {
@@ -212,9 +263,11 @@ public class CreateMatchActivity extends AppCompatActivity implements
                         try {
                             matchBuilder.addPlayer(dataSnapshot.getValue(Player.class));
                         } catch(IllegalStateException e) {
-                            ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this, R.string.match_is_full, "Sorry, desired match is full");
+                            ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
+                                    R.string.match_is_full, "Sorry, desired match is full");
                         } catch(IllegalAccessException a) {
-                            ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this, R.string.cannot_join_match, "You are already signed into that Match");
+                            ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
+                                    R.string.cannot_join_match, "You are already signed into that Match");
                         }
                         createMatchButton.setEnabled(true);
                     }
@@ -226,6 +279,29 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 });
     }
 
+    /**
+     * Async class necessary to send invite message in background
+     *
+     * @author Alexis Montavon
+     */
+    private class InvitePlayer extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            // Send invite to added players
+            if (playersToAdd.size() > 1) {
+                for (int i = 1; i < playersToAdd.size(); i++) {
+                    JassTokenService.sendInvite(playersToAdd.get(i).getID().toString(), params[0]);
+                }
+            }
+            return "";
+        }
+    }
+
+    /**
+     * Helper method to display expiration date as string.
+     *
+     * @param calendar Calendar to display
+     */
     private void displayCurrentExpirationDate(Calendar calendar) {
         TextView currentExpirationDate =
                 (TextView) findViewById(R.id.current_expiration_time);

@@ -57,4 +57,33 @@ public class JassTokenService extends FirebaseInstanceIdService {
                 urlConnection.disconnect();
         }
     }
+
+    /**
+     * Send invite notification to added player
+     *
+     * @param sciper Player sciper
+     * @param matchId The Match ID
+     */
+    public static void sendInvite(String sciper, String matchId) {
+        JsonObject data = new JsonObject();
+        data.addProperty("sciper", sciper);
+        data.addProperty("matchId", matchId);
+        data.addProperty("by", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        HttpURLConnection urlConnection = null;
+        try {
+            URL srv = new URL(SERVER_URL + "/invite");
+            urlConnection = (HttpURLConnection) srv.openConnection();
+            urlConnection.setDoOutput(true);
+            urlConnection.setChunkedStreamingMode(0);
+            OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+            out.write(new Gson().toJson(data).getBytes());
+            out.flush();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+        } catch (IOException e) {
+            Log.e("IDSERVICE", "Could not send packet");
+        } finally {
+            if (urlConnection != null)
+                urlConnection.disconnect();
+        }
+    }
 }
