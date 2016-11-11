@@ -9,9 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
 
@@ -74,6 +72,11 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
                 FirebaseAuth.getInstance().signOut();
                 //Show login activity
                 intent = new Intent(this, LoginActivity.class);
+                break;
+            case R.id.nav_exit:
+                intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 break;
         }
 
