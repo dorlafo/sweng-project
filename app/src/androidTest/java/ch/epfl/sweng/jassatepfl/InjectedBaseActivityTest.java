@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import ch.epfl.sweng.jassatepfl.App;
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 
+@SuppressWarnings("deprecation")
 public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
 
     public InjectedBaseActivityTest(Class activityClass) {

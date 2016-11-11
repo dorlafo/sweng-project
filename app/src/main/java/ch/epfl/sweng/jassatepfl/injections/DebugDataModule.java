@@ -127,6 +127,7 @@ public final class DebugDataModule {
         when(dbRefWrapMock.getKey()).thenReturn(id);
     }
 
+    @SuppressWarnings("deprecation")
     private void addMockedSetValueMethod(final DBRefWrapMock dbRefWrapMock) {
         doAnswer(new Answer<DBReferenceWrapper>() {
             @Override
