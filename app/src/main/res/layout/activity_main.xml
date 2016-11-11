@@ -14,7 +14,28 @@
     android:weightSum="1"
     tools:context="ch.epfl.sweng.jassatepfl.MainActivity">
 
+    <FrameLayout
+        android:id="@+id/main_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/main_layout_activity_buttons"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/background_light"
+            android:divider="@color/listview_divider_color"
+            android:dividerHeight="@dimen/listview_divider_height"
+            android:drawSelectorOnTop="true">
+
+        </ListView>
+
+    </FrameLayout>
+
     <RelativeLayout
+        android:id="@+id/main_layout_activity_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/create_match_button"
