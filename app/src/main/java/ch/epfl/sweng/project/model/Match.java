@@ -213,6 +213,22 @@ public class Match {
         }
     }
 
+    /**
+     * Removes the given player to the player from list.
+     * <p>
+     * Removing a player that is not present do nothing
+     *
+     *
+     * @param player The player to remove from the match
+     * @return The updated builder
+     */
+    public Match removePlayer(Player player) {
+        if (players.contains(player)) {
+            players.remove(player);
+        }
+        return this;
+    }
+
     public static class MatchRank extends Rank {
 
         public MatchRank(int rank) {
@@ -303,25 +319,6 @@ public class Match {
             }
             if (!players.contains(player)) {
                 players.add(player);
-            }
-            return this;
-        }
-
-        /**
-         * Removes the given player to the player list.
-         * <p>
-         * Removing a player that is not present throws an exception,
-         *
-         *
-         * @param player The player to remove from the match
-         * @return The updated builder
-         */
-        public Builder removePlayer(Player player) {
-            if (players.contains(player)) {
-                players.remove(player);
-            }
-            else  {
-                throw new IllegalStateException("Player not in match");
             }
             return this;
         }

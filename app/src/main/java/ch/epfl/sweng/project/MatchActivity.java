@@ -1,15 +1,19 @@
 package ch.epfl.sweng.project;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -22,18 +26,15 @@ import ch.epfl.sweng.project.tools.PlayerListAdapter;
 public class MatchActivity extends AppCompatActivity {
 
     private String matchId;
+    private String sciper;
     private PlayerListAdapter pAdapter;
+    private Player player;
+    private Match match;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match);
-        ListView listView = (ListView) findViewById(android.R.id.list);
-        listView.setEmptyView(findViewById(android.R.id.empty));
-
-        pAdapter = new PlayerListAdapter(this);
-
-        listView.setAdapter(pAdapter);
     }
 
     @Override
@@ -52,13 +53,18 @@ public class MatchActivity extends AppCompatActivity {
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Match match = dataSnapshot.getValue(Match.class);
+                            match = dataSnapshot.getValue(Match.class);
                             Log.d("MATCH:", matchId);
                             TextView description = (TextView) findViewById(R.id.match_description);
                             TextView variant = (TextView) findViewById(R.id.match_variant);
 
                             description.setText(match.getDescription());
                             variant.setText(match.getGameVariant().toString());
+
+                            ListView listView = (ListView) findViewById(android.R.id.list);
+                            listView.setEmptyView(findViewById(android.R.id.empty));
+                            pAdapter = new PlayerListAdapter(MatchActivity.this, matchId);
+                            listView.setAdapter(pAdapter);
 
 
                         }
@@ -78,12 +84,26 @@ public class MatchActivity extends AppCompatActivity {
 
     public void leaveMatch(View view) {
 
-        /*
-        retirer le joueur de la partie
-         */
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        FirebaseDatabase.getInstance().getReference()
+                .child("players")
+                .child(sciper)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        player = dataSnapshot.getValue(Player.class);
+                        match.removePlayer(player);
+                        Intent intent = new Intent(MatchActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /*
@@ -94,10 +114,22 @@ public class MatchActivity extends AppCompatActivity {
      */
 
     public void startMatch(View view) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.waiting_others)
+                .setMessage(R.string.your_match_will_begin_soon)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing, goes back to MatchActivity
+            }
+        })
+                .show();
+
         /*
          Intent intent = new Intent(this, ***MatchIsStart***.class);
          startActivity(intent);
           */
+
+
     }
 
 }

@@ -161,7 +161,6 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 Dans le doute je laisse les 2
                 TODO régler cette histoire de intent pour match activity
                  */
-
                 getIntent().putExtra("MATCH_ID", matchId);
                 moveToMatchActivity.putExtra("MATCH_ID", matchId);
                 startActivity(moveToMatchActivity);

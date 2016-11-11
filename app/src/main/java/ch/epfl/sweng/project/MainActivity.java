@@ -89,10 +89,6 @@ public final class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void displayEnrolledMatches(View view) {
-        Intent intent = new Intent(this, MatchActivity.class);
-        startActivity(intent);
-    }
 
     /**
      * Launch the LoginActivity if the user is not yet logged in

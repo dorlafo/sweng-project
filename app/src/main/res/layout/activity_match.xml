@@ -18,9 +18,9 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/match_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Game Resume"
             android:gravity="center"
             android:textSize="20sp"/>
 
@@ -43,19 +43,6 @@
 
         </LinearLayout>
 
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/match_description"
-                android:textSize="20sp"/>
-
-            <TextView
-                android:id="@+id/match_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
 
 
 

@@ -10,17 +10,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.model.Player;
 
+
+
 /**
  * Created by leo on 07.11.16.
+ */
+
+/**
+ * Adapter that display the players of the match in parameter.
  */
 
 public class PlayerListAdapter extends FirebaseListAdapter<Player> {
 
     private final Activity activity;
 
-    public PlayerListAdapter(Activity activity) {
+    public PlayerListAdapter(Activity activity, String matchID) {
         super(activity, Player.class, R.layout.list_element_player,
-                FirebaseDatabase.getInstance().getReference("players"));
+                FirebaseDatabase.getInstance().getReference().child("matches").child(matchID).child("players"));
         this.activity = activity;
     }
 
