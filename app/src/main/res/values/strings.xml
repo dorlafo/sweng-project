@@ -86,4 +86,5 @@
     <string name="navigation_drawer_user">User</string>
     <string name="navigation_drawer_user_profile">Profile</string>
     <string name="navigation_drawer_logout">Logout</string>
+    <string name="navigation_drawer_exit">Exit</string>
 </resources>
