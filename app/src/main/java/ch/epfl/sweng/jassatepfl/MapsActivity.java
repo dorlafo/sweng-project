@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,7 +57,7 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_ORAN
  * Clicking on a marker displays the match information and clicking on
  * the information window prompts the user to join the match.
  */
-public class MapsActivity extends FragmentActivity implements
+public class MapsActivity extends NavigationDrawerActivity implements
         OnMapReadyCallback, LocationProviderListener {
 
     private GoogleMap matchMap;
@@ -68,7 +69,10 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        //setContentView(R.layout.activity_maps);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_maps, null, false);
+        drawer.addView(contentView, 0);
         createMap();
 
         locationProvider = new LocationProvider(this, true);
