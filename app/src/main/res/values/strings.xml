@@ -53,4 +53,6 @@
     <string name="leave_match">Leave Match</string>
     <string name="player_rank">Rank : </string>
     <string name="player_id">ID :</string>
+    <string name="waiting_others">Waiting for other players...</string>
+    <string name="your_match_will_begin_soon">Your match is about to begin soon !</string>
 </resources>

@@ -19,15 +19,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.model.Match;
 import ch.epfl.sweng.project.model.Player;
-import ch.epfl.sweng.project.tools.MatchListAdapter;
-import ch.epfl.sweng.project.tools.MatchStringifier;
-import ch.epfl.sweng.project.tools.PlayerListAdapter;
+import ch.epfl.sweng.project.tools.PlayerListAdapterForMatch;
 
 public class MatchActivity extends AppCompatActivity {
 
     private String matchId;
     private String sciper;
-    private PlayerListAdapter pAdapter;
+    private PlayerListAdapterForMatch pAdapter;
     private Player player;
     private Match match;
 
@@ -63,7 +61,7 @@ public class MatchActivity extends AppCompatActivity {
 
                             ListView listView = (ListView) findViewById(android.R.id.list);
                             listView.setEmptyView(findViewById(android.R.id.empty));
-                            pAdapter = new PlayerListAdapter(MatchActivity.this, matchId);
+                            pAdapter = new PlayerListAdapterForMatch(MatchActivity.this, matchId);
                             listView.setAdapter(pAdapter);
 
 

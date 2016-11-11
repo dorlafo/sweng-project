@@ -20,11 +20,11 @@ import ch.epfl.sweng.project.model.Player;
  * Adapter that display the players of the match in parameter.
  */
 
-public class PlayerListAdapter extends FirebaseListAdapter<Player> {
+public class PlayerListAdapterForMatch extends FirebaseListAdapter<Player> {
 
     private final Activity activity;
 
-    public PlayerListAdapter(Activity activity, String matchID) {
+    public PlayerListAdapterForMatch(Activity activity, String matchID) {
         super(activity, Player.class, R.layout.list_element_player,
                 FirebaseDatabase.getInstance().getReference().child("matches").child(matchID).child("players"));
         this.activity = activity;
