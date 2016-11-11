@@ -2,12 +2,17 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -37,6 +42,15 @@ public final class MainActivity extends NavigationDrawerActivity {
         System.out.println(FirebaseInstanceId.getInstance().getToken());
         //Show login screen if not logged in
         showLogin();
+
+        TextView emptyList = new TextView(this);
+        emptyList.setText(R.string.main_empty_list);
+        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        emptyList.setTextColor(Color.BLACK);
+
+        ListView listView = (ListView) findViewById(android.R.id.list);
+        ((ViewGroup) listView.getParent()).addView(emptyList);
+        listView.setEmptyView(emptyList);
     }
 
     @Override

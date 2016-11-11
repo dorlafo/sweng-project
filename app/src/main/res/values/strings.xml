@@ -20,6 +20,7 @@
     <string name="create_button_text_create">Create Match</string>
 
     <string name="list_empty_list">No matches are available.</string>
+    <string name="main_empty_list">You are not enrolled in any match</string>
 
     <string name="profile_title">Profile</string>
     <string name="profile_label_player_id">Player id :</string>
