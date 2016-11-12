@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
@@ -36,7 +37,7 @@ import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
  * Activity allowing user to add player while
  * creating match
  */
-public class InvitePlayerToMatchActivity extends AppCompatActivity implements
+public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implements
         SearchView.OnQueryTextListener,
         View.OnClickListener {
 
@@ -102,7 +103,7 @@ public class InvitePlayerToMatchActivity extends AppCompatActivity implements
     @Override
     public boolean onQueryTextChange(String newText) {
         // Modify query when user changes the search text
-        DatabaseReference ref  =  FirebaseDatabase.getInstance().getReference().child("players");
+        DBReferenceWrapper ref  =  dbRefWrapped.child("players");
         ref.orderByChild("firstName").startAt(newText).endAt(newText + "z").limitToFirst(50).addValueEventListener(
                 new ValueEventListener() {
                     @Override

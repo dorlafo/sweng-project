@@ -253,7 +253,7 @@ public class CreateMatchActivity extends BaseActivity implements
                     int playerNum = data.getIntExtra("players_added", 0);
                     for (int i = 0; i < playerNum; i++) {
                         String sciper = data.getStringExtra("player" + i);
-                        FirebaseDatabase.getInstance().getReference().child("players")
+                        dbRefWrapped.child("players")
                                 .child(sciper)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override

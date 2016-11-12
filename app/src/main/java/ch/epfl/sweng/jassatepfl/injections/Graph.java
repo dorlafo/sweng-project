@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl.injections;
 import javax.inject.Singleton;
 
 import ch.epfl.sweng.jassatepfl.BaseActivity;
+import ch.epfl.sweng.jassatepfl.BaseAppCompatActivity;
 import ch.epfl.sweng.jassatepfl.BaseFragmentActivity;
 import ch.epfl.sweng.jassatepfl.BaseListActivity;
 import ch.epfl.sweng.jassatepfl.injections.DaggerGraph;
@@ -41,6 +42,12 @@ public interface Graph {
      * @param activity the activity which will be injected
      */
     void inject(InjectedBaseActivityTest activity);
+
+    /**
+     * Injects providers return values to the BaseAppCompatActivity
+     * @param activity the activity which will be injected
+     */
+    void inject(BaseAppCompatActivity activity);
 
     /**
      * Initializer of the graph

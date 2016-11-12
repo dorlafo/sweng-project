@@ -63,7 +63,7 @@ public class MatchListActivity extends BaseListActivity {
                         DatabaseUtils.addPlayerToMatch(MatchListActivity.this,
                                 dbRefWrapped,
                                 match.getMatchID(),
-                                FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                fAuth.getCurrentUser().getDisplayName(),
                                 match);
                     }
                 })

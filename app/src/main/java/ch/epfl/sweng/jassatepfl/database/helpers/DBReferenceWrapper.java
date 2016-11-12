@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl.database.helpers;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 /**
@@ -75,5 +76,12 @@ public class DBReferenceWrapper {
      */
     public ChildEventListener addChildEventListener(ChildEventListener listener) {
         return dbRef.addChildEventListener(listener);
+    }
+
+    /**
+     * Look at the firebase documentation to see what this method does
+     */
+    public Query orderByChild(String path) {
+        return dbRef.orderByChild(path);
     }
 }
