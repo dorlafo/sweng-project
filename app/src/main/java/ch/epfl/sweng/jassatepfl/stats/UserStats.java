@@ -105,13 +105,12 @@ public class UserStats {
             wonByDate.peekLast().setValue(wonByDate.getLast().getValue() + 1);
         }
         List<Player.PlayerID> team = isWinner ? update.getWinners() : update.getLosers();
-        List<Player.PlayerID> teamMates = new LinkedList<>(team);
-        teamMates.remove(playerId);
         for (Player.PlayerID id : team) {
-            if (partners.containsKey(id))
+            if (!playerId.equals(id)) {
                 partners.put(id, getOrDefaultMap(partners, id, 0) + 1);
-            if (isWinner) {
-                wonWith.put(id, getOrDefaultMap(wonWith, id, 0) + 1);
+                if (isWinner) {
+                    wonWith.put(id, getOrDefaultMap(wonWith, id, 0) + 1);
+                }
             }
         }
 
@@ -133,7 +132,7 @@ public class UserStats {
     /**
      * Updates the rank object of the day specified in timestamp according to new information.
      *
-     * @param rankCalculator A Strategy objects that computes the new rank using the UserStats object.
+     * @param rankCalculator A Strategy object that computes the new rank using the UserStats object.
      */
     protected void updateRank(RankCalculator rankCalculator) {
         Rank newRank = rankCalculator.computeNewRank();
@@ -148,13 +147,14 @@ public class UserStats {
      */
     private void prepareLastBuckets(Long time) {
         long updateDate = getDay(time);
-        if (playedByDate.peekLast().getKey() != updateDate) {
+        if (playedByDate.peekLast() == null || playedByDate.peekLast().getKey() != updateDate) {
             playedByDate.addLast(new Tuple2<>(updateDate, 0));
             wonByDate.addLast(new Tuple2<>(updateDate, 0));
             if (rankByDate.isEmpty()) {
                 rankByDate.addLast(new Tuple2<Long, Rank>(updateDate, new Rank(0)));
+            } else {
+                rankByDate.addLast(new Tuple2<>(updateDate, rankByDate.getLast().getValue()));
             }
-            rankByDate.addLast(new Tuple2<>(updateDate, rankByDate.getLast().getValue()));
         }
     }
 
