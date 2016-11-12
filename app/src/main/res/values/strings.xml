@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Jass@EPFL</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_navigation_drawer">NavigationDrawer</string>
+    <string name="title_activity_create">Match Information</string>
 
     <string name="main_button_text_map">Map</string>
     <string name="main_button_text_list">Match list</string>
@@ -10,13 +10,13 @@
     <string name="main_button_text_ranking">Ranking</string>
     <string name="main_button_text_stats">Stats</string>
 
-    <string name="create_title">Match Information</string>
     <string name="create_button_text_add_player">Add Player</string>
     <string name="create_field_private_match">Private Match</string>
     <string name="create_field_variant">Match Variant</string>
     <string name="create_field_description">Description</string>
     <string name="create_field_expiration_time">Match valid until</string>
     <string name="create_field_location">Pick the match location</string>
+    <string name="create_field_players_list">Players in Match:</string>
     <string name="create_button_text_create">Create Match</string>
 
     <string name="list_empty_list">No matches are available</string>
@@ -49,6 +49,7 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_retry">Retry</string>
+    <string name="dialog_add">Add</string>
 
     <string name="log_in">Log In</string>
     <string name="log_out">Log Out</string>
@@ -89,12 +90,11 @@
     <string name="navigation_drawer_logout">Logout</string>
     <string name="navigation_drawer_exit">Exit</string>
 
-    <string name="add">Add</string>
-    <string name="search_player">Search Player</string>
+    <string name="invite_button_text_invite">Invite</string>
+    <string name="invite_welcome_text">Look for players, add them and click on Invite</string>
+    <string name="invite_search_player">Search for Player</string>
+    <string name="invite_player_dialog">Invite Player</string>
+
     <string name="enter_player_name">Enter player name</string>
-    <string name="players_in_match">Players in Match:</string>
-    <string name="invite_player_text">Invite Player</string>
-    <string name="invite_player_message">Do you want to invite this player</string>
-    <string name="invite">Invite</string>
-    <string name="search_player_list">Search players, add them and click on Invite</string>
+    <string name="invite_player_message">Do you want to invite this player?</string>
 </resources>

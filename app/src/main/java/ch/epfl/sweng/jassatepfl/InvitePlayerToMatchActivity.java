@@ -47,7 +47,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_player_to_match);
         TextView emptyList = new TextView(this);
-        emptyList.setText(R.string.search_player_list);
+        emptyList.setText(R.string.invite_welcome_text);
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         emptyList.setTextColor(Color.BLACK);
         emptyList.setTextSize(20);
@@ -61,9 +61,9 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
                 final Player player = adapter.getItem(position);
                 new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
-                        .setTitle(R.string.invite_player_text)
+                        .setTitle(R.string.invite_player_dialog)
                         .setMessage(" " + player.getFirstName() + " " + player.getLastName())
-                        .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.dialog_add, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 playerToAdd.add(player);
                             }
