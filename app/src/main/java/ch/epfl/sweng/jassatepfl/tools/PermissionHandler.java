@@ -14,7 +14,6 @@ import android.view.View;
 
 import ch.epfl.sweng.jassatepfl.R;
 
-
 /**
  * Utility class used to request a permission and to check the state of
  * that permission.

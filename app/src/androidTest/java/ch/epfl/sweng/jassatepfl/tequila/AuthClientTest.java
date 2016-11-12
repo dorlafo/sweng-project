@@ -1,17 +1,16 @@
 package ch.epfl.sweng.jassatepfl.tequila;
 
 
-import junit.framework.Assert;
 import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Tests for AuthClient methods
  *
  * @author Alexis Montavon
  */
-
-public class
-AuthClientTest {
+public class AuthClientTest {
 
     @Test
     public void createRightRequestUrl() {
@@ -24,7 +23,7 @@ AuthClientTest {
         OAuth2Config testConfig = new OAuth2Config(scopes, "TOTO", "TUTU", "TITI");
         String url = AuthClient.createCodeRequestUrl(testConfig);
 
-        Assert.assertEquals(rightSample, url);
+        assertEquals(rightSample, url);
     }
 
     @Test
@@ -33,6 +32,7 @@ AuthClientTest {
         String extractMe = "voila%undebut2string&inutilecode=cestbienlecoderequis112234";
         String extractResult = AuthClient.extractCode(extractMe);
 
-        Assert.assertEquals(rightString, extractResult);
+        assertEquals(rightString, extractResult);
     }
+
 }

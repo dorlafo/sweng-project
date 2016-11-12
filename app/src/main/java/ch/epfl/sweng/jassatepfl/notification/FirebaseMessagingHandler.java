@@ -18,7 +18,12 @@ import ch.epfl.sweng.jassatepfl.MainActivity;
 import ch.epfl.sweng.jassatepfl.MatchActivity;
 import ch.epfl.sweng.jassatepfl.R;
 
-import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.*;
+import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.DEFAULT_MSG;
+import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.MATCH_EXPIRED;
+import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.MATCH_FULL;
+import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.PLAYER_INVITED_YOU;
+import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.PLAYER_JOINED;
+import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.PLAYER_LEFT;
 
 /**
  * Handler for FireBase Cloud Messaging notifications
@@ -61,7 +66,7 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
      */
     private void sendNotification(NotificationMessages msgType, Map<String, String> msgData) {
         Intent intent;
-        switch(msgType) {
+        switch (msgType) {
             case MATCH_FULL:
                 intent = new Intent(this, MatchActivity.class).putExtra("notif", "matchfull")
                         .putExtra("matchId", msgData.get("matchId"));
@@ -93,7 +98,7 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         //TODO: change icon with Jass@EPFL icon!
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_ic_notification)
@@ -115,7 +120,7 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
      * @return NotificationMessages The message type
      */
     private NotificationMessages getMsgType(String msgType) {
-        switch(msgType) {
+        switch (msgType) {
             case "matchfull":
                 return MATCH_FULL;
             case "matchexpired":
@@ -130,4 +135,5 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
                 return DEFAULT_MSG;
         }
     }
+
 }
