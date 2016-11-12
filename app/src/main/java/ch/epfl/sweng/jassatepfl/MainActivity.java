@@ -20,7 +20,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_main, null, false);
+        View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
         drawer.addView(contentView, 0);
 
         System.out.println(FirebaseInstanceId.getInstance().getToken());

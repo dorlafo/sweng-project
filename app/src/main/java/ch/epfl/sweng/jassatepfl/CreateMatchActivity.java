@@ -96,7 +96,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_create_match, null, false);
+        View contentView = inflater.inflate(R.layout.activity_create_match, drawer, false);
         drawer.addView(contentView, 0);
 
         matchBuilder = new Match.Builder();
