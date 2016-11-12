@@ -103,36 +103,43 @@ public class StatsUpdate {
             losers = new LinkedList<>();
         }
 
-        public void addLosers(Player.PlayerID... losers) {
+        public Builder addLosers(Player.PlayerID... losers) {
             for (Player.PlayerID id : losers) {
                 this.losers.add(id);
             }
+            return this;
         }
 
-        public void addWinners(Player.PlayerID... winners) {
+        public Builder addWinners(Player.PlayerID... winners) {
             for (Player.PlayerID id : winners) {
                 this.winners.add(id);
             }
+            return this;
         }
 
-        public void setTimestamp(long timestamp) {
+        public Builder setTimestamp(long timestamp) {
             this.timestamp = timestamp;
+            return this;
         }
 
-        public void setWinScore(int winScore) {
+        public Builder setWinScore(int winScore) {
             this.scoreWin = winScore;
+            return this;
         }
 
-        public void setLoseScore(int loseScore) {
+        public Builder setLoseScore(int loseScore) {
             this.scoreLost = loseScore;
+            return this;
         }
 
-        public void setGameVariant(Match.GameVariant v) {
+        public Builder setGameVariant(Match.GameVariant v) {
             this.variant = v;
+            return this;
         }
 
-        public void setMatchId(String matchId) {
+        public Builder setMatchId(String matchId) {
             this.matchId = matchId;
+            return this;
         }
 
         public StatsUpdate build() {
