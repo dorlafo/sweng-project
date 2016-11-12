@@ -14,6 +14,12 @@
     android:weightSum="1"
     tools:context="ch.epfl.sweng.jassatepfl.MainActivity">
 
+    <Space
+        android:id="@+id/main_top_space"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_alignParentTop="true"/>
+
     <FrameLayout
         android:id="@+id/main_list_view"
         android:layout_width="match_parent"
