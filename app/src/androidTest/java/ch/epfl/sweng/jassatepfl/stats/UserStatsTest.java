@@ -17,8 +17,8 @@ import static org.junit.Assert.*;
  */
 public class UserStatsTest {
 
-    Player.PlayerID id = new Player.PlayerID("000000");
-    StatsUpdate update = new StatsUpdate.Builder()
+    static Player.PlayerID id = new Player.PlayerID("000000");
+    static StatsUpdate update = new StatsUpdate.Builder()
             .addLosers(new Player.PlayerID("111111"), new Player.PlayerID("222222"))
             .addWinners(new Player.PlayerID("333333"), new Player.PlayerID("000000"))
             .setTimestamp(1478908800)
@@ -28,7 +28,7 @@ public class UserStatsTest {
             .setMatchId("lol")
             .build();
 
-    UserStats stats = new UserStats(id).update(update);
+    static UserStats stats = new UserStats(id).update(update);
 
     @Test
     public void getPlayerId() throws Exception {
