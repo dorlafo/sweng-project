@@ -20,7 +20,7 @@ import javax.inject.Inject;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 
-public abstract class BaseActivity extends AppCompatActivity
+public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
         implements OnNavigationItemSelectedListener {
 
     @Inject

@@ -12,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
 
-public class UserProfileActivity extends BaseActivity {
+public class UserProfileActivity extends BaseActivityWithNavDrawer {
 
     private final String TAG = UserProfileActivity.class.getSimpleName();
     private TextView mtwPlayerID;

@@ -55,7 +55,7 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_ORAN
  * Clicking on a marker displays the match information and clicking on
  * the information window prompts the user to join the match.
  */
-public class MapsActivity extends BaseActivity implements
+public class MapsActivity extends BaseActivityWithNavDrawer implements
         OnMapReadyCallback, LocationProviderListener {
 
     private GoogleMap matchMap;

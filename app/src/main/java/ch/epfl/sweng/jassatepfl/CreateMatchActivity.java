@@ -75,7 +75,7 @@ import static java.util.Calendar.YEAR;
  *
  * @author Nicolas Phan Van
  */
-public class CreateMatchActivity extends BaseActivity implements
+public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         OnClickListener,
         OnItemSelectedListener,
         OnTimeSetListener,

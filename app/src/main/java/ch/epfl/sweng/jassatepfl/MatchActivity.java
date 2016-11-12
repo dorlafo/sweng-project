@@ -15,7 +15,7 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
-public class MatchActivity extends BaseActivity {
+public class MatchActivity extends BaseActivityWithNavDrawer {
     private String matchId;
     private final static String TAG = MatchActivity.class.getSimpleName();
     private Match match;

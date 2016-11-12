@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
-public final class MainActivity extends BaseActivity {
+public final class MainActivity extends BaseActivityWithNavDrawer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

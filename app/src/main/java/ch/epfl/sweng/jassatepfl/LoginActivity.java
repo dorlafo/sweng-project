@@ -30,7 +30,7 @@ import ch.epfl.sweng.jassatepfl.tequila.AuthServer;
 import ch.epfl.sweng.jassatepfl.tequila.OAuth2Config;
 import ch.epfl.sweng.jassatepfl.tequila.Profile;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivityWithNavDrawer {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
