@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-public final class MainActivity extends NavigationDrawerActivity {
-
-    private FirebaseAuth fAuth;
+public final class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,17 +23,6 @@ public final class MainActivity extends NavigationDrawerActivity {
         View contentView = inflater.inflate(R.layout.activity_main, null, false);
         drawer.addView(contentView, 0);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        //setContentView(R.layout.activity_main);
-
-        fAuth = FirebaseAuth.getInstance();
         System.out.println(FirebaseInstanceId.getInstance().getToken());
         //Show login screen if not logged in
         showLogin();

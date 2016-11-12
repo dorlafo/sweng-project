@@ -19,8 +19,9 @@
     <string name="create_field_location">Pick the match location</string>
     <string name="create_button_text_create">Create Match</string>
 
-    <string name="list_empty_list">No matches are available.</string>
+    <string name="list_empty_list">No matches are available</string>
     <string name="main_empty_list">You are not enrolled in any match</string>
+    <string name="create_empty_list">No players in the match</string>
 
     <string name="profile_title">Profile</string>
     <string name="profile_label_player_id">Player id :</string>
@@ -34,7 +35,7 @@
 
     <string name="notification_start_game">All players have joined! The game can start!</string>
     <string name="notification_player_joined">A new player has joined your game!</string>
-    <string name="notification_player_left">A player left you game</string>
+    <string name="notification_player_left">A player left your game</string>
     <string name="notification_match_expired">Your match has expired</string>
 
     <string name="snippet_match_rank">Match Rank:&#160;</string>
@@ -87,4 +88,13 @@
     <string name="navigation_drawer_user_profile">Profile</string>
     <string name="navigation_drawer_logout">Logout</string>
     <string name="navigation_drawer_exit">Exit</string>
+
+    <string name="add">Add</string>
+    <string name="search_player">Search Player</string>
+    <string name="enter_player_name">Enter player name</string>
+    <string name="players_in_match">Players in Match:</string>
+    <string name="invite_player_text">Invite Player</string>
+    <string name="invite_player_message">Do you want to invite this player</string>
+    <string name="invite">Invite</string>
+    <string name="search_player_list">Search players, add them and click on Invite</string>
 </resources>

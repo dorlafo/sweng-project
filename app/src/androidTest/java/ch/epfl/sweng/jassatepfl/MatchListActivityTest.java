@@ -23,11 +23,11 @@ public final class MatchListActivityTest extends
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+        getActivity();
     }
 
     @Test
     public void testSwitchToMapFromList() {
-        getActivity();
         onView(withId(R.id.switch_to_map)).perform(click());
         onView(withId(R.id.switch_to_list)).check(matches(isDisplayed()));
     }

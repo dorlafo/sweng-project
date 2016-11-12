@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -35,6 +34,7 @@
             android:id="@+id/rank_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -55,6 +55,7 @@
             android:id="@+id/players_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -75,6 +76,7 @@
             android:id="@+id/variant_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -95,6 +97,7 @@
             android:id="@+id/expiration_date_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
 </RelativeLayout>
