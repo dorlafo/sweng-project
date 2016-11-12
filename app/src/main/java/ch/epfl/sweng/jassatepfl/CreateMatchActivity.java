@@ -6,6 +6,7 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -22,6 +23,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -41,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
@@ -48,6 +51,9 @@ import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.GameVariant;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.server.ServerInterface;
+import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
+import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
 import ch.epfl.sweng.jassatepfl.tools.DatePickerFragment;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
@@ -65,6 +71,8 @@ import static java.util.Calendar.YEAR;
  * The creation options are: inputting a short description of the match,
  * manually adding a player, choosing the match location, if it will be
  * private or not, its variant, and its expiration date.
+ *
+ * @author Nicolas Phan Van
  */
 public class CreateMatchActivity extends BaseActivity implements
         OnClickListener,
@@ -73,13 +81,14 @@ public class CreateMatchActivity extends BaseActivity implements
         OnDateSetListener {
 
     private static final String TAG = CreateMatchActivity.class.getSimpleName();
-    private final int PLACE_PICKER_REQUEST = 27;
+    private static final int PLACE_PICKER_REQUEST = 27;
+    private static final int ADD_PLAYER_REQUEST = 0;
 
     private Button createMatchButton;
     private ImageButton placePickerButton;
-
     private Match.Builder matchBuilder;
     private LocationProvider locationProvider;
+    private List<Player> playersToAdd;
     private Calendar matchCalendar;
 
     @Override
@@ -155,6 +164,15 @@ public class CreateMatchActivity extends BaseActivity implements
         variantSpinner.setAdapter(variantAdapter);
         variantSpinner.setOnItemSelectedListener(this);
 
+        //TODO: Doesn't show players... --> fix this
+        ListView playersLV = (ListView)findViewById(android.R.id.list);
+        playersLV.setEmptyView(findViewById(android.R.id.empty));
+        playersToAdd = matchBuilder.getPlayerList();
+        ArrayAdapter<Player> playerArrayAdapter = new ArrayAdapter<Player>(this,
+                R.layout.player_list_element, playersToAdd);
+        playerArrayAdapter.setNotifyOnChange(true);
+        playersLV.setAdapter(playerArrayAdapter);
+
         // Place picker
         placePickerButton = (ImageButton) findViewById(R.id.create_place_picker_button);
         placePickerButton.setEnabled(false);
@@ -167,7 +185,6 @@ public class CreateMatchActivity extends BaseActivity implements
                         currentLocation.getLongitude()));
             }
         }
-
         addCurrentUserToBuilder();
     }
 
@@ -193,6 +210,7 @@ public class CreateMatchActivity extends BaseActivity implements
                 String matchId = dbRefWrapped.child("matches").push().getKey();
                 dbRefWrapped.child("matches").child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
                 Log.d(TAG, "Pushed match " + matchId + " to database");
+                new InvitePlayer().execute(matchId);
                 Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
                 getIntent().putExtra("MATCH_ID", matchId);
                 startActivity(moveToMatchActivity);
@@ -206,7 +224,8 @@ public class CreateMatchActivity extends BaseActivity implements
                 datePickerFragment.show(getSupportFragmentManager(), "datePicker");
                 break;
             case R.id.add_player_button:
-                // TODO: add player with player provider
+                Intent addPlayerIntent = new Intent(this, InvitePlayerToMatchActivity.class);
+                startActivityForResult(addPlayerIntent, ADD_PLAYER_REQUEST);
                 break;
             case R.id.create_place_picker_button:
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
@@ -227,11 +246,38 @@ public class CreateMatchActivity extends BaseActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
-            Place place = PlacePicker.getPlace(this, data);
-            LatLng location = place.getLatLng();
-            matchBuilder.setLocation(new GPSPoint(location.latitude, location.longitude));
-            placePickerButton.setEnabled(true);
+        // Add all players sent by InvitePlayerToMatchActivity
+        if(resultCode == RESULT_OK) {
+            switch(requestCode){
+                case ADD_PLAYER_REQUEST:
+                    int playerNum = data.getIntExtra("players_added", 0);
+                    for (int i = 0; i < playerNum; i++) {
+                        String sciper = data.getStringExtra("player" + i);
+                        dbRefWrapped.child("players")
+                                .child(sciper)
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Player player = dataSnapshot.getValue(Player.class);
+                                        playersToAdd.add(player);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.e("ERROR-DATABASE", databaseError.toString());
+                                    }
+                                });
+                    }
+                    break;
+                case PLACE_PICKER_REQUEST:
+                    Place place = PlacePicker.getPlace(this, data);
+                    LatLng location = place.getLatLng();
+                    matchBuilder.setLocation(new GPSPoint(location.latitude, location.longitude));
+                    placePickerButton.setEnabled(true);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -245,11 +291,6 @@ public class CreateMatchActivity extends BaseActivity implements
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     @Override
@@ -271,6 +312,11 @@ public class CreateMatchActivity extends BaseActivity implements
     }
 
     @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Necessary for implementation of OnItemSelected interface
+        // Never used, do nothing.
+    }
+
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         final Calendar currentTime = Calendar.getInstance();
         int currentYear = currentTime.get(YEAR);
@@ -338,6 +384,27 @@ public class CreateMatchActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * Async class necessary to send invite message in background
+     *
+     * @author Alexis Montavon
+     */
+    private class InvitePlayer extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            // Send invite to added players
+            if (playersToAdd.size() > 1) {
+                for (int i = 1; i < playersToAdd.size(); i++) {
+                    ServerInterface.getInstance().invitePlayer(playersToAdd.get(i).getID().toString(), params[0]);
+                }
+            }
+            return "";
+        }
+    }
+
+    /**
+     * Helper method to display expiration date as string.
+     */
     private void displayCurrentExpirationDate() {
         TextView currentExpirationDate = (TextView) findViewById(R.id.current_expiration_time);
         DateFormat dateFormat = new SimpleDateFormat(getString(R.string.create_date_format), Locale.FRENCH);

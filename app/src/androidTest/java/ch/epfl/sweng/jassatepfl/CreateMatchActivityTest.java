@@ -1,9 +1,8 @@
 package ch.epfl.sweng.jassatepfl;
 
-
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.contrib.PickerActions;
 import android.test.ActivityInstrumentationTestCase2;
+import android.support.test.espresso.contrib.PickerActions;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -39,8 +38,13 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
-public final class CreateMatchActivityTest extends
-        ActivityInstrumentationTestCase2<CreateMatchActivity> {
+
+/**
+ * Test class for CreateMatchActivity
+ *
+ * @author Alexis Montavon
+ */
+public final class CreateMatchActivityTest extends ActivityInstrumentationTestCase2<CreateMatchActivity> {
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
 
@@ -54,6 +58,13 @@ public final class CreateMatchActivityTest extends
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         getActivity();
     }
+
+    /*@Test
+    public void testSwitchToInvitePlayerActivity() {
+        getActivity();
+        onView(withId(R.id.add_player_button)).perform(click());
+        onView(withId(R.id.invite_button)).check(matches(isDisplayed()));
+    }*/
 
     @Test
     public void testSpinnerSelection() {

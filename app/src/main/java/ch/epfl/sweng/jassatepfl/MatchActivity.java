@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
@@ -34,7 +35,7 @@ public class MatchActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Intent startIntent = getIntent();
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        final DBReferenceWrapper ref = dbRefWrapped;
 
         /* Notification onClick handler.
          * Will display dialog Box depending on the notification received.
@@ -124,7 +125,7 @@ public class MatchActivity extends BaseActivity {
                                                     DatabaseUtils.addPlayerToMatch(MatchActivity.this,
                                                             dbRefWrapped,
                                                             matchID,
-                                                            FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                                            fAuth.getCurrentUser().getDisplayName(),
                                                             match);
                                                 }
 

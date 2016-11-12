@@ -312,6 +312,10 @@ public class Match {
             return this;
         }
 
+        public List<Player> getPlayerList() {
+            ArrayList<Player> playerList = new ArrayList<>(players);
+            return playerList;
+        }
         // TODO: add removePlayer method
 
         public Builder setLocation(GPSPoint location) {

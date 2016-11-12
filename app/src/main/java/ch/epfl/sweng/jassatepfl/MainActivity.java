@@ -17,14 +17,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
  * Your app's main activity.
  */
 public final class MainActivity extends BaseActivity {
-    private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fAuth = FirebaseAuth.getInstance();
         System.out.println(FirebaseInstanceId.getInstance().getToken());
         //Show login screen if not logged in
         showLogin();
@@ -57,7 +55,7 @@ public final class MainActivity extends BaseActivity {
                     CookieManager.getInstance().removeAllCookies(null);
                 }
                 //Sign out from Firebase
-                FirebaseAuth.getInstance().signOut();
+                fAuth.signOut();
                 //Show login activity
                 showLogin();
                 return true;

@@ -136,7 +136,7 @@ public class MapsActivity extends BaseFragmentActivity implements
                                                 DatabaseUtils.addPlayerToMatch(MapsActivity.this,
                                                         dbRefWrapped,
                                                         matchID,
-                                                        FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                                        fAuth.getCurrentUser().getDisplayName(),
                                                         match);
                                             }
 
