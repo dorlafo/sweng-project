@@ -5,11 +5,13 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -163,8 +165,13 @@ public class CreateMatchActivity extends BaseActivity implements
         variantSpinner.setOnItemSelectedListener(this);
 
         //TODO: Doesn't show players... --> fix this
-        ListView playersLV = (ListView) findViewById(android.R.id.list);
-        playersLV.setEmptyView(findViewById(android.R.id.empty));
+        TextView emptyList = new TextView(this);
+        emptyList.setText(R.string.empty_match_list);
+        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        emptyList.setTextColor(Color.BLACK);
+
+        ListView playersLV = (ListView) findViewById(R.id.create_player_list);
+        playersLV.setEmptyView(emptyList);
         playersToAdd = matchBuilder.getPlayerList();
         ArrayAdapter<Player> playerArrayAdapter = new ArrayAdapter<>(this,
                 R.layout.player_list_element, playersToAdd);

@@ -176,7 +176,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/player_list"
+        android:id="@+id/create_row_player_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/create_row_location"
@@ -192,21 +192,13 @@
             android:textSize="@dimen/create_text_size"/>
 
         <ListView
-            android:id="@android:id/list"
+            android:id="@+id/create_player_list"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="@android:color/background_light"
             android:divider="@color/listview_divider_color"
             android:dividerHeight="@dimen/listview_divider_height"
             android:drawSelectorOnTop="true"/>
-
-        <TextView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@+id/empty_match_list"
-            android:textAlignment="textStart"
-            android:visibility="gone"/>
 
     </LinearLayout>
 
