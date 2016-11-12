@@ -94,7 +94,7 @@ public class UserStats {
      *
      * @param update The results of a concluded match
      */
-    protected void update(StatsUpdate update) {
+    protected UserStats update(StatsUpdate update) {
         prepareLastBuckets(update.getTimestamp());
 
         playedMatches += 1;
@@ -116,6 +116,7 @@ public class UserStats {
         }
 
         variants.put(update.getVariant(), getOrDefaultMap(variants, update.getVariant(), 0) + 1);
+        return this;
     }
 
     /**
