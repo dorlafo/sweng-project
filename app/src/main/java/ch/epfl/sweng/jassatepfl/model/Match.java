@@ -292,7 +292,7 @@ public class Match {
          */
         public Builder() {
             players = new ArrayList<>();
-            location = new GPSPoint(46.520407, 6.565802); // Esplanade
+            location = new GPSPoint(46.520450, 6.567737); // Satellite
             description = DEFAULT_DESCRIPTION;
             privateMatch = false;
             gameVariant = CLASSIC;
