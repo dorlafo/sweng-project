@@ -60,10 +60,9 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
         Intent intent = null;
 
-        switch (id) {
+        switch (item.getItemId()) {
             case R.id.nav_main:
                 intent = new Intent(this, MainActivity.class);
                 break;

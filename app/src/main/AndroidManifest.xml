@@ -52,13 +52,14 @@
             android:name=".CreateMatchActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".MatchListActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".MatchListActivity"/>
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".MatchActivity"/>
+        <activity
+            android:name=".MatchActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".LoginActivity"/>
         <activity
             android:name=".NavigationDrawerActivity"

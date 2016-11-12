@@ -14,7 +14,7 @@ import android.webkit.WebViewClient;
  *
  * @author Alexis Montavon
  */
-public class WebViewActivity extends BaseActivityWithNavDrawer {
+public class WebViewActivity extends BaseAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
