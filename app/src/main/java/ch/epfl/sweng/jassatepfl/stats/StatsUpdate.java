@@ -35,7 +35,7 @@ public class StatsUpdate {
      *                  match.
      * @param matchId   The unique identifier of the match.
      */
-    public StatsUpdate(long timestamp,
+    private StatsUpdate(long timestamp,
                        List<Player.PlayerID> winners,
                        List<Player.PlayerID> losers,
                        int scoreWin,
@@ -43,8 +43,8 @@ public class StatsUpdate {
                        Match.GameVariant variant,
                        String matchId) {
         this.timestamp = timestamp;
-        this.winners = new ArrayList<>(winners);
-        this.losers = new ArrayList<>(losers);
+        this.winners = winners;
+        this.losers = losers;
         this.scoreWin = scoreWin;
         this.scoreLost = scoreLost;
         this.variant = variant;
