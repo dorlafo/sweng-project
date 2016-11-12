@@ -49,5 +49,11 @@ public interface Node {
      * @return the child that was just added
      */
     public Node addChild(String id);
+
+    /**
+     * Remove all chidren of the current node
+     */
+    public void dropChildren();
+
 }
 

@@ -11,6 +11,7 @@ import org.mockito.stubbing.Answer;
 
 import javax.inject.Singleton;
 
+import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;
 import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
@@ -32,6 +33,8 @@ import static org.mockito.Mockito.when;
 
 
 /**
+ * @author Amaury Combes
+ *
  * DebugDataModule is module (i.e. a class that defines a set of providers which are the method
  * annotated with @Provides). The providers can provide their objects in normal mod or mocked mod.
  */
@@ -80,13 +83,16 @@ public final class DebugDataModule {
 
     private void fillDB(DBRefWrapMock dbRef) {
         Root root = (Root) dbRef.getCurrentNode();
-        TreeNode nodeAdded = root.addChild("players");
-        nodeAdded.addChild("123456").setData(new Player(new Player.PlayerID("123456"), "Test", "Jean Pierre", new Rank(1000)));
+        root.addChild("players");
+        root.addChild("matches");
+        root.getChild("players")
+               .addChild("696969")
+                .setData(new Player(new Player.PlayerID("696969"), "LeBricoleur", "Bob", new Rank(1000)));
     }
 
     private void addMockedBehaviorAuth(FirebaseAuth fAuth) {
         FirebaseUser fUser = mock(FirebaseUser.class);
-        when(fUser.getDisplayName()).thenReturn("123456");
+        when(fUser.getDisplayName()).thenReturn("696969");
         when(fAuth.getCurrentUser()).thenReturn(fUser);
     }
 
@@ -147,28 +153,26 @@ public final class DebugDataModule {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 final ValueEventListener v = invocation.getArgument(0);
-                //Runnable task = new Runnable() {
-                    //@Override
-                    //public void run() {
-                        //try {
-                            //Thread.sleep(1000 + (new Random().nextInt(500)));
-                            DataSnapshot obj = mock(DataSnapshot.class);
-                            Player p = (Player) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
-                            when(obj.getValue(Player.class)).thenReturn(p);
-                            v.onDataChange((DataSnapshot) obj);
-                        //} catch (Exception ex) {
-                            //handle error which cannot be thrown back
-                         //   Log.e("ERROR ASYNC CALL", ex.toString());
-                        //}
-                    //}
-                //};
-                //new Thread(task, "ServiceThread").start();
+                DataSnapshot obj = mock(DataSnapshot.class);
+                Player p = null;
+                Match m = null;
+
+                if(((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Player) {
+                    p = (Player) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
+                } else if(((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Match) {
+                    m = (Match) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
+                }
+
+                when(obj.getValue(Player.class)).thenReturn(p);
+                when(obj.getValue(Match.class)).thenReturn(m);
+
+                v.onDataChange((DataSnapshot) obj);
                 return null;
             }
         }).when(dbRefWrapMock).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     private void addMockedAddChildEventListener(DBRefWrapMock dbRefWrapMock) {
-
+        //TODO
     }
 }

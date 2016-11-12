@@ -9,6 +9,8 @@ import ch.epfl.sweng.jassatepfl.injections.DaggerGraph;
 import dagger.Component;
 
 /**
+ * @author Amaury Combes
+ *
  * The Graph interface represents a mapping from the returns of the providers to the field of the
  * injected activity
  */
@@ -33,6 +35,12 @@ public interface Graph {
      * @param activity the activity which will be injected
      */
     void inject(BaseFragmentActivity activity);
+
+    /**
+     * Injects providers return values to the BaseFragmentActivity
+     * @param activity the activity which will be injected
+     */
+    void inject(InjectedBaseActivityTest activity);
 
     /**
      * Initializer of the graph

@@ -65,4 +65,10 @@ public class Leaf implements Node {
     public void setData(Object data) {
         this.data = data;
     }
+
+    @Override
+    public void dropChildren() {
+        throw new UnsupportedOperationException();
+
+    }
 }

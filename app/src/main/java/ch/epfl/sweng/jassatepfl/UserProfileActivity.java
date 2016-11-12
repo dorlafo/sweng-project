@@ -58,9 +58,6 @@ public class UserProfileActivity extends BaseActivity {
 
                     }
                 });
-
-        // Subscribe to FirebaseMessaging topic
-        FirebaseMessaging.getInstance().subscribeToTopic("test-n");
     }
 
     @Override

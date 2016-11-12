@@ -6,11 +6,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 /**
+ * @author Amaury Combes
+ *
  * DBReferenceWrapper is class that just wrap a DatabaseReference and reproduce all its methods
  * needed.
  * This wrapper is essential to mock our firebase database
- *
- * @author Amaury Combes
  */
 public class DBReferenceWrapper {
     private final DatabaseReference dbRef;
@@ -34,7 +34,7 @@ public class DBReferenceWrapper {
     /**
      * Look at the firebase documentation to see what this method does
      *
-     * @return returns a wrapped DatabaseRefenrece
+     * @return returns a wrapped DatabaseReference
      */
     public DBReferenceWrapper child(String pathString) {
         return new DBReferenceWrapper(dbRef.child(pathString));
