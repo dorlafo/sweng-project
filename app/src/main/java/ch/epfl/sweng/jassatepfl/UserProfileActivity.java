@@ -14,7 +14,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class UserProfileActivity extends BaseActivity {
 
     private final String TAG = UserProfileActivity.class.getSimpleName();
     private TextView mtwPlayerID;
@@ -26,11 +26,20 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        sciper = fAuth.getCurrentUser().getDisplayName();
+
+        setContentView(R.layout.activity_user_profile);
+
+        mtwPlayerID = (TextView) findViewById(R.id.twPlayerID);
+        mtwLastName = (TextView) findViewById(R.id.twLastName);
+        mtwFirstName = (TextView) findViewById(R.id.twFirstName);
+        mtwPlayerRank = (TextView) findViewById(R.id.twRank);
 
         //New ChildEventListener that will change the value of the textView according to the current
         //logged in user
-        FirebaseDatabase.getInstance().getReference()
+
+
+        dbRefWrapped
                 .child("players")
                 .child(sciper)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -38,6 +47,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Player p = dataSnapshot.getValue(Player.class);
                         mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
+                        System.out.println(p.getID().toString());
                         mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
                         mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
                         mtwPlayerRank.setText(mtwPlayerRank.getText() + " " + p.getRank().toString());
@@ -48,21 +58,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     }
                 });
-
-        setContentView(R.layout.activity_user_profile);
-
-        // Subscribe to FirebaseMessaging topic
-        FirebaseMessaging.getInstance().subscribeToTopic("test-n");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        mtwPlayerID = (TextView) findViewById(R.id.twPlayerID);
-        mtwLastName = (TextView) findViewById(R.id.twLastName);
-        mtwFirstName = (TextView) findViewById(R.id.twFirstName);
-        mtwPlayerRank = (TextView) findViewById(R.id.twRank);
     }
 
     public void viewMenu(View view) {

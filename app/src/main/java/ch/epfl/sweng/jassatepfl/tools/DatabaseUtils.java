@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.MatchActivity;
@@ -14,6 +13,7 @@ import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 
 /**
  * Utils fonctions to retrieve/add from/to Database
@@ -33,10 +33,10 @@ public class DatabaseUtils {
      * @param match   The match to add player to.
      */
     public static void addPlayerToMatch(final Context context,
-                                        final DatabaseReference ref,
-                                        final String matchID,
-                                        final String sciper,
-                                        final Match match) {
+                                 final DBReferenceWrapper ref,
+                                 final String matchID,
+                                 final String sciper,
+                                 final Match match) {
         ref.child("players")
                 .child(sciper)
                 .addListenerForSingleValueEvent(new ValueEventListener() {

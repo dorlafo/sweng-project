@@ -13,8 +13,10 @@ import android.webkit.CookieManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-public final class MainActivity extends AppCompatActivity {
-
+/**
+ * Your app's main activity.
+ */
+public final class MainActivity extends BaseActivity {
     private FirebaseAuth fAuth;
 
     @Override
