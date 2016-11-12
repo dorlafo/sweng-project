@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -157,17 +158,21 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         variantSpinner.setAdapter(variantAdapter);
         variantSpinner.setOnItemSelectedListener(this);
 
+        // Player list
         TextView emptyList = new TextView(this);
         emptyList.setText(R.string.create_empty_list);
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-        emptyList.setTextColor(Color.BLACK);
+        emptyList.setTextColor(Color.GRAY);
 
-        //TODO: Doesn't show players... --> fix this
+        //TODO: Doesn't show players... --> fix this + make clicking on player ask to remove him
         ListView playersLV = (ListView) findViewById(R.id.create_player_list);
+        ((ViewGroup) playersLV.getParent()).addView(emptyList);
         playersLV.setEmptyView(emptyList);
+        playersLV.setBackgroundColor(0xFAFAFA);
+
         playersToAdd = matchBuilder.getPlayerList();
         ArrayAdapter<Player> playerArrayAdapter = new ArrayAdapter<>(this,
-                R.layout.player_list_element, playersToAdd);
+                android.R.layout.simple_list_item_1, playersToAdd);
         playerArrayAdapter.setNotifyOnChange(true);
         playersLV.setAdapter(playerArrayAdapter);
 
