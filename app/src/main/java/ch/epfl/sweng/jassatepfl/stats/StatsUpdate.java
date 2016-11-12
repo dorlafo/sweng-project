@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl.stats;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,8 +43,8 @@ public class StatsUpdate {
                        Match.GameVariant variant,
                        String matchId) {
         this.timestamp = timestamp;
-        this.winners = winners;
-        this.losers = losers;
+        this.winners = new ArrayList<>(winners);
+        this.losers = new ArrayList<>(losers);
         this.scoreWin = scoreWin;
         this.scoreLost = scoreLost;
         this.variant = variant;
