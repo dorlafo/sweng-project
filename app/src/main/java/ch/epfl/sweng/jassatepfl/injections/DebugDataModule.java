@@ -11,15 +11,14 @@ import org.mockito.stubbing.Answer;
 
 import javax.inject.Singleton;
 
-import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
-import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.database.local.Leaf;
 import ch.epfl.sweng.jassatepfl.database.local.Node;
 import ch.epfl.sweng.jassatepfl.database.local.Root;
-import ch.epfl.sweng.jassatepfl.database.local.TreeNode;
+import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.model.Rank;
 import dagger.Module;
 import dagger.Provides;
 
@@ -31,19 +30,20 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-
 /**
- * @author Amaury Combes
- *
  * DebugDataModule is module (i.e. a class that defines a set of providers which are the method
  * annotated with @Provides). The providers can provide their objects in normal mod or mocked mod.
+ *
+ * @author Amaury Combes
  */
 @Module
 public final class DebugDataModule {
+
     private final boolean mockMode;
 
     /**
      * Constructor of the DebugDataModule class
+     *
      * @param provideMocks let us enable the mocking of our objects returned by the providers
      */
     public DebugDataModule(boolean provideMocks) {
@@ -52,11 +52,13 @@ public final class DebugDataModule {
 
     /**
      * A DatabaseReference provider
+     *
      * @return returns a DatabaseReference that can be mocked or not
      */
-    @Provides @Singleton
+    @Provides
+    @Singleton
     public DBReferenceWrapper provideDBReference() {
-        if(mockMode) {
+        if (mockMode) {
             DBRefWrapMock dbRefWrapMock = spy(new DBRefWrapMock(FirebaseDatabase.getInstance().getReference()));
             addMockedBehaviorRef(dbRefWrapMock);
             fillDB(dbRefWrapMock);
@@ -68,11 +70,13 @@ public final class DebugDataModule {
 
     /**
      * A firebase authentification provider
+     *
      * @return returns a firebase authentification that can be mocked or not
      */
-    @Provides @Singleton
+    @Provides
+    @Singleton
     public FirebaseAuth provideDBAuth() {
-        if(mockMode) {
+        if (mockMode) {
             FirebaseAuth fAuth = mock(FirebaseAuth.class);
             addMockedBehaviorAuth(fAuth);
             return fAuth;
@@ -86,7 +90,7 @@ public final class DebugDataModule {
         root.addChild("players");
         root.addChild("matches");
         root.getChild("players")
-               .addChild("696969")
+                .addChild("696969")
                 .setData(new Player(new Player.PlayerID("696969"), "LeBricoleur", "Bob", new Rank(1000)));
     }
 
@@ -157,9 +161,9 @@ public final class DebugDataModule {
                 Player p = null;
                 Match m = null;
 
-                if(((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Player) {
+                if (((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Player) {
                     p = (Player) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
-                } else if(((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Match) {
+                } else if (((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Match) {
                     m = (Match) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
                 }
 
@@ -175,4 +179,5 @@ public final class DebugDataModule {
     private void addMockedAddChildEventListener(DBRefWrapMock dbRefWrapMock) {
         //TODO
     }
+
 }

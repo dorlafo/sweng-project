@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="10dp"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/llTitle"
@@ -62,6 +61,7 @@
             android:text="@string/last_name_label"
             android:textSize="18sp"
             android:textStyle="bold"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -99,6 +99,7 @@
             android:text="@string/rank_label"
             android:textSize="18sp"
             android:textStyle="bold"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -135,6 +136,5 @@
             android:text="@string/stats"/>
 
     </LinearLayout>
-
 
 </LinearLayout>

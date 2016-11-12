@@ -3,10 +3,9 @@ package ch.epfl.sweng.jassatepfl;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,8 +20,6 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -54,14 +51,14 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         emptyList.setTextColor(Color.BLACK);
         emptyList.setTextSize(20);
-        playerListView = (ListView)findViewById(android.R.id.list);
+        playerListView = (ListView) findViewById(android.R.id.list);
         ((ViewGroup) playerListView.getParent()).addView(emptyList);
         playerListView.setEmptyView(emptyList);
 
 
         playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView , View view , int position ,long arg3) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
                 final Player player = adapter.getItem(position);
                 new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
                         .setTitle(R.string.invite_player_text)
@@ -103,14 +100,14 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
     @Override
     public boolean onQueryTextChange(String newText) {
         // Modify query when user changes the search text
-        DBReferenceWrapper ref  =  dbRefWrapped.child("players");
+        DBReferenceWrapper ref = dbRefWrapped.child("players");
         ref.orderByChild("firstName").startAt(newText).endAt(newText + "z").limitToFirst(50).addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
                         List<Player> playerList = new ArrayList<Player>();
-                        while(iterator.hasNext()){
+                        while (iterator.hasNext()) {
                             playerList.add(iterator.next().getValue(Player.class));
                         }
                         adapter = new PlayerListAdapter(InvitePlayerToMatchActivity.this, R.layout.player_list_element, playerList);
@@ -127,12 +124,12 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
     }
 
     @Override
-    public void onClick(View view){
-        switch(view.getId()) {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.invite_button:
                 Intent resultIntent = new Intent();
-                if(!playerToAdd.isEmpty()) {
-                    for(Player p : playerToAdd) {
+                if (!playerToAdd.isEmpty()) {
+                    for (Player p : playerToAdd) {
                         resultIntent.putExtra("player" + playerToAdd.indexOf(p), p.getID().toString());
                     }
                     resultIntent.putExtra("players_added", playerToAdd.size());
@@ -146,4 +143,5 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                 break;
         }
     }
+
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_invite_player_to_match"
     android:layout_width="match_parent"
@@ -24,17 +25,17 @@
             android:background="@android:color/background_light"
             android:divider="@color/listview_divider_color"
             android:dividerHeight="@dimen/listview_divider_height"
-            android:drawSelectorOnTop="true" />
+            android:drawSelectorOnTop="true"/>
 
     </FrameLayout>
 
     <Button
-        android:text="@string/invite"
+        android:id="@+id/invite_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/match_list_view"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
-        android:id="@+id/invite_button" />
+        android:text="@string/invite"/>
 
 </RelativeLayout>

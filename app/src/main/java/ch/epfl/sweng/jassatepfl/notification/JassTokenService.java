@@ -19,4 +19,5 @@ public class JassTokenService extends FirebaseInstanceIdService {
             ServerInterface.getInstance().registerSciperToken(sciper, refreshedToken);
         }
     }
+
 }

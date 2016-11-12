@@ -12,12 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
-
 
 /**
  * Activity displaying matches as a scrolling list.

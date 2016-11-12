@@ -4,13 +4,14 @@ package ch.epfl.sweng.jassatepfl.database.local;
 import java.util.Set;
 
 /**
- * @author Amaury Combes
- *
  * The leaf class is a particular case of the Node interface. It represents the bottom of our
  * database.
  * Some operations are not supported
+ *
+ * @author Amaury Combes
  */
 public class Leaf implements Node {
+
     private String id;
     private Object data;
 
@@ -69,6 +70,6 @@ public class Leaf implements Node {
     @Override
     public void dropChildren() {
         throw new UnsupportedOperationException();
-
     }
+
 }

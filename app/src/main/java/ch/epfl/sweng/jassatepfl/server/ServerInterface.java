@@ -18,6 +18,7 @@ import java.net.URL;
  * Singleton class abstracting interactions with the server.
  */
 public class ServerInterface {
+
     private static final String SERVER_URL = "http://vps333923.ovh.net";
     private static final ServerInterface instance = new ServerInterface();
     private static Gson gson = new Gson();
@@ -50,8 +51,8 @@ public class ServerInterface {
     /**
      * Registration with notification server
      *
-     * @param sciper         User sciper to register
-     * @param token Refresh token to send
+     * @param sciper User sciper to register
+     * @param token  Refresh token to send
      */
     public void registerSciperToken(String sciper, String token) {
         JsonObject data = new JsonObject();
@@ -78,4 +79,5 @@ public class ServerInterface {
                 urlConnection.disconnect();
         }
     }
+
 }

@@ -23,11 +23,11 @@ public final class MapsActivityTest extends
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+        getActivity();
     }
 
     @Test
     public void testSwitchToListFromMap() {
-        getActivity();
         onView(withId(R.id.switch_to_list)).perform(click());
         onView(withId(android.R.id.list)).check(matches(isEnabled()));
     }

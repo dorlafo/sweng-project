@@ -8,8 +8,6 @@ import android.support.v7.app.AlertDialog;
  *
  * @author Alexis Montavon
  */
-
-//TODO: Test this method...have to see how
 public class ErrorHandlerUtils {
 
     /**
@@ -19,6 +17,7 @@ public class ErrorHandlerUtils {
      * @param titleId   The title ID in res.value.string
      * @param messageId Error Message
      */
+//TODO: Test this method...have to see how
     public static void sendErrorMessage(Context context,
                                         int titleId,
                                         int messageId) {
@@ -27,4 +26,5 @@ public class ErrorHandlerUtils {
                 .setMessage(messageId)
                 .show();
     }
+
 }

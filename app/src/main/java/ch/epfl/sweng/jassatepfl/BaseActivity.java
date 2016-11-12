@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 
 public abstract class BaseActivity extends AppCompatActivity {
+
     @Inject
     public DBReferenceWrapper dbRefWrapped;
     @Inject
@@ -26,4 +27,3 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 }
-

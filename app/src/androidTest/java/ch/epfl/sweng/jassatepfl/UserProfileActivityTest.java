@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.util.ArraySet;
 import android.widget.TextView;
 
 import org.junit.Test;
@@ -9,20 +8,16 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.jassatepfl.database.local.Root;
-import ch.epfl.sweng.jassatepfl.database.local.TreeNode;
 import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;
-
-import static org.mockito.Mockito.verify;
 
 /**
  * UserProfileActivityTest show an example of mock usage
  */
 public final class UserProfileActivityTest extends InjectedBaseActivityTest {
-    UserProfileActivity act;
 
+    UserProfileActivity act;
 
     public UserProfileActivityTest() {
         super(UserProfileActivity.class);
@@ -59,4 +54,5 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
         //Reset the local database
         dbRefWrapMock.reset();
     }
+
 }

@@ -14,12 +14,11 @@ import ch.epfl.sweng.jassatepfl.database.local.TreeNode;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
-import static org.mockito.ArgumentMatchers.any;
-
 /**
  * @author Amaury Combes
  */
 public class DBRefWrapMock extends DBReferenceWrapper {
+
     private Node currentNode;
 
     public DBRefWrapMock(DatabaseReference dbRef) {
@@ -93,7 +92,7 @@ public class DBRefWrapMock extends DBReferenceWrapper {
      */
     public void addPlayers(Set<Player> players) {
         TreeNode playersNode = ((Root) currentNode).getChild("players");
-        for(Player p: players) {
+        for (Player p : players) {
             String playerId = p.getID().toString();
             playersNode.addChild(playerId);
             playersNode.getChild(playerId).setData(p);
@@ -109,10 +108,11 @@ public class DBRefWrapMock extends DBReferenceWrapper {
      */
     public void addMatches(Set<Match> matches) {
         TreeNode playersNode = ((Root) currentNode).getChild("matches");
-        for(Match m: matches) {
+        for (Match m : matches) {
             String matchID = m.getMatchID();
             playersNode.addChild(matchID);
             playersNode.getChild(matchID).setData(m);
         }
     }
+
 }

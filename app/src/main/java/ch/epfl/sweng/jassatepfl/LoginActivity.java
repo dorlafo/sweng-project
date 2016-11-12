@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.notification.JassTokenService;
 import ch.epfl.sweng.jassatepfl.server.ServerInterface;
 import ch.epfl.sweng.jassatepfl.tequila.AuthClient;
 import ch.epfl.sweng.jassatepfl.tequila.AuthServer;

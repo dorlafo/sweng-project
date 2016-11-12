@@ -4,14 +4,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
@@ -40,9 +36,9 @@ public class MatchActivity extends BaseActivity {
         /* Notification onClick handler.
          * Will display dialog Box depending on the notification received.
          */
-        if(startIntent.hasExtra("notif")) {
+        if (startIntent.hasExtra("notif")) {
             final String matchID = startIntent.getStringExtra("matchId");
-            switch(startIntent.getStringExtra("notif")) {
+            switch (startIntent.getStringExtra("notif")) {
                 case "matchfull":
                     ref.child("matches").child(startIntent.getStringExtra("matchId"))
                             .addListenerForSingleValueEvent(new ValueEventListener() {

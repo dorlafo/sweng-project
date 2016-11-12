@@ -1,8 +1,8 @@
 package ch.epfl.sweng.jassatepfl;
 
 import android.support.test.InstrumentationRegistry;
-import android.test.ActivityInstrumentationTestCase2;
 import android.support.test.espresso.contrib.PickerActions;
+import android.test.ActivityInstrumentationTestCase2;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -38,7 +38,6 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
-
 /**
  * Test class for CreateMatchActivity
  *
@@ -71,7 +70,6 @@ public final class CreateMatchActivityTest extends ActivityInstrumentationTestCa
         onView(withId(R.id.variant_spinner)).perform(click());
         onData(allOf(is(instanceOf(Match.GameVariant.class)), is(CLASSIC))).perform(click());
     }
-
 
     @Test
     public void testInputDescription() {

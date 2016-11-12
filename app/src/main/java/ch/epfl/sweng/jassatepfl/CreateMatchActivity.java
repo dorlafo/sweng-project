@@ -5,11 +5,13 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,8 +54,6 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.GameVariant;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.server.ServerInterface;
-import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
-import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
 import ch.epfl.sweng.jassatepfl.tools.DatePickerFragment;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
@@ -96,7 +96,7 @@ public class CreateMatchActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_match);
         matchBuilder = new Match.Builder();
-        locationProvider = new LocationProvider(this);
+        locationProvider = new LocationProvider(this, false);
 
         createMatchButton = (Button) findViewById(R.id.create_create_button);
         createMatchButton.setEnabled(false);
@@ -165,10 +165,15 @@ public class CreateMatchActivity extends BaseActivity implements
         variantSpinner.setOnItemSelectedListener(this);
 
         //TODO: Doesn't show players... --> fix this
-        ListView playersLV = (ListView)findViewById(android.R.id.list);
-        playersLV.setEmptyView(findViewById(android.R.id.empty));
+        TextView emptyList = new TextView(this);
+        emptyList.setText(R.string.empty_match_list);
+        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        emptyList.setTextColor(Color.BLACK);
+
+        ListView playersLV = (ListView) findViewById(R.id.create_player_list);
+        playersLV.setEmptyView(emptyList);
         playersToAdd = matchBuilder.getPlayerList();
-        ArrayAdapter<Player> playerArrayAdapter = new ArrayAdapter<Player>(this,
+        ArrayAdapter<Player> playerArrayAdapter = new ArrayAdapter<>(this,
                 R.layout.player_list_element, playersToAdd);
         playerArrayAdapter.setNotifyOnChange(true);
         playersLV.setAdapter(playerArrayAdapter);
@@ -247,8 +252,8 @@ public class CreateMatchActivity extends BaseActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Add all players sent by InvitePlayerToMatchActivity
-        if(resultCode == RESULT_OK) {
-            switch(requestCode){
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
                 case ADD_PLAYER_REQUEST:
                     int playerNum = data.getIntExtra("players_added", 0);
                     for (int i = 0; i < playerNum; i++) {

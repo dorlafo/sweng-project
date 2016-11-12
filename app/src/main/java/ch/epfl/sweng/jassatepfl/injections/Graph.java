@@ -6,14 +6,13 @@ import ch.epfl.sweng.jassatepfl.BaseActivity;
 import ch.epfl.sweng.jassatepfl.BaseAppCompatActivity;
 import ch.epfl.sweng.jassatepfl.BaseFragmentActivity;
 import ch.epfl.sweng.jassatepfl.BaseListActivity;
-import ch.epfl.sweng.jassatepfl.injections.DaggerGraph;
 import dagger.Component;
 
 /**
- * @author Amaury Combes
- *
  * The Graph interface represents a mapping from the returns of the providers to the field of the
  * injected activity
+ *
+ * @author Amaury Combes
  */
 @Singleton
 @Component(modules = {DebugDataModule.class})
@@ -21,30 +20,35 @@ public interface Graph {
 
     /**
      * Injects providers return values to the BaseActivity
+     *
      * @param activity the activity which will be injected
      */
     void inject(BaseActivity activity);
 
     /**
      * Injects providers return values to the BaseListActivity
+     *
      * @param activity the activity which will be injected
      */
     void inject(BaseListActivity activity);
 
     /**
      * Injects providers return values to the BaseFragmentActivity
+     *
      * @param activity the activity which will be injected
      */
     void inject(BaseFragmentActivity activity);
 
     /**
      * Injects providers return values to the BaseFragmentActivity
+     *
      * @param activity the activity which will be injected
      */
     void inject(InjectedBaseActivityTest activity);
 
     /**
      * Injects providers return values to the BaseAppCompatActivity
+     *
      * @param activity the activity which will be injected
      */
     void inject(BaseAppCompatActivity activity);

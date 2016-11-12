@@ -4,12 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Amaury Combes
- *
  * The root class is a special case of the Node interface. It represents the top of our tree
  * structure.
+ *
+ * @author Amaury Combes
  */
 public class Root implements Node {
+
     private final String id;
     private Set<Node> children;
 
@@ -35,8 +36,8 @@ public class Root implements Node {
 
     @Override
     public TreeNode getChild(String id) {
-        for(Node n: children) {
-            if(n.getId().equals(id)) {
+        for (Node n : children) {
+            if (n.getId().equals(id)) {
                 return (TreeNode) n;
             }
         }
@@ -59,4 +60,5 @@ public class Root implements Node {
     public void dropChildren() {
         children = new HashSet<>();
     }
+
 }

@@ -3,12 +3,12 @@ package ch.epfl.sweng.jassatepfl.database.local;
 import java.util.Set;
 
 /**
- * @author Amaury Combes
- *
  * The Node interface represents a link to an element of the local database used for tests
  * This interface is implemented by multiple class and some operations might not be supported
  * in all of them. This is because the data structure has some specific architecture (i.e. a three
- * of height 3)
+ * of height 3).
+ *
+ * @author Amaury Combes
  */
 public interface Node {
 
@@ -56,4 +56,3 @@ public interface Node {
     public void dropChildren();
 
 }
-
