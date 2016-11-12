@@ -96,7 +96,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_maps, null, false);
+        View contentView = inflater.inflate(R.layout.activity_create_match, null, false);
         drawer.addView(contentView, 0);
 
         matchBuilder = new Match.Builder();
@@ -121,17 +121,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     return true;
                 }
                 return false;
-            }
-        });
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String description = ((TextView) v).getText().toString();
-                    if (description.length() != 0) {
-                        matchBuilder.setDescription(description);
-                    }
-                }
             }
         });
 
@@ -168,12 +157,12 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         variantSpinner.setAdapter(variantAdapter);
         variantSpinner.setOnItemSelectedListener(this);
 
-        //TODO: Doesn't show players... --> fix this
         TextView emptyList = new TextView(this);
         emptyList.setText(R.string.create_empty_list);
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         emptyList.setTextColor(Color.BLACK);
 
+        //TODO: Doesn't show players... --> fix this
         ListView playersLV = (ListView) findViewById(R.id.create_player_list);
         playersLV.setEmptyView(emptyList);
         playersToAdd = matchBuilder.getPlayerList();
@@ -194,6 +183,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                         currentLocation.getLongitude()));
             }
         }
+
         addCurrentUserToBuilder();
     }
 
@@ -394,6 +384,15 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     }
 
     /**
+     * Helper method to display expiration date as string.
+     */
+    private void displayCurrentExpirationDate() {
+        TextView currentExpirationDate = (TextView) findViewById(R.id.current_expiration_time);
+        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.date_format_match_creation), Locale.FRENCH);
+        currentExpirationDate.setText(dateFormat.format(matchCalendar.getTimeInMillis()));
+    }
+
+    /**
      * Async class necessary to send invite message in background
      *
      * @author Alexis Montavon
@@ -409,15 +408,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             }
             return "";
         }
-    }
-
-    /**
-     * Helper method to display expiration date as string.
-     */
-    private void displayCurrentExpirationDate() {
-        TextView currentExpirationDate = (TextView) findViewById(R.id.current_expiration_time);
-        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.date_format_match_creation), Locale.FRENCH);
-        currentExpirationDate.setText(dateFormat.format(matchCalendar.getTimeInMillis()));
     }
 
 }

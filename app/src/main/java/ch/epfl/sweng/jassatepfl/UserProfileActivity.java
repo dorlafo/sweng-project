@@ -27,7 +27,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
         sciper = fAuth.getCurrentUser().getDisplayName();
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_maps, null, false);
+        View contentView = inflater.inflate(R.layout.activity_user_profile, null, false);
         drawer.addView(contentView, 0);
 
         mtwPlayerID = (TextView) findViewById(R.id.twPlayerID);
