@@ -7,16 +7,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
@@ -34,7 +31,7 @@ import ch.epfl.sweng.jassatepfl.tequila.AuthServer;
 import ch.epfl.sweng.jassatepfl.tequila.OAuth2Config;
 import ch.epfl.sweng.jassatepfl.tequila.Profile;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -45,14 +42,16 @@ public class LoginActivity extends AppCompatActivity {
     private static OAuth2Config config;
     private static final int REQUEST_CODE_AUTHENTICATE = 0;
 
-    private FirebaseAuth fAuth;
+    //TODO remove
+    //private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        fAuth = FirebaseAuth.getInstance();
+        //TODO remove
+        //fAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -184,7 +183,7 @@ public class LoginActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<AuthResult> task) {
                                             Log.d(TAG, "Signup was successfull? " + task.isSuccessful());
                                             if (task.isSuccessful()) {
-                                                FirebaseDatabase.getInstance().getReference().child("players")
+                                                dbRefWrapped.child("players")
                                                         .child(profile.sciper).setValue(new Player(
                                                         new Player.PlayerID(Long.parseLong(profile.sciper)),
                                                         profile.lastNames,

@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,8 +30,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -43,6 +40,7 @@ import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.LocationProviderListener;
 import ch.epfl.sweng.jassatepfl.tools.MatchStringifier;
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 
 /**
  * Activity displaying matches as markers on a Google Maps Fragment.
@@ -50,7 +48,7 @@ import ch.epfl.sweng.jassatepfl.tools.MatchStringifier;
  * Clicking on a marker displays the match information and clicking on
  * the information window prompts the user to join the match.
  */
-public class MapsActivity extends FragmentActivity implements
+public class MapsActivity extends BaseFragmentActivity implements
         OnMapReadyCallback, LocationProviderListener {
 
     private GoogleMap matchMap;
@@ -127,15 +125,16 @@ public class MapsActivity extends FragmentActivity implements
                         .setMessage(R.string.join_message)
                         .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                                //TODO remove this
+                                //final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                 final String matchID = marker.getTag().toString();
-                                ref.child("matches").child(matchID)
+                                dbRefWrapped.child("matches").child(matchID)
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 match = dataSnapshot.getValue(Match.class);
                                                 DatabaseUtils.addPlayerToMatch(MapsActivity.this,
-                                                        ref,
+                                                        dbRefWrapped,
                                                         matchID,
                                                         FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
                                                         match);
@@ -203,7 +202,7 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     private void displayNearbyMatches() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("matches");
+        DBReferenceWrapper ref = dbRefWrapped.child("matches");
 
         ref.addChildEventListener(new ChildEventListener() {
             private final Map<String, Marker> markers = new HashMap<>();

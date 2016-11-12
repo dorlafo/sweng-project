@@ -18,9 +18,9 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
-
-public class MatchActivity extends AppCompatActivity {
-
+public class MatchActivity extends BaseActivity {
+    private String matchId;
+    private final static String TAG = MatchActivity.class.getSimpleName();
     private Match match;
     private Player player;
 
@@ -115,15 +115,14 @@ public class MatchActivity extends AppCompatActivity {
                             .setMessage(R.string.join_message)
                             .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                                    ref.child("matches").child(matchID)
+                                    dbRefWrapped.child("matches").child(matchID)
                                             .addListenerForSingleValueEvent(new ValueEventListener() {
 
                                                 @Override
                                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                                     match = dataSnapshot.getValue(Match.class);
                                                     DatabaseUtils.addPlayerToMatch(MatchActivity.this,
-                                                            ref,
+                                                            dbRefWrapped,
                                                             matchID,
                                                             FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
                                                             match);
