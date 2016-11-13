@@ -1,14 +1,19 @@
 package ch.epfl.sweng.jassatepfl;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,15 +26,23 @@ import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
  * <br>
  * Clicking on a list item prompts the user to join the match.
  */
-public class MatchListActivity extends BaseListActivity {
+public class MatchListActivity extends BaseActivityWithNavDrawer
+        implements OnItemClickListener {
 
     private MatchListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_list, drawer, false);
+        drawer.addView(contentView, 0);
 
-        setContentView(R.layout.activity_list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().hide();
+        }
 
         TextView emptyList = new TextView(this);
         emptyList.setText(R.string.list_empty_list);
@@ -43,10 +56,11 @@ public class MatchListActivity extends BaseListActivity {
         mAdapter = new MatchListAdapter(this);
 
         listView.setAdapter(mAdapter);
+        listView.setOnItemClickListener(this);
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, final int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
         // Opens dialog box to ask user if he wants to join match
         // Allows user to cancel or accept
         new AlertDialog.Builder(this)
@@ -70,7 +84,6 @@ public class MatchListActivity extends BaseListActivity {
                     }
                 })
                 .show();
-        super.onListItemClick(l, v, position, id);
     }
 
     @Override

@@ -54,7 +54,8 @@
             android:label="@string/title_activity_create"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".MatchListActivity"/>
+            android:name=".MatchListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
