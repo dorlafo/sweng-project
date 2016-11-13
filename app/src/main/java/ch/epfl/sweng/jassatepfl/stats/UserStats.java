@@ -28,6 +28,8 @@ public class UserStats {
     // The player rank by date (store the value each day to study progression).
     private LinkedList<Tuple2<Long, Rank>> rankByDate = new LinkedList<>();
 
+    // We have to use strings instead of real objects as Firebase does not support Maps with
+    // no string - keys
     // How many times different game variants have been played.
     private Map<String, Integer> variants = new HashMap<>();
     // How many matches have been as a partner of other players.
