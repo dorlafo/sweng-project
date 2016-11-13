@@ -17,8 +17,8 @@ import static org.junit.Assert.*;
  */
 public class UserStatsTest {
 
-    static Player.PlayerID id = new Player.PlayerID("000000");
-    static StatsUpdate update = new StatsUpdate.Builder()
+    Player.PlayerID id = new Player.PlayerID("000000");
+    StatsUpdate update = new StatsUpdate.Builder()
             .addLosers(new Player.PlayerID("111111"), new Player.PlayerID("222222"))
             .addWinners(new Player.PlayerID("333333"), new Player.PlayerID("000000"))
             .setTimestamp(1478908800)
@@ -28,7 +28,7 @@ public class UserStatsTest {
             .setMatchId("lol")
             .build();
 
-    static UserStats stats = new UserStats(id).update(update);
+    UserStats stats = new UserStats(id).update(update);
 
     @Test
     public void getPlayerId() throws Exception {
@@ -70,25 +70,25 @@ public class UserStatsTest {
 
     @Test
     public void getVariants() throws Exception {
-        Map<Match.GameVariant, Integer> mp = stats.getVariants();
+        Map<String, Integer> mp = stats.getVariants();
         assertThat(mp.size(), is(1));
-        assertThat(mp.get(Match.GameVariant.CLASSIC), is(1));
+        assertThat(mp.get(Match.GameVariant.CLASSIC.toString()), is(1));
     }
 
     @Test
     public void getPartners() throws Exception {
-        Map<Player.PlayerID, Integer> mp = stats.getPartners();
+        Map<String, Integer> mp = stats.getPartners();
         assertThat(mp.size(), is(1));
-        assertThat(mp.get(new Player.PlayerID(333333)), is(1));
-        assertThat(mp.get(new Player.PlayerID(111111) )== null, is(true));
+        assertThat(mp.get("333333"), is(1));
+        assertThat(mp.get("111111")== null, is(true));
     }
 
     @Test
     public void getWonWith() throws Exception {
-        Map<Player.PlayerID, Integer> mp = stats.getWonWith();
+        Map<String, Integer> mp = stats.getWonWith();
         assertThat(mp.size(), is(1));
-        assertThat(mp.get(new Player.PlayerID(333333)), is(1));
-        assertThat(mp.get(new Player.PlayerID(111111) )== null, is(true));
+        assertThat(mp.get("333333"), is(1));
+        assertThat(mp.get("111111") == null, is(true));
     }
 
     @Test
