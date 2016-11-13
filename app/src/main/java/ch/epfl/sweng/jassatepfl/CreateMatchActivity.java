@@ -91,7 +91,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     private ImageButton placePickerButton;
     private Match.Builder matchBuilder;
     private LocationProvider locationProvider;
-    ArrayAdapter<Player> playerArrayAdapter;
+    private ArrayAdapter<Player> playerArrayAdapter;
     private Calendar matchCalendar;
 
     @Override
@@ -105,7 +105,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         locationProvider = new LocationProvider(this, false);
 
         createMatchButton = (Button) findViewById(R.id.create_create_button);
-        createMatchButton.setEnabled(false);
         createMatchButton.setOnClickListener(this);
 
         // Description input
@@ -184,8 +183,15 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                         .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
+                                    // TODO: should we add the option to remove the creator of the match? if yes, change the createdBy method of match
                                     matchBuilder.removePlayer(player);
                                     playerArrayAdapter.remove(player);
+                                    if (matchBuilder.getPlayerList().size() == 0) {
+                                        Toast.makeText(CreateMatchActivity.this,
+                                                R.string.toast_cannot_create_with_no_player, Toast.LENGTH_SHORT)
+                                                .show();
+                                        createMatchButton.setEnabled(false);
+                                    }
                                 } catch (IllegalStateException | IllegalArgumentException e) {
                                     // TODO: probably not possible to raise exception here
                                 }
@@ -290,6 +296,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                                         try {
                                             matchBuilder.addPlayer(player);
                                             playerArrayAdapter.add(player);
+                                            createMatchButton.setEnabled(true);
                                             // TODO: handle these errors differently
                                         } catch (IllegalStateException e) {
                                             ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
@@ -403,7 +410,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                                 Player currentUser = dataSnapshot.getValue(Player.class);
                                 matchBuilder.addPlayer(currentUser);
                                 playerArrayAdapter.add(currentUser);
-                                createMatchButton.setEnabled(true);
                             } catch (IllegalStateException e) {
                                 ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
                                         R.string.error_cannot_join, R.string.error_match_full);
