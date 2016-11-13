@@ -164,19 +164,12 @@ public class CreateMatchActivity extends BaseActivity implements
         variantSpinner.setAdapter(variantAdapter);
         variantSpinner.setOnItemSelectedListener(this);
 
-        //TODO: Doesn't show players... --> fix this
         TextView emptyList = new TextView(this);
         emptyList.setText(R.string.empty_match_list);
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         emptyList.setTextColor(Color.BLACK);
 
-        ListView playersLV = (ListView) findViewById(R.id.create_player_list);
-        playersLV.setEmptyView(emptyList);
         playersToAdd = matchBuilder.getPlayerList();
-        ArrayAdapter<Player> playerArrayAdapter = new ArrayAdapter<>(this,
-                R.layout.player_list_element, playersToAdd);
-        playerArrayAdapter.setNotifyOnChange(true);
-        playersLV.setAdapter(playerArrayAdapter);
 
         // Place picker
         placePickerButton = (ImageButton) findViewById(R.id.create_place_picker_button);

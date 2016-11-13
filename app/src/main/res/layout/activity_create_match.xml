@@ -175,33 +175,6 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/create_row_player_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/create_row_location"
-        android:layout_marginBottom="@dimen/create_row_margin"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/players_in_match"
-            android:textAlignment="center"
-            android:textSize="@dimen/create_text_size"/>
-
-        <ListView
-            android:id="@+id/create_player_list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@android:color/background_light"
-            android:divider="@color/listview_divider_color"
-            android:dividerHeight="@dimen/listview_divider_height"
-            android:drawSelectorOnTop="true"/>
-
-    </LinearLayout>
-
     <Button
         android:id="@+id/create_create_button"
         android:layout_width="wrap_content"
