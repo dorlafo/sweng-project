@@ -26,10 +26,10 @@ public final class MatchListActivityTest extends
         getActivity();
     }
 
-    @Test
+    /*@Test
     public void testSwitchToMapFromList() {
-        onView(withId(R.id.switch_to_map)).perform(click());
-        onView(withId(R.id.switch_to_list)).check(matches(isDisplayed()));
-    }
+        onView(withId(R.id.list_menu_button)).perform(click());
+        onView(withId(R.id.maps_menu_button)).check(matches(isDisplayed()));
+    }*/
 
 }

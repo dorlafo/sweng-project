@@ -3,17 +3,18 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,6 +77,14 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
             setSupportActionBar(toolbar);
             getSupportActionBar().hide();
         }
+
+        ImageButton menuButton = (ImageButton) findViewById(R.id.maps_menu_button);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
 
         createMap();
 
@@ -206,11 +215,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                             location.getLongitude()), 15f, 0f, 0f)));
         }
         userLastLocation = new LatLng(location.getLatitude(), location.getLongitude());
-    }
-
-    public void switchToList(View view) {
-        Intent intent = new Intent(this, MatchListActivity.class);
-        startActivity(intent);
     }
 
     private void createMap() {
