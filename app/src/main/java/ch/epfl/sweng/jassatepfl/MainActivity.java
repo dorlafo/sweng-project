@@ -3,11 +3,7 @@ package ch.epfl.sweng.jassatepfl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-
-import com.google.firebase.iid.FirebaseInstanceId;
 
 public final class MainActivity extends BaseActivity {
 

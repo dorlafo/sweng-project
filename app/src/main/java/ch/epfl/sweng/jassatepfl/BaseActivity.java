@@ -1,6 +1,7 @@
 package ch.epfl.sweng.jassatepfl;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
@@ -31,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         App.getInstance().graph().inject(this);
 
         fAuth = FirebaseAuth.getInstance();
+        Log.d("BaseActivity", "fAuth.getCurrentUser:" + fAuth.getCurrentUser());
         showLogin();
     }
 

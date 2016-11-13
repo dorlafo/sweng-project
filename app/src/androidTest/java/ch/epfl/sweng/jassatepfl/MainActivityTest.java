@@ -1,5 +1,6 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.Suppress;
 
 import org.junit.Test;
@@ -15,8 +16,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public final class MainActivityTest extends InjectedBaseActivityTest {
 
-    MainActivity act;
-
     public MainActivityTest() {
         super(MainActivity.class);
     }
@@ -24,17 +23,18 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        //injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+        getActivity();
     }
 
     @Test
     public void testCantShowProfileIfLoggedOff() {
-        act = (MainActivity)  getActivity();
         onView(withId(R.id.login_button)).check(matches(withText(R.string.login_button_text)));
     }
 
     //Ignoring this test for now because we need mock test to mock the login and access the activity
     //This will be resolved in Sprint #7
-    @Suppress
+    @Test
     public void testSwitchToMatchListActivity() {
         onView(withId(R.id.main_list_button)).perform(click());
         onView(withId(R.id.switch_to_map)).check(matches(isDisplayed()));
@@ -42,7 +42,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
 
     //Ignoring this test for now because we need mock test to mock the login and access the activity
     //This will be resolved in Sprint #7
-    @Suppress
+    @Test
     public void testCreateMatchButtonSwitchesToCorrectActivity() {
         getActivity();
         onView(withId(R.id.create_match_button)).perform(click());
@@ -51,7 +51,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
 
     //Ignoring this test for now because we need mock test to mock the login and access the activity
     //This will be resolved in Sprint #7
-    @Suppress
+    @Test
     public void testSwitchToMapsActivity() {
         onView(withId(R.id.main_map_button)).perform(click());
         onView(withId(R.id.switch_to_list)).check(matches(isDisplayed()));
@@ -59,7 +59,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
 
     //Ignoring this test for now because we need mock test to mock the login and access the activity
     //This will be resolved in Sprint #7
-    @Suppress
+    @Test
     public void testCanShowProfile() {
 
         getActivity();
