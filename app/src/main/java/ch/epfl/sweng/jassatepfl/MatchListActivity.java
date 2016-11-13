@@ -1,7 +1,6 @@
 package ch.epfl.sweng.jassatepfl;
 
 
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,9 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
@@ -25,7 +21,7 @@ import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
  * <br>
  * Clicking on a list item prompts the user to join the match.
  */
-public class MatchListActivity extends ListActivity {
+public class MatchListActivity extends BaseListActivity {
 
     private MatchListAdapter mAdapter;
 
@@ -58,12 +54,13 @@ public class MatchListActivity extends ListActivity {
                 .setMessage(R.string.join_message)
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        //final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                         final Match match = mAdapter.getItem(position);
 
                         DatabaseUtils.addPlayerToMatch(MatchListActivity.this,
-                                FirebaseDatabase.getInstance().getReference(),
+                                dbRefWrapped,
                                 match.getMatchID(),
-                                FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                fAuth.getCurrentUser().getDisplayName(),
                                 match);
                     }
                 })

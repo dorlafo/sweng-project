@@ -8,13 +8,13 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,22 +27,25 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.LocationProviderListener;
 import ch.epfl.sweng.jassatepfl.tools.MatchStringifier;
+
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_ORANGE;
 
 /**
  * Activity displaying matches as markers on a Google Maps Fragment.
@@ -50,28 +53,46 @@ import ch.epfl.sweng.jassatepfl.tools.MatchStringifier;
  * Clicking on a marker displays the match information and clicking on
  * the information window prompts the user to join the match.
  */
-public class MapsActivity extends FragmentActivity implements
+public class MapsActivity extends BaseFragmentActivity implements
         OnMapReadyCallback, LocationProviderListener {
 
     private GoogleMap matchMap;
     private LocationProvider locationProvider;
     private Match match;
+    private LatLng userLastLocation;
+    private Player currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
         createMap();
 
-        locationProvider = new LocationProvider(this);
+        locationProvider = new LocationProvider(this, true);
         locationProvider.setProviderListener(this);
+
+        try {
+            FirebaseDatabase.getInstance().getReference().child("players")
+                    .child(fAuth.getCurrentUser().getDisplayName())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            currentUser = dataSnapshot.getValue(Player.class);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
+        } catch (NullPointerException e) {
+            Toast.makeText(this, R.string.create_toast_no_connection, Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        createMap();
         locationProvider.connectGoogleApiClient();
     }
 
@@ -86,6 +107,10 @@ public class MapsActivity extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         matchMap = googleMap;
         matchMap.getUiSettings().setZoomControlsEnabled(true);
+        if (locationProvider.locationPermissionIsGranted()) {
+            matchMap.setMyLocationEnabled(true);
+        }
+
         matchMap.setInfoWindowAdapter(new InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
@@ -115,6 +140,7 @@ public class MapsActivity extends FragmentActivity implements
                 return infoWindow;
             }
         });
+
         /**
          * When click on one game, opens AlertDialog
          * Provides oppotunity to join match or cancel.
@@ -127,17 +153,18 @@ public class MapsActivity extends FragmentActivity implements
                         .setMessage(R.string.join_message)
                         .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                                //TODO remove this
+                                //final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                 final String matchID = marker.getTag().toString();
-                                ref.child("matches").child(matchID)
+                                dbRefWrapped.child("matches").child(matchID)
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 match = dataSnapshot.getValue(Match.class);
                                                 DatabaseUtils.addPlayerToMatch(MapsActivity.this,
-                                                        ref,
+                                                        dbRefWrapped,
                                                         matchID,
-                                                        FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                                        fAuth.getCurrentUser().getDisplayName(),
                                                         match);
                                             }
 
@@ -158,19 +185,16 @@ public class MapsActivity extends FragmentActivity implements
         });
 
         displayNearbyMatches();
-
-        if (locationProvider.locationPermissionIsGranted()) {
-            matchMap.setMyLocationEnabled(true);
-        }
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        LatLng userCoordinates = new LatLng(location.getLatitude(),
-                location.getLongitude());
-
-        matchMap.animateCamera(CameraUpdateFactory.newCameraPosition(
-                new CameraPosition(userCoordinates, 15f, 0f, 0f)));
+        if (userLastLocation == null) {
+            matchMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+                    new CameraPosition(new LatLng(location.getLatitude(),
+                            location.getLongitude()), 15f, 0f, 0f)));
+        }
+        userLastLocation = new LatLng(location.getLatitude(), location.getLongitude());
     }
 
     public void switchToList(View view) {
@@ -186,24 +210,8 @@ public class MapsActivity extends FragmentActivity implements
         }
     }
 
-    private void displayNearbyMatches(Iterable<Match> matches) {
-        MatchStringifier stringifier = new MatchStringifier(MapsActivity.this);
-        for (Match match : matches) {
-            if (!match.isPrivateMatch()) {
-                stringifier.setMatch(match);
-                Marker marker = matchMap.addMarker(new MarkerOptions()
-                        .position(match.getLocation().toLatLng())
-                        .title(match.getDescription())
-                        .snippet(stringifier.markerSnippet())
-                        .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                marker.setTag(match.getMatchID());
-            }
-        }
-    }
-
     private void displayNearbyMatches() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("matches");
+        DBReferenceWrapper ref = dbRefWrapped.child("matches"); // TODO: filter this
 
         ref.addChildEventListener(new ChildEventListener() {
             private final Map<String, Marker> markers = new HashMap<>();
@@ -243,8 +251,8 @@ public class MapsActivity extends FragmentActivity implements
                         .position(match.getLocation().toLatLng())
                         .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
-                        .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        .icon(BitmapDescriptorFactory.defaultMarker(
+                                match.hasParticipant(currentUser) ? HUE_ORANGE : HUE_BLUE)));
                 marker.setTag(match.getMatchID());
                 return marker;
             }

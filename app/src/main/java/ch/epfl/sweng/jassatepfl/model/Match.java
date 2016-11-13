@@ -216,6 +216,16 @@ public class Match {
         }
     }
 
+    /**
+     * Checks whether the given player is taking part in the match.
+     *
+     * @param player The player
+     * @return true if the player is in the match, false otherwise
+     */
+    public boolean hasParticipant(Player player) {
+        return players.contains(player);
+    }
+
     public static class MatchRank extends Rank {
 
         public MatchRank(int rank) {
@@ -312,6 +322,10 @@ public class Match {
             return this;
         }
 
+        public List<Player> getPlayerList() {
+            ArrayList<Player> playerList = new ArrayList<>(players);
+            return playerList;
+        }
         // TODO: add removePlayer method
 
         public Builder setLocation(GPSPoint location) {

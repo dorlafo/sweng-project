@@ -62,4 +62,12 @@
     <string name="player_joined">A new player has joined your game!</string>
     <string name="player_left">A player left you game</string>
     <string name="match_expired">Your match has expired</string>
+    <string name="add">Add</string>
+    <string name="search_player">Search Player</string>
+    <string name="enter_player_name">Enter player name</string>
+    <string name="players_in_match">Players in Match:</string>
+    <string name="invite_player_text">Invite Player</string>
+    <string name="invite_player_message">Do you want to invite this player</string>
+    <string name="invite">Invite</string>
+    <string name="search_player_list">Search players, add them and click on Invite</string>
 </resources>

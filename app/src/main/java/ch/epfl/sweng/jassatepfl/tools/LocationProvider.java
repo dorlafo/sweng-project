@@ -23,10 +23,11 @@ import com.google.android.gms.location.LocationServices;
  */
 public final class LocationProvider implements ConnectionCallbacks, LocationListener {
 
-    private LocationProviderListener providerListener;
+    private final Activity callingActivity;
     private final PermissionHandler permissionHandler;
+    private final boolean updatesRequested;
 
-    private final Activity activity;
+    private LocationProviderListener providerListener;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
     private Location lastLocation;
@@ -34,12 +35,15 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
     /**
      * Constructs a new LocationProvider with the given activity.
      *
-     * @param activity The activity using the provider
+     * @param callingActivity  The activity using the provider
+     * @param updatesRequested true if the location provider should update the location
+     *                         in real time, false otherwise
      */
-    public LocationProvider(Activity activity) {
-        this.activity = activity;
+    public LocationProvider(Activity callingActivity, boolean updatesRequested) {
+        this.callingActivity = callingActivity;
+        this.updatesRequested = updatesRequested;
 
-        permissionHandler = new PermissionHandler(activity, Manifest.permission.ACCESS_FINE_LOCATION);
+        permissionHandler = new PermissionHandler(callingActivity, Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionHandler.chamallowIsHere()) {
             permissionHandler.requestPermission();
         }
@@ -56,7 +60,9 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
             if (lastLocation != null) {
                 notifyListener(lastLocation);
             }
-            startLocationUpdates();
+            if (updatesRequested) {
+                startLocationUpdates();
+            }
         }
     }
 
@@ -121,7 +127,7 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
      * Builds a new googleApiClient to provide access to location services.
      */
     private synchronized void buildGoogleApiClient() {
-        googleApiClient = new GoogleApiClient.Builder(activity)
+        googleApiClient = new GoogleApiClient.Builder(callingActivity)
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)
                 .build();
@@ -129,8 +135,8 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
 
     private void createLocationRequest() {
         locationRequest = LocationRequest.create()
-                .setInterval(5000)
-                .setFastestInterval(1000)
+                .setInterval(15000)
+                .setFastestInterval(5000)
                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 
