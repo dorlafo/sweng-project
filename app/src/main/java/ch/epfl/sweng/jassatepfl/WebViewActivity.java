@@ -3,7 +3,6 @@ package ch.epfl.sweng.jassatepfl;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -14,7 +13,7 @@ import android.webkit.WebViewClient;
  *
  * @author Alexis Montavon
  */
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivity extends BaseAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

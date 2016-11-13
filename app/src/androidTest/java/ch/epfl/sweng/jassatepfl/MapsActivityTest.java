@@ -22,13 +22,13 @@ public final class MapsActivityTest extends
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+        getActivity();
     }
 
     //Ignoring this test for now because we need mock test to mock the login and access the activity
     //This will be resolved in Sprint #7
     @Suppress
     public void testSwitchToListFromMap() {
-        getActivity();
         onView(withId(R.id.switch_to_list)).perform(click());
         onView(withId(android.R.id.list)).check(matches(isEnabled()));
     }

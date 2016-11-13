@@ -202,17 +202,28 @@ public class Match {
      * and adding a player if the match if full throws an exception.
      *
      * @param player The player to add to the match
-     * @throws IllegalStateException When the match is full
+     * @throws IllegalStateException  When the match is full
+     * @throws IllegalAccessException When the player is already in the match
      */
     public void addPlayer(Player player) throws IllegalStateException, IllegalAccessException {
         if (players.size() >= maxPlayerNumber) {
             throw new IllegalStateException("Match is full.");
         }
-        if(!players.contains(player)) {
+        if (!players.contains(player)) {
             players.add(player);
         } else {
-            throw new IllegalAccessException("Player already in that Match");
+            throw new IllegalAccessException("Player already in that Match.");
         }
+    }
+
+    /**
+     * Checks whether the given player is taking part in the match.
+     *
+     * @param player The player
+     * @return true if the player is in the match, false otherwise
+     */
+    public boolean hasParticipant(Player player) {
+        return players.contains(player);
     }
 
     public static class MatchRank extends Rank {
@@ -267,7 +278,7 @@ public class Match {
         public static final String DEFAULT_DESCRIPTION = "New Match";
         public static final String DEFAULT_ID = "Default Match ID";
 
-        private List<Player> players;
+        private final List<Player> players;
         private GPSPoint location;
         private String description;
         private boolean privateMatch;
@@ -286,7 +297,7 @@ public class Match {
             privateMatch = false;
             gameVariant = CLASSIC;
             maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
-            expirationTime = Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000; // 2 hours after current time
+            expirationTime = Calendar.getInstance().getTimeInMillis() + 1 * 3600 * 1000; // 1 hour after current time
             matchID = DEFAULT_ID;
         }
 
@@ -303,14 +314,18 @@ public class Match {
             if (players.size() >= maxPlayerNumber) {
                 throw new IllegalStateException("Match is full.");
             }
-            if(!players.contains(player)) {
+            if (!players.contains(player)) {
                 players.add(player);
             } else {
-                throw new IllegalAccessException("Player already in that Match");
+                throw new IllegalAccessException("Player already in that Match.");
             }
             return this;
         }
 
+        public List<Player> getPlayerList() {
+            ArrayList<Player> playerList = new ArrayList<>(players);
+            return playerList;
+        }
         // TODO: add removePlayer method
 
         public Builder setLocation(GPSPoint location) {

@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -16,9 +15,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
@@ -29,13 +26,13 @@ import java.io.InputStream;
 import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.notification.JassTokenService;
+import ch.epfl.sweng.jassatepfl.server.ServerInterface;
 import ch.epfl.sweng.jassatepfl.tequila.AuthClient;
 import ch.epfl.sweng.jassatepfl.tequila.AuthServer;
 import ch.epfl.sweng.jassatepfl.tequila.OAuth2Config;
 import ch.epfl.sweng.jassatepfl.tequila.Profile;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseAppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -46,16 +43,12 @@ public class LoginActivity extends AppCompatActivity {
     private static OAuth2Config config;
     private static final int REQUEST_CODE_AUTHENTICATE = 0;
 
-    private FirebaseAuth fAuth;
-
     private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        fAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -149,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
                         if (task.isSuccessful()) {
                             //Adding the user to the database
-                            FirebaseDatabase.getInstance().getReference().child("players")
+                            dbRefWrapped.child("players")
                                     .child(profile.sciper).setValue(new Player(
                                     new Player.PlayerID(Long.parseLong(profile.sciper)),
                                     profile.lastNames,
@@ -225,7 +218,7 @@ public class LoginActivity extends AppCompatActivity {
                 tokens = AuthServer.fetchTokens(config, params[0]);
                 profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
                 signIn(profile);
-                JassTokenService.registerWithServer(profile.sciper, FirebaseInstanceId.getInstance().getToken());
+                ServerInterface.getInstance().registerSciperToken(profile.sciper, FirebaseInstanceId.getInstance().getToken());
             } catch (IOException e) {
                 //TODO: Handle exception
                 Log.e("ERR", "IOException, couldn't fetch token");
@@ -233,7 +226,6 @@ public class LoginActivity extends AppCompatActivity {
             return "profile retrieved";
         }
     }
-
 
     /**
      * Hide the login progress dialog and redirect to the MainActivity

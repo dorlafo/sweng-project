@@ -2,12 +2,10 @@ package ch.epfl.sweng.jassatepfl.tools;
 
 
 import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
+import android.app.Activity;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -25,34 +23,46 @@ import com.google.android.gms.location.LocationServices;
  */
 public final class LocationProvider implements ConnectionCallbacks, LocationListener {
 
-    private LocationProviderListener providerListener;
+    private final Activity callingActivity;
+    private final PermissionHandler permissionHandler;
+    private final boolean updatesRequested;
 
-    private final Context context;
+    private LocationProviderListener providerListener;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
     private Location lastLocation;
 
     /**
-     * Constructs a new LocationProvider with the given context.
+     * Constructs a new LocationProvider with the given activity.
      *
-     * @param context The context using the provider
+     * @param callingActivity  The activity using the provider
+     * @param updatesRequested true if the location provider should update the location
+     *                         in real time, false otherwise
      */
-    public LocationProvider(Context context) {
-        this.context = context;
+    public LocationProvider(Activity callingActivity, boolean updatesRequested) {
+        this.callingActivity = callingActivity;
+        this.updatesRequested = updatesRequested;
+
+        permissionHandler = new PermissionHandler(callingActivity, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionHandler.chamallowIsHere()) {
+            permissionHandler.requestPermission();
+        }
+
         buildGoogleApiClient();
         createLocationRequest();
     }
 
     @Override
+    @SuppressWarnings({"MissingPermission"})
     public void onConnected(@Nullable Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (permissionHandler.permissionIsGranted()) {
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (lastLocation != null) {
                 notifyListener(lastLocation);
             }
-            startLocationUpdates();
+            if (updatesRequested) {
+                startLocationUpdates();
+            }
         }
     }
 
@@ -103,10 +113,21 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
     }
 
     /**
+     * Checks whether the ACCESS_FINE_LOCATION permission has been granted.
+     *
+     * @return true if the current system version is lower than Marshmallow
+     * (no runtime permission needed) or the runtime permission has been granted,
+     * false otherwise.
+     */
+    public boolean locationPermissionIsGranted() {
+        return permissionHandler.permissionIsGranted();
+    }
+
+    /**
      * Builds a new googleApiClient to provide access to location services.
      */
     private synchronized void buildGoogleApiClient() {
-        googleApiClient = new GoogleApiClient.Builder(context)
+        googleApiClient = new GoogleApiClient.Builder(callingActivity)
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)
                 .build();
@@ -114,8 +135,8 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
 
     private void createLocationRequest() {
         locationRequest = LocationRequest.create()
-                .setInterval(5000)
-                .setFastestInterval(1000)
+                .setInterval(15000)
+                .setFastestInterval(5000)
                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 
@@ -123,10 +144,9 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
      * Starts the location updates, notifying the provider whenever
      * the location changes.
      */
+    @SuppressWarnings({"MissingPermission"})
     private void startLocationUpdates() {
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (permissionHandler.permissionIsGranted()) {
             LocationServices.FusedLocationApi
                     .requestLocationUpdates(googleApiClient, locationRequest, this);
         }

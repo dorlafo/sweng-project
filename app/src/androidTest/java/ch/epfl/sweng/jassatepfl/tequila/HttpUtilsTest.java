@@ -2,7 +2,6 @@ package ch.epfl.sweng.jassatepfl.tequila;
 
 import com.google.gson.annotations.SerializedName;
 
-
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -11,7 +10,6 @@ import java.io.IOException;
 
 import static junit.framework.Assert.fail;
 
-
 /**
  * Test for HttpUtils methods
  * Only error case for fetch()
@@ -19,7 +17,6 @@ import static junit.framework.Assert.fail;
  *
  * @author Alexis Montavon
  */
-
 public class HttpUtilsTest {
 
     private static final class JsonProfile {
@@ -64,4 +61,5 @@ public class HttpUtilsTest {
             fail("Should not throw this");
         }
     }
+
 }

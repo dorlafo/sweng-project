@@ -11,6 +11,7 @@ import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
 
+@SuppressWarnings({"EqualsBetweenInconvertibleTypes", "EqualsWithItself", "ObjectEqualsNull"})
 public final class PlayerTest {
 
     private final Player amaury = new Player(new Player.PlayerID(1), "Combes", "Amaury", new Rank(123));

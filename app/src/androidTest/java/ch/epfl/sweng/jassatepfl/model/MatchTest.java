@@ -12,21 +12,20 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertNotEquals;
 
+@SuppressWarnings({"EqualsBetweenInconvertibleTypes", "EqualsWithItself", "ObjectEqualsNull"})
 public final class MatchTest {
 
-    private Player amaury = new Player(new Player.PlayerID(1), "Combes", "Amaury", new Rank(123));
-    private Player vincenzo = new Player(new Player.PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
-    private Player dorian = new Player(new Player.PlayerID(3), "Laforest", "Dorian", new Rank(567));
-    private Player alexis = new Player(new Player.PlayerID(4), "Montavon", "Alexis", new Rank(789));
-    private Player random = new Player(new Player.PlayerID(5), "Smith", "John", new Rank(7));
+    private final Player amaury = new Player(new Player.PlayerID(1), "Combes", "Amaury", new Rank(123));
+    private final Player vincenzo = new Player(new Player.PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
+    private final Player dorian = new Player(new Player.PlayerID(3), "Laforest", "Dorian", new Rank(567));
+    private final Player alexis = new Player(new Player.PlayerID(4), "Montavon", "Alexis", new Rank(789));
+    private final Player random = new Player(new Player.PlayerID(5), "Smith", "John", new Rank(7));
 
     public Match.Builder defaultBuilder() {
         Match.Builder match = null;
         try {
             match = new Match.Builder().addPlayer(amaury).addPlayer(vincenzo);
-        } catch(IllegalStateException e) {
-            fail();
-        } catch(IllegalAccessException a) {
+        } catch (IllegalStateException | IllegalAccessException e) {
             fail();
         }
         return match;
@@ -98,9 +97,7 @@ public final class MatchTest {
         Match match = defaultBuilder().build();
         try {
             match.addPlayer(alexis);
-        } catch(IllegalStateException e) {
-            fail();
-        } catch(IllegalAccessException a) {
+        } catch (IllegalStateException | IllegalAccessException e) {
             fail();
         }
         assertEquals(3, match.getPlayers().size());
@@ -114,10 +111,10 @@ public final class MatchTest {
         try {
             match.addPlayer(alexis);
             match.addPlayer(vincenzo);
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             fail();
-        } catch(IllegalAccessException a) {
-            assertEquals("Player already in that Match", a.getMessage());
+        } catch (IllegalAccessException a) {
+            assertEquals("Player already in that Match.", a.getMessage());
         }
 
         assertEquals(3, match.getPlayers().size());
@@ -131,20 +128,32 @@ public final class MatchTest {
         try {
             match.addPlayer(alexis);
             match.addPlayer(dorian);
-        } catch(IllegalStateException e) {
-            fail();
-        } catch(IllegalAccessException a) {
+        } catch (IllegalStateException | IllegalAccessException e) {
             fail();
         }
 
         try {
             match.addPlayer(random);
             fail("Expected IllegalStateException");
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             assertEquals("Match is full.", e.getMessage());
-        } catch(IllegalAccessException a) {
+        } catch (IllegalAccessException a) {
             fail();
         }
+    }
+
+    @Test
+    public void hasParticipantReturnsTrueIfPlayerIsInMatch() {
+        Match match = defaultBuilder().build();
+        assertTrue(match.hasParticipant(vincenzo));
+        assertTrue(match.hasParticipant(amaury));
+    }
+
+    @Test
+    public void hasParticipantReturnsFalseIfPlayerIsNotInMatch() {
+        Match match = defaultBuilder().build();
+        assertFalse(match.hasParticipant(null));
+        assertFalse(match.hasParticipant(dorian));
     }
 
 }

@@ -9,17 +9,16 @@ import android.view.Menu;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
-
 public class MatchActivity extends BaseActivity {
-
+    private String matchId;
+    private final static String TAG = MatchActivity.class.getSimpleName();
     private Match match;
     private Player player;
 
@@ -38,14 +37,14 @@ public class MatchActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Intent startIntent = getIntent();
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        final DBReferenceWrapper ref = dbRefWrapped;
 
         /* Notification onClick handler.
          * Will display dialog Box depending on the notification received.
          */
-        if(startIntent.hasExtra("notif")) {
+        if (startIntent.hasExtra("notif")) {
             final String matchID = startIntent.getStringExtra("matchId");
-            switch(startIntent.getStringExtra("notif")) {
+            switch (startIntent.getStringExtra("notif")) {
                 case "matchfull":
                     ref.child("matches").child(startIntent.getStringExtra("matchId"))
                             .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -54,7 +53,7 @@ public class MatchActivity extends BaseActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Match match = dataSnapshot.getValue(Match.class);
                                     new AlertDialog.Builder(MatchActivity.this)
-                                            .setTitle(R.string.match_is_full)
+                                            .setTitle(R.string.error_match_full)
                                             .setMessage("Match: " + match.getDescription())
                                             .show();
                                 }
@@ -119,15 +118,14 @@ public class MatchActivity extends BaseActivity {
                             .setMessage(R.string.join_message)
                             .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                                    ref.child("matches").child(matchID)
+                                    dbRefWrapped.child("matches").child(matchID)
                                             .addListenerForSingleValueEvent(new ValueEventListener() {
 
                                                 @Override
                                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                                     match = dataSnapshot.getValue(Match.class);
                                                     DatabaseUtils.addPlayerToMatch(MatchActivity.this,
-                                                            ref,
+                                                            dbRefWrapped,
                                                             matchID,
                                                             getUserSciper(),
                                                             match);

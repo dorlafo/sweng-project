@@ -1,8 +1,9 @@
 package ch.epfl.sweng.jassatepfl.tequila;
 
-import junit.framework.Assert;
 
 import org.junit.Test;
+
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Test OAuth2Config class
@@ -18,9 +19,10 @@ public class OAuth2ConfigTest {
         String clientSecret = "TOTO";
         String redirectUri = "TUTU";
         OAuth2Config config = new OAuth2Config(scopes, clientId, clientSecret, redirectUri);
-        Assert.assertTrue(config.scopes.equals(scopes));
-        Assert.assertTrue(config.clientId.equals(clientId));
-        Assert.assertTrue(config.clientSecret.equals(clientSecret));
-        Assert.assertTrue(config.redirectUri.equals(redirectUri));
+        assertTrue(config.scopes.equals(scopes));
+        assertTrue(config.clientId.equals(clientId));
+        assertTrue(config.clientSecret.equals(clientSecret));
+        assertTrue(config.redirectUri.equals(redirectUri));
     }
+
 }

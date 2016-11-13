@@ -5,140 +5,136 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="10dp"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/llTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.16"
-        android:id="@+id/llTitle">
+        android:orientation="horizontal">
 
         <TextView
-            android:text="@string/profileTitle"
+            android:id="@+id/twProfileTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/twProfileTitle"
             android:gravity="center_vertical|center_horizontal"
-            android:textStyle="normal|bold"
-            android:textSize="30sp"/>
+            android:text="@string/profileTitle"
+            android:textSize="30sp"
+            android:textStyle="normal|bold"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/llPlayerID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.16"
-        android:id="@+id/llPlayerID">
+        android:orientation="horizontal">
 
         <TextView
-            android:text="@string/player_id_label"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             android:id="@+id/twPlayerID"
-            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/player_id_label"
             android:textAllCaps="false"
-            android:textStyle="normal|bold"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"/>
+            android:textSize="18sp"
+            android:textStyle="normal|bold"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/llLastName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.16"
-        android:id="@+id/llLastName">
+        android:orientation="horizontal">
 
         <TextView
-            android:text="@string/last_name_label"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             android:id="@+id/twLastName"
-            android:textStyle="bold"
-            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
             android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"/>
+            android:text="@string/last_name_label"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/llFirstName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.16"
-        android:id="@+id/llFirstName">
+        android:orientation="horizontal">
 
         <TextView
-            android:text="@string/first_name_label"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             android:id="@+id/twFirstName"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.16"
-        android:id="@+id/llRank">
-
-        <TextView
-            android:text="@string/rank_label"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/twRank"
-            android:textStyle="bold"
-            android:textSize="18sp"
+            android:layout_marginStart="10dp"
             android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"/>
+            android:text="@string/first_name_label"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llRank"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:layout_weight="0.16"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:id="@+id/llButton">
+        android:orientation="horizontal">
 
-        <Button
-            android:text="@string/menu"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/menu_button"
-            android:background = "@drawable/roundedbutton"
-            android:onClick="viewMenu"/>
-
-        <Button
-            android:text="@string/ranking"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/ranking_button"
-            android:background = "@drawable/roundedbutton"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp" />
-
-        <Button
-            android:text="@string/stats"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/statistics_button"
-            android:background = "@drawable/roundedbutton" />
+        <TextView
+            android:id="@+id/twRank"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/rank_label"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/llButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_weight="0.16"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/menu_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/roundedbutton"
+            android:onClick="viewMenu"
+            android:text="@string/menu"/>
+
+        <Button
+            android:id="@+id/ranking_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/roundedbutton"
+            android:text="@string/ranking"/>
+
+        <Button
+            android:id="@+id/statistics_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/roundedbutton"
+            android:text="@string/stats"/>
+
+    </LinearLayout>
 
 </LinearLayout>

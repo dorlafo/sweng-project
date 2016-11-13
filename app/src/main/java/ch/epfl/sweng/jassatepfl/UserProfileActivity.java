@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
@@ -34,9 +33,9 @@ public class UserProfileActivity extends BaseActivity {
         sciper = getUserSciper();
         Log.d(TAG, "DisplayName:" + sciper);
 
-        //New SingleValueListener that will change the value of the textView according to the
-        //current logged in user
-        FirebaseDatabase.getInstance().getReference()
+        //New SingleEventListener that will change the value of the textView according to the current
+        //logged in user
+        dbRefWrapped
                 .child("players")
                 .child(sciper)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -44,6 +43,7 @@ public class UserProfileActivity extends BaseActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Player p = dataSnapshot.getValue(Player.class);
                         mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
+                        System.out.println(p.getID().toString());
                         mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
                         mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
                         mtwPlayerRank.setText(mtwPlayerRank.getText() + " " + p.getRank().toString());
