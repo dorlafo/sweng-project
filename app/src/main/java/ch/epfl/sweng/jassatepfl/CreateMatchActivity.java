@@ -410,10 +410,8 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                         }
                     });
         } catch (NullPointerException e) {
-            /* Commented out out due to conflict with tests that check that a toast is displayed
             Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
                     .show();
-            */
         }
     }
 
