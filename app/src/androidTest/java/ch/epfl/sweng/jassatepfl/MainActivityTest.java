@@ -1,12 +1,15 @@
 package ch.epfl.sweng.jassatepfl;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.filters.Suppress;
 import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -27,11 +30,10 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
         onView(withId(R.id.login_button)).check(matches(withText(R.string.login_button_text)));
     }
 
-    /*
-    * Test to redo with a mock login since it now required to be logged in to acces the main
-    * activity
-    *
-    @Test
+
+    //Ignoring this test for now because we need mock test to mock the login and access the activity
+    //This will be resolved in Sprint #7
+    @Suppress
     public void testCanShowProfile() {
 
         getActivity();
@@ -40,12 +42,13 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
         onView(withId(R.id.menu_button)).perform(click());
         onView(withId(R.id.profile_button)).check(matches(withText("Profile")));
     }
-    /*
-    @Test
+
+    //Ignoring this test for now because we need mock test to mock the login and access the activity
+    //This will be resolved in Sprint #7
+    @Suppress
     public void testCreateMatchButtonSwitchesToCorrectActivity() {
         getActivity();
         onView(withId(R.id.create_match_button)).perform(click());
         onView(withId(R.id.create_title)).check(matches(isDisplayed()));
     }
-    */
 }
