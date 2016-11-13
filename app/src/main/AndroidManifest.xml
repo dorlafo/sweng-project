@@ -64,7 +64,9 @@
             android:name=".MatchActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".LoginActivity"/>
-        <activity android:name=".InvitePlayerToMatchActivity"/>
+        <activity
+            android:name=".InvitePlayerToMatchActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
