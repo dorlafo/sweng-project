@@ -68,7 +68,7 @@ public class MatchListActivity extends ListActivity {
                                             match.addPlayer(player);
                                             ref.child("matches").child(matchID).setValue(match);
                                             Intent moveToMatchActivity = new Intent(MatchListActivity.this, MatchActivity.class);
-                                            getIntent().putExtra("MATCH_ID", matchID);
+                                            moveToMatchActivity.putExtra("MATCH_ID", matchID);
                                             startActivity(moveToMatchActivity);
                                         } catch (IllegalStateException e) {
                                             sendErrorMessage("Sorry, desired match is full");

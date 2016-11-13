@@ -75,6 +75,9 @@ public class MatchActivity extends AppCompatActivity {
         }
     }
 
+
+
+
     /*
     When user click this button "leave match" it removes him from the match's player list and
     send him back to main menu.
@@ -93,6 +96,12 @@ public class MatchActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         player = dataSnapshot.getValue(Player.class);
                         match.removePlayer(player);
+                        if (match.getPlayers().isEmpty()){
+                            ref.child("matches").child(matchId).removeValue();
+                        }
+                        else{
+                            ref.child("matches").child(matchId).setValue(match);
+                        }
                         Intent intent = new Intent(MatchActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
