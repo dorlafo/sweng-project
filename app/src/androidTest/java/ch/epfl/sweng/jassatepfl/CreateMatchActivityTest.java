@@ -1,8 +1,6 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.PickerActions;
-import android.test.ActivityInstrumentationTestCase2;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -14,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcher;
 
@@ -43,9 +42,9 @@ import static org.hamcrest.Matchers.is;
  *
  * @author Alexis Montavon
  */
-public final class CreateMatchActivityTest extends ActivityInstrumentationTestCase2<CreateMatchActivity> {
+public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
+    private DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
 
     public CreateMatchActivityTest() {
         super(CreateMatchActivity.class);
@@ -54,16 +53,14 @@ public final class CreateMatchActivityTest extends ActivityInstrumentationTestCa
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         getActivity();
     }
 
-    /*@Test
+    @Test
     public void testSwitchToInvitePlayerActivity() {
-        getActivity();
         onView(withId(R.id.add_player_button)).perform(click());
         onView(withId(R.id.invite_button)).check(matches(isDisplayed()));
-    }*/
+    }
 
     @Test
     public void testSpinnerSelection() {
@@ -164,5 +161,21 @@ public final class CreateMatchActivityTest extends ActivityInstrumentationTestCa
                 .perform(PickerActions.setDate(year, month + 1, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
     }
+
+    /* need mock queries (inviteplayer l.105)
+    @Test
+    public void testInvitePlayers() {
+        Set<Player> playerSet = new HashSet<>();
+        playerSet.add(DummyData.amaury);
+        playerSet.add(DummyData.jimmy);
+        dbRefWrapMock.addPlayers(playerSet);
+
+        onView(withId(R.id.add_player_button)).perform(click());
+        onView(withId(R.id.search)).perform(click());
+        onView(isAssignableFrom(EditText.class)).perform(typeText("Hello"));
+
+        dbRefWrapMock.reset();
+    }
+    */
 
 }
