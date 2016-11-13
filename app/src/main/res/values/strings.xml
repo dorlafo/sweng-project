@@ -43,13 +43,15 @@
     <string name="snippet_game_variant">Variant:&#160;</string>
     <string name="snippet_expiration_date">Valid until:&#160;</string>
 
-    <string name="dialog_join_match">Join Match</string>
-    <string name="dialog_join_message">Do you want to join this match ?</string>
-    <string name="dialog_join_confirmation">Join!</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_retry">Retry</string>
-    <string name="dialog_add">Add</string>
+    <string name="dialog_join_match">Join Match</string>
+    <string name="dialog_join_message">Do you want to join this match ?</string>
+    <string name="dialog_join_confirmation">Join!</string>
+    <string name="dialog_add_player">Invite Player</string>
+    <string name="dialog_add_confirmation">Add</string>
+    <string name="dialog_remove_player">Remove this player?</string>
 
     <string name="log_in">Log In</string>
     <string name="log_out">Log Out</string>
@@ -93,7 +95,6 @@
     <string name="invite_button_text_invite">Invite</string>
     <string name="invite_welcome_text">Look for players, add them and click on Invite</string>
     <string name="invite_search_player">Search for Player</string>
-    <string name="invite_player_dialog">Invite Player</string>
 
     <string name="enter_player_name">Enter player name</string>
     <string name="invite_player_message">Do you want to invite this player?</string>

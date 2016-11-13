@@ -46,24 +46,24 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_player_to_match);
+
         TextView emptyList = new TextView(this);
         emptyList.setText(R.string.invite_welcome_text);
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         emptyList.setTextColor(Color.BLACK);
         emptyList.setTextSize(20);
-        playerListView = (ListView) findViewById(android.R.id.list);
+        playerListView = (ListView) findViewById(R.id.invite_list);
         ((ViewGroup) playerListView.getParent()).addView(emptyList);
         playerListView.setEmptyView(emptyList);
-
 
         playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
                 final Player player = adapter.getItem(position);
                 new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
-                        .setTitle(R.string.invite_player_dialog)
+                        .setTitle(R.string.dialog_add_player)
                         .setMessage(" " + player.getFirstName() + " " + player.getLastName())
-                        .setPositiveButton(R.string.dialog_add, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.dialog_add_confirmation, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 playerToAdd.add(player);
                             }
@@ -76,6 +76,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                         .show();
             }
         });
+
         playerToAdd = new ArrayList<>();
         Button inviteButton = (Button) findViewById(R.id.invite_button);
         inviteButton.setOnClickListener(this);
