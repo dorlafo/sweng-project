@@ -4,12 +4,14 @@ package ch.epfl.sweng.jassatepfl;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -47,7 +49,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
@@ -90,7 +91,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     private ImageButton placePickerButton;
     private Match.Builder matchBuilder;
     private LocationProvider locationProvider;
-    private List<Player> playersToAdd;
+    ArrayAdapter<Player> playerArrayAdapter;
     private Calendar matchCalendar;
 
     @Override
@@ -170,11 +171,34 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         playersLV.setEmptyView(emptyList);
         playersLV.setBackgroundColor(0xFAFAFA);
 
-        playersToAdd = matchBuilder.getPlayerList();
-        ArrayAdapter<Player> playerArrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, playersToAdd);
-        playerArrayAdapter.setNotifyOnChange(true);
+        playerArrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, matchBuilder.getPlayerList());
         playersLV.setAdapter(playerArrayAdapter);
+
+        playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Player player = playerArrayAdapter.getItem(position);
+                new AlertDialog.Builder(CreateMatchActivity.this)
+                        .setTitle(R.string.dialog_remove_player)
+                        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    matchBuilder.removePlayer(player);
+                                    playerArrayAdapter.remove(player);
+                                } catch (IllegalStateException | IllegalArgumentException e) {
+                                    // TODO: probably not possible to raise exception here
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing, goes back to InvitePlayerToMatchActivity
+                            }
+                        })
+                        .show();
+            }
+        });
 
         // Place picker
         placePickerButton = (ImageButton) findViewById(R.id.create_place_picker_button);
@@ -263,7 +287,17 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Player player = dataSnapshot.getValue(Player.class);
-                                        playersToAdd.add(player);
+                                        try {
+                                            matchBuilder.addPlayer(player);
+                                            playerArrayAdapter.add(player);
+                                            // TODO: handle these errors differently
+                                        } catch (IllegalStateException e) {
+                                            ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
+                                                    R.string.error_cannot_join, R.string.error_match_full);
+                                        } catch (IllegalAccessException a) {
+                                            ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
+                                                    R.string.error_cannot_join, R.string.error_already_in_match);
+                                        }
                                     }
 
                                     @Override
@@ -298,6 +332,12 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     }
 
     @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Necessary for implementation of OnItemSelected interface
+        // Never used, do nothing.
+    }
+
+    @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar tempCalendar = (Calendar) matchCalendar.clone();
         tempCalendar.set(HOUR_OF_DAY, hourOfDay);
@@ -316,11 +356,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Necessary for implementation of OnItemSelected interface
-        // Never used, do nothing.
-    }
-
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         final Calendar currentTime = Calendar.getInstance();
         int currentYear = currentTime.get(YEAR);
@@ -357,6 +392,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     }
 
     private void addCurrentUserToBuilder() {
+        // TODO: can we fuse this method with addplayer l.258, it is almost the same
         try {
             String currentUserId = fAuth.getCurrentUser().getDisplayName();
             dbRefWrapped.child("players").child(currentUserId)
@@ -364,7 +400,10 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             try {
-                                matchBuilder.addPlayer(dataSnapshot.getValue(Player.class));
+                                Player currentUser = dataSnapshot.getValue(Player.class);
+                                matchBuilder.addPlayer(currentUser);
+                                playerArrayAdapter.add(currentUser);
+                                createMatchButton.setEnabled(true);
                             } catch (IllegalStateException e) {
                                 ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
                                         R.string.error_cannot_join, R.string.error_match_full);
@@ -372,7 +411,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                                 ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
                                         R.string.error_cannot_join, R.string.error_already_in_match);
                             }
-                            createMatchButton.setEnabled(true);
                         }
 
                         @Override
@@ -405,11 +443,11 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     private class InvitePlayer extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
+            // TODO: maybe do this after match is created, when player list does not change anymore
             // Send invite to added players
-            if (playersToAdd.size() > 1) {
-                for (int i = 1; i < playersToAdd.size(); i++) {
-                    ServerInterface.getInstance().invitePlayer(playersToAdd.get(i).getID().toString(), params[0]);
-                }
+            int playerCount = matchBuilder.getPlayerList().size();
+            for (int i = 1; playerCount > 1 && i < playerCount; ++i) {
+                ServerInterface.getInstance().invitePlayer(matchBuilder.getPlayerList().get(i).getID().toString(), params[0]);
             }
             return "";
         }
