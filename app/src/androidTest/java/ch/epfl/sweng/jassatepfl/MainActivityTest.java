@@ -1,10 +1,10 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.Suppress;
-import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
+
+import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -13,7 +13,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public final class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public final class MainActivityTest extends InjectedBaseActivityTest {
+
+    MainActivity act;
 
     public MainActivityTest() {
         super(MainActivity.class);
@@ -22,12 +24,11 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        getActivity();
     }
 
     @Test
     public void testCantShowProfileIfLoggedOff() {
+        act = (MainActivity)  getActivity();
         onView(withId(R.id.login_button)).check(matches(withText(R.string.login_button_text)));
     }
 
