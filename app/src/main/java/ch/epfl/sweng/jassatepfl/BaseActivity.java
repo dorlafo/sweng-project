@@ -31,7 +31,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         App.getInstance().graph().inject(this);
 
-        fAuth = FirebaseAuth.getInstance();
         Log.d("BaseActivity", "fAuth.getCurrentUser:" + fAuth.getCurrentUser());
         showLogin();
     }

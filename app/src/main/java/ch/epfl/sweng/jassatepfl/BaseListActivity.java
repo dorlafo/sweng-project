@@ -22,7 +22,6 @@ public abstract class BaseListActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         App.getInstance().graph().inject(this);
 
-        fAuth = FirebaseAuth.getInstance();
         showLogin();
     }
 

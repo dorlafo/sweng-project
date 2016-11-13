@@ -22,7 +22,6 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         App.getInstance().graph().inject(this);
 
-        fAuth = FirebaseAuth.getInstance();
         showLogin();
     }
 
