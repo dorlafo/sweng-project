@@ -1,8 +1,6 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.PickerActions;
-import android.test.ActivityInstrumentationTestCase2;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
