@@ -24,6 +24,7 @@ public class DummyData {
     public static Player random = new Player(new PlayerID(999999), "Smith", "John", new Rank(741));
     public static Player colin = new Player(new PlayerID(777777), "Branca", "Colin", new Rank(852));
     public static Player marco = new Player(new PlayerID(666666), "Ballerini", "Marco", new Rank(963));
+    public static Player bricoloBob = new Player(new PlayerID(696969), "LeBricoleur", "Bob", new Rank(1000));
 
     public static GPSPoint rolexCoord = new GPSPoint(46.518299, 6.568323);
     public static GPSPoint BCCoord = new GPSPoint(46.518470, 6.561907);
