@@ -33,7 +33,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -92,7 +91,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
         locationProvider.setProviderListener(this);
 
         try {
-            FirebaseDatabase.getInstance().getReference().child("players")
+            dbRefWrapped.child("players")
                     .child(fAuth.getCurrentUser().getDisplayName())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
