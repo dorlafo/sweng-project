@@ -48,6 +48,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -171,7 +172,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         playersLV.setBackgroundColor(0xFAFAFA);
 
         playerArrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, matchBuilder.getPlayerList());
+                android.R.layout.simple_list_item_1, new ArrayList<Player>());
         playersLV.setAdapter(playerArrayAdapter);
 
         playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -182,19 +183,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                         .setTitle(R.string.dialog_remove_player)
                         .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    // TODO: should we add the option to remove the creator of the match? if yes, change the createdBy method of match
-                                    matchBuilder.removePlayer(player);
-                                    playerArrayAdapter.remove(player);
-                                    if (matchBuilder.getPlayerList().size() == 0) {
-                                        Toast.makeText(CreateMatchActivity.this,
-                                                R.string.toast_cannot_create_with_no_player, Toast.LENGTH_SHORT)
-                                                .show();
-                                        createMatchButton.setEnabled(false);
-                                    }
-                                } catch (IllegalStateException | IllegalArgumentException e) {
-                                    // TODO: probably not possible to raise exception here
-                                }
+                                playerArrayAdapter.remove(player);
                             }
                         })
                         .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -241,13 +230,20 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_create_button:
-                String matchId = dbRefWrapped.child("matches").push().getKey();
-                dbRefWrapped.child("matches").child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
-                Log.d(TAG, "Pushed match " + matchId + " to database");
-                new InvitePlayer().execute(matchId);
-                Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
-                getIntent().putExtra("MATCH_ID", matchId);
-                startActivity(moveToMatchActivity);
+                if (matchBuilder.getPlayerList().size() == 0) {
+                    Toast.makeText(CreateMatchActivity.this,
+                            R.string.toast_cannot_create_with_no_player, Toast.LENGTH_SHORT)
+                            .show();
+                    createMatchButton.setEnabled(false);
+                } else {
+                    String matchId = dbRefWrapped.child("matches").push().getKey();
+                    dbRefWrapped.child("matches").child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
+                    Log.d(TAG, "Pushed match " + matchId + " to database");
+                    new InvitePlayer().execute(matchId);
+                    Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
+                    getIntent().putExtra("MATCH_ID", matchId);
+                    startActivity(moveToMatchActivity);
+                }
                 break;
             case R.id.time_picker_button:
                 DialogFragment timePickerFragment = new TimePickerFragment();
@@ -293,18 +289,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Player player = dataSnapshot.getValue(Player.class);
-                                        try {
-                                            matchBuilder.addPlayer(player);
-                                            playerArrayAdapter.add(player);
-                                            createMatchButton.setEnabled(true);
-                                            // TODO: handle these errors differently
-                                        } catch (IllegalStateException e) {
-                                            ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
-                                                    R.string.error_cannot_join, R.string.error_match_full);
-                                        } catch (IllegalAccessException a) {
-                                            ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
-                                                    R.string.error_cannot_join, R.string.error_already_in_match);
-                                        }
+                                        playerArrayAdapter.add(player);
                                     }
 
                                     @Override
@@ -409,7 +394,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                             try {
                                 Player currentUser = dataSnapshot.getValue(Player.class);
                                 matchBuilder.addPlayer(currentUser);
-                                playerArrayAdapter.add(currentUser);
+                                createMatchButton.setEnabled(true);
                             } catch (IllegalStateException e) {
                                 ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
                                         R.string.error_cannot_join, R.string.error_match_full);
@@ -449,11 +434,10 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     private class InvitePlayer extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            // TODO: maybe do this after match is created, when player list does not change anymore
             // Send invite to added players
-            int playerCount = matchBuilder.getPlayerList().size();
-            for (int i = 1; playerCount > 1 && i < playerCount; ++i) {
-                ServerInterface.getInstance().invitePlayer(matchBuilder.getPlayerList().get(i).getID().toString(), params[0]);
+            int playerCount = playerArrayAdapter.getCount();
+            for (int i = 0; i < playerCount; ++i) {
+                ServerInterface.getInstance().invitePlayer(playerArrayAdapter.getItem(i).getID().toString(), params[0]);
             }
             return "";
         }

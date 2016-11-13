@@ -17,12 +17,12 @@
     <string name="create_field_description">Description</string>
     <string name="create_field_expiration_time">Match valid until</string>
     <string name="create_field_location">Pick the match location</string>
-    <string name="create_field_players_list">Players in Match:</string>
+    <string name="create_field_players_list">Send invitations to:</string>
     <string name="create_button_text_create">Create Match</string>
 
     <string name="list_empty_list">No matches are available</string>
     <string name="main_empty_list">You are not enrolled in any match</string>
-    <string name="create_empty_list">No players in the match</string>
+    <string name="create_empty_list">Are you in Info? It seems you have no friends.</string>
 
     <string name="profile_label_player_id">Player id :</string>
     <string name="profile_label_first_name">First name :</string>
