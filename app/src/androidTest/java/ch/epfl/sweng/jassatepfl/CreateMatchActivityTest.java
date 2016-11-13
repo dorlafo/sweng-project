@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcher;
 
@@ -43,7 +44,7 @@ import static org.hamcrest.Matchers.is;
  *
  * @author Alexis Montavon
  */
-public final class CreateMatchActivityTest extends ActivityInstrumentationTestCase2<CreateMatchActivity> {
+public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
 
@@ -54,16 +55,15 @@ public final class CreateMatchActivityTest extends ActivityInstrumentationTestCa
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         getActivity();
     }
 
-    /*@Test
+    @Test
     public void testSwitchToInvitePlayerActivity() {
         getActivity();
         onView(withId(R.id.add_player_button)).perform(click());
         onView(withId(R.id.invite_button)).check(matches(isDisplayed()));
-    }*/
+    }
 
     @Test
     public void testSpinnerSelection() {
