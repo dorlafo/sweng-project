@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.Suppress;
 
 import org.junit.Test;
@@ -8,7 +7,6 @@ import org.junit.Test;
 import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -44,6 +42,24 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
     //Ignoring this test for now because we need mock test to mock the login and access the activity
     //This will be resolved in Sprint #7
     @Suppress
+    public void testSwitchToMapsActivity() {
+        onView(withId(R.id.main_map_button)).perform(click());
+        onView(withId(R.id.switch_to_list)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSwitchToMatchListActivity() {
+        onView(withId(R.id.main_list_button)).perform(click());
+        onView(withId(R.id.switch_to_map)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testCreateMatchButtonSwitchesToCorrectActivity() {
+        onView(withId(R.id.create_match_button)).perform(click());
+        onView(withId(R.id.create_title)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void testSwitchToMapsActivity() {
         onView(withId(R.id.main_map_button)).perform(click());
         onView(withId(R.id.switch_to_list)).check(matches(isDisplayed()));

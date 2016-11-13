@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
+/**
+ * Your app's main activity.
+ */
 public final class MainActivity extends BaseActivity {
 
     @Override
