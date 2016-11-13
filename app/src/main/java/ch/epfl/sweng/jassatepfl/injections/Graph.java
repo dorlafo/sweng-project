@@ -2,7 +2,7 @@ package ch.epfl.sweng.jassatepfl.injections;
 
 import javax.inject.Singleton;
 
-import ch.epfl.sweng.jassatepfl.BaseActivity;
+import ch.epfl.sweng.jassatepfl.BaseActivityWithNavDrawer;
 import ch.epfl.sweng.jassatepfl.BaseAppCompatActivity;
 import ch.epfl.sweng.jassatepfl.BaseFragmentActivity;
 import ch.epfl.sweng.jassatepfl.BaseListActivity;
@@ -19,11 +19,11 @@ import dagger.Component;
 public interface Graph {
 
     /**
-     * Injects providers return values to the BaseActivity
+     * Injects providers return values to the BaseActivityWithNavDrawer
      *
      * @param activity the activity which will be injected
      */
-    void inject(BaseActivity activity);
+    void inject(BaseActivityWithNavDrawer activity);
 
     /**
      * Injects providers return values to the BaseListActivity

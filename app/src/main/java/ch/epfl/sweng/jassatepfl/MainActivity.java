@@ -1,24 +1,35 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 
-/**
- * Your app's main activity.
- */
-public final class MainActivity extends BaseActivity {
+public final class MainActivity extends BaseActivityWithNavDrawer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
+        //setContentView(R.layout.activity_main);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
+        drawer.addView(contentView, 0);
 
-    @Override
-    public void onBackPressed() {
-        //DO NOTHING -> it will disable the back button
+        TextView emptyList = new TextView(this);
+        emptyList.setText(R.string.main_empty_list);
+        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        emptyList.setTextColor(Color.BLACK);
+
+        ListView listView = (ListView) findViewById(android.R.id.list);
+        ((ViewGroup) listView.getParent()).addView(emptyList);
+        listView.setEmptyView(emptyList);
     }
 
     @Override
@@ -30,7 +41,7 @@ public final class MainActivity extends BaseActivity {
         // Can not display match name because it doesn't exists anymore.
         if (startIntent.hasExtra("notif") && startIntent.getStringExtra("notif").equals("matchexpired")) {
             new AlertDialog.Builder(this)
-                    .setTitle(R.string.match_expired)
+                    .setTitle(R.string.notification_match_expired)
                     .show();
             startIntent.removeExtra("notif");
             startIntent.removeExtra("matchId");

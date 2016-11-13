@@ -1,7 +1,9 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,7 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
 
-public class UserProfileActivity extends BaseActivity {
+public class UserProfileActivity extends BaseActivityWithNavDrawer {
 
     private final String TAG = UserProfileActivity.class.getSimpleName();
     private TextView mtwPlayerID;
@@ -23,7 +25,11 @@ public class UserProfileActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        //setContentView(R.layout.activity_user_profile);
+
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_user_profile, drawer, false);
+        drawer.addView(contentView, 0);
 
         mtwPlayerID = (TextView) findViewById(R.id.twPlayerID);
         mtwLastName = (TextView) findViewById(R.id.twLastName);
