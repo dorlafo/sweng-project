@@ -2,6 +2,7 @@
     <string name="app_name">Jass@EPFL</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_create">Match Information</string>
+    <string name="title_activity_profile">Profile</string>
 
     <string name="main_button_text_map">Map</string>
     <string name="main_button_text_list">Match list</string>
@@ -23,7 +24,6 @@
     <string name="main_empty_list">You are not enrolled in any match</string>
     <string name="create_empty_list">No players in the match</string>
 
-    <string name="profile_title">Profile</string>
     <string name="profile_label_player_id">Player id :</string>
     <string name="profile_label_first_name">First name :</string>
     <string name="profile_label_last_name">Last name :</string>

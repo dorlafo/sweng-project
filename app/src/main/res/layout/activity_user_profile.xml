@@ -13,28 +13,10 @@
         android:layout_height="?android:attr/actionBarSize"/>
 
     <LinearLayout
-        android:id="@+id/llTitle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.16"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/twProfileTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/profile_title"
-            android:textSize="30sp"
-            android:textStyle="normal|bold"/>
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/llPlayerID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.16"
+        android:layout_weight="0.2"
         android:orientation="horizontal">
 
         <TextView
@@ -54,7 +36,7 @@
         android:id="@+id/llLastName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.16"
+        android:layout_weight="0.2"
         android:orientation="horizontal">
 
         <TextView
@@ -73,7 +55,7 @@
         android:id="@+id/llFirstName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.16"
+        android:layout_weight="0.2"
         android:orientation="horizontal">
 
         <TextView
@@ -92,7 +74,7 @@
         android:id="@+id/llRank"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.16"
+        android:layout_weight="0.2"
         android:orientation="horizontal">
 
         <TextView
@@ -112,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        android:layout_weight="0.16"
+        android:layout_weight="0.2"
         android:gravity="center"
         android:orientation="horizontal">
 
