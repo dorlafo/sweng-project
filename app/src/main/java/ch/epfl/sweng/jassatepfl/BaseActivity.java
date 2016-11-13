@@ -10,6 +10,10 @@ import android.webkit.CookieManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * Base activity extended by almost all other activities. This handle the top menu for log out and
+ * redirect any activities to the login activity if not logged in
+ */
 public class BaseActivity extends AppCompatActivity {
 
     private FirebaseAuth fAuth;
@@ -30,8 +34,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /* Handler for menu items
-     * Usage of deprecated method because the new one require
-     * a minimum of android 21, we set minimum android 15
+     * Handles the logout process by deleting stored cookies and signing out from Firebase
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -41,7 +44,7 @@ public class BaseActivity extends AppCompatActivity {
             } else {
                 CookieManager.getInstance().removeAllCookies(null);
             }
-            //Sign out from Firebase
+
             fAuth.signOut();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -52,6 +55,10 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Getter for the user sciper
+     * @return The user' sciper
+     */
     public String getUserSciper() {
         return fAuth.getCurrentUser().getDisplayName();
     }

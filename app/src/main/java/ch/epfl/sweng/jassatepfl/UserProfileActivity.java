@@ -34,8 +34,8 @@ public class UserProfileActivity extends BaseActivity {
         sciper = getUserSciper();
         Log.d(TAG, "DisplayName:" + sciper);
 
-        //New ChildEventListener that will change the value of the textView according to the current
-        //logged in user
+        //New SingleValueListener that will change the value of the textView according to the
+        //current logged in user
         FirebaseDatabase.getInstance().getReference()
                 .child("players")
                 .child(sciper)

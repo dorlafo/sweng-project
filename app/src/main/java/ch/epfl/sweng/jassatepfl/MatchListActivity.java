@@ -21,12 +21,16 @@ import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
 public class MatchListActivity extends ListActivity {
 
     private MatchListAdapter mAdapter;
+    private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_list);
+
+        fAuth = FirebaseAuth.getInstance();
+        showLogin();
+
         ListView listView = (ListView) findViewById(android.R.id.list);
         listView.setEmptyView(findViewById(android.R.id.empty));
 
@@ -34,6 +38,16 @@ public class MatchListActivity extends ListActivity {
         mAdapter = new MatchListAdapter(this);
 
         listView.setAdapter(mAdapter);
+    }
+
+    /**
+     * Launch the LoginActivity if the user is not yet logged in
+     */
+    private void showLogin() {
+        if (fAuth.getCurrentUser() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

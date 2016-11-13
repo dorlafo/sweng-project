@@ -73,6 +73,10 @@ public class LoginActivity extends AppCompatActivity {
         //DO NOTHING -> it disables the back button
     }
 
+    /**
+     * Launch the login process when a user click on the login button
+     * @param view the current view (This is a required parameters for method related to a button)
+     */
     public void login(View view) {
         config = getOAuth2Config();
         final String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
@@ -82,6 +86,9 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_AUTHENTICATE);
     }
 
+    /**
+     * Creates, if it does not exist, a progress Dialog and show it
+     */
     public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -92,11 +99,20 @@ public class LoginActivity extends AppCompatActivity {
         mProgressDialog.show();
     }
 
+    /**
+     * Hide the progress dialog if it exist and is showing
+     */
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
     }
+
+    /**
+     * Sign in the user with the information from the Profile object. If the sign in does not work,
+     * it means that the user does not have an account so it creates one by calling signUp
+     * @param profile The user Profile retrieved from Tequila authentication
+     */
     //TODO: REPLACE SCIPER WITH HASH
     private void signIn(final Profile profile) {
         Log.d(TAG, "signIn");
@@ -117,6 +133,11 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Sign up the user by creating an account on Firebase and adding it's user profile to the
+     * database
+     * @param profile The user Profile retrieved from Tequila authentication
+     */
     //TODO: REPLACE SCIPER WITH HASH
     private void signUp(final Profile profile) {
         Log.d(TAG, "signUp");
@@ -144,6 +165,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Handle the result from the log in process
+     */
+    //TODO: Add a default case to the switch ?
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -173,23 +198,20 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     // Get the token.
                     String code = AuthClient.extractCode(data.getStringExtra("url"));
-                    Log.d(TAG, "1234:beforeExecute");
                     new FetchTokens().execute(code);
-                    Log.d(TAG, "1234:afterExecute");
                 }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-    /* Fetched token from Tequila server using AuthServer methods
-    * Stores the user profile in Profile object
-    * Execute HttpUrlConnection on a separated async thread
-    */
+    /**
+     * Fetches token from Tequila server using AuthServer methods
+     * Stores the user profile in a Profile object
+     * Execute HttpUrlConnection on a separated asynchronous thread
+     */
     private class FetchTokens extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
-            Log.d(TAG, "1234:onExecute:onPreExecute");
             findViewById(R.id.login_button).setVisibility(View.GONE);
             findViewById(R.id.login_text_view).setVisibility(View.GONE);
             showProgressDialog();
@@ -197,7 +219,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            Log.d(TAG, "1234:onExecute:doInBackground");
             Map<String, String> tokens;
             Profile profile;
             try {
@@ -214,6 +235,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Hide the login progress dialog and redirect to the MainActivity
+     */
     private void onAuthSuccess() {
         // Go to MainActivity
         hideProgressDialog();
@@ -222,8 +246,6 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    //TODO: Place those 2 utilitmethods outside
-    //............................ UTILITY METHOD TO BE PLACED OUTSIDE .............................
     /**
      * Load Tequila credentials from file
      *
