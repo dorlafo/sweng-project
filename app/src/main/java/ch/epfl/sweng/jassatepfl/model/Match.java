@@ -267,17 +267,11 @@ public class Match {
         public int getMaxPlayerNumber() {
             switch (this) {
                 case CHIBRE:
-                    return 4;
                 case PIQUE_DOUBLE:
-                    return 4;
                 case OBEN_ABE:
-                    return 4;
                 case UNDEN_UFE:
-                    return 4;
                 case SLALOM:
-                    return 4;
                 case CHICANE:
-                    return 4;
                 case JASS_MARANT:
                     return 4;
                 case ROI:
