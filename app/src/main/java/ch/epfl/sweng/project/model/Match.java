@@ -218,15 +218,14 @@ public class Match {
      * <p>
      * Removing a player that is not present do nothing
      *
-     *
-     * @param player The player to remove from the match
-     * @return The updated builder
+     * @param toRemove The id of the player to remove from the match
      */
-    public Match removePlayer(Player player) {
-        if (players.contains(player)) {
-            players.remove(player);
+    public void removePlayerById(Player.PlayerID toRemove) {
+        for (Player p : players) {
+            if (p.getID().equals(toRemove)) {
+                players.remove(p);
+            }
         }
-        return this;
     }
 
     public static class MatchRank extends Rank {
