@@ -5,11 +5,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.model.Player;
-
 
 
 /**
@@ -22,25 +24,19 @@ import ch.epfl.sweng.project.model.Player;
 
 public class PlayerListAdapterForMatch extends FirebaseListAdapter<Player> {
 
-    private final Activity activity;
-
     public PlayerListAdapterForMatch(Activity activity, String matchID) {
         super(activity, Player.class, R.layout.list_element_player,
-                FirebaseDatabase.getInstance().getReference().child("matches").child(matchID).child("players"));
-        this.activity = activity;
+                FirebaseDatabase.getInstance().getReference()
+                        .child("matches").child(matchID).child("players"));
+
     }
-
-
 
     @Override
     protected void populateView(View v, Player player, int position) {
-            TextView name = (TextView) v.findViewById(R.id.name);
-            TextView rank = (TextView) v.findViewById(R.id.rank_data);
-            TextView playerID = (TextView) v.findViewById(R.id.player_id_data);
+        TextView name = (TextView) v.findViewById(R.id.name);
+        TextView rank = (TextView) v.findViewById(R.id.rank_data);
 
-            name.setText(player.getFirstName() + " " + player.getLastName());
-            rank.setText(player.getRank().toString());
-            playerID.setText(player.getID().toString());
-
+        name.setText(player.getFirstName() + " " + player.getLastName());
+        rank.setText(player.getRank().toString());
     }
 }
