@@ -67,7 +67,7 @@ public class MatchListActivity extends ListActivity {
                                         try {
                                             match.addPlayer(player);
                                             ref.child("matches").child(matchID).setValue(match);
-                                            Intent moveToMatchActivity = new Intent(MatchListActivity.this, MatchActivity.class);
+                                            Intent moveToMatchActivity = new Intent(MatchListActivity.this, WaitingPlayersActivity.class);
                                             moveToMatchActivity.putExtra("MATCH_ID", matchID);
                                             startActivity(moveToMatchActivity);
                                         } catch (IllegalStateException e) {
