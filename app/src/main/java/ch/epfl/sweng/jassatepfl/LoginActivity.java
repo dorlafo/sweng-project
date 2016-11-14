@@ -51,6 +51,8 @@ public class LoginActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
+    /*
+    This code should not be necessary
     @Override
     public void onStart() {
         super.onStart();
@@ -60,7 +62,7 @@ public class LoginActivity extends BaseAppCompatActivity {
             onAuthSuccess();
         }
     }
-
+    */
     @Override
     public void onBackPressed() {
         //DO NOTHING -> it disables the back button
