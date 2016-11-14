@@ -162,7 +162,7 @@ public class MapsActivity extends FragmentActivity implements
                                                 try {
                                                     match.addPlayer(player);
                                                     ref.child("matches").child(matchID).setValue(match);
-                                                    Intent moveToMatchActivity = new Intent(MapsActivity.this, MatchActivity.class);
+                                                    Intent moveToMatchActivity = new Intent(MapsActivity.this, WaitingPlayersActivity.class);
                                                     getIntent().putExtra("MATCH_ID", matchID);
                                                     startActivity(moveToMatchActivity);
                                                 } catch (IllegalStateException e) {
