@@ -3,15 +3,18 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +33,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -53,7 +55,7 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_ORAN
  * Clicking on a marker displays the match information and clicking on
  * the information window prompts the user to join the match.
  */
-public class MapsActivity extends BaseFragmentActivity implements
+public class MapsActivity extends BaseActivityWithNavDrawer implements
         OnMapReadyCallback, LocationProviderListener {
 
     private GoogleMap matchMap;
@@ -65,14 +67,31 @@ public class MapsActivity extends BaseFragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_maps, drawer, false);
+        drawer.addView(contentView, 0);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().hide();
+        }
+
+        ImageButton menuButton = (ImageButton) findViewById(R.id.maps_menu_button);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
+
         createMap();
 
         locationProvider = new LocationProvider(this, true);
         locationProvider.setProviderListener(this);
 
         try {
-            FirebaseDatabase.getInstance().getReference().child("players")
+            dbRefWrapped.child("players")
                     .child(fAuth.getCurrentUser().getDisplayName())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -85,7 +104,7 @@ public class MapsActivity extends BaseFragmentActivity implements
                         }
                     });
         } catch (NullPointerException e) {
-            Toast.makeText(this, R.string.create_toast_no_connection, Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
                     .show();
         }
     }
@@ -149,9 +168,9 @@ public class MapsActivity extends BaseFragmentActivity implements
             @Override
             public void onInfoWindowClick(final Marker marker) {
                 new AlertDialog.Builder(MapsActivity.this)
-                        .setTitle(R.string.join_match)
-                        .setMessage(R.string.join_message)
-                        .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.dialog_join_match)
+                        .setMessage(R.string.dialog_join_message)
+                        .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 //TODO remove this
                                 //final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
@@ -175,7 +194,7 @@ public class MapsActivity extends BaseFragmentActivity implements
                                         });
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Do nothing, goes back to MapsActivity
                             }
@@ -195,11 +214,6 @@ public class MapsActivity extends BaseFragmentActivity implements
                             location.getLongitude()), 15f, 0f, 0f)));
         }
         userLastLocation = new LatLng(location.getLatitude(), location.getLongitude());
-    }
-
-    public void switchToList(View view) {
-        Intent intent = new Intent(this, MatchListActivity.class);
-        startActivity(intent);
     }
 
     private void createMap() {

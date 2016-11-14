@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="@string/player_rank"
+            android:text="@string/wait_player_list_field_rank"
             android:textStyle="bold" />
 
         <TextView

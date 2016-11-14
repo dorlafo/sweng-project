@@ -11,14 +11,10 @@ import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
 
-/**
- * Created by leo on 07.11.16.
- */
 
 /**
  * Adapter that display the players of the match in parameter.
  */
-
 public class PlayerListAdapterForMatch extends FirebaseListAdapter<Player> {
 
     public PlayerListAdapterForMatch(Activity activity, String matchID) {

@@ -137,4 +137,43 @@ public final class MatchBuilderTest {
         }
     }
 
+    @Test
+    public void testRemovingFromEmptyListThrowsException() {
+        setUp();
+        try {
+            matchBuilder.removePlayer(amaury);
+            fail("Expected IllegalStateException");
+        } catch (IllegalArgumentException e) {
+            fail();
+        } catch (IllegalStateException e) {
+            assertTrue(e.getMessage().equals("No players in the match."));
+        }
+    }
+
+    @Test
+    public void testRemovingPlayerNotInMatchThrowsException() {
+        setUp();
+        try {
+            matchBuilder.addPlayer(amaury);
+            matchBuilder.removePlayer(vincenzo);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalStateException | IllegalAccessException e) {
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().equals("Player not in the Match."));
+        }
+    }
+
+    @Test
+    public void testRemovePlayerIsCorrect() {
+        setUp();
+        try {
+            matchBuilder.addPlayer(amaury);
+            matchBuilder.removePlayer(amaury);
+        } catch (IllegalStateException | IllegalArgumentException | IllegalAccessException e) {
+            fail();
+        }
+        assertTrue(matchBuilder.getPlayerList().isEmpty());
+    }
+
 }

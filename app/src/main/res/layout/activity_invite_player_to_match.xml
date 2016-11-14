@@ -5,6 +5,7 @@
     android:id="@+id/activity_invite_player_to_match"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,14 +13,14 @@
     tools:context="ch.epfl.sweng.jassatepfl.InvitePlayerToMatchActivity">
 
     <FrameLayout
-        android:id="@+id/match_list_view"
+        android:id="@+id/invite_list_view"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="match_parent"
         android:layout_margin="@dimen/listview_layout_margin"
         android:orientation="vertical">
 
         <ListView
-            android:id="@android:id/list"
+            android:id="@+id/invite_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/background_light"
@@ -33,9 +34,9 @@
         android:id="@+id/invite_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/match_list_view"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        android:text="@string/invite"/>
+        android:text="@string/invite_button_text_invite"
+        android:visibility="visible"/>
 
 </RelativeLayout>

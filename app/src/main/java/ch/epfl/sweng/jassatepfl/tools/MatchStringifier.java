@@ -77,7 +77,7 @@ public final class MatchStringifier {
      */
     public String dateToStringCustom() {
         DateFormat dateFormat = new SimpleDateFormat(
-                context.getResources().getString(R.string.date_format),
+                context.getResources().getString(R.string.date_format_match_display),
                 Locale.FRENCH);
         return dateFormat.format(match.getExpirationTime());
     }

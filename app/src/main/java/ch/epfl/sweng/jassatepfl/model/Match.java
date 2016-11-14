@@ -217,7 +217,6 @@ public class Match {
     }
 
     /**
-<<<<<<< HEAD:app/src/main/java/ch/epfl/sweng/project/model/Match.java
      * Removes the given player to the player from list.
      * <p>
      * Removing a player that is not present do nothing
@@ -307,7 +306,7 @@ public class Match {
          */
         public Builder() {
             players = new ArrayList<>();
-            location = new GPSPoint(46.520407, 6.565802); // Esplanade
+            location = new GPSPoint(46.520450, 6.567737); // Satellite
             description = DEFAULT_DESCRIPTION;
             privateMatch = false;
             gameVariant = CLASSIC;
@@ -337,9 +336,18 @@ public class Match {
             return this;
         }
 
+        public void removePlayer(Player player) throws IllegalStateException, IllegalArgumentException {
+            if (players.isEmpty()) {
+                throw new IllegalStateException("No players in the match.");
+            }
+            if (!players.contains(player)) {
+                throw new IllegalArgumentException("Player not in the Match.");
+            }
+            players.remove(player);
+        }
+
         public List<Player> getPlayerList() {
-            ArrayList<Player> playerList = new ArrayList<>(players);
-            return playerList;
+            return new ArrayList<>(players);
         }
 
         public Builder setLocation(GPSPoint location) {
