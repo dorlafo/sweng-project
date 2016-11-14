@@ -154,7 +154,7 @@ public class CreateMatchActivity extends AppCompatActivity implements
                 String matchId = ref.push().getKey();
                 ref.child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
                 Log.d(TAG, "Pushed match " + matchId + " to database");
-                Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
+                Intent moveToMatchActivity = new Intent(this, WaitingPlayersActivity.class);
 
                 /*
                 j'ose pas trop tout casser mais à mon avis c'est pas getIntent(), mais moveToMatchActivity...
