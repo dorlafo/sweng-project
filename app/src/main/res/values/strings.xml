@@ -21,7 +21,7 @@
     <string name="button_confirmation">OK</string>
     <string name="match_title">Match Information</string>
     <string name="private_match">Private Match</string>
-    <string name="variant">Match Variant</string>
+    <string name="variant">Game Variant</string>
     <string name="description">Description</string>
     <string name="add_player_text">Add Player</string>
     <string name="expiration_time_query">Match valid until</string>
@@ -49,10 +49,9 @@
     <string name="match_description">Match description :</string>
     <string name="match_players">Match players</string>
     <string name="no_match">Sorry but you are currently enrolled in no match...</string>
-    <string name="start_match">Start Match</string>
+    <string name="ready">Ready</string>
+    <string name="play">Play</string>
     <string name="leave_match">Leave Match</string>
     <string name="player_rank">Rank : </string>
     <string name="player_id">ID :</string>
-    <string name="waiting_others">Waiting for other players...</string>
-    <string name="your_match_will_begin_soon">Your match is about to begin soon !</string>
 </resources>
