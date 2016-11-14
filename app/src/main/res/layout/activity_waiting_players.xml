@@ -10,12 +10,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".WaitingPlayersActivity">
 
+    <Space
+        android:id="@+id/waiting_top_space"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_height="?android:attr/actionBarSize" />
+
     <LinearLayout
         android:id="@+id/match_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/match_leave"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/waiting_top_space"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
