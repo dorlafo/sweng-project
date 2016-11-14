@@ -61,7 +61,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".MatchActivity" />
+        <activity android:name=".WaitingPlayersActivity" />
         <activity android:name=".LoginActivity"></activity>
     </application>
 
