@@ -12,13 +12,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapterForMatch;
@@ -27,19 +24,17 @@ public class WaitingPlayersActivity extends BaseAppCompatActivity {
 
     private String sciper;
     private Match match;
-    String matchId;
+    private String matchId;
 
-    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    private ChildEventListener pendingMatchesListener;
 
-    ChildEventListener pendingMatchesListener;
-
-    TextView variant;
-    TextView description;
-    ListView listView;
+    private TextView variant;
+    private TextView description;
+    private ListView listView;
 
 
-    int playersReady = 0;
-    int posInList;
+    private int playersReady = 0;
+    private int posInList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +121,7 @@ public class WaitingPlayersActivity extends BaseAppCompatActivity {
     public void leaveMatch(View view) {
         match.removePlayerById(new Player.PlayerID(sciper));
         dbRefWrapped.child("matches").child(matchId).setValue(match);
-        ref.child("pendingMatches").child(matchId).child(Integer.toString(posInList)).removeValue();
+        dbRefWrapped.child("pendingMatches").child(matchId).child(Integer.toString(posInList)).removeValue();
         Intent backToList = new Intent(this, MatchListActivity.class);
         startActivity(backToList);
     }
@@ -135,7 +130,7 @@ public class WaitingPlayersActivity extends BaseAppCompatActivity {
      * When all user clicks on "start match" button it launches the game.
      */
     public void userIsReady(View view) {
-        ref.child("pendingMatches").child(matchId).child(Integer.toString(posInList)).setValue(true);
+        dbRefWrapped.child("pendingMatches").child(matchId).child(Integer.toString(posInList)).setValue(true);
         Button ready = (Button) findViewById(R.id.ready);
         ready.setEnabled(false);
     }
@@ -145,7 +140,8 @@ public class WaitingPlayersActivity extends BaseAppCompatActivity {
                 .setTitle("Feature missing")
                 .setMessage("will move to new activity")
                 .show();
-        FirebaseDatabase.getInstance().getReference().child("pendingMatches").child(matchId).removeEventListener(pendingMatchesListener);
+        dbRefWrapped.child("pendingMatches").child(matchId).removeEventListener(pendingMatchesListener);
+        // TODO: backToList.putExtra("MATCH_ID", matchId);
         // TODO: Create intent for next activity
         // TODO: In new activity, delete pendingMatches
     }
