@@ -289,7 +289,9 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Player player = dataSnapshot.getValue(Player.class);
-                                        playerArrayAdapter.add(player);
+                                        if (playerArrayAdapter.getPosition(player) == -1) {
+                                            playerArrayAdapter.add(player);
+                                        }
                                     }
 
                                     @Override
