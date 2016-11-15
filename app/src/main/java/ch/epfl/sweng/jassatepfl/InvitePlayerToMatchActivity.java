@@ -17,14 +17,17 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Player;
@@ -38,20 +41,26 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         SearchView.OnQueryTextListener,
         View.OnClickListener {
 
+    private String currentUserSciper;
     private PlayerListAdapter adapter;
     private ListView playerListView;
-    private List<Player> playerToAdd;
+    private Set<String> inviteScipers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_player_to_match);
 
+        // TODO: maybe have a field in base activity with sciper of current user, with error management
+        currentUserSciper = fAuth.getCurrentUser().getDisplayName();
+        inviteScipers = new HashSet<>();
+
         TextView emptyList = new TextView(this);
         emptyList.setText(R.string.invite_welcome_text);
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         emptyList.setTextColor(Color.BLACK);
         emptyList.setTextSize(20);
+
         playerListView = (ListView) findViewById(R.id.invite_list);
         ((ViewGroup) playerListView.getParent()).addView(emptyList);
         playerListView.setEmptyView(emptyList);
@@ -62,10 +71,17 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                 final Player player = adapter.getItem(position);
                 new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
                         .setTitle(R.string.dialog_add_player)
-                        .setMessage(" " + player.getFirstName() + " " + player.getLastName())
+                        .setMessage(player.toString())
                         .setPositiveButton(R.string.dialog_add_confirmation, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                playerToAdd.add(player);
+                                String sciper = player.getID().toString();
+                                if (sciper.equals(currentUserSciper)) {
+                                    Toast.makeText(InvitePlayerToMatchActivity.this,
+                                            R.string.toast_invite_yourself, Toast.LENGTH_SHORT)
+                                            .show();
+                                } else {
+                                    inviteScipers.add(player.getID().toString());
+                                }
                             }
                         })
                         .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -77,7 +93,6 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
             }
         });
 
-        playerToAdd = new ArrayList<>();
         Button inviteButton = (Button) findViewById(R.id.invite_button);
         inviteButton.setOnClickListener(this);
     }
@@ -129,11 +144,13 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         switch (view.getId()) {
             case R.id.invite_button:
                 Intent resultIntent = new Intent();
-                if (!playerToAdd.isEmpty()) {
-                    for (Player p : playerToAdd) {
-                        resultIntent.putExtra("player" + playerToAdd.indexOf(p), p.getID().toString());
+                if (!inviteScipers.isEmpty()) {
+                    int playerIndex = 0;
+                    for (String sciper : inviteScipers) {
+                        resultIntent.putExtra("player" + playerIndex, sciper);
+                        ++playerIndex;
                     }
-                    resultIntent.putExtra("players_added", playerToAdd.size());
+                    resultIntent.putExtra("players_added", playerIndex);
                     setResult(RESULT_OK, resultIntent);
                 } else {
                     setResult(RESULT_CANCELED, resultIntent);
