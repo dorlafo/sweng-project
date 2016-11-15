@@ -122,7 +122,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         dbRefWrapped.child("pendingMatches").child(matchId).addChildEventListener(pendingMatchesListener);
 
         Intent startIntent = getIntent();
-        final DBReferenceWrapper ref = dbRefWrapped;
 
         /* Notification onClick handler.
          * Will display dialog Box depending on the notification received.
@@ -131,7 +130,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
             final String matchID = startIntent.getStringExtra("matchId");
             switch (startIntent.getStringExtra("notif")) {
                 case "matchfull":
-                    ref.child("matches").child(startIntent.getStringExtra("matchId"))
+                    dbRefWrapped.child("matches").child(startIntent.getStringExtra("matchId"))
                             .addListenerForSingleValueEvent(new ValueEventListener() {
 
                                 @Override
@@ -152,7 +151,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     startIntent.removeExtra("matchId");
                     break;
                 case "playerjoined":
-                    ref.child("players")
+                    dbRefWrapped.child("players")
                             .child(startIntent.getStringExtra("sciper"))
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -175,7 +174,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     startIntent.removeExtra("sciper");
                     break;
                 case "playerleft":
-                    ref.child("players")
+                    dbRefWrapped.child("players")
                             .child(startIntent.getStringExtra("sciper"))
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -203,14 +202,14 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                             .setMessage(R.string.dialog_join_message)
                             .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dbRefWrapped.child("matches").child(matchID)
+                                    WaitingPlayersActivity.this.dbRefWrapped.child("matches").child(matchID)
                                             .addListenerForSingleValueEvent(new ValueEventListener() {
 
                                                 @Override
                                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                                     match = dataSnapshot.getValue(Match.class);
                                                     DatabaseUtils.addPlayerToMatch(WaitingPlayersActivity.this,
-                                                            dbRefWrapped,
+                                                            WaitingPlayersActivity.this.dbRefWrapped,
                                                             matchID,
                                                             fAuth.getCurrentUser().getDisplayName(),
                                                             match);
