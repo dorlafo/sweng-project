@@ -18,11 +18,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapterForMatch;
 
@@ -42,6 +44,9 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     private int playersReady = 0;
     private int posInList;
 
+    private static final int INVITE_CODE = 42;
+    private List<Player> playerList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         matchId = getIntent().getStringExtra("MATCH_ID");
         description = (TextView) findViewById(R.id.match_description);
         variant = (TextView) findViewById(R.id.match_variant);
+
+        playerList = new ArrayList<>();
 
         listView = (ListView) findViewById(android.R.id.list);
         listView.setEmptyView(findViewById(android.R.id.empty));
@@ -239,9 +246,38 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            if(requestCode == INVITE_CODE) {
+                int playerNum = data.getIntExtra("players_added", 0);
+                for (int i = 0; i < playerNum; i++) {
+                    String sciper = data.getStringExtra("player" + i);
+                    dbRefWrapped.child("players")
+                            .child(sciper)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Player player = dataSnapshot.getValue(Player.class);
+                                    playerList.add(new Player(player.getID(), player.getLastName(), player.getFirstName(), player.getRank()));
+                                    new InvitePlayer(player).execute(matchId);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.e("ERROR-DATABASE", databaseError.toString());
+                                }
+                            });
+                }
+            }
+        }
+    }
+
     /**
      * When button "LEAVE MATCH" is pressed, the current user is removed from the match player list
      * send him back to main menu.
+     *
+     * @param view General view
      */
     public void leaveMatch(View view) {
         match.removePlayerById(new Player.PlayerID(sciper));
@@ -253,11 +289,23 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
     /**
      * When all user clicks on "start match" button it launches the game.
+     *
+     * @param view General view
      */
     public void userIsReady(View view) {
         dbRefWrapped.child("pendingMatches").child(matchId).child(Integer.toString(posInList)).setValue(true);
         Button ready = (Button) findViewById(R.id.ready);
         ready.setEnabled(false);
+    }
+
+    /**
+     * Ridirects user to InvitePlayerToMatchActivity when
+     * clicks on "Invite" button
+     *
+     * @param view General view
+     */
+    public void invitePlayers(View view) {
+        startActivityForResult(new Intent(this, InvitePlayerToMatchActivity.class), INVITE_CODE);
     }
 
     public void goToMatch(View view) {
