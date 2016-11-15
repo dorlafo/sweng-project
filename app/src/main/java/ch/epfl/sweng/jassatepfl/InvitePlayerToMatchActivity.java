@@ -17,14 +17,16 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Player;
@@ -38,37 +40,50 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         SearchView.OnQueryTextListener,
         View.OnClickListener {
 
+    private String currentUserSciper;
     private PlayerListAdapter adapter;
     private ListView playerListView;
-    private List<Player> playerToAdd;
+    private Set<String> inviteScipers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_player_to_match);
+
+        // TODO: maybe have a field in base activity with sciper of current user, with error management
+        currentUserSciper = fAuth.getCurrentUser().getDisplayName();
+        inviteScipers = new HashSet<>();
+
         TextView emptyList = new TextView(this);
-        emptyList.setText(R.string.search_player_list);
+        emptyList.setText(R.string.invite_welcome_text);
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         emptyList.setTextColor(Color.BLACK);
         emptyList.setTextSize(20);
-        playerListView = (ListView) findViewById(android.R.id.list);
+
+        playerListView = (ListView) findViewById(R.id.invite_list);
         ((ViewGroup) playerListView.getParent()).addView(emptyList);
         playerListView.setEmptyView(emptyList);
-
 
         playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
                 final Player player = adapter.getItem(position);
                 new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
-                        .setTitle(R.string.invite_player_text)
-                        .setMessage(" " + player.getFirstName() + " " + player.getLastName())
-                        .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.dialog_add_player)
+                        .setMessage(player.toString())
+                        .setPositiveButton(R.string.dialog_add_confirmation, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                playerToAdd.add(player);
+                                String sciper = player.getID().toString();
+                                if (sciper.equals(currentUserSciper)) {
+                                    Toast.makeText(InvitePlayerToMatchActivity.this,
+                                            R.string.toast_invite_yourself, Toast.LENGTH_SHORT)
+                                            .show();
+                                } else {
+                                    inviteScipers.add(player.getID().toString());
+                                }
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Do nothing, goes back to InvitePlayerToMatchActivity
                             }
@@ -76,7 +91,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                         .show();
             }
         });
-        playerToAdd = new ArrayList<>();
+
         Button inviteButton = (Button) findViewById(R.id.invite_button);
         inviteButton.setOnClickListener(this);
     }
@@ -105,10 +120,9 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
-                        List<Player> playerList = new ArrayList<Player>();
-                        while (iterator.hasNext()) {
-                            playerList.add(iterator.next().getValue(Player.class));
+                        List<Player> playerList = new ArrayList<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            playerList.add(snapshot.getValue(Player.class));
                         }
                         adapter = new PlayerListAdapter(InvitePlayerToMatchActivity.this, R.layout.player_list_element, playerList);
                         playerListView.setAdapter(adapter);
@@ -128,11 +142,13 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         switch (view.getId()) {
             case R.id.invite_button:
                 Intent resultIntent = new Intent();
-                if (!playerToAdd.isEmpty()) {
-                    for (Player p : playerToAdd) {
-                        resultIntent.putExtra("player" + playerToAdd.indexOf(p), p.getID().toString());
+                if (!inviteScipers.isEmpty()) {
+                    int playerIndex = 0;
+                    for (String sciper : inviteScipers) {
+                        resultIntent.putExtra("player" + playerIndex, sciper);
+                        ++playerIndex;
                     }
-                    resultIntent.putExtra("players_added", playerToAdd.size());
+                    resultIntent.putExtra("players_added", playerIndex);
                     setResult(RESULT_OK, resultIntent);
                 } else {
                     setResult(RESULT_CANCELED, resultIntent);

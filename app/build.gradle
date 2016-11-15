@@ -89,6 +89,8 @@ dependencies {
     compile 'com.github.blueapron:dexmaker:2.0'
     compile 'org.mockito:mockito-core:2.1.0'
 
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

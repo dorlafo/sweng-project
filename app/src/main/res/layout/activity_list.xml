@@ -26,17 +26,16 @@
     </FrameLayout>
 
     <ImageButton
-        android:id="@+id/switch_to_map"
+        android:id="@+id/list_menu_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="@dimen/button_bottom_margin"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/button_left_margin"
+        android:layout_marginTop="@dimen/button_top_margin"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/icon_description_list_to_map"
-        android:onClick="switchToMap"
-        android:src="@drawable/ic_map_black"
+        android:contentDescription="@string/icon_description_menu_button"
+        android:src="@drawable/ic_menu_black"
         android:visibility="visible"/>
 
 </RelativeLayout>
