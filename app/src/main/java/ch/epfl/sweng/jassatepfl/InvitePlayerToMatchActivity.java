@@ -25,7 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -121,10 +120,9 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
-                        List<Player> playerList = new ArrayList<Player>();
-                        while (iterator.hasNext()) {
-                            playerList.add(iterator.next().getValue(Player.class));
+                        List<Player> playerList = new ArrayList<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            playerList.add(snapshot.getValue(Player.class));
                         }
                         adapter = new PlayerListAdapter(InvitePlayerToMatchActivity.this, R.layout.player_list_element, playerList);
                         playerListView.setAdapter(adapter);
