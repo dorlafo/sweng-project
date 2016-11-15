@@ -19,8 +19,7 @@
     <LinearLayout
         android:id="@+id/match_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/match_leave"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/waiting_top_space"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
@@ -79,11 +78,46 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/bottom_buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/waiting_players_invite_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="invitePlayers"
+            android:text="@string/invite_button_text_invite"
+            android:textAlignment="center"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/match_leave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="leaveMatch"
+            android:text="@string/wait_button_text_leave"
+            android:textAlignment="center"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/ready"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="userIsReady"
+            android:text="@string/wait_button_text_ready"
+            android:textAlignment="center"
+            android:textSize="15sp" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/play"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_above="@+id/match_leave"
+        android:layout_above="@id/bottom_buttons"
         android:layout_centerHorizontal="true"
         android:background="@drawable/roundedbutton"
         android:enabled="false"
@@ -91,35 +125,5 @@
         android:text="@string/wait_button_text_play"
         android:textAlignment="center"
         android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/waiting_players_invite_button"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/match_leave"
-        android:onClick="invitePlayers"
-        android:text="@string/invite_button_text_invite"
-        android:textAlignment="center"
-        android:textSize="15sp"/>
-
-    <Button
-        android:id="@+id/match_leave"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/ready"
-        android:onClick="leaveMatch"
-        android:text="@string/wait_button_text_leave"
-        android:textAlignment="center"
-        android:textSize="15sp" />
-
-    <Button
-        android:id="@+id/ready"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:onClick="userIsReady"
-        android:text="@string/wait_button_text_ready"
-        android:textAlignment="center"
-        android:textSize="15sp" />
 
 </RelativeLayout>
