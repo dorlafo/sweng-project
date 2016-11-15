@@ -23,11 +23,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
+import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
 /**
@@ -40,7 +45,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
 
     private PlayerListAdapter adapter;
     private ListView playerListView;
-    private List<Player> playerToAdd;
+    private Set<Player> playerToAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +58,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         emptyList.setTextColor(Color.BLACK);
         emptyList.setTextSize(20);
 
-        playerToAdd = new ArrayList<>();
+        playerToAdd = new HashSet<>();
         playerListView = (ListView) findViewById(R.id.invite_list);
         ((ViewGroup) playerListView.getParent()).addView(emptyList);
         playerListView.setEmptyView(emptyList);
@@ -61,20 +66,27 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
                 final Player player = adapter.getItem(position);
-                new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
-                        .setTitle(R.string.dialog_add_player)
-                        .setMessage(" " + player.getFirstName() + " " + player.getLastName())
-                        .setPositiveButton(R.string.dialog_add_confirmation, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                playerToAdd.add(player);
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing, goes back to InvitePlayerToMatchActivity
-                            }
-                        })
-                        .show();
+                if(!player.getID().toString().equals(fAuth.getCurrentUser().getDisplayName())) {
+                    new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
+                            .setTitle(R.string.dialog_add_player)
+                            .setMessage(" " + player.getFirstName() + " " + player.getLastName())
+                            .setPositiveButton(R.string.dialog_add_confirmation, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    playerToAdd.add(player);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Do nothing, goes back to InvitePlayerToMatchActivity
+                                }
+                            })
+                            .show();
+                } else {
+                    ErrorHandlerUtils.sendErrorMessage(InvitePlayerToMatchActivity.this,
+                                                        R.string.error_cannot_invite,
+                                                        R.string.error_already_in_match);
+                }
+
             }
         });
         Button inviteButton = (Button) findViewById(R.id.invite_button);
@@ -129,8 +141,10 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
             case R.id.invite_button:
                 Intent resultIntent = new Intent();
                 if (!playerToAdd.isEmpty()) {
+                    int index = 0;
                     for (Player p : playerToAdd) {
-                        resultIntent.putExtra("player" + playerToAdd.indexOf(p), p.getID().toString());
+                        resultIntent.putExtra("player" + index, p.getID().toString());
+                        index += 1;
                     }
                     resultIntent.putExtra("players_added", playerToAdd.size());
                     setResult(RESULT_OK, resultIntent);
