@@ -74,6 +74,7 @@
     <string name="toast_invalid_date">Invalid date: you cannot go back in time!</string>
     <string name="toast_no_connection">No connection to Firebase.</string>
     <string name="toast_cannot_create_with_no_player">You cannot create a match with no player in it.</string>
+    <string name="toast_invite_yourself">You cannot invite yourself</string>
 
     <string name="error">Error!</string>
     <string name="error_cannot_join">Can not join match</string>

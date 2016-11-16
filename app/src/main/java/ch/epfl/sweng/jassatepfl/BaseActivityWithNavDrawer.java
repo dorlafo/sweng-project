@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
 
@@ -47,6 +48,9 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Log.d("BaseActivity", "fAuth.getCurrentUser:" + fAuth.getCurrentUser());
+        showLogin();
     }
 
     @Override
@@ -107,4 +111,21 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
         return dbRefWrapped;
     }
 
+    /**
+     * Getter for the user sciper
+     * @return The user' sciper
+     */
+    public String getUserSciper() {
+        return fAuth.getCurrentUser().getDisplayName();
+    }
+
+    /**
+     * Launch the LoginActivity if the user is not yet logged in
+     */
+    private void showLogin() {
+        if (fAuth.getCurrentUser() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+    }
 }

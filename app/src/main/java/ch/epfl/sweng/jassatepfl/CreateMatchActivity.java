@@ -33,6 +33,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -285,7 +286,9 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Player player = dataSnapshot.getValue(Player.class);
-                                        playerArrayAdapter.add(player);
+                                        if (playerArrayAdapter.getPosition(player) == -1) {
+                                            playerArrayAdapter.add(player);
+                                        }
                                     }
 
                                     @Override

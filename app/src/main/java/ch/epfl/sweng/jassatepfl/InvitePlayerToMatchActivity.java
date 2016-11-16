@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,15 +25,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
-import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
 /**
@@ -43,14 +41,19 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         SearchView.OnQueryTextListener,
         View.OnClickListener {
 
+    private String currentUserSciper;
     private PlayerListAdapter adapter;
     private ListView playerListView;
-    private Set<Player> playerToAdd;
+    private Set<String> inviteScipers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_player_to_match);
+
+        // TODO: maybe have a field in base activity with sciper of current user, with error management
+        currentUserSciper = fAuth.getCurrentUser().getDisplayName();
+        inviteScipers = new HashSet<>();
 
         TextView emptyList = new TextView(this);
         emptyList.setText(R.string.invite_welcome_text);
@@ -58,7 +61,6 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         emptyList.setTextColor(Color.BLACK);
         emptyList.setTextSize(20);
 
-        playerToAdd = new HashSet<>();
         playerListView = (ListView) findViewById(R.id.invite_list);
         ((ViewGroup) playerListView.getParent()).addView(emptyList);
         playerListView.setEmptyView(emptyList);
@@ -66,27 +68,27 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
                 final Player player = adapter.getItem(position);
-                if(!player.getID().toString().equals(fAuth.getCurrentUser().getDisplayName())) {
-                    new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
-                            .setTitle(R.string.dialog_add_player)
-                            .setMessage(" " + player.getFirstName() + " " + player.getLastName())
-                            .setPositiveButton(R.string.dialog_add_confirmation, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    playerToAdd.add(player);
+                new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
+                        .setTitle(R.string.dialog_add_player)
+                        .setMessage(player.toString())
+                        .setPositiveButton(R.string.dialog_add_confirmation, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                String sciper = player.getID().toString();
+                                if (sciper.equals(currentUserSciper)) {
+                                    ErrorHandlerUtils.sendErrorMessage(InvitePlayerToMatchActivity.this,
+                                            R.string.toast_invite_yourself,
+                                            R.string.error_already_in_match);
+                                } else {
+                                    inviteScipers.add(player.getID().toString());
                                 }
-                            })
-                            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Do nothing, goes back to InvitePlayerToMatchActivity
-                                }
-                            })
-                            .show();
-                } else {
-                    ErrorHandlerUtils.sendErrorMessage(InvitePlayerToMatchActivity.this,
-                                                        R.string.error_cannot_invite,
-                                                        R.string.error_already_in_match);
-                }
-
+                            }
+                        })
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing, goes back to InvitePlayerToMatchActivity
+                            }
+                        })
+                        .show();
             }
         });
         Button inviteButton = (Button) findViewById(R.id.invite_button);
@@ -117,10 +119,9 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
-                        List<Player> playerList = new ArrayList<Player>();
-                        while (iterator.hasNext()) {
-                            playerList.add(iterator.next().getValue(Player.class));
+                        List<Player> playerList = new ArrayList<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            playerList.add(snapshot.getValue(Player.class));
                         }
                         adapter = new PlayerListAdapter(InvitePlayerToMatchActivity.this, R.layout.player_list_element, playerList);
                         playerListView.setAdapter(adapter);
@@ -140,13 +141,13 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         switch (view.getId()) {
             case R.id.invite_button:
                 Intent resultIntent = new Intent();
-                if (!playerToAdd.isEmpty()) {
-                    int index = 0;
-                    for (Player p : playerToAdd) {
-                        resultIntent.putExtra("player" + index, p.getID().toString());
-                        index += 1;
+                if (!inviteScipers.isEmpty()) {
+                    int playerIndex = 0;
+                    for (String sciper : inviteScipers) {
+                        resultIntent.putExtra("player" + playerIndex, sciper);
+                        ++playerIndex;
                     }
-                    resultIntent.putExtra("players_added", playerToAdd.size());
+                    resultIntent.putExtra("players_added", playerIndex);
                     setResult(RESULT_OK, resultIntent);
                 } else {
                     setResult(RESULT_CANCELED, resultIntent);

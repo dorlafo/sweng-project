@@ -12,20 +12,15 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-
 public final class MainActivity extends BaseActivityWithNavDrawer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_main);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
         drawer.addView(contentView, 0);
-
-        System.out.println(FirebaseInstanceId.getInstance().getToken());
-        //Show login screen if not logged in
-        showLogin();
 
         TextView emptyList = new TextView(this);
         emptyList.setText(R.string.main_empty_list);
@@ -81,16 +76,4 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
         Intent intent = new Intent(this, MatchListActivity.class);
         startActivity(intent);
     }
-
-
-    /**
-     * Launch the LoginActivity if the user is not yet logged in
-     */
-    private void showLogin() {
-        if (fAuth.getCurrentUser() == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
-    }
-
 }

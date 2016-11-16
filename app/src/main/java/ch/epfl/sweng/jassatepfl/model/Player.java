@@ -149,6 +149,22 @@ public class Player {
         public PlayerID() {
         }
 
+        @Override
+        public boolean equals(Object other) {
+            if (other == this) {
+                return true;
+            } else if (other == null || other.getClass() != this.getClass()) {
+                return false;
+            }
+            return this.getID() == ((PlayerID) other).getID();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.getID());
+        }
+
     }
 
 }
