@@ -249,6 +249,47 @@ public class Match {
     }
 
     /**
+     * The different meld available
+     */
+    public enum Meld {
+        MARRIAGE("Stöck"),
+        THREE_CARDS("Trois carte"),
+        FIFTY("Cinquante"),
+        HUNDRED("Cent"),
+        FOUR_NINE("Cent cinquante"),
+        FOUR_JACKS("Deux cent");
+
+        private final String meldName;
+
+        private Meld(String meldName) {
+            this.meldName = meldName;
+        }
+
+        /**
+         * Returns the value of the current meld
+         * @return The value of the meld
+         */
+        public int value() {
+            switch (this) {
+                case MARRIAGE:
+                case THREE_CARDS:
+                    return 20;
+                case FIFTY:
+                    return 50;
+                case HUNDRED:
+                    return 100;
+                case FOUR_NINE:
+                    return 150;
+                case FOUR_JACKS:
+                    return 200;
+                default:
+                    return 0;
+            }
+        }
+
+    }
+
+    /**
      * The different variants of a Jass game.
      */
     public enum GameVariant {
@@ -297,6 +338,50 @@ public class Match {
             }
         }
 
+        /**
+         * Returns the number of team for the current game variant
+         *
+         * @return The number of team
+         */
+        public int getNumberOfTeam() {
+            switch (this) {
+                case CHIBRE:
+                case PIQUE_DOUBLE:
+                case OBEN_ABE:
+                case UNDEN_UFE:
+                case SLALOM:
+                case CHICANE:
+                case JASS_MARANT:
+                case POMME:
+                    return 2;
+                case ROI:
+                    return 3;
+                default:
+                    return 2;
+            }
+        }
+
+        /**
+         * Returns the number of player by team for the current game variant
+         * @return The number of player by team
+         */
+        public int getNumberOfPlayerByTeam() {
+            switch (this) {
+                case CHIBRE:
+                case PIQUE_DOUBLE:
+                case OBEN_ABE:
+                case UNDEN_UFE:
+                case SLALOM:
+                case CHICANE:
+                case JASS_MARANT:
+                    return 2;
+                case ROI:
+                case POMME:
+                    return 1;
+                default:
+                    return 2;
+            }
+        }
     }
 
     /**

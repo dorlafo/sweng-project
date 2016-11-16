@@ -32,11 +32,17 @@ public class MatchStats {
             throw new IllegalArgumentException("Invalid number of teams");
         }
 
+        for(Team t : teams) {
+            if (t.getNumberOfMembers() != gameVariant.getNumberOfPlayerByTeam()) {
+                throw new IllegalArgumentException("Invalid number of member in some team");
+            }
+        }
+
         this.matchID = matchID;
         this.gameVariant = gameVariant;
         this.teams = new Team[nbTeam];
 
-        this.teamScores = new ArrayList[gameVariant.getnumberOfTeam()];
+        this.teamScores = new ArrayList[gameVariant.getNumberOfTeam()];
         for(ArrayList<Integer> teamScore : teamScores) {
             teamScore = new ArrayList<>();
         }
@@ -64,12 +70,8 @@ public class MatchStats {
      * Set the meld to the corresponding team
      * @param m The meld made
      * @param teamIndex The team that made the bid
-     * @throws IllegalArgumentException If the bid is not in this game variant
      */
-    public void setMeld(Meld m, int teamIndex) throws IllegalArgumentException {
-        if(!gameVariant.getAvailableMeld().contains(m)) {
-            throw new IllegalArgumentException("Invalid bid for this game variant");
-        }
+    public void setMeld(Match.Meld m, int teamIndex) {
         teamScores[teamIndex].add(roundIndex, teamScores[teamIndex].get(roundIndex) + m.value());
     }
 }
