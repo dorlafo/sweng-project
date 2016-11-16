@@ -1,22 +1,37 @@
 package ch.epfl.sweng.jassatepfl.model;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 /**
- * Created by admin on 16.11.16.
+ * Test for the Team class
  */
 public class TeamTest {
-    @Before
-    public void setUp() throws Exception {
+    @Test
+    public void teamIsImmutable() {
+        Player.PlayerID p1 = new Player.PlayerID(234832);
+        Player.PlayerID p2 = new Player.PlayerID(244532);
+        Set<Player.PlayerID> players = new HashSet<>();
+        players.add(p1);
+        players.add(p2);
 
+        Team t = new Team(players);
+        players.clear();
+
+        assertThat(t.getNumberOfMembers(), is(2));
+        assertThat(t.getMembers().size(), is(2));
+        assertThat(t.getMembers().contains(p1), is(true));
+        assertThat(t.getMembers().contains(p2), is(true));
     }
 
-    @After
-    public void tearDown() throws Exception {
-
+    @Test(expected = IllegalArgumentException.class)
+    public void emptyTeamCannotBeCreated() {
+        Set<Player.PlayerID> p = Collections.emptySet();
+        Team t = new Team(p);
     }
-
 }
