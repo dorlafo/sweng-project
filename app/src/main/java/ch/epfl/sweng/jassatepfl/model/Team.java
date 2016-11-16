@@ -1,23 +1,31 @@
 package ch.epfl.sweng.jassatepfl.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class representing a team. It contains the ID's of all team members
  */
 
 public class Team {
-    //Array containing the ID of the team members
-    private final List<Player.PlayerID> members;
+    //Set containing the ID of the team members
+    private final Set<Player.PlayerID> members;
 
-    public Team(List<Player.PlayerID> memberIDs) {
-        ArrayList<Player.PlayerID> tmpMembers = new ArrayList<>();
+    /**
+     * Public constructor for Team
+     * @param memberIDs A set containing the ID's of the player
+     * @throws IllegalArgumentException If the set of ID's is empty
+     */
+    public Team(Set<Player.PlayerID> memberIDs) throws IllegalArgumentException {
+        if(memberIDs.size() == 0) {
+            throw new IllegalArgumentException("The team cannot have zero member");
+        }
+        HashSet<Player.PlayerID> tmpMembers = new HashSet<>();
         for(Player.PlayerID member : memberIDs) {
             tmpMembers.add(member);
         }
-        this.members = Collections.unmodifiableList(tmpMembers);
+        this.members = Collections.unmodifiableSet(tmpMembers);
     }
 
     /**
@@ -32,7 +40,7 @@ public class Team {
      * Getter for the players
      * @return Returns a list of the members of the team
      */
-    public List<Player.PlayerID> getMembers() {
-        return Collections.unmodifiableList(members);
+    public Set<Player.PlayerID> getMembers() {
+        return Collections.unmodifiableSet(members);
     }
 }
