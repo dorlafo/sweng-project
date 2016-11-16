@@ -51,7 +51,6 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_ORAN
 
 /**
  * Activity displaying matches as markers on a Google Maps Fragment.
- * <br>
  * Clicking on a marker displays the match information and clicking on
  * the information window prompts the user to join the match.
  */
@@ -272,5 +271,4 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
             }
         });
     }
-
 }

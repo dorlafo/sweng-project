@@ -126,7 +126,7 @@ public class MatchActivity extends BaseActivityWithNavDrawer {
                                                     DatabaseUtils.addPlayerToMatch(MatchActivity.this,
                                                             dbRefWrapped,
                                                             matchID,
-                                                            fAuth.getCurrentUser().getDisplayName(),
+                                                            getUserSciper(),
                                                             match);
                                                 }
 

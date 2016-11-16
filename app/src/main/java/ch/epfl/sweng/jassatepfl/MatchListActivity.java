@@ -35,6 +35,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_list);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_list, drawer, false);
         drawer.addView(contentView, 0);

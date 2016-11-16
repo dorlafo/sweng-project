@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl;
 
-
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -48,7 +47,6 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         matches.add(DummyData.twoPlayersMatch());
         matches.add(DummyData.onePlayerMatch());
         dbRefWrapMock.addMatches(matches);
-
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Rolex"));
         try {

@@ -2,6 +2,7 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -24,7 +25,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sciper = fAuth.getCurrentUser().getDisplayName();
+        //setContentView(R.layout.activity_user_profile);
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_user_profile, drawer, false);
@@ -35,9 +36,11 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
         mtwFirstName = (TextView) findViewById(R.id.twFirstName);
         mtwPlayerRank = (TextView) findViewById(R.id.twRank);
 
-        //New ChildEventListener that will change the value of the textView according to the current
-        //logged in user
+        sciper = getUserSciper();
+        Log.d(TAG, "DisplayName:" + sciper);
 
+        //New SingleEventListener that will change the value of the textView according to the current
+        //logged in user
         dbRefWrapped
                 .child("players")
                 .child(sciper)
@@ -54,14 +57,9 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        //Nothing to be done
                     }
                 });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
     public void viewMenu(View view) {
