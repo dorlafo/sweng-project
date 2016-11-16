@@ -17,11 +17,10 @@ public class ErrorHandlerUtils {
      * @param titleId   The title ID in res.value.string
      * @param messageId Error Message
      */
-//TODO: Test this method...have to see how
-    public static void sendErrorMessage(Context context,
+    public static AlertDialog sendErrorMessage(Context context,
                                         int titleId,
                                         int messageId) {
-        new AlertDialog.Builder(context)
+        return new AlertDialog.Builder(context)
                 .setTitle(titleId)
                 .setMessage(messageId)
                 .show();
