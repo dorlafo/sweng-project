@@ -11,7 +11,7 @@ import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Player.PlayerID;
 import ch.epfl.sweng.jassatepfl.model.Rank;
 
-import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CLASSIC;
+import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
 
 public class DummyData {
 
@@ -37,14 +37,14 @@ public class DummyData {
     public static Match onePlayerMatch() {
         List<Player> match1Players = new ArrayList<>();
         match1Players.add(amaury);
-        return new Match(match1Players, rolexCoord, "Rolex", false, CLASSIC, expirationTime(2), "one_player");
+        return new Match(match1Players, rolexCoord, "Rolex", false, CHIBRE, expirationTime(2), "one_player");
     }
 
     public static Match twoPlayersMatch() {
         List<Player> match2Players = new ArrayList<>();
         match2Players.add(vincenzo);
         match2Players.add(dorian);
-        return new Match(match2Players, BCCoord, "BC", false, CLASSIC, expirationTime(24), "two_players");
+        return new Match(match2Players, BCCoord, "BC", false, CHIBRE, expirationTime(24), "two_players");
     }
 
     public static Match threePlayersMatch() {
@@ -52,19 +52,19 @@ public class DummyData {
         match3Players.add(colin);
         match3Players.add(nicolas);
         match3Players.add(alexis);
-        return new Match(match3Players, CECoord, "CE", false, CLASSIC, expirationTime(3), "three_players");
+        return new Match(match3Players, CECoord, "CE", false, CHIBRE, expirationTime(3), "three_players");
     }
 
     public static Match noPlayersMatch() {
         return new Match(new ArrayList<Player>(), lemanCoord,
                 "Cette String est beaucoup trop longue, je me demande si l'affichage va foirer???",
-                false, CLASSIC, expirationTime(12), "no_players");
+                false, CHIBRE, expirationTime(12), "no_players");
     }
 
     public static Match privateMatch() {
         List<Player> privatePlayers = new ArrayList<>();
         privatePlayers.add(jimmy);
-        return new Match(privatePlayers, swissTechCoord, "SwissTech", true, CLASSIC, expirationTime(1), "private");
+        return new Match(privatePlayers, swissTechCoord, "SwissTech", true, CHIBRE, expirationTime(1), "private");
     }
 
     public static Match fullMatch() {
@@ -73,7 +73,7 @@ public class DummyData {
         fullPlayers.add(marco);
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
-        return new Match(fullPlayers, COCoord, "CO", false, CLASSIC, expirationTime(3), "full");
+        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full");
     }
 
     private static long expirationTime(int hourOffset) {

@@ -20,7 +20,7 @@ public class NaiveCalculatorTest {
             .setTimestamp(1478908800)
             .setWinScore(700)
             .setLoseScore(200)
-            .setGameVariant(Match.GameVariant.CLASSIC)
+            .setGameVariant(Match.GameVariant.CHIBRE)
             .setMatchId("lol")
             .build();
     UserStats stats = new UserStats(id).update(update);

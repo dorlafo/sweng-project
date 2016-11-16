@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CLASSIC;
+import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.*;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
@@ -65,7 +65,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testSpinnerSelection() {
         onView(withId(R.id.variant_spinner)).perform(click());
-        onData(allOf(is(instanceOf(Match.GameVariant.class)), is(CLASSIC))).perform(click());
+        onData(allOf(is(instanceOf(Match.GameVariant.class)), is(CHIBRE))).perform(click());
     }
 
     @Test
