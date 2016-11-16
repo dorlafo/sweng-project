@@ -33,12 +33,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
@@ -224,7 +224,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     }
 
     private void displayNearbyMatches() {
-        DBReferenceWrapper ref = dbRefWrapped.child("matches"); // TODO: filter this
+        Query ref = dbRefWrapped.child("matches").child("privateMatch").equalTo(false);
 
         ref.addChildEventListener(new ChildEventListener() {
             private final Map<String, Marker> markers = new HashMap<>();
@@ -271,4 +271,5 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
             }
         });
     }
+
 }

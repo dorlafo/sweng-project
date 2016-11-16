@@ -23,7 +23,7 @@ public class MatchListAdapter extends FirebaseListAdapter<Match> {
     public MatchListAdapter(Activity activity) {
         super(activity, Match.class, R.layout.match_list_row,
                 ((BaseActivityWithNavDrawer) activity).dbRefWrapped.child("matches")
-                        .orderByChild("privateMatch").equalTo(false));
+                        .child("privateMatch").equalTo(false));
         this.activity = activity;
     }
 

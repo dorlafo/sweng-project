@@ -86,6 +86,18 @@ public class DBReferenceWrapper {
         return dbRef.orderByChild(path);
     }
 
+    public Query equalTo(boolean b) {
+        return dbRef.equalTo(b);
+    }
+
+    public Query startAt(String s) {
+        return this.startAt(s);
+    }
+
+    public Query endAt(String s) {
+        return dbRef.endAt(s);
+    }
+
     /**
      * Look at the firebase documentation to see what this method does
      */
@@ -99,4 +111,5 @@ public class DBReferenceWrapper {
     public void removeValue() {
         dbRef.removeValue();
     }
+
 }
