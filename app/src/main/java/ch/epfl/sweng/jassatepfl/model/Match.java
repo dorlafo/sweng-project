@@ -307,7 +307,7 @@ public class Match {
          */
         public Builder() {
             players = new ArrayList<>();
-            location = new GPSPoint(46.520407, 6.565802); // Esplanade
+            location = new GPSPoint(46.520450, 6.567737); // Satellite
             description = DEFAULT_DESCRIPTION;
             privateMatch = false;
             gameVariant = CHIBRE;
@@ -337,11 +337,19 @@ public class Match {
             return this;
         }
 
-        public List<Player> getPlayerList() {
-            ArrayList<Player> playerList = new ArrayList<>(players);
-            return playerList;
+        public void removePlayer(Player player) throws IllegalStateException, IllegalArgumentException {
+            if (players.isEmpty()) {
+                throw new IllegalStateException("No players in the match.");
+            }
+            if (!players.contains(player)) {
+                throw new IllegalArgumentException("Player not in the Match.");
+            }
+            players.remove(player);
         }
-        // TODO: add removePlayer method
+
+        public List<Player> getPlayerList() {
+            return new ArrayList<>(players);
+        }
 
         public Builder setLocation(GPSPoint location) {
             this.location = location;

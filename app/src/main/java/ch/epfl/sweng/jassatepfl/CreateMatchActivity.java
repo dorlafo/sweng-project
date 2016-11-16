@@ -4,17 +4,21 @@ package ch.epfl.sweng.jassatepfl;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -30,6 +34,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -44,8 +49,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
@@ -74,7 +79,7 @@ import static java.util.Calendar.YEAR;
  *
  * @author Nicolas Phan Van
  */
-public class CreateMatchActivity extends BaseActivity implements
+public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         OnClickListener,
         OnItemSelectedListener,
         OnTimeSetListener,
@@ -88,18 +93,20 @@ public class CreateMatchActivity extends BaseActivity implements
     private ImageButton placePickerButton;
     private Match.Builder matchBuilder;
     private LocationProvider locationProvider;
-    private List<Player> playersToAdd;
+    private ArrayAdapter<Player> playerArrayAdapter;
     private Calendar matchCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_match);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_create_match, drawer, false);
+        drawer.addView(contentView, 0);
+
         matchBuilder = new Match.Builder();
         locationProvider = new LocationProvider(this, false);
 
         createMatchButton = (Button) findViewById(R.id.create_create_button);
-        createMatchButton.setEnabled(false);
         createMatchButton.setOnClickListener(this);
 
         // Description input
@@ -117,17 +124,6 @@ public class CreateMatchActivity extends BaseActivity implements
                     return true;
                 }
                 return false;
-            }
-        });
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String description = ((TextView) v).getText().toString();
-                    if (description.length() != 0) {
-                        matchBuilder.setDescription(description);
-                    }
-                }
             }
         });
 
@@ -164,12 +160,41 @@ public class CreateMatchActivity extends BaseActivity implements
         variantSpinner.setAdapter(variantAdapter);
         variantSpinner.setOnItemSelectedListener(this);
 
+        // Player list
         TextView emptyList = new TextView(this);
-        emptyList.setText(R.string.empty_match_list);
+        emptyList.setText(R.string.create_empty_list);
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-        emptyList.setTextColor(Color.BLACK);
+        emptyList.setTextColor(Color.GRAY);
 
-        playersToAdd = matchBuilder.getPlayerList();
+        //TODO: Doesn't show players... --> fix this + make clicking on player ask to remove him
+        ListView playersLV = (ListView) findViewById(R.id.create_player_list);
+        ((ViewGroup) playersLV.getParent()).addView(emptyList);
+        playersLV.setEmptyView(emptyList);
+        playersLV.setBackgroundColor(0xFAFAFA);
+
+        playerArrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, new ArrayList<Player>());
+        playersLV.setAdapter(playerArrayAdapter);
+
+        playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Player player = playerArrayAdapter.getItem(position);
+                new AlertDialog.Builder(CreateMatchActivity.this)
+                        .setTitle(R.string.dialog_remove_player)
+                        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                playerArrayAdapter.remove(player);
+                            }
+                        })
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing, goes back to InvitePlayerToMatchActivity
+                            }
+                        })
+                        .show();
+            }
+        });
 
         // Place picker
         placePickerButton = (ImageButton) findViewById(R.id.create_place_picker_button);
@@ -183,6 +208,7 @@ public class CreateMatchActivity extends BaseActivity implements
                         currentLocation.getLongitude()));
             }
         }
+
         addCurrentUserToBuilder();
     }
 
@@ -205,13 +231,20 @@ public class CreateMatchActivity extends BaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_create_button:
-                String matchId = dbRefWrapped.child("matches").push().getKey();
-                dbRefWrapped.child("matches").child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
-                Log.d(TAG, "Pushed match " + matchId + " to database");
-                new InvitePlayer().execute(matchId);
-                Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
-                getIntent().putExtra("MATCH_ID", matchId);
-                startActivity(moveToMatchActivity);
+                if (matchBuilder.getPlayerList().size() == 0) {
+                    Toast.makeText(CreateMatchActivity.this,
+                            R.string.toast_cannot_create_with_no_player, Toast.LENGTH_SHORT)
+                            .show();
+                    createMatchButton.setEnabled(false);
+                } else {
+                    String matchId = dbRefWrapped.child("matches").push().getKey();
+                    dbRefWrapped.child("matches").child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
+                    Log.d(TAG, "Pushed match " + matchId + " to database");
+                    new InvitePlayer().execute(matchId);
+                    Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
+                    getIntent().putExtra("MATCH_ID", matchId);
+                    startActivity(moveToMatchActivity);
+                }
                 break;
             case R.id.time_picker_button:
                 DialogFragment timePickerFragment = new TimePickerFragment();
@@ -257,7 +290,9 @@ public class CreateMatchActivity extends BaseActivity implements
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Player player = dataSnapshot.getValue(Player.class);
-                                        playersToAdd.add(player);
+                                        if (playerArrayAdapter.getPosition(player) == -1) {
+                                            playerArrayAdapter.add(player);
+                                        }
                                     }
 
                                     @Override
@@ -292,6 +327,12 @@ public class CreateMatchActivity extends BaseActivity implements
     }
 
     @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Necessary for implementation of OnItemSelected interface
+        // Never used, do nothing.
+    }
+
+    @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar tempCalendar = (Calendar) matchCalendar.clone();
         tempCalendar.set(HOUR_OF_DAY, hourOfDay);
@@ -304,17 +345,12 @@ public class CreateMatchActivity extends BaseActivity implements
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
-            Toast.makeText(this, R.string.create_toast_invalid_hour, Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.toast_invalid_hour, Toast.LENGTH_SHORT)
                     .show();
         }
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Necessary for implementation of OnItemSelected interface
-        // Never used, do nothing.
-    }
-
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         final Calendar currentTime = Calendar.getInstance();
         int currentYear = currentTime.get(YEAR);
@@ -344,13 +380,14 @@ public class CreateMatchActivity extends BaseActivity implements
                 matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
                 displayCurrentExpirationDate();
             } else {
-                Toast.makeText(this, R.string.create_toast_invalid_date, Toast.LENGTH_SHORT)
+                Toast.makeText(this, R.string.toast_invalid_date, Toast.LENGTH_SHORT)
                         .show();
             }
         }
     }
 
     private void addCurrentUserToBuilder() {
+        // TODO: can we fuse this method with addplayer l.258, it is almost the same
         try {
             String currentUserId = fAuth.getCurrentUser().getDisplayName();
             dbRefWrapped.child("players").child(currentUserId)
@@ -358,7 +395,9 @@ public class CreateMatchActivity extends BaseActivity implements
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             try {
-                                matchBuilder.addPlayer(dataSnapshot.getValue(Player.class));
+                                Player currentUser = dataSnapshot.getValue(Player.class);
+                                matchBuilder.addPlayer(currentUser);
+                                createMatchButton.setEnabled(true);
                             } catch (IllegalStateException e) {
                                 ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
                                         R.string.error_cannot_join, R.string.error_match_full);
@@ -366,7 +405,6 @@ public class CreateMatchActivity extends BaseActivity implements
                                 ErrorHandlerUtils.sendErrorMessage(CreateMatchActivity.this,
                                         R.string.error_cannot_join, R.string.error_already_in_match);
                             }
-                            createMatchButton.setEnabled(true);
                         }
 
                         @Override
@@ -375,11 +413,18 @@ public class CreateMatchActivity extends BaseActivity implements
                         }
                     });
         } catch (NullPointerException e) {
-            /* Commented out out due to conflict with tests that check that a toast is displayed
-            Toast.makeText(this, R.string.create_toast_no_connection, Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
                     .show();
-            */
         }
+    }
+
+    /**
+     * Helper method to display expiration date as string.
+     */
+    private void displayCurrentExpirationDate() {
+        TextView currentExpirationDate = (TextView) findViewById(R.id.current_expiration_time);
+        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.date_format_match_creation), Locale.FRENCH);
+        currentExpirationDate.setText(dateFormat.format(matchCalendar.getTimeInMillis()));
     }
 
     /**
@@ -391,22 +436,12 @@ public class CreateMatchActivity extends BaseActivity implements
         @Override
         protected String doInBackground(String... params) {
             // Send invite to added players
-            if (playersToAdd.size() > 1) {
-                for (int i = 1; i < playersToAdd.size(); i++) {
-                    ServerInterface.getInstance().invitePlayer(playersToAdd.get(i).getID().toString(), params[0]);
-                }
+            int playerCount = playerArrayAdapter.getCount();
+            for (int i = 0; i < playerCount; ++i) {
+                ServerInterface.getInstance().invitePlayer(playerArrayAdapter.getItem(i).getID().toString(), params[0]);
             }
             return "";
         }
-    }
-
-    /**
-     * Helper method to display expiration date as string.
-     */
-    private void displayCurrentExpirationDate() {
-        TextView currentExpirationDate = (TextView) findViewById(R.id.current_expiration_time);
-        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.create_date_format), Locale.FRENCH);
-        currentExpirationDate.setText(dateFormat.format(matchCalendar.getTimeInMillis()));
     }
 
 }

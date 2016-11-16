@@ -1,7 +1,11 @@
 package ch.epfl.sweng.jassatepfl.model;
 
 
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+
+import java.util.Objects;
 
 /**
  * Class that represents a rank in a competition system.
@@ -48,6 +52,22 @@ public class Rank implements Comparable<Rank> {
     @Override
     public int compareTo(@NonNull Rank o) {
         return ((Integer) rank).compareTo(o.rank);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        } else if (other == null || other.getClass() != this.getClass()) {
+            return false;
+        }
+        return this.getRank() == ((Rank) other).getRank();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getRank());
     }
 
     /**

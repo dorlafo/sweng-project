@@ -37,7 +37,7 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         if (p != null) {
             TextView tv = (TextView) v.findViewById(R.id.player_name);
             if (tv != null) {
-                tv.setText(p.getFirstName() + " " + p.getLastName());
+                tv.setText(p.toString());
             }
         }
         return v;

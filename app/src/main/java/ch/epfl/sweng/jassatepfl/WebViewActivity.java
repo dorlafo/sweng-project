@@ -2,7 +2,6 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -14,7 +13,7 @@ import android.webkit.WebViewClient;
  *
  * @author Alexis Montavon
  */
-public class WebViewActivity extends BaseActivity {
+public class WebViewActivity extends BaseAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +52,13 @@ public class WebViewActivity extends BaseActivity {
                 }
             }
 
+            //TODO: See if this code was really needed before removing it
             /* Handles delay in url changes
              * Fixes bug that makes user reload redirect URI
              * Had to use deprecated method because new one requires min android 24
              * and we set the min to android 15
              */
+            /*
             @Override
             @SuppressWarnings("deprecation")
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -70,7 +71,7 @@ public class WebViewActivity extends BaseActivity {
                     return false;
                 }
             }
+            */
         });
     }
-
 }

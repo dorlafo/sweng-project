@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.database.FirebaseDatabase;
 
+import ch.epfl.sweng.jassatepfl.BaseActivityWithNavDrawer;
 import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.model.Match;
 
@@ -22,7 +22,7 @@ public class MatchListAdapter extends FirebaseListAdapter<Match> {
 
     public MatchListAdapter(Activity activity) {
         super(activity, Match.class, R.layout.match_list_row,
-                FirebaseDatabase.getInstance().getReference("matches")
+                ((BaseActivityWithNavDrawer) activity).dbRefWrapped.child("matches")
                         .orderByChild("privateMatch").equalTo(false));
         this.activity = activity;
     }
