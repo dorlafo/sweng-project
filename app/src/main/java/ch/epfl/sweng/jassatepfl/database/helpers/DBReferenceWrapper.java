@@ -86,4 +86,17 @@ public class DBReferenceWrapper {
         return dbRef.orderByChild(path);
     }
 
+    /**
+     * Look at the firebase documentation to see what this method does
+     */
+    public void removeEventListener(ChildEventListener listener) {
+        dbRef.removeEventListener(listener);
+    }
+
+    /**
+     * Look at the firebase documentation to see what this method does
+     */
+    public void removeValue() {
+        dbRef.removeValue();
+    }
 }

@@ -53,6 +53,10 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
         startActivity(intent);
     }
 
+    public void showEnrolledMatch(View view){
+        Intent intent = new Intent(this, CreateMatchActivity.class);
+    }
+
     /**
      * Launch the UserProfileActivity then the Profile button is clicked
      *

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
+import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
@@ -63,7 +64,6 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         playerListView = (ListView) findViewById(R.id.invite_list);
         ((ViewGroup) playerListView.getParent()).addView(emptyList);
         playerListView.setEmptyView(emptyList);
-
         playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
@@ -75,9 +75,9 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                             public void onClick(DialogInterface dialog, int which) {
                                 String sciper = player.getID().toString();
                                 if (sciper.equals(currentUserSciper)) {
-                                    Toast.makeText(InvitePlayerToMatchActivity.this,
-                                            R.string.toast_invite_yourself, Toast.LENGTH_SHORT)
-                                            .show();
+                                    ErrorHandlerUtils.sendErrorMessage(InvitePlayerToMatchActivity.this,
+                                            R.string.toast_invite_yourself,
+                                            R.string.error_already_in_match);
                                 } else {
                                     inviteScipers.add(player.getID().toString());
                                 }
@@ -91,7 +91,6 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                         .show();
             }
         });
-
         Button inviteButton = (Button) findViewById(R.id.invite_button);
         inviteButton.setOnClickListener(this);
     }

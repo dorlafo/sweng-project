@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -58,7 +57,7 @@ import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.GameVariant;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.server.ServerInterface;
+import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
 import ch.epfl.sweng.jassatepfl.tools.DatePickerFragment;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
@@ -240,10 +239,8 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     String matchId = dbRefWrapped.child("matches").push().getKey();
                     dbRefWrapped.child("matches").child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
                     Log.d(TAG, "Pushed match " + matchId + " to database");
-                    new InvitePlayer().execute(matchId);
-                    Intent moveToMatchActivity = new Intent(this, MatchActivity.class);
-                    getIntent().putExtra("MATCH_ID", matchId);
-                    startActivity(moveToMatchActivity);
+                    new InvitePlayer(playerArrayAdapter).execute(matchId);
+                    startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("MATCH_ID", matchId));
                 }
                 break;
             case R.id.time_picker_button:
@@ -255,8 +252,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                 datePickerFragment.show(getSupportFragmentManager(), "datePicker");
                 break;
             case R.id.add_player_button:
-                Intent addPlayerIntent = new Intent(this, InvitePlayerToMatchActivity.class);
-                startActivityForResult(addPlayerIntent, ADD_PLAYER_REQUEST);
+                startActivityForResult(new Intent(this, InvitePlayerToMatchActivity.class), ADD_PLAYER_REQUEST);
                 break;
             case R.id.create_place_picker_button:
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
@@ -425,23 +421,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         TextView currentExpirationDate = (TextView) findViewById(R.id.current_expiration_time);
         DateFormat dateFormat = new SimpleDateFormat(getString(R.string.date_format_match_creation), Locale.FRENCH);
         currentExpirationDate.setText(dateFormat.format(matchCalendar.getTimeInMillis()));
-    }
-
-    /**
-     * Async class necessary to send invite message in background
-     *
-     * @author Alexis Montavon
-     */
-    private class InvitePlayer extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            // Send invite to added players
-            int playerCount = playerArrayAdapter.getCount();
-            for (int i = 0; i < playerCount; ++i) {
-                ServerInterface.getInstance().invitePlayer(playerArrayAdapter.getItem(i).getID().toString(), params[0]);
-            }
-            return "";
-        }
     }
 
 }

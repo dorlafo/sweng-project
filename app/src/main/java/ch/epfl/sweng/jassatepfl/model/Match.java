@@ -217,7 +217,21 @@ public class Match {
     }
 
     /**
-     * Checks whether the given player is taking part in the match.
+     * Removes the given player to the player from list.
+     * <p>
+     * Removing a player that is not present do nothing
+     *
+     * @param toRemove The id of the player to remove from the match
+     */
+    public void removePlayerById(Player.PlayerID toRemove) {
+        for (Player p : players) {
+            if (p.getID().equals(toRemove)) {
+                players.remove(p);
+            }
+        }
+    }
+
+     /* Checks whether the given player is taking part in the match.
      *
      * @param player The player
      * @return true if the player is in the match, false otherwise

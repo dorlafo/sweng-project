@@ -8,7 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import ch.epfl.sweng.jassatepfl.MatchActivity;
+import ch.epfl.sweng.jassatepfl.WaitingPlayersActivity;
 import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
@@ -45,7 +45,7 @@ public class DatabaseUtils {
                         try {
                             match.addPlayer(player);
                             ref.child("matches").child(matchID).setValue(match);
-                            Intent moveToMatchActivity = new Intent(context, MatchActivity.class);
+                            Intent moveToMatchActivity = new Intent(context, WaitingPlayersActivity.class);
                             moveToMatchActivity.putExtra("MATCH_ID", matchID);
                             context.startActivity(moveToMatchActivity);
                         } catch (IllegalStateException e) {
