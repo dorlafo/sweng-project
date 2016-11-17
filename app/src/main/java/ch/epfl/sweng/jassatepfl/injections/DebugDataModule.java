@@ -105,7 +105,6 @@ public final class DebugDataModule {
         addMockedPushdMethod(dbRefWrapMock);
         addMockedGetKeyMethod(dbRefWrapMock);
         addMockedSetValueMethod(dbRefWrapMock);
-        addMockedAddListenerForSingleValueEventMethod(dbRefWrapMock);
         addMockedAddChildEventListener(dbRefWrapMock);
     }
 
@@ -150,30 +149,6 @@ public final class DebugDataModule {
             }
 
         }).when(dbRefWrapMock).setValue(anyObject());
-    }
-
-    private void addMockedAddListenerForSingleValueEventMethod(final DBRefWrapMock dbRefWrapMock) {
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                final ValueEventListener v = invocation.getArgument(0);
-                DataSnapshot obj = mock(DataSnapshot.class);
-                Player p = null;
-                Match m = null;
-
-                if (((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Player) {
-                    p = (Player) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
-                } else if (((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Match) {
-                    m = (Match) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
-                }
-
-                when(obj.getValue(Player.class)).thenReturn(p);
-                when(obj.getValue(Match.class)).thenReturn(m);
-
-                v.onDataChange((DataSnapshot) obj);
-                return null;
-            }
-        }).when(dbRefWrapMock).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     private void addMockedAddChildEventListener(DBRefWrapMock dbRefWrapMock) {

@@ -14,6 +14,7 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -55,6 +56,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Rolex"));
         try {
             marker.click();
+            onData(withText("Rolex")).perform(click());
             onView(withText(R.string.dialog_join_match)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_message)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
@@ -75,6 +77,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
         try {
             marker.click();
+            onData(withText("Rolex")).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
@@ -95,6 +98,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         UiObject marker = device.findObject(new UiSelector().descriptionContains("CO"));
         try {
             marker.click();
+            onData(withText("CO")).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             onView(withId(R.string.error_cannot_join)).check(matches(isDisplayed()));
@@ -115,12 +119,14 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
         try {
             marker.click();
+            onData(withText("Rolex")).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
             assertMatchContainsPlayer(dbRefWrapMock, "one_player", new Player.PlayerID("696969"));
 
             marker.click();
+            onData(withText("Rolex")).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             onView(withId(R.string.error_cannot_join)).check(matches(isDisplayed()));
