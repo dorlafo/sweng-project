@@ -45,6 +45,7 @@ public final class PermissionHandler implements OnRequestPermissionsResultCallba
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    callingActivity.recreate();
                 }
         }
     }
