@@ -1,8 +1,9 @@
 package ch.epfl.sweng.jassatepfl.stats;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Team;
@@ -18,15 +19,15 @@ public class MatchStats {
     private final String matchID;
     //The match' gameVariant. Used to choose how points are counted and so on
     private final Match.GameVariant gameVariant;
-    //Array containing the player's sciper of each team
-    private final Team[] teams;
+    //Set containing the team of this match
+    private final Set<Team> teams;
     private final int nbTeam;
     //Array containing the team's score for each round
     private final ArrayList<Integer>[] teamScores;
     //Index to the current round
     private int roundIndex;
 
-    public MatchStats(String matchID, Match.GameVariant gameVariant, List<Team> teams) {
+    public MatchStats(String matchID, Match.GameVariant gameVariant, Set<Team> teams) {
         this.nbTeam = gameVariant.getNumberOfTeam();
         if(teams.size() != this.nbTeam) {
             throw new IllegalArgumentException("Invalid number of teams");
@@ -40,7 +41,7 @@ public class MatchStats {
 
         this.matchID = matchID;
         this.gameVariant = gameVariant;
-        this.teams = new Team[nbTeam];
+        this.teams = Collections.unmodifiableSet(teams);
 
         this.teamScores = new ArrayList[gameVariant.getNumberOfTeam()];
         for(ArrayList<Integer> teamScore : teamScores) {
