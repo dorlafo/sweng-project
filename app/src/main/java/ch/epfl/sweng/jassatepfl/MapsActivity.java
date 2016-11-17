@@ -171,8 +171,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                         .setMessage(R.string.dialog_join_message)
                         .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                //TODO remove this
-                                //final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                 final String matchID = marker.getTag().toString();
                                 dbRefWrapped.child("matches").child(matchID)
                                         .addListenerForSingleValueEvent(new ValueEventListener() {

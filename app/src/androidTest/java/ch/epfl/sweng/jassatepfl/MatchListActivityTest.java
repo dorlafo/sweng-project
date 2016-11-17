@@ -27,6 +27,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        getActivity();
     }
 
     /* Need support of queries orderByChild and equalTo in mockito*/
@@ -34,8 +35,6 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
     public void testEmptyListDisplay() {
         Set<Match> emptyMatchSet = new HashSet<>();
         dbRefWrapMock.addMatches(emptyMatchSet);
-
-        getActivity();
 
         try {
             onView(withText(R.string.list_empty_list)).check(matches(isDisplayed()));
@@ -52,8 +51,6 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         matches.add(DummyData.onePlayerMatch());
         matches.add(DummyData.twoPlayersMatch());
         dbRefWrapMock.addMatches(matches);
-
-        getActivity();
 
         try {
             onView(withId(android.R.id.list)).perform(click());
@@ -75,8 +72,6 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         dbRefWrapMock.addMatches(matches);
         assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
 
-        getActivity();
-
         try {
             onView(withId(android.R.id.list)).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
@@ -96,8 +91,6 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         dbRefWrapMock.addMatches(matches);
         assertMatchContainsNPlayers(dbRefWrapMock, "full", 4);
 
-        getActivity();
-
         try {
             onView(withId(android.R.id.list)).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
@@ -116,8 +109,6 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         matches.add(DummyData.onePlayerMatch());
         dbRefWrapMock.addMatches(matches);
         assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
-
-        getActivity();
 
         try {
             onView(withId(android.R.id.list)).perform(click());
