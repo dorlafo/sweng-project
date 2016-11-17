@@ -1,7 +1,11 @@
 package ch.epfl.sweng.jassatepfl.model;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -42,5 +46,30 @@ public class Team {
      */
     public Set<Player.PlayerID> getMembers() {
         return Collections.unmodifiableSet(members);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null) {
+            return false;
+        }
+        else if (o == this) {
+            return true;
+        }
+        else if (o.getClass().getName() != this.getClass().getName()) {
+            return false;
+        }
+        else {
+            if (((Team)o).members.equals(this.members)) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+        return Objects.hash(members);
     }
 }
