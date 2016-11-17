@@ -7,11 +7,16 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.*;
 
 public final class MatchListActivityTest extends InjectedBaseActivityTest {
 
@@ -24,7 +29,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         super.setUp();
     }
 
-    /* Need support of queries orderByChild and equalTo in mockito
+    /* Need support of queries orderByChild and equalTo in mockito*/
     @Test
     public void testEmptyListDisplay() {
         Set<Match> emptyMatchSet = new HashSet<>();
@@ -51,12 +56,85 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         getActivity();
 
         try {
+            onView(withId(android.R.id.list)).perform(click());
+            onView(withText(R.string.dialog_join_match)).check(matches(isDisplayed()));
+            onView(withText(R.string.dialog_join_message)).check(matches(isDisplayed()));
+            onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
+            onView(withText(R.string.dialog_cancel)).check(matches(isDisplayed()));
         } catch (Exception e) {
             fail();
         }
 
         dbRefWrapMock.reset();
     }
-    */
+
+    @Test
+    public void testAddPlayerOnListMatchActivity() {
+        Set<Match> matches = new HashSet<>();
+        matches.add(DummyData.onePlayerMatch());
+        dbRefWrapMock.addMatches(matches);
+        assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
+
+        getActivity();
+
+        try {
+            onView(withId(android.R.id.list)).perform(click());
+            onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
+            onView(withText(R.string.dialog_join_confirmation)).perform(click());
+            assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
+            assertMatchContainsPlayer(dbRefWrapMock, "one_player", new Player.PlayerID("696969"));
+        } catch (Exception e) {
+            fail();
+        }
+        dbRefWrapMock.reset();
+    }
+
+    @Test
+    public void testDoNotAddWhenMatchFull() {
+        Set<Match> matches = new HashSet<>();
+        matches.add(DummyData.fullMatch());
+        dbRefWrapMock.addMatches(matches);
+        assertMatchContainsNPlayers(dbRefWrapMock, "full", 4);
+
+        getActivity();
+
+        try {
+            onView(withId(android.R.id.list)).perform(click());
+            onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
+            onView(withText(R.string.dialog_join_confirmation)).perform(click());
+            onView(withId(R.string.error_cannot_join)).check(matches(isDisplayed()));
+            onView(withId(R.string.error_match_full)).check(matches(isDisplayed()));
+        } catch (Exception e) {
+            fail();
+        }
+        dbRefWrapMock.reset();
+    }
+
+    @Test
+    public void testDoNotAddWhenAlreadyInMatch() {
+        Set<Match> matches = new HashSet<>();
+        matches.add(DummyData.onePlayerMatch());
+        dbRefWrapMock.addMatches(matches);
+        assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
+
+        getActivity();
+
+        try {
+            onView(withId(android.R.id.list)).perform(click());
+            onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
+            onView(withText(R.string.dialog_join_confirmation)).perform(click());
+            assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
+            assertMatchContainsPlayer(dbRefWrapMock, "one_player", new Player.PlayerID("696969"));
+
+            onView(withId(android.R.id.list)).perform(click());
+            onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
+            onView(withText(R.string.dialog_join_confirmation)).perform(click());
+            onView(withId(R.string.error_cannot_join)).check(matches(isDisplayed()));
+            onView(withId(R.string.error_already_in_match)).check(matches(isDisplayed()));
+        } catch (Exception e){
+            fail();
+        }
+        dbRefWrapMock.reset();
+    }
 
 }
