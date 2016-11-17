@@ -10,6 +10,7 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -17,6 +18,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.*;
+import static org.hamcrest.Matchers.anything;
 
 public final class MatchListActivityTest extends InjectedBaseActivityTest {
 
@@ -53,7 +55,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         dbRefWrapMock.addMatches(matches);
 
         try {
-            onView(withId(android.R.id.list)).perform(click());
+            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_match)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_message)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
@@ -73,7 +75,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
 
         try {
-            onView(withId(android.R.id.list)).perform(click());
+            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
@@ -92,7 +94,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapMock, "full", 4);
 
         try {
-            onView(withId(android.R.id.list)).perform(click());
+            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             onView(withId(R.string.error_cannot_join)).check(matches(isDisplayed()));
@@ -111,13 +113,13 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
 
         try {
-            onView(withId(android.R.id.list)).perform(click());
+            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
             assertMatchContainsPlayer(dbRefWrapMock, "one_player", new Player.PlayerID("696969"));
 
-            onView(withId(android.R.id.list)).perform(click());
+            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             onView(withId(R.string.error_cannot_join)).check(matches(isDisplayed()));
