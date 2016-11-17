@@ -3,8 +3,10 @@ package ch.epfl.sweng.jassatepfl.model;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,22 +16,30 @@ import java.util.Set;
 
 public class Team {
     //Set containing the ID of the team members
-    private final Set<Player.PlayerID> members;
+    private List<Player.PlayerID> members;
 
+    public Team() {
+
+    }
     /**
      * Public constructor for Team
      * @param memberIDs A set containing the ID's of the player
      * @throws IllegalArgumentException If the set of ID's is empty
      */
-    public Team(Set<Player.PlayerID> memberIDs) throws IllegalArgumentException {
+    public Team(List<Player.PlayerID> memberIDs) throws IllegalArgumentException {
         if(memberIDs.size() == 0) {
             throw new IllegalArgumentException("The team cannot have zero member");
         }
-        HashSet<Player.PlayerID> tmpMembers = new HashSet<>();
-        for(Player.PlayerID member : memberIDs) {
-            tmpMembers.add(member);
+        ArrayList<Player.PlayerID> tmpMembers = new ArrayList<>();
+        for(Player.PlayerID m : memberIDs) {
+            if(tmpMembers.contains(m)) {
+                throw new IllegalArgumentException("The team cannot have multiple time the same member");
+            }
+            else {
+                tmpMembers.add(m);
+            }
         }
-        this.members = Collections.unmodifiableSet(tmpMembers);
+        this.members = Collections.unmodifiableList(tmpMembers);
     }
 
     /**
@@ -44,8 +54,8 @@ public class Team {
      * Getter for the players
      * @return Returns a list of the members of the team
      */
-    public Set<Player.PlayerID> getMembers() {
-        return Collections.unmodifiableSet(members);
+    public List<Player.PlayerID> getMembers() {
+        return Collections.unmodifiableList(members);
     }
 
     @Override
@@ -60,7 +70,7 @@ public class Team {
             return false;
         }
         else {
-            if (((Team)o).members.equals(this.members)) {
+            if (((Team)o).members.containsAll(this.members) && this.members.containsAll(((Team)o).members)) {
                 return true;
             }
             return false;

@@ -2,8 +2,11 @@ package ch.epfl.sweng.jassatepfl.model;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
@@ -17,10 +20,8 @@ public class TeamTest {
     public void teamIsImmutable() {
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
-        Set<Player.PlayerID> players = new HashSet<>();
-        players.add(p1);
-        players.add(p2);
 
+        List<Player.PlayerID> players = Arrays.asList(p1, p2);
         Team t = new Team(players);
         players.clear();
 
@@ -32,7 +33,7 @@ public class TeamTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyTeamCannotBeCreated() {
-        Set<Player.PlayerID> p = Collections.emptySet();
+        List<Player.PlayerID> p = Collections.emptyList();
         Team t = new Team(p);
     }
 
@@ -40,11 +41,8 @@ public class TeamTest {
     public void equalsReturnsFalseWhenComparingWithNull() {
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
-        Set<Player.PlayerID> players = new HashSet<>();
-        players.add(p1);
-        players.add(p2);
 
-        Team t = new Team(players);
+        Team t = new Team(Arrays.asList(p1, p2));
 
         assertThat(t.equals(null), is(false));
     }
@@ -54,11 +52,8 @@ public class TeamTest {
         Long randomLong = Long.valueOf("78545465465461");
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
-        Set<Player.PlayerID> players = new HashSet<>();
-        players.add(p1);
-        players.add(p2);
 
-        Team t = new Team(players);
+        Team t = new Team(Arrays.asList(p1, p2));
 
         assertThat(t.equals(randomLong), is(false));
     }
@@ -67,7 +62,7 @@ public class TeamTest {
     public void equalsReturnsFalseWhenComparingDifferentTeams() {
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
-        Set<Player.PlayerID> players = new HashSet<>();
+        List<Player.PlayerID> players = new ArrayList<>();
         players.add(p1);
         Team t1 = new Team(players);
         players.add(p2);
@@ -80,10 +75,7 @@ public class TeamTest {
     public void equalsIsReflexive() {
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
-        Set<Player.PlayerID> players = new HashSet<>();
-        players.add(p1);
-        players.add(p2);
-        Team t = new Team(players);
+        Team t = new Team(Arrays.asList(p1, p2));
 
         assertThat(t.equals(t), is(true));
     }
@@ -92,8 +84,8 @@ public class TeamTest {
     public void equalsReturnsTrueWhenComparingSameTeams() {
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
-        Set<Player.PlayerID> players = new HashSet<>();
-        Set<Player.PlayerID> players2 = new HashSet<>();
+        List<Player.PlayerID> players = new ArrayList<>();
+        List<Player.PlayerID> players2 = new ArrayList<>();
         players.add(p1);
         players.add(p2);
         players2.add(p1);
@@ -109,8 +101,8 @@ public class TeamTest {
     public void hashCodeIsTheSameForSameTeams() {
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
-        Set<Player.PlayerID> players = new HashSet<>();
-        Set<Player.PlayerID> players2 = new HashSet<>();
+        List<Player.PlayerID> players = new ArrayList<>();
+        List<Player.PlayerID> players2 = new ArrayList<>();
         players.add(p1);
         players.add(p2);
         players2.add(p1);
@@ -127,7 +119,7 @@ public class TeamTest {
     public void hashCodeIsDifferentForDifferentTeams() {
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
-        Set<Player.PlayerID> players = new HashSet<>();
+        List<Player.PlayerID> players = new ArrayList<>();
         players.add(p1);
         Team t1 = new Team(players);
         players.add(p2);

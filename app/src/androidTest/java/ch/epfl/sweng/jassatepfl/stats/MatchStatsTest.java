@@ -2,8 +2,10 @@ package ch.epfl.sweng.jassatepfl.stats;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -21,12 +23,12 @@ public class MatchStatsTest {
     public void constructorReturnsExceptionWhenTeamSizeIsWrong() {
         Player.PlayerID p1 = new Player.PlayerID("234832");
         Player.PlayerID p2 = new Player.PlayerID("234554");
-        Set<Player.PlayerID> players = new HashSet<>();
+        List<Player.PlayerID> players = new ArrayList<>();
         players.add(p1);
         players.add(p2);
 
         Team t1 = new Team(players);
-        Set<Team> teams = new HashSet<>();
+        List<Team> teams = new ArrayList<>();
         teams.add(t1);
 
         MatchStats m = new MatchStats("matchID", Match.GameVariant.CHIBRE, teams);
@@ -40,8 +42,8 @@ public class MatchStatsTest {
         Player.PlayerID p21 = new Player.PlayerID("123456");
 
 
-        Set<Player.PlayerID> players1 = new HashSet<>();
-        Set<Player.PlayerID> players2 = new HashSet<>();
+        List<Player.PlayerID> players1 = new ArrayList<>();
+        List<Player.PlayerID> players2 = new ArrayList<>();
         players1.add(p11);
         players1.add(p12);
 
@@ -49,7 +51,7 @@ public class MatchStatsTest {
 
         Team t1 = new Team(players1);
         Team t2 = new Team(players2);
-        Set<Team> teams = new HashSet<>();
+        List<Team> teams = new ArrayList<>();
         teams.add(t1);
         teams.add(t2);
 
@@ -61,8 +63,8 @@ public class MatchStatsTest {
         Player.PlayerID p11 = new Player.PlayerID("234832");
         Player.PlayerID p12 = new Player.PlayerID("234554");
 
-        Set<Player.PlayerID> players1 = new HashSet<>();
-        Set<Player.PlayerID> players2 = new HashSet<>();
+        List<Player.PlayerID> players1 = new ArrayList<>();
+        List<Player.PlayerID> players2 = new ArrayList<>();
 
         players1.add(p11);
         players1.add(p12);
@@ -71,7 +73,7 @@ public class MatchStatsTest {
 
         Team t1 = new Team(players1);
         Team t2 = new Team(players2);
-        Set<Team> teams = new HashSet<>();
+        List<Team> teams = new ArrayList<>();
         teams.add(t1);
         teams.add(t2);
 
