@@ -84,6 +84,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     if (players.get(i).getID().equals(new Player.PlayerID(sciper))) {
                         posInList = i;
                     }
+                    dbRefWrapped.child("pendingMatches")
+                            .child(matchId).child(Integer.toString(posInList)).setValue(false);
                 }
             }
 
