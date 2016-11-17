@@ -93,10 +93,13 @@ public class TeamTest {
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
         Set<Player.PlayerID> players = new HashSet<>();
+        Set<Player.PlayerID> players2 = new HashSet<>();
         players.add(p1);
         players.add(p2);
+        players2.add(p1);
+        players2.add(p2);
         Team t1 = new Team(players);
-        Team t2 = new Team(players);
+        Team t2 = new Team(players2);
 
         assertThat(t1 == t2, is(false));
         assertThat(t1.equals(t2) && t2.equals(t1), is(true));
@@ -107,10 +110,13 @@ public class TeamTest {
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
         Set<Player.PlayerID> players = new HashSet<>();
+        Set<Player.PlayerID> players2 = new HashSet<>();
         players.add(p1);
         players.add(p2);
+        players2.add(p1);
+        players2.add(p2);
         Team t1 = new Team(players);
-        Team t2 = new Team(players);
+        Team t2 = new Team(players2);
 
         assertThat(t1 == t2, is(false));
         assertThat(t1.equals(t2) && t2.equals(t1), is(true));
