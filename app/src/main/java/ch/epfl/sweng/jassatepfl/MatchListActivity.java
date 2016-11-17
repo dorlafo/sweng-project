@@ -14,13 +14,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
-import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
+import ch.epfl.sweng.jassatepfl.tools.NotAFirebaseMatchListAdapter;
 
 /**
  * Activity displaying matches as a scrolling list.
@@ -30,7 +39,9 @@ import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
 public class MatchListActivity extends BaseActivityWithNavDrawer
         implements OnItemClickListener {
 
-    private MatchListAdapter mAdapter;
+    //private MatchListAdapter mAdapter;
+    private BaseAdapter adapter;
+    private List<Match> matches;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +74,14 @@ public class MatchListActivity extends BaseActivityWithNavDrawer
         ((ViewGroup) listView.getParent()).addView(emptyList);
         listView.setEmptyView(emptyList);
 
-        mAdapter = new MatchListAdapter(this);
+        matches = new ArrayList<>();
+        contactFirebase();
+        adapter = new NotAFirebaseMatchListAdapter(this, matches);
+        listView.setAdapter(adapter);
 
-        listView.setAdapter(mAdapter);
+        //mAdapter = new MatchListAdapter(this);
+
+        //listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(this);
     }
 
@@ -79,7 +95,8 @@ public class MatchListActivity extends BaseActivityWithNavDrawer
                 .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                        final Match match = mAdapter.getItem(position);
+                        //final Match match = mAdapter.getItem(position);
+                        final Match match = (Match) adapter.getItem(position);
 
                         DatabaseUtils.addPlayerToMatch(MatchListActivity.this,
                                 dbRefWrapped,
@@ -99,7 +116,41 @@ public class MatchListActivity extends BaseActivityWithNavDrawer
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mAdapter.cleanup();
+        //mAdapter.cleanup();
+    }
+
+    private void contactFirebase() {
+        Query ref = dbRefWrapped.child("matches").child("privateMatch").equalTo(false);
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Match match = dataSnapshot.getValue(Match.class);
+                matches.add(match);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Match match = dataSnapshot.getValue(Match.class);
+                matches.remove(match);
+                matches.add(match);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Match match = dataSnapshot.getValue(Match.class);
+                matches.remove(match);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
