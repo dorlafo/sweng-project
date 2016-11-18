@@ -240,7 +240,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     dbRefWrapped.child("matches").child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
                     Log.d(TAG, "Pushed match " + matchId + " to database");
                     new InvitePlayer(playerArrayAdapter).execute(matchId);
-                    startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("MATCH_ID", matchId));
+                    startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("match_Id", matchId));
                 }
                 break;
             case R.id.time_picker_button:

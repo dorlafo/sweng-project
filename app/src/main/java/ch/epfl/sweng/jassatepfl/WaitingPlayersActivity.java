@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,12 +20,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
-import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapterForMatch;
+import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
 public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
@@ -47,6 +45,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     private static final int INVITE_CODE = 42;
     private List<Player> playerList;
 
+    private PlayerListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,18 +60,15 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     @Override
     protected void onResume() {
         super.onResume();
-        matchId = getIntent().getStringExtra("MATCH_ID");
+        matchId = getIntent().getStringExtra("match_Id");
         description = (TextView) findViewById(R.id.match_description);
         variant = (TextView) findViewById(R.id.match_variant);
-
         playerList = new ArrayList<>();
 
         listView = (ListView) findViewById(android.R.id.list);
         listView.setEmptyView(findViewById(android.R.id.empty));
 
-        sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        PlayerListAdapterForMatch pAdapter = new PlayerListAdapterForMatch(this, matchId);
-        listView.setAdapter(pAdapter);
+        sciper = getUserSciper();
         dbRefWrapped.child("matches").child(matchId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -244,6 +241,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     break;
             }
         }
+        contactFirebase();
     }
 
     @Override
@@ -259,7 +257,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Player player = dataSnapshot.getValue(Player.class);
-                                    playerList.add(new Player(player.getID(), player.getLastName(), player.getFirstName(), player.getRank()));
                                     new InvitePlayer(player).execute(matchId);
                                 }
 
@@ -317,6 +314,51 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         // TODO: backToList.putExtra("MATCH_ID", matchId);
         // TODO: Create intent for next activity
         // TODO: In new activity, delete pendingMatches
+    }
+
+    private void contactFirebase() {
+        dbRefWrapped.child("matches").child(matchId).child("players")
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Player player = dataSnapshot.getValue(Player.class);
+                        playerList.add(player);
+                        modifyListAdapter();
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        Player player = dataSnapshot.getValue(Player.class);
+                        playerList.remove(player);
+                        playerList.add(player);
+                        modifyListAdapter();
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        Player player = dataSnapshot.getValue(Player.class);
+                        playerList.remove(player);
+                        modifyListAdapter();
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                        Player player = dataSnapshot.getValue(Player.class);
+                        playerList.remove(player);
+                        playerList.add(player);
+                        modifyListAdapter();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void modifyListAdapter() {
+        adapter = new PlayerListAdapter(WaitingPlayersActivity.this, R.layout.player_list_element, playerList);
+        listView.setAdapter(adapter);
     }
 
 }

@@ -28,7 +28,7 @@ import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
-import ch.epfl.sweng.jassatepfl.tools.NotAFirebaseMatchListAdapter;
+import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
 
 /**
  * Activity displaying matches as a scrolling list.
@@ -113,7 +113,8 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     }
 
     private void contactFirebase() {
-        dbRefWrapped.child("matches").orderByChild("privateMatch").equalTo(false).addChildEventListener(new ChildEventListener() {
+        dbRefWrapped.child("matches").orderByChild("privateMatch").equalTo(false)
+                .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Match match = dataSnapshot.getValue(Match.class);
@@ -150,7 +151,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
      * Updates Match list adapter
      */
     private void modifyListAdapter() {
-        adapter = new NotAFirebaseMatchListAdapter(MatchListActivity.this, R.layout.match_list_row, matches);
+        adapter = new MatchListAdapter(MatchListActivity.this, R.layout.match_list_row, matches);
         listView.setAdapter(adapter);
     }
 
