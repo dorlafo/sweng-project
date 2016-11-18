@@ -139,6 +139,10 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Match match = dataSnapshot.getValue(Match.class);
+                matches.remove(match);
+                matches.add(match);
+                modifyListAdapter();
             }
 
             @Override
