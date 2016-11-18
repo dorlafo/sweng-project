@@ -95,7 +95,7 @@ public class DBReferenceWrapper {
     }
 
     public Query startAt(String s) {
-        return this.startAt(s);
+        return dbRef.startAt(s);
     }
 
     public Query endAt(String s) {
