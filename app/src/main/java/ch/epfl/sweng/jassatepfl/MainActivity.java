@@ -44,7 +44,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
                     .setTitle(R.string.notification_match_expired)
                     .show();
             startIntent.removeExtra("notif");
-            startIntent.removeExtra("matchId");
+            startIntent.removeExtra("match_Id");
         }
     }
 

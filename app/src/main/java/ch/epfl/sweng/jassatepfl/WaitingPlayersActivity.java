@@ -131,10 +131,10 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
          * Will display dialog Box depending on the notification received.
          */
         if (startIntent.hasExtra("notif")) {
-            final String matchID = startIntent.getStringExtra("matchId");
+            final String matchID = startIntent.getStringExtra("match_Id");
             switch (startIntent.getStringExtra("notif")) {
                 case "matchfull":
-                    dbRefWrapped.child("matches").child(startIntent.getStringExtra("matchId"))
+                    dbRefWrapped.child("matches").child(startIntent.getStringExtra("match_Id"))
                             .addListenerForSingleValueEvent(new ValueEventListener() {
 
                                 @Override
@@ -152,7 +152,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                                 }
                             });
                     startIntent.removeExtra("notif");
-                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("match_Id");
                     break;
                 case "playerjoined":
                     dbRefWrapped.child("players")
@@ -174,7 +174,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                             });
 
                     startIntent.removeExtra("notif");
-                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("match_Id");
                     startIntent.removeExtra("sciper");
                     break;
                 case "playerleft":
@@ -197,7 +197,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                             });
 
                     startIntent.removeExtra("notif");
-                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("match_Id");
                     startIntent.removeExtra("sciper");
                     break;
                 case "invite":
@@ -234,7 +234,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                             })
                             .show();
                     startIntent.removeExtra("notif");
-                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("match_Id");
                     startIntent.removeExtra("sciper");
                     break;
                 default:
