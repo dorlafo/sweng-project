@@ -34,6 +34,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     private Player player;
 
     private ChildEventListener pendingMatchesListener;
+    private ChildEventListener childEventListener;
 
     private TextView variant;
     private TextView description;
@@ -270,6 +271,13 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dbRefWrapped.removeEventListener(pendingMatchesListener);
+        dbRefWrapped.removeEventListener(childEventListener);
+    }
+
     /**
      * When button "LEAVE MATCH" is pressed, the current user is removed from the match player list
      * send him back to main menu.
@@ -317,8 +325,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     }
 
     private void contactFirebase() {
-        dbRefWrapped.child("matches").child(matchId).child("players")
-                .addChildEventListener(new ChildEventListener() {
+        childEventListener = new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Player player = dataSnapshot.getValue(Player.class);
@@ -353,7 +360,10 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
-                });
+                };
+        dbRefWrapped.child("matches")
+                .child(matchId).child("players")
+                .addChildEventListener(childEventListener);
     }
 
     private void modifyListAdapter() {

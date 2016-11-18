@@ -40,6 +40,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     private BaseAdapter adapter;
     private List<Match> matches;
     private ListView listView;
+    private ChildEventListener childEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,6 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
                 .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         final Match match = (Match) adapter.getItem(position);
-
                         DatabaseUtils.addPlayerToMatch(MatchListActivity.this,
                                 dbRefWrapped,
                                 match.getMatchID(),
@@ -110,11 +110,11 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        dbRefWrapped.removeEventListener(childEventListener);
     }
 
     private void contactFirebase() {
-        dbRefWrapped.child("matches").orderByChild("privateMatch").equalTo(false)
-                .addChildEventListener(new ChildEventListener() {
+        childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Match match = dataSnapshot.getValue(Match.class);
@@ -148,7 +148,10 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });
+        };
+        dbRefWrapped.child("matches")
+                .orderByChild("privateMatch").equalTo(false)
+                .addChildEventListener(childEventListener);
     }
 
     /**

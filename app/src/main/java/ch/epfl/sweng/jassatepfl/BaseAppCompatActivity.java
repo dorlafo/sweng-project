@@ -22,4 +22,12 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         App.getInstance().graph().inject(this);
     }
 
+    /**
+     * Getter for the user sciper
+     * @return The user' sciper
+     */
+    public String getUserSciper() {
+        return fAuth.getCurrentUser().getDisplayName();
+    }
+
 }
