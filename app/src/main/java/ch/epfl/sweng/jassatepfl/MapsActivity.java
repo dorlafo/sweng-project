@@ -222,9 +222,8 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     }
 
     private void displayNearbyMatches() {
-        Query ref = dbRefWrapped.child("matches").orderByChild("privateMatch").equalTo(false);
-
-        ref.addChildEventListener(new ChildEventListener() {
+        dbRefWrapped.child("matches").orderByChild("privateMatch").equalTo(false)
+                .addChildEventListener(new ChildEventListener() {
             private final Map<String, Marker> markers = new HashMap<>();
             private final MatchStringifier stringifier = new MatchStringifier(MapsActivity.this);
 
