@@ -90,6 +90,10 @@ public class DBReferenceWrapper {
         return dbRef.equalTo(b);
     }
 
+    public Query equalTo(String b) {
+        return dbRef.equalTo(b);
+    }
+
     public Query startAt(String s) {
         return this.startAt(s);
     }
