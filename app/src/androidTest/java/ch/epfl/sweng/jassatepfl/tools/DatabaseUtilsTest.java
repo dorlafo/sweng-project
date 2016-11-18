@@ -31,7 +31,7 @@ public class DatabaseUtilsTest extends InjectedBaseActivityTest {
         super.setUp();
     }
 
-    /*@Test
+    @Test
     public void testAddPlayerWithMethod() {
         Set<Match> matches = new HashSet<>();
         Match matchOne = DummyData.onePlayerMatch();
@@ -43,5 +43,5 @@ public class DatabaseUtilsTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
         DatabaseUtils.addPlayerToMatch(act, dbRefWrapMock, "one_player", "696969", matchOne);
         assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
-    }*/
+    }
 }

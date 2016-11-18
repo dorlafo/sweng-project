@@ -143,9 +143,7 @@ public final class DebugDataModule {
             public DBReferenceWrapper answer(InvocationOnMock invocation) throws Throwable {
                 Leaf currentNode = (Leaf) dbRefWrapMock.getCurrentNode();
                 currentNode.setData(invocation.getArgument(0));
-                DBRefWrapMock dRef = spy(new DBRefWrapMock(currentNode));
-                addMockedBehaviorRef(dRef);
-                return dRef;
+                return null;
             }
 
         }).when(dbRefWrapMock).setValue(anyObject());

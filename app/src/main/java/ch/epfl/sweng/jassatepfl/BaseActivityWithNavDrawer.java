@@ -107,7 +107,7 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
         return true;
     }
 
-    protected DBReferenceWrapper getDbRef() {
+    public DBReferenceWrapper getDbRef() {
         return dbRefWrapped;
     }
 
