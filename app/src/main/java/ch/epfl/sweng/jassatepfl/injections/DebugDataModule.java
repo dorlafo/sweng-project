@@ -2,9 +2,7 @@ package ch.epfl.sweng.jassatepfl.injections;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -16,13 +14,11 @@ import ch.epfl.sweng.jassatepfl.database.local.Leaf;
 import ch.epfl.sweng.jassatepfl.database.local.Node;
 import ch.epfl.sweng.jassatepfl.database.local.Root;
 import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
-import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;
 import dagger.Module;
 import dagger.Provides;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;

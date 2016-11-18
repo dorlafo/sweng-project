@@ -40,7 +40,7 @@ public interface Graph {
     /**
      * Initializer of the graph
      */
-    public final static class Initializer {
+    final class Initializer {
         public static Graph init(boolean mockMode) {
             return DaggerGraph.builder().debugDataModule(new DebugDataModule(mockMode)).build();
         }

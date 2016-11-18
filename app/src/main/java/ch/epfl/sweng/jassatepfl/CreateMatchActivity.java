@@ -260,6 +260,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
                     placePickerButton.setEnabled(false);
                 } catch (GooglePlayServicesRepairableException e) {
+                    //noinspection deprecation
                     GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), this, 0);
                 } catch (GooglePlayServicesNotAvailableException e) {
                     Toast.makeText(this, R.string.error_play_services_not_available, Toast.LENGTH_LONG)

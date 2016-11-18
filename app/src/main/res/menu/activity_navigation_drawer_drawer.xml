@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group
-        android:id="@+id/navigation_drawer_group_activities"
-        android:checkableBehavior="none">
+    <group android:checkableBehavior="none">
         <item
             android:id="@+id/nav_main"
             android:icon="@drawable/ic_home_black"
@@ -22,9 +20,7 @@
             android:title="@string/navigation_drawer_match_list"/>
     </group>
 
-    <group
-        android:id="@+id/navigation_drawer_group_user_actions"
-        android:checkableBehavior="none">
+    <group android:checkableBehavior="none">
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_account_circle_black"

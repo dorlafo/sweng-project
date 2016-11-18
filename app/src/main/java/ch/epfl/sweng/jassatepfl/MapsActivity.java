@@ -33,7 +33,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -92,7 +91,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
         try {
             dbRefWrapped.child("players")
-                    .child(fAuth.getCurrentUser().getDisplayName())
+                    .child(getUserSciper())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -181,7 +180,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                                                 DatabaseUtils.addPlayerToMatch(MapsActivity.this,
                                                         dbRefWrapped,
                                                         matchID,
-                                                        fAuth.getCurrentUser().getDisplayName(),
+                                                        getUserSciper(),
                                                         match);
                                             }
 

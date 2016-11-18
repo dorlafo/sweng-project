@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_user_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="10dp"
     android:orientation="vertical">
 
     <Space
-        android:id="@+id/profile_top_space"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"/>
 
@@ -33,7 +31,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llLastName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.2"
@@ -52,7 +49,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llFirstName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.2"
@@ -71,7 +67,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llRank"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.2"
@@ -90,7 +85,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
@@ -99,7 +93,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/menu_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:background="@drawable/roundedbutton"
@@ -107,7 +100,6 @@
             android:text="@string/profile_button_text_menu"/>
 
         <Button
-            android:id="@+id/ranking_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginLeft="40dp"
@@ -116,7 +108,6 @@
             android:text="@string/main_button_text_ranking"/>
 
         <Button
-            android:id="@+id/statistics_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:background="@drawable/roundedbutton"

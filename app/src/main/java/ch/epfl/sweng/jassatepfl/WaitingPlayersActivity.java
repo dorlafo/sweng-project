@@ -46,8 +46,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     private static final int INVITE_CODE = 42;
     private List<Player> playerList;
 
-    private PlayerListAdapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -367,7 +365,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     }
 
     private void modifyListAdapter() {
-        adapter = new PlayerListAdapter(WaitingPlayersActivity.this, R.layout.player_list_element, playerList);
+        PlayerListAdapter adapter = new PlayerListAdapter(WaitingPlayersActivity.this, R.layout.player_list_element, playerList);
         listView.setAdapter(adapter);
     }
 

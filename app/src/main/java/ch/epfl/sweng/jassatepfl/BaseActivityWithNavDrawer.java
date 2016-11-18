@@ -43,6 +43,8 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        //noinspection deprecation
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -86,6 +88,7 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
                 // Use of deprecated method because the new one requires
                 // at least android 21, we set minimum android 19
                 if (Build.VERSION.SDK_INT < 21) {
+                    //noinspection deprecation
                     CookieManager.getInstance().removeAllCookie();
                 } else {
                     CookieManager.getInstance().removeAllCookies(null);
