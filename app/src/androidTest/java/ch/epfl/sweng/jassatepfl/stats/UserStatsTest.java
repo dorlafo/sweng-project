@@ -24,7 +24,7 @@ public class UserStatsTest {
             .setTimestamp(1478908800)
             .setWinScore(700)
             .setLoseScore(200)
-            .setGameVariant(Match.GameVariant.CLASSIC)
+            .setGameVariant(Match.GameVariant.CHIBRE)
             .setMatchId("lol")
             .build();
 
@@ -72,7 +72,7 @@ public class UserStatsTest {
     public void getVariants() throws Exception {
         Map<String, Integer> mp = stats.getVariants();
         assertThat(mp.size(), is(1));
-        assertThat(mp.get(Match.GameVariant.CLASSIC.toString()), is(1));
+        assertThat(mp.get(Match.GameVariant.CHIBRE.toString()), is(1));
     }
 
     @Test
