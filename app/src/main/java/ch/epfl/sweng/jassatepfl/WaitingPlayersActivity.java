@@ -294,7 +294,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         Intent backToMain = new Intent(this, MainActivity.class);
         startActivity(backToMain);
         if(match.getPlayers().size() == 0) {
-            Log.d("WHALLLLLA", "PAS POSSIBLE");
             dbRefWrapped.child("matches").child(matchId).removeValue();
         }
     }

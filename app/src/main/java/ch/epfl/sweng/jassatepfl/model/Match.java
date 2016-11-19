@@ -3,7 +3,6 @@ package ch.epfl.sweng.jassatepfl.model;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -228,15 +227,13 @@ public class Match {
         if (players.isEmpty()) {
             throw new IllegalStateException("No players in the match.");
         } else {
-            List<Player> newPlayerList = new ArrayList<>();
             for (Player p : players) {
-                if (!p.getID().equals(toRemove)) {
-                    newPlayerList.add(p);
-                    Log.d("PLAYER", p.getID().toString());
+                if (p.getID().equals(toRemove)) {
+                    players.remove(p);
                 }
             }
-            players = newPlayerList;
         }
+
     }
 
      /* Checks whether the given player is taking part in the match.
