@@ -46,22 +46,21 @@ public class QueryWrapperMock extends QueryWrapper{
     }
 
     public ValueEventListener addValueEventListener(ValueEventListener listener) {
-        final ValueEventListener v = invocation.getArgument(0);
-        DataSnapshot obj = mock(DataSnapshot.class);
         Player p = null;
         Match m = null;
+        DataSnapshot dSnap = mock(DataSnapshot.class);
 
-        if (((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Player) {
-            p = (Player) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
-        } else if (((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Match) {
-            m = (Match) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
+        for(Leaf l: elements) {
+            Object obj = l.getData();
+            if(obj instanceof Player) {
+                p = (Player) obj;
+            }
+
+            when(dSnap.getValue(Player.class)).thenReturn(p);
+            when(dSnap.getValue(Match.class)).thenReturn(m);
+
+            listener.onDataChange(dSnap);
         }
-
-        when(obj.getValue(Player.class)).thenReturn(p);
-        when(obj.getValue(Match.class)).thenReturn(m);
-
-        v.onDataChange((DataSnapshot) obj);
-        return null;
-
+        return listener;
     }
 }
