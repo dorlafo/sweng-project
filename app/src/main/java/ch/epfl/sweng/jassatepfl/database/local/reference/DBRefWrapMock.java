@@ -105,10 +105,25 @@ public class DBRefWrapMock extends DBReferenceWrapper {
             });
             return new QueryWrapperMock(leafList);
         } else if(path.equals("privateMatch")) {
-
+            Collections.sort(leafList, new Comparator<Leaf>() {
+                @Override
+                public int compare(Leaf o1, Leaf o2) {
+                    if((((Match) o1.getData()).isPrivateMatch() &&
+                            ((Match) o2.getData()).isPrivateMatch()) ||
+                            (!((Match) o1.getData()).isPrivateMatch() &&
+                                    !((Match) o2.getData()).isPrivateMatch())) {
+                        return 0;
+                    } else if(!((Match) o1.getData()).isPrivateMatch() &&
+                                ((Match) o2.getData()).isPrivateMatch()) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
+            });
+            return new QueryWrapperMock(leafList);
         }
 
-        //TODO add states for path == privateMatch
         throw new IllegalArgumentException("Path : " + path + " is not supported");
     }
 

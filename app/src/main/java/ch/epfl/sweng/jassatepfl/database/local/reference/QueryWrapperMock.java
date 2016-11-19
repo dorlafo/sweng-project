@@ -45,22 +45,26 @@ public class QueryWrapperMock extends QueryWrapper{
         return new QueryWrapperMock(elements.subList(0, num - 1));
     }
 
-    public ValueEventListener addValueEventListener(ValueEventListener listener) {
-        Player p = null;
-        Match m = null;
-        DataSnapshot dSnap = mock(DataSnapshot.class);
+    public ValueEventListener addValueEventListener(final ValueEventListener listener) {
+        new Thread() {
+            public void run() {
+                Player p = null;
+                Match m = null;
+                DataSnapshot dSnap = mock(DataSnapshot.class);
 
-        for(Leaf l: elements) {
-            Object obj = l.getData();
-            if(obj instanceof Player) {
-                p = (Player) obj;
+                for(Leaf l: elements) {
+                    Object obj = l.getData();
+                    if(obj instanceof Player) {
+                        p = (Player) obj;
+                    }
+
+                    when(dSnap.getValue(Player.class)).thenReturn(p);
+                    when(dSnap.getValue(Match.class)).thenReturn(m);
+
+                    listener.onDataChange(dSnap);
+                }
             }
-
-            when(dSnap.getValue(Player.class)).thenReturn(p);
-            when(dSnap.getValue(Match.class)).thenReturn(m);
-
-            listener.onDataChange(dSnap);
-        }
+        }.start();
         return listener;
     }
 }
