@@ -325,7 +325,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                 .setMessage("will move to new activity")
                 .show();
         dbRefWrapped.child("pendingMatches").child(matchId).removeEventListener(pendingMatchesListener);
-        // TODO: backToList.putExtra("MATCH_ID", matchId);
+        // TODO: backToList.putExtra("match_Id", matchId);
         // TODO: Create intent for next activity
         // TODO: In new activity, delete pendingMatches
     }
