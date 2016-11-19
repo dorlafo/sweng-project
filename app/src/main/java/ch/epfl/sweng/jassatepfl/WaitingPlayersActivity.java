@@ -283,12 +283,18 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
      * @param view General view
      */
     public void leaveMatch(View view) {
-        match.removePlayerById(new Player.PlayerID(sciper));
+        try {
+            match.removePlayerById(new Player.PlayerID(sciper));
+        } catch (IllegalStateException e) {
+            Log.e("Illegal State Exception", e.getMessage());
+            return;
+        }
         dbRefWrapped.child("matches").child(matchId).setValue(match);
         dbRefWrapped.child("pendingMatches").child(matchId).child(Integer.toString(posInList)).removeValue();
         Intent backToMain = new Intent(this, MainActivity.class);
         startActivity(backToMain);
         if(match.getPlayers().size() == 0) {
+            Log.d("WHALLLLLA", "PAS POSSIBLE");
             dbRefWrapped.child("matches").child(matchId).removeValue();
         }
     }
