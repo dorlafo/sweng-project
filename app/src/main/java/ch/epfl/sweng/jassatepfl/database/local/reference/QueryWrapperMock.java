@@ -6,6 +6,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.lang.reflect.Field;
+
 import ch.epfl.sweng.jassatepfl.database.helpers.QueryWrapper;
 import ch.epfl.sweng.jassatepfl.database.local.Leaf;
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -50,7 +52,20 @@ public class QueryWrapperMock extends QueryWrapper{
 
     @Override
     public QueryWrapper equalTo(Boolean b) {
-
+        List<Leaf> newLeafs = new ArrayList<>();
+        for(Leaf l: elements) {
+            try {
+                Field field = l.getData().getClass().getField(childOrder);
+                field.setAccessible(true);
+                Boolean isPrivate = (Boolean) field.get(l.getData());
+                if(isPrivate == b) {
+                    newLeafs.add(l);
+                }
+            } catch(Exception e) {
+                throw new Error("Problem in equalTo with : " + childOrder);
+            }
+        }
+        return new QueryWrapperMock(newLeafs, childOrder);
     }
 
     @Override
