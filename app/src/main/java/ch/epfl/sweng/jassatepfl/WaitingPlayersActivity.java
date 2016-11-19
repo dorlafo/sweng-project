@@ -286,8 +286,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         match.removePlayerById(new Player.PlayerID(sciper));
         dbRefWrapped.child("matches").child(matchId).setValue(match);
         dbRefWrapped.child("pendingMatches").child(matchId).child(Integer.toString(posInList)).removeValue();
-        Intent backToList = new Intent(this, MatchListActivity.class);
-        startActivity(backToList);
+        Intent backToMain = new Intent(this, MainActivity.class);
+        startActivity(backToMain);
+        if(match.getPlayers().size() == 0) {
+            dbRefWrapped.child("matches").child(matchId).removeValue();
+        }
     }
 
     /**
@@ -333,10 +336,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                        Player player = dataSnapshot.getValue(Player.class);
-                        playerList.remove(player);
-                        playerList.add(player);
-                        modifyListAdapter();
                     }
 
                     @Override
@@ -348,10 +347,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
                     @Override
                     public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                        Player player = dataSnapshot.getValue(Player.class);
-                        playerList.remove(player);
-                        playerList.add(player);
-                        modifyListAdapter();
                     }
 
                     @Override
