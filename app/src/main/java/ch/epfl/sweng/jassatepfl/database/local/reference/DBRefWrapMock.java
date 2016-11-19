@@ -30,7 +30,6 @@ import static org.mockito.Mockito.when;
 public class DBRefWrapMock extends DBReferenceWrapper {
 
     private Node currentNode;
-    private String childOrder;
 
     public DBRefWrapMock(DatabaseReference dbRef) {
         super();
@@ -91,19 +90,21 @@ public class DBRefWrapMock extends DBReferenceWrapper {
     @Override
     public QueryWrapper orderByChild(String path) {
         List<Leaf> leafList = new ArrayList();
+        String childOrder = null;
         for(Node n: currentNode.getChildren()) {
             Leaf l = ((Leaf) n);
             leafList.add(l);
         }
 
-        if(path.equals("firstname")) {
+        if(path.equals("firstName")) {
             Collections.sort(leafList, new Comparator<Leaf>() {
                 @Override
                 public int compare(Leaf l1, Leaf l2) {
                     return ((Player)l1.getData()).getFirstName().compareTo(((Player)l2.getData()).getFirstName());
                 }
             });
-            return new QueryWrapperMock(leafList);
+            childOrder = "firstName";
+            return new QueryWrapperMock(leafList, childOrder);
         } else if(path.equals("privateMatch")) {
             Collections.sort(leafList, new Comparator<Leaf>() {
                 @Override
@@ -121,7 +122,8 @@ public class DBRefWrapMock extends DBReferenceWrapper {
                     }
                 }
             });
-            return new QueryWrapperMock(leafList);
+            childOrder = "privateMatch";
+            return new QueryWrapperMock(leafList, childOrder);
         }
 
         throw new IllegalArgumentException("Path : " + path + " is not supported");

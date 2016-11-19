@@ -19,10 +19,12 @@ import static org.mockito.Mockito.when;
  */
 public class QueryWrapperMock extends QueryWrapper{
     private final List<Leaf> elements;
+    private String childOrder;
 
-    public QueryWrapperMock(List<Leaf> elems) {
+    public QueryWrapperMock(List<Leaf> elems, String childOrder) {
         super();
         elements = new ArrayList<>(elems);
+        this.childOrder = childOrder;
     }
 
     @Override
@@ -33,18 +35,25 @@ public class QueryWrapperMock extends QueryWrapper{
         for(Leaf l: elems) {
             if(!l.getId().startsWith(path)) elems.remove(l);
         }
-        return new QueryWrapperMock(elems);
+        return new QueryWrapperMock(elems, childOrder);
     }
 
     @Override
     public QueryWrapper endAt(String path) {
-        return new QueryWrapperMock(elements);
+        return new QueryWrapperMock(elements, childOrder);
     }
 
+    @Override
     public QueryWrapper limitToFirst(int num) {
-        return new QueryWrapperMock(elements.subList(0, num - 1));
+        return new QueryWrapperMock(elements.subList(0, num - 1), childOrder);
     }
 
+    @Override
+    public QueryWrapper equalTo(Boolean b) {
+
+    }
+
+    @Override
     public ValueEventListener addValueEventListener(final ValueEventListener listener) {
         new Thread() {
             public void run() {

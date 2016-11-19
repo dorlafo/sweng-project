@@ -4,6 +4,8 @@ package ch.epfl.sweng.jassatepfl.database.helpers;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import ch.epfl.sweng.jassatepfl.database.local.reference.QueryWrapperMock;
+
 /**
  * @author Amaury Combes
  *
@@ -29,6 +31,10 @@ public class QueryWrapper {
 
     public QueryWrapper limitToFirst(int num) {
         return new QueryWrapper(query.limitToFirst(num));
+    }
+
+    public QueryWrapper equalTo(Boolean b) {
+        return new QueryWrapper(query.equalTo(b));
     }
 
     public ValueEventListener addValueEventListener(ValueEventListener listener) {
