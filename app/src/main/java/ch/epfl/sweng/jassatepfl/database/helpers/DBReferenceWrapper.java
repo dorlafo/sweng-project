@@ -82,8 +82,8 @@ public class DBReferenceWrapper {
     /**
      * Look at the firebase documentation to see what this method does
      */
-    public Query orderByChild(String path) {
-        return dbRef.orderByChild(path);
+    public QueryWrapper orderByChild(String path) {
+        return new QueryWrapper(dbRef.orderByChild(path));
     }
 
     /**
