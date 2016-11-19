@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CLASSIC;
+import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.*;
 import static ch.epfl.sweng.jassatepfl.tools.RankOperationsHelper.averageRank;
 
 /**
@@ -67,7 +67,7 @@ public class Match {
     }
 
     /**
-     * Constructs a Match with default variant (Classic).
+     * Constructs a Match with default variant (Chibre).
      *
      * @param players        The list of players in the match
      * @param location       The location of the match
@@ -82,7 +82,7 @@ public class Match {
                  boolean privateMatch,
                  long expirationTime,
                  String matchID) {
-        this(players, location, description, privateMatch, CLASSIC, expirationTime, matchID);
+        this(players, location, description, privateMatch, CHIBRE, expirationTime, matchID);
     }
 
     /**
@@ -250,13 +250,17 @@ public class Match {
 
     /**
      * The different variants of a Jass game.
-     * <li>{@link #CLASSIC}</li>
      */
     public enum GameVariant {
-        /**
-         * Classic Jass game, with 4 players.
-         */
-        CLASSIC("Classic");
+        CHIBRE("Chibre"),
+        PIQUE_DOUBLE("Pique Double"),
+        OBEN_ABE("Oben Abe"),
+        UNDEN_UFE("Unden Ufe"),
+        SLALOM("Slalom"),
+        CHICANE("Chicane"),
+        JASS_MARANT("Jass Marant"),
+        ROI("Roi"),
+        POMME("Pomme");
 
         private final String variantName;
 
@@ -276,7 +280,18 @@ public class Match {
          */
         public int getMaxPlayerNumber() {
             switch (this) {
-                case CLASSIC:
+                case CHIBRE:
+                case PIQUE_DOUBLE:
+                case OBEN_ABE:
+                case UNDEN_UFE:
+                case SLALOM:
+                case CHICANE:
+                case JASS_MARANT:
+                    return 4;
+                case ROI:
+                    return 3;
+                case POMME:
+                    return 2;
                 default:
                     return 4;
             }
@@ -309,8 +324,8 @@ public class Match {
             location = new GPSPoint(46.520450, 6.567737); // Satellite
             description = DEFAULT_DESCRIPTION;
             privateMatch = false;
-            gameVariant = CLASSIC;
-            maxPlayerNumber = CLASSIC.getMaxPlayerNumber();
+            gameVariant = CHIBRE;
+            maxPlayerNumber = CHIBRE.getMaxPlayerNumber();
             expirationTime = Calendar.getInstance().getTimeInMillis() + 1 * 3600 * 1000; // 1 hour after current time
             matchID = DEFAULT_ID;
         }
