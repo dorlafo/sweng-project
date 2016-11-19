@@ -3,16 +3,26 @@ package ch.epfl.sweng.jassatepfl.database.local.reference;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
+import ch.epfl.sweng.jassatepfl.database.helpers.QueryWrapper;
+import ch.epfl.sweng.jassatepfl.database.local.Leaf;
 import ch.epfl.sweng.jassatepfl.database.local.Node;
 import ch.epfl.sweng.jassatepfl.database.local.Root;
 import ch.epfl.sweng.jassatepfl.database.local.TreeNode;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Amaury Combes
@@ -20,9 +30,10 @@ import ch.epfl.sweng.jassatepfl.model.Player;
 public class DBRefWrapMock extends DBReferenceWrapper {
 
     private Node currentNode;
+    private String childOrder;
 
     public DBRefWrapMock(DatabaseReference dbRef) {
-        super(dbRef);
+        super();
         currentNode = new Root("JassDB (Local mock database)");
     }
 
@@ -75,6 +86,33 @@ public class DBRefWrapMock extends DBReferenceWrapper {
     }
 
     /**
+     * Look at the firebase documentation to see what this method does
+     */
+    @Override
+    public QueryWrapper orderByChild(String path) {
+        List<Leaf> leafList = new ArrayList();
+        for(Node n: currentNode.getChildren()) {
+            Leaf l = ((Leaf) n);
+            leafList.add(l);
+        }
+
+        if(path.equals("firstname")) {
+            Collections.sort(leafList, new Comparator<Leaf>() {
+                @Override
+                public int compare(Leaf l1, Leaf l2) {
+                    return ((Player)l1.getData()).getFirstName().compareTo(((Player)l2.getData()).getFirstName());
+                }
+            });
+            return new QueryWrapperMock(leafList);
+        } else if(path.equals("privateMatch")) {
+
+        }
+
+        //TODO add states for path == privateMatch
+        throw new IllegalArgumentException("Path : " + path + " is not supported");
+    }
+
+    /**
      * Drop all children of the currentNode. This can be used as a reset of the local database
      */
     public void reset() {
@@ -114,5 +152,4 @@ public class DBRefWrapMock extends DBReferenceWrapper {
             playersNode.getChild(matchID).setData(m);
         }
     }
-
 }

@@ -107,6 +107,7 @@ public final class DebugDataModule {
         addMockedSetValueMethod(dbRefWrapMock);
         addMockedAddListenerForSingleValueEventMethod(dbRefWrapMock);
         addMockedAddChildEventListener(dbRefWrapMock);
+        addMockedAddValueEventListenner(dbRefWrapMock);
     }
 
     private void addMockedChildMethod(final DBRefWrapMock dbRefWrapMock) {
@@ -144,9 +145,7 @@ public final class DebugDataModule {
             public DBReferenceWrapper answer(InvocationOnMock invocation) throws Throwable {
                 Leaf currentNode = (Leaf) dbRefWrapMock.getCurrentNode();
                 currentNode.setData(invocation.getArgument(0));
-                DBRefWrapMock dRef = spy(new DBRefWrapMock(currentNode));
-                addMockedBehaviorRef(dRef);
-                return dRef;
+                return null;
             }
 
         }).when(dbRefWrapMock).setValue(anyObject());
@@ -176,8 +175,11 @@ public final class DebugDataModule {
         }).when(dbRefWrapMock).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
-    private void addMockedAddChildEventListener(DBRefWrapMock dbRefWrapMock) {
+    private void addMockedAddValueEventListenner(DBRefWrapMock dbRefWrapMock) {
         //TODO
     }
 
+    private void addMockedAddChildEventListener(DBRefWrapMock dbRefWrapMock) {
+
+    }
 }
