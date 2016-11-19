@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
@@ -52,7 +50,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         setContentView(R.layout.activity_invite_player_to_match);
 
         // TODO: maybe have a field in base activity with sciper of current user, with error management
-        currentUserSciper = fAuth.getCurrentUser().getDisplayName();
+        currentUserSciper = getUserSciper();
         inviteScipers = new HashSet<>();
 
         TextView emptyList = new TextView(this);
@@ -114,8 +112,8 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
     @Override
     public boolean onQueryTextChange(String newText) {
         // Modify query when user changes the search text
-        DBReferenceWrapper ref = dbRefWrapped.child("players");
-        ref.orderByChild("firstName").startAt(newText).endAt(newText + "z").limitToFirst(50).addValueEventListener(
+        dbRefWrapped.child("players").orderByChild("firstName")
+                .startAt(newText).endAt(newText + "z").limitToFirst(50).addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

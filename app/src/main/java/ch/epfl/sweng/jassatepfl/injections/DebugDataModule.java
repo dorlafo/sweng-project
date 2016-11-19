@@ -105,7 +105,6 @@ public final class DebugDataModule {
         addMockedPushdMethod(dbRefWrapMock);
         addMockedGetKeyMethod(dbRefWrapMock);
         addMockedSetValueMethod(dbRefWrapMock);
-        addMockedAddListenerForSingleValueEventMethod(dbRefWrapMock);
         addMockedAddChildEventListener(dbRefWrapMock);
         addMockedAddValueEventListenner(dbRefWrapMock);
     }
@@ -176,7 +175,7 @@ public final class DebugDataModule {
     }
 
     private void addMockedAddValueEventListenner(DBRefWrapMock dbRefWrapMock) {
-        //TODO
+
     }
 
     private void addMockedAddChildEventListener(DBRefWrapMock dbRefWrapMock) {

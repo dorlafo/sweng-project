@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,12 +20,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
-import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapterForMatch;
+import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
 public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
@@ -36,6 +34,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     private Player player;
 
     private ChildEventListener pendingMatchesListener;
+    private ChildEventListener childEventListener;
+    private ValueEventListener valueEventListener;
 
     private TextView variant;
     private TextView description;
@@ -60,29 +60,27 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     @Override
     protected void onResume() {
         super.onResume();
-        matchId = getIntent().getStringExtra("MATCH_ID");
         description = (TextView) findViewById(R.id.match_description);
         variant = (TextView) findViewById(R.id.match_variant);
-
-        playerList = new ArrayList<>();
-
         listView = (ListView) findViewById(android.R.id.list);
         listView.setEmptyView(findViewById(android.R.id.empty));
+        sciper = getUserSciper();
 
-        sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        PlayerListAdapterForMatch pAdapter = new PlayerListAdapterForMatch(this, matchId);
-        listView.setAdapter(pAdapter);
-        dbRefWrapped.child("matches").child(matchId).addListenerForSingleValueEvent(new ValueEventListener() {
+        playerList = new ArrayList<>();
+        matchId = getIntent().getStringExtra("match_Id");
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 match = dataSnapshot.getValue(Match.class);
-                description.setText(match.getDescription());
-                variant.setText(match.getGameVariant().toString());
+                if(match != null) {
+                    description.setText(match.getDescription());
+                    variant.setText(match.getGameVariant().toString());
 
-                List<Player> players = match.getPlayers();
-                for (int i = 0; i < players.size(); ++i) {
-                    if (players.get(i).getID().equals(new Player.PlayerID(sciper))) {
-                        posInList = i;
+                    List<Player> players = match.getPlayers();
+                    for (int i = 0; i < players.size(); ++i) {
+                        if (players.get(i).getID().equals(new Player.PlayerID(sciper))) {
+                            posInList = i;
+                        }
                     }
                     dbRefWrapped.child("pendingMatches")
                             .child(matchId).child(Integer.toString(posInList)).setValue(false);
@@ -91,9 +89,12 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.e("ERROR-DATABASE", databaseError.toString());
             }
-        });
+        };
+        dbRefWrapped.child("matches").child(matchId).addValueEventListener(valueEventListener);
+        contactFirebase();
+
         pendingMatchesListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -136,28 +137,14 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
          * Will display dialog Box depending on the notification received.
          */
         if (startIntent.hasExtra("notif")) {
-            final String matchID = startIntent.getStringExtra("matchId");
             switch (startIntent.getStringExtra("notif")) {
                 case "matchfull":
-                    dbRefWrapped.child("matches").child(startIntent.getStringExtra("matchId"))
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Match match = dataSnapshot.getValue(Match.class);
-                                    new AlertDialog.Builder(WaitingPlayersActivity.this)
-                                            .setTitle(R.string.error_match_full)
-                                            .setMessage("Match: " + match.getDescription())
-                                            .show();
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    Log.e("ERROR-DATABASE", databaseError.toString());
-                                }
-                            });
+                    new AlertDialog.Builder(WaitingPlayersActivity.this)
+                            .setTitle(R.string.error_match_full)
+                            .setMessage("Match: " + match.getDescription())
+                            .show();
                     startIntent.removeExtra("notif");
-                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("match_Id");
                     break;
                 case "playerjoined":
                     dbRefWrapped.child("players")
@@ -179,7 +166,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                             });
 
                     startIntent.removeExtra("notif");
-                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("match_Id");
                     startIntent.removeExtra("sciper");
                     break;
                 case "playerleft":
@@ -202,7 +189,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                             });
 
                     startIntent.removeExtra("notif");
-                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("match_Id");
                     startIntent.removeExtra("sciper");
                     break;
                 case "invite":
@@ -211,25 +198,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                             .setMessage(R.string.dialog_join_message)
                             .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    WaitingPlayersActivity.this.dbRefWrapped.child("matches").child(matchID)
-                                            .addListenerForSingleValueEvent(new ValueEventListener() {
-
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    match = dataSnapshot.getValue(Match.class);
-                                                    DatabaseUtils.addPlayerToMatch(WaitingPlayersActivity.this,
-                                                            WaitingPlayersActivity.this.dbRefWrapped,
-                                                            matchID,
-                                                            fAuth.getCurrentUser().getDisplayName(),
-                                                            match);
-                                                }
-
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-                                                    Log.e("ERROR-DATABASE", databaseError.toString());
-                                                }
-                                            });
-
+                                    DatabaseUtils.addPlayerToMatch(WaitingPlayersActivity.this,
+                                            WaitingPlayersActivity.this.dbRefWrapped,
+                                            matchId,
+                                            fAuth.getCurrentUser().getDisplayName(),
+                                            match);
                                 }
                             })
                             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -239,7 +212,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                             })
                             .show();
                     startIntent.removeExtra("notif");
-                    startIntent.removeExtra("matchId");
+                    startIntent.removeExtra("match_Id");
                     startIntent.removeExtra("sciper");
                     break;
                 default:
@@ -261,7 +234,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Player player = dataSnapshot.getValue(Player.class);
-                                    playerList.add(new Player(player.getID(), player.getLastName(), player.getFirstName(), player.getRank()));
                                     new InvitePlayer(player).execute(matchId);
                                 }
 
@@ -275,6 +247,13 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dbRefWrapped.removeEventListener(pendingMatchesListener);
+        dbRefWrapped.removeEventListener(childEventListener);
+    }
+
     /**
      * When button "LEAVE MATCH" is pressed, the current user is removed from the match player list
      * send him back to main menu.
@@ -282,11 +261,21 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
      * @param view General view
      */
     public void leaveMatch(View view) {
-        match.removePlayerById(new Player.PlayerID(sciper));
-        dbRefWrapped.child("matches").child(matchId).setValue(match);
+        dbRefWrapped.removeEventListener(valueEventListener);
+        try {
+            match.removePlayerById(new Player.PlayerID(sciper));
+        } catch (IllegalStateException e) {
+            Log.e("Illegal State Exception", e.getMessage());
+            return;
+        }
         dbRefWrapped.child("pendingMatches").child(matchId).child(Integer.toString(posInList)).removeValue();
-        Intent backToList = new Intent(this, MatchListActivity.class);
-        startActivity(backToList);
+        Intent backToMain = new Intent(this, MainActivity.class);
+        startActivity(backToMain);
+        if(match.getPlayers().size() == 0) {
+            dbRefWrapped.child("matches").child(matchId).removeValue();
+        } else {
+            dbRefWrapped.child("matches").child(matchId).setValue(match);
+        }
     }
 
     /**
@@ -316,9 +305,48 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                 .setMessage("will move to new activity")
                 .show();
         dbRefWrapped.child("pendingMatches").child(matchId).removeEventListener(pendingMatchesListener);
-        // TODO: backToList.putExtra("MATCH_ID", matchId);
+        // TODO: backToList.putExtra("match_Id", matchId);
         // TODO: Create intent for next activity
         // TODO: In new activity, delete pendingMatches
+    }
+
+    private void contactFirebase() {
+        childEventListener = new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Player player = dataSnapshot.getValue(Player.class);
+                        playerList.add(player);
+                        modifyListAdapter();
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        Player player = dataSnapshot.getValue(Player.class);
+                        playerList.remove(player);
+                        modifyListAdapter();
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                };
+        dbRefWrapped.child("matches")
+                .child(matchId).child("players")
+                .addChildEventListener(childEventListener);
+    }
+
+    private void modifyListAdapter() {
+        PlayerListAdapter adapter = new PlayerListAdapter(WaitingPlayersActivity.this, R.layout.player_list_element, playerList);
+        listView.setAdapter(adapter);
     }
 
 }

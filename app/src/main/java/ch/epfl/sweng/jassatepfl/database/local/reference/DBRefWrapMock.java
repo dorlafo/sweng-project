@@ -2,6 +2,7 @@ package ch.epfl.sweng.jassatepfl.database.local.reference;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -72,7 +73,25 @@ public class DBRefWrapMock extends DBReferenceWrapper {
      * Look at the firebase documentation to see what this method does
      */
     @Override
-    public void addListenerForSingleValueEvent(ValueEventListener listener) {
+    public void addListenerForSingleValueEvent(final ValueEventListener v) {
+        final DataSnapshot obj = mock(DataSnapshot.class);
+        Player p = null;
+        Match m = null;
+
+        if (((Leaf) this.getCurrentNode()).getData() instanceof Player) {
+            p = (Player) ((Leaf) this.getCurrentNode()).getData();
+        } else if (((Leaf) this.getCurrentNode()).getData() instanceof Match) {
+            m = (Match) ((Leaf) this.getCurrentNode()).getData();
+        }
+
+        when(obj.getValue(Player.class)).thenReturn(p);
+        when(obj.getValue(Match.class)).thenReturn(m);
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                v.onDataChange((DataSnapshot) obj);
+            }
+        });
+        t.start();
 
     }
 

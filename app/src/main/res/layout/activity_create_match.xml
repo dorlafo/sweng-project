@@ -2,7 +2,6 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_create_match"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -87,7 +86,6 @@
         android:layout_marginBottom="@dimen/create_row_margin">
 
         <TextView
-            android:id="@+id/create_expiration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -142,7 +140,6 @@
         android:layout_marginBottom="@dimen/create_row_margin">
 
         <TextView
-            android:id="@+id/create_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -196,7 +193,6 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/create_row_player_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/create_row_buttons"

@@ -2,7 +2,6 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
@@ -15,13 +14,11 @@
     tools:context="ch.epfl.sweng.jassatepfl.MainActivity">
 
     <Space
-        android:id="@+id/main_top_space"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:layout_alignParentTop="true"/>
 
     <FrameLayout
-        android:id="@+id/main_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/main_layout_activity_buttons"
@@ -103,7 +100,6 @@
             android:text="@string/main_button_text_profile"/>
 
         <Button
-            android:id="@+id/ranking_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginLeft="40dp"
@@ -112,7 +108,6 @@
             android:text="@string/main_button_text_ranking"/>
 
         <Button
-            android:id="@+id/statistics_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:background="@drawable/roundedbutton"

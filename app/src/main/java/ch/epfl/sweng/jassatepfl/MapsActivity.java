@@ -38,7 +38,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
@@ -62,6 +61,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     private Match match;
     private LatLng userLastLocation;
     private Player currentUser;
+    private ChildEventListener childEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
         try {
             dbRefWrapped.child("players")
-                    .child(fAuth.getCurrentUser().getDisplayName())
+                    .child(getUserSciper())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -171,8 +171,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                         .setMessage(R.string.dialog_join_message)
                         .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                //TODO remove this
-                                //final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                 final String matchID = marker.getTag().toString();
                                 dbRefWrapped.child("matches").child(matchID)
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -182,7 +180,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                                                 DatabaseUtils.addPlayerToMatch(MapsActivity.this,
                                                         dbRefWrapped,
                                                         matchID,
-                                                        fAuth.getCurrentUser().getDisplayName(),
+                                                        getUserSciper(),
                                                         match);
                                             }
 
@@ -215,6 +213,12 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
         userLastLocation = new LatLng(location.getLatitude(), location.getLongitude());
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dbRefWrapped.removeEventListener(childEventListener);
+    }
+
     private void createMap() {
         if (matchMap == null) {
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -224,9 +228,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     }
 
     private void displayNearbyMatches() {
-        DBReferenceWrapper ref = dbRefWrapped.child("matches"); // TODO: filter this
-
-        ref.addChildEventListener(new ChildEventListener() {
+        childEventListener = new ChildEventListener() {
             private final Map<String, Marker> markers = new HashMap<>();
             private final MatchStringifier stringifier = new MatchStringifier(MapsActivity.this);
 
@@ -269,6 +271,10 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 marker.setTag(match.getMatchID());
                 return marker;
             }
-        });
+        };
+        dbRefWrapped.child("matches")
+                .orderByChild("privateMatch").equalTo(false)
+                .addChildEventListener(childEventListener);
     }
+
 }

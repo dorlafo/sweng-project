@@ -75,6 +75,13 @@ public class DBReferenceWrapper {
     /**
      * Look at the firebase documentation to see what this method does
      */
+    public ValueEventListener addValueEventListener(ValueEventListener listener) {
+        return dbRef.addValueEventListener(listener);
+    }
+
+    /**
+     * Look at the firebase documentation to see what this method does
+     */
     public ChildEventListener addChildEventListener(ChildEventListener listener) {
         return dbRef.addChildEventListener(listener);
     }
@@ -84,6 +91,22 @@ public class DBReferenceWrapper {
      */
     public QueryWrapper orderByChild(String path) {
         return new QueryWrapper(dbRef.orderByChild(path));
+    }
+
+    public Query equalTo(boolean b) {
+        return dbRef.equalTo(b);
+    }
+
+    public Query equalTo(String b) {
+        return dbRef.equalTo(b);
+    }
+
+    public Query startAt(String s) {
+        return dbRef.startAt(s);
+    }
+
+    public Query endAt(String s) {
+        return dbRef.endAt(s);
     }
 
     /**
@@ -96,7 +119,15 @@ public class DBReferenceWrapper {
     /**
      * Look at the firebase documentation to see what this method does
      */
+    public void removeEventListener(ValueEventListener listener) {
+        dbRef.removeEventListener(listener);
+    }
+
+    /**
+     * Look at the firebase documentation to see what this method does
+     */
     public void removeValue() {
         dbRef.removeValue();
     }
+
 }
