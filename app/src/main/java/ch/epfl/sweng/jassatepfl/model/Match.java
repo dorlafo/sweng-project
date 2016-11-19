@@ -227,10 +227,14 @@ public class Match {
         if (players.isEmpty()) {
             throw new IllegalStateException("No players in the match.");
         } else {
+            int index = -1;
             for (Player p : players) {
                 if (p.getID().equals(toRemove)) {
-                    players.remove(p);
+                    index = players.indexOf(p);
                 }
+            }
+            if(index != -1) {
+                players.remove(index);
             }
         }
 

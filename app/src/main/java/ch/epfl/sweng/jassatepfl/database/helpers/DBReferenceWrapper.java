@@ -75,6 +75,13 @@ public class DBReferenceWrapper {
     /**
      * Look at the firebase documentation to see what this method does
      */
+    public ValueEventListener addValueEventListener(ValueEventListener listener) {
+        return dbRef.addValueEventListener(listener);
+    }
+
+    /**
+     * Look at the firebase documentation to see what this method does
+     */
     public ChildEventListener addChildEventListener(ChildEventListener listener) {
         return dbRef.addChildEventListener(listener);
     }
@@ -106,6 +113,13 @@ public class DBReferenceWrapper {
      * Look at the firebase documentation to see what this method does
      */
     public void removeEventListener(ChildEventListener listener) {
+        dbRef.removeEventListener(listener);
+    }
+
+    /**
+     * Look at the firebase documentation to see what this method does
+     */
+    public void removeEventListener(ValueEventListener listener) {
         dbRef.removeEventListener(listener);
     }
 
