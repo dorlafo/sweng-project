@@ -1,6 +1,7 @@
 package ch.epfl.sweng.jassatepfl.database.helpers;
 
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -39,5 +40,9 @@ public class QueryWrapper {
 
     public ValueEventListener addValueEventListener(ValueEventListener listener) {
         return query.addValueEventListener(listener);
+    }
+
+    public ChildEventListener addChildEventListener(ChildEventListener listener) {
+        return query.addChildEventListener(listener);
     }
 }
