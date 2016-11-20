@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ch.epfl.sweng.jassatepfl.database.local.Leaf;
 import ch.epfl.sweng.jassatepfl.database.local.Root;
 import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
 import ch.epfl.sweng.jassatepfl.database.local.reference.QueryWrapperMock;
@@ -41,9 +42,9 @@ public class QueryWrapperMockTest {
         try {
             Field f = query.getClass().getDeclaredField("elements");
             f.setAccessible(true);
-            List<Object> matchs = (List<Object>) f.get(query);
+            List<Leaf> matchs = (List<Leaf>) f.get(query);
             assertEquals(1 , matchs.size());
-            assertEquals("private", ((Match) matchs.get(0)).getMatchID());
+            assertEquals("private", ((Match) matchs.get(0).getData()).getMatchID());
         } catch (Exception e) {
             fail();
         }
