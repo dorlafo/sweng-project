@@ -1,6 +1,8 @@
 package ch.epfl.sweng.jassatepfl.database.local;
 
 
+import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -10,10 +12,10 @@ import java.util.Set;
  *
  * @author Amaury Combes
  */
-public class Leaf implements Node {
+public abstract class Leaf<T> implements Node {
 
     private String id;
-    private Object data;
+    protected T data;
 
     /**
      * Constructor of the Leaf class
@@ -24,6 +26,16 @@ public class Leaf implements Node {
         this.id = id;
     }
 
+    /**
+     * Setter for the data of the current leaf
+     *
+     * @param data the data that we need to add
+     */
+    public abstract void setData(T data);
+
+    @Override
+    public abstract LeafField getChild(String id);
+
     @Override
     public String getId() {
         return id;
@@ -32,11 +44,6 @@ public class Leaf implements Node {
     @Override
     public Set<Node> getChildren() {
         throw new UnsupportedOperationException("Leaf does not support getChildren()");
-    }
-
-    @Override
-    public Node getChild(String id) {
-        throw new UnsupportedOperationException("Leaf does not support getChild(id)");
     }
 
     @Override
@@ -54,22 +61,19 @@ public class Leaf implements Node {
      *
      * @return the data of the current leaf
      */
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    /**
-     * Setter for the data of the current leaf
-     *
-     * @param data the data that we need to add
-     */
-    public void setData(Object data) {
-        this.data = data;
-    }
 
     @Override
     public void dropChildren() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
 }

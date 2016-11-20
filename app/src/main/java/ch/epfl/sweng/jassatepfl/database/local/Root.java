@@ -61,4 +61,11 @@ public class Root implements Node {
         children = new HashSet<>();
     }
 
+    @Override
+    public void initialize() {
+        addChild("matches");
+        addChild("players");
+        addChild("pendingMatches");
+    }
+
 }
