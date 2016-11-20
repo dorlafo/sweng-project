@@ -1,5 +1,9 @@
 package ch.epfl.sweng.jassatepfl.database.local.reference;
 
+import android.os.Handler;
+import android.os.Looper;
+
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.ValueEventListener;
 
@@ -22,11 +26,20 @@ import static org.mockito.Mockito.when;
 public class QueryWrapperMock extends QueryWrapper{
     private final List<Leaf> elements;
     private String childOrder;
+    private int numOfValueListener = 0;
+    private int numOfChildListener = 0;
 
     public QueryWrapperMock(List<Leaf> elems, String childOrder) {
         super();
         elements = new ArrayList<>(elems);
         this.childOrder = childOrder;
+    }
+
+    private QueryWrapperMock(List<Leaf> elems, int numOfValueListener, int numOfChildListener) {
+        super();
+        elements = new ArrayList<>(elems);
+        this.numOfValueListener = numOfValueListener;
+        this.numOfChildListener = numOfChildListener;
     }
 
     @Override
@@ -37,46 +50,40 @@ public class QueryWrapperMock extends QueryWrapper{
         for(Leaf l: elems) {
             if(!l.getId().startsWith(path)) elems.remove(l);
         }
-        return new QueryWrapperMock(elems, childOrder);
+        return new QueryWrapperMock(elems, numOfValueListener, numOfChildListener);
     }
 
     @Override
     public QueryWrapper endAt(String path) {
-        return new QueryWrapperMock(elements, childOrder);
+        return new QueryWrapperMock(elements,  numOfValueListener, numOfChildListener);
     }
 
     @Override
     public QueryWrapper limitToFirst(int num) {
-        return new QueryWrapperMock(elements.subList(0, num - 1), childOrder);
+        return new QueryWrapperMock(elements.subList(0, num - 1),  numOfValueListener, numOfChildListener);
     }
 
     @Override
     public QueryWrapper equalTo(Boolean b) {
         List<Leaf> newLeafs = new ArrayList<>();
         for(Leaf l: elements) {
-            try {
-                Field field = l.getData().getClass().getField(childOrder);
-                field.setAccessible(true);
-                Boolean isPrivate = (Boolean) field.get(l.getData());
-                if(isPrivate == b) {
-                    newLeafs.add(l);
-                }
-            } catch(Exception e) {
-                throw new Error("Problem in equalTo with : " + childOrder);
+            Match p = (Match) l.getData();
+            if(p.isPrivateMatch() == b) {
+                newLeafs.add(l);
             }
         }
-        return new QueryWrapperMock(newLeafs, childOrder);
+        return new QueryWrapperMock(newLeafs,  numOfValueListener, numOfChildListener);
     }
 
     @Override
     public ValueEventListener addValueEventListener(final ValueEventListener listener) {
+        ++numOfValueListener;
         new Thread() {
             public void run() {
-                Player p = null;
-                Match m = null;
-                DataSnapshot dSnap = mock(DataSnapshot.class);
-
                 for(Leaf l: elements) {
+                    Player p = null;
+                    Match m = null;
+                    DataSnapshot dSnap = mock(DataSnapshot.class);
                     Object obj = l.getData();
                     if(obj instanceof Player) {
                         p = (Player) obj;
@@ -89,6 +96,44 @@ public class QueryWrapperMock extends QueryWrapper{
                 }
             }
         }.start();
+        return listener;
+    }
+
+    @Override
+    public ChildEventListener addChildEventListener(final ChildEventListener listener) {
+        ++numOfChildListener;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (final Leaf l : elements) {
+
+                    Handler uiHandler = new Handler(Looper.getMainLooper());
+                    Runnable toRun = new Runnable() {
+                        @Override
+                        public void run() {
+                            Player p = null;
+                            Match m = null;
+                            String id = null;
+
+                            DataSnapshot dSnap = mock(DataSnapshot.class);
+                            Object obj = l.getData();
+                            if (obj instanceof Player) {
+                                p = (Player) obj;
+                                id = p.getID().toString();
+                            } else if (obj instanceof Match) {
+                                m = (Match) obj;
+                                id = m.getMatchID().toString();
+                            }
+
+                            when(dSnap.getValue(Player.class)).thenReturn(p);
+                            when(dSnap.getValue(Match.class)).thenReturn(m);
+                            listener.onChildAdded(dSnap, id);
+                        }
+                    };
+                    uiHandler.post(toRun);
+                }
+            }
+        }).start();
         return listener;
     }
 }
