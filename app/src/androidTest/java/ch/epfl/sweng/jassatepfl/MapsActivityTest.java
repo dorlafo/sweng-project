@@ -37,7 +37,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         super.setUp();
     }
 
-    /* Not working for now
+    // Not working for now
     @Test
     public void testDrawerOpens() {
         Set<Match> matches = new HashSet<>();
@@ -51,7 +51,8 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.maps_menu_button)).perform(click());
         onView(withId(R.id.drawer_layout)).check(matches(isOpen()));
         dbRefWrapMock.reset();
-    }*/
+    }
+
 
 
     /*
@@ -63,9 +64,16 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         dbRefWrapMock.addMatches(matches);
 
         getActivity();
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Rolex"));
+
         try {
             marker.click();
             onData(withText("Rolex")).perform(click());
@@ -74,6 +82,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_cancel)).check(matches(isDisplayed()));
         } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
         dbRefWrapMock.reset();
