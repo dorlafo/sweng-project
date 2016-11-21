@@ -1,5 +1,8 @@
 package ch.epfl.sweng.jassatepfl.database.local.reference;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +40,8 @@ import static org.mockito.Mockito.when;
 public class DBRefWrapMock extends DBReferenceWrapper {
 
     private Node currentNode;
-    private int numValueEventListener = 0;
+    private static int numValueEventListener = 0;
+    private static int numChildEventListener = 0;
 
     public DBRefWrapMock(DatabaseReference dbRef) {
         super();
@@ -106,12 +110,18 @@ public class DBRefWrapMock extends DBReferenceWrapper {
 
         when(obj.getValue(Player.class)).thenReturn(p);
         when(obj.getValue(Match.class)).thenReturn(m);
-        Thread t = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             public void run() {
-                v.onDataChange((DataSnapshot) obj);
+                Handler uiHandler = new Handler(Looper.getMainLooper());
+                Runnable toRun = new Runnable() {
+                    @Override
+                    public void run() {
+                        v.onDataChange((DataSnapshot) obj);
+                    }
+                };
+                uiHandler.post(toRun);
             }
-        });
-        t.start();
+        }).start();
 
     }
 
@@ -151,40 +161,46 @@ public class DBRefWrapMock extends DBReferenceWrapper {
     public ValueEventListener addValueEventListener(final ValueEventListener listener) {
         ++numValueEventListener;
 
-
         new Thread(new Runnable() {
 
             public void run() {
-                Player p = null;
-                Match m = null;
+                Handler uiHandler = new Handler(Looper.getMainLooper());
+                Runnable toRun = new Runnable() {
+                    @Override
+                    public void run() {
+                        Player p = null;
+                        Match m = null;
 
-                while(numValueEventListener > 0) {
-                    final DataSnapshot obj = mock(DataSnapshot.class);
+                        while(numValueEventListener > 0) {
+                            final DataSnapshot obj = mock(DataSnapshot.class);
 
-                    List<Boolean> status = null;
-                    boolean callDataChange = false;
+                            List<Boolean> status = null;
+                            boolean callDataChange = false;
 
-                    if(currentNode instanceof PlayerLeaf) {
-                        if(p == null || !p.equals(((PlayerLeaf) currentNode).getData())) {
-                            callDataChange = true;
-                        }
-                        p = ((PlayerLeaf) currentNode).getData();
-                    } else if(currentNode instanceof MatchLeaf) {
-                        if(m == null || !m.equals(((MatchLeaf) currentNode).getData())) {
-                            callDataChange = true;
-                        }
-                        m = ((MatchLeaf) currentNode).getData();
-                    } else if(currentNode instanceof MatchStatusLeaf) {
-                        status = new ArrayList<>(((MatchStatusLeaf) currentNode).getData());
-                    }
+                            if(currentNode instanceof PlayerLeaf) {
+                                if(p == null || !p.equals(((PlayerLeaf) currentNode).getData())) {
+                                    callDataChange = true;
+                                }
+                                p = ((PlayerLeaf) currentNode).getData();
+                            } else if(currentNode instanceof MatchLeaf) {
+                                if(m == null || !m.equals(((MatchLeaf) currentNode).getData())) {
+                                    callDataChange = true;
+                                }
+                                m = ((MatchLeaf) currentNode).getData();
+                            } else if(currentNode instanceof MatchStatusLeaf) {
+                                status = new ArrayList<>(((MatchStatusLeaf) currentNode).getData());
+                            }
 
-                    when(obj.getValue(Player.class)).thenReturn(p);
-                    when(obj.getValue(Match.class)).thenReturn(m);
+                            when(obj.getValue(Player.class)).thenReturn(p);
+                            when(obj.getValue(Match.class)).thenReturn(m);
 
-                    if(callDataChange) {
-                        listener.onDataChange((DataSnapshot) obj);
+                            if(callDataChange) {
+                                listener.onDataChange((DataSnapshot) obj);
+                            }
                     }
                 }
+                };
+                uiHandler.post(toRun);
             }
         }).start();
         return listener;
@@ -194,13 +210,40 @@ public class DBRefWrapMock extends DBReferenceWrapper {
      * Look at the firebase documentation to see what this method does
      */
     @Override
-    public ChildEventListener addChildEventListener(ChildEventListener listener) {
-        return null;
+    public ChildEventListener addChildEventListener(final ChildEventListener listener) {
+        ++numChildEventListener;
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                Handler uiHandler = new Handler(Looper.getMainLooper());
+                Runnable toRun = new Runnable() {
+                    @Override
+                    public void run() {
+                                    final DataSnapshot snap = mock(DataSnapshot.class);
+
+                                    if(currentNode instanceof MatchStatusLeaf) {
+                                        List<Boolean> statusList = ((MatchStatusLeaf) currentNode).getData();
+                                        for(int i = 0; i < statusList.size(); ++i) {
+                                            boolean value = statusList.get(i);
+                                            when(snap.getKey()).thenReturn(Integer.toString(i));
+                                            when(snap.getValue()).thenReturn(value);
+                                            listener.onChildAdded(snap, currentNode.getId());
+                                        }
+
+                                    }
+                            }
+                        };
+                        uiHandler.post(toRun);
+                    }
+                }).start();
+        return listener;
     }
 
     @Override
     public void removeEventListener(ChildEventListener listener) {
-
+        --numChildEventListener;
     }
 
     @Override
