@@ -63,6 +63,10 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         sciper = getUserSciper();
         playerList = new ArrayList<>();
         matchId = getIntent().getStringExtra("match_Id");
+
+        listView = (ListView) findViewById(android.R.id.list);
+        listView.setEmptyView(findViewById(android.R.id.empty));
+
         Intent startIntent = getIntent();
 
         /* Notification onClick handler.
