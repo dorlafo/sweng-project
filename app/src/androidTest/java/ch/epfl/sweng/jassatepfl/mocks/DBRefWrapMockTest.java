@@ -44,7 +44,8 @@ public class DBRefWrapMockTest {
         localRef.addPlayers(players);
         localRef.addMatches(matches);
 
-        localRef.child("matches").child("private").addValueEventListener(new ValueEventListener() {
+        DBRefWrapMock refToPrivate = (DBRefWrapMock) localRef.child("matches").child("private");
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Match match = dataSnapshot.getValue(Match.class);
@@ -55,8 +56,11 @@ public class DBRefWrapMockTest {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+
+        refToPrivate.addValueEventListener(listener);
         waitCompletion();
+        refToPrivate.removeEventListener(listener);
         assertEquals(playerList.get(0), DummyData.jimmy);
     }
 
