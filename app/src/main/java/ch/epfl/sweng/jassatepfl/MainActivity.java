@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
 import ch.epfl.sweng.jassatepfl.tools.MatchListEnrolledAdapter;
 
@@ -124,7 +125,10 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        final Match match = (Match) adapter.getItem(position);
+        Intent moveToMatchActivity = new Intent(this, WaitingPlayersActivity.class);
+        moveToMatchActivity.putExtra("match_Id", match.getMatchID());
+        startActivity(moveToMatchActivity);
     }
 
     private void contactFirebase() {
