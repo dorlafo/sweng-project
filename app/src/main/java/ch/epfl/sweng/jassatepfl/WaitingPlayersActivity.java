@@ -38,6 +38,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     private ChildEventListener pendingMatchesListener;
     private ChildEventListener childEventListener;
     private ValueEventListener valueEventListener;
+    private ChildEventListener innerListener;
 
     private TextView variant;
     private TextView description;
@@ -66,7 +67,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         }
     }
 
-    // TODO: implement pendingMatches deletion on server
     // TODO: on tap on player tile, show his stats
     @Override
     protected void onResume() {
@@ -95,7 +95,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     startIntent.removeExtra("match_Id");
                     break;
                 case "playerjoined":
-                    dbRefWrapped.child("players")
+                    //TODO: rename
+                    dbRefWrapped.child("players2")
                             .child(startIntent.getStringExtra("sciper"))
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -118,7 +119,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     startIntent.removeExtra("sciper");
                     break;
                 case "playerleft":
-                    dbRefWrapped.child("players")
+                    //TODO: rename
+                    dbRefWrapped.child("players2")
                             .child(startIntent.getStringExtra("sciper"))
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -187,6 +189,41 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                             posInList = i;
                         }
                     }
+                    innerListener = new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            int pos = Integer.parseInt(dataSnapshot.getKey());
+                            boolean ready = dataSnapshot.getValue(Boolean.class);
+                            if (ready && listView.getChildAt(pos) != null) {
+                                listView.getChildAt(pos).setBackgroundColor(0xFF00FF00);
+                                playersReady += 1;
+                            }
+                            if (playersReady == match.getMaxPlayerNumber()) {
+                                Button game = (Button) findViewById(R.id.play);
+                                game.setEnabled(true);
+                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    };
+                    //TODO: rename
+                    dbRefWrapped.child("pendingMatches2").child(matchId).addChildEventListener(innerListener);
                 }
             }
 
@@ -195,13 +232,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                 Log.e("ERROR-DATABASE", databaseError.toString());
             }
         };
-        dbRefWrapped.child("matches").child(matchId).addValueEventListener(valueEventListener);
+        //TODO: rename
+        dbRefWrapped.child("matches2").child(matchId).addValueEventListener(valueEventListener);
 
         contactFirebase();
 
-
-        //TODO: Problem here, when we get back to the activity, the player is still ready but not in color
-        //TODO: Might cause problem with playersReady += 1...See what we can do, maybe add variable on fireabse for playersReady.
         pendingMatchesListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -235,7 +270,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
             }
         };
-        dbRefWrapped.child("pendingMatches").child(matchId).addChildEventListener(pendingMatchesListener);
+        //TODO: rename
+        dbRefWrapped.child("pendingMatches2").child(matchId).addChildEventListener(pendingMatchesListener);
     }
 
     @Override
@@ -245,7 +281,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                 int playerNum = data.getIntExtra("players_added", 0);
                 for (int i = 0; i < playerNum; i++) {
                     String sciper = data.getStringExtra("player" + i);
-                    dbRefWrapped.child("players")
+                    //TODO: rename
+                    dbRefWrapped.child("players2")
                             .child(sciper)
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -276,6 +313,9 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         if(valueEventListener != null) {
             dbRefWrapped.removeEventListener(valueEventListener);
         }
+        if(innerListener != null) {
+            dbRefWrapped.removeEventListener(innerListener);
+        }
     }
 
     /**
@@ -298,13 +338,16 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
             Log.e("Illegal State Exception", e.getMessage());
             return;
         }
-        dbRefWrapped.child("pendingMatches").child(matchId).child(Integer.toString(posInList)).removeValue();
+        //TODO: rename
+        dbRefWrapped.child("pendingMatches2").child(matchId).child(Integer.toString(posInList)).removeValue();
         Intent backToMain = new Intent(this, MainActivity.class);
         startActivity(backToMain);
         if(match.getPlayers().size() == 0) {
-            dbRefWrapped.child("matches").child(matchId).removeValue();
+            //TODO: rename
+            dbRefWrapped.child("matches2").child(matchId).removeValue();
         } else {
-            dbRefWrapped.child("matches").child(matchId).setValue(match);
+            //TODO: rename
+            dbRefWrapped.child("matches2").child(matchId).setValue(match);
         }
     }
 
@@ -314,7 +357,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
      * @param view General view
      */
     public void userIsReady(View view) {
-        dbRefWrapped.child("pendingMatches").child(matchId).child(Integer.toString(posInList)).setValue(true);
+        //TODO: rename
+        dbRefWrapped.child("pendingMatches2").child(matchId).child(Integer.toString(posInList)).setValue(true);
         Button ready = (Button) findViewById(R.id.ready);
         ready.setEnabled(false);
     }
@@ -336,7 +380,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                 .show();
         //TODO: check if this still work in case of error
         /* Useless since onDestroy() will be called
-        dbRefWrapped.child("pendingMatches").child(matchId).removeEventListener(pendingMatchesListener);
+        //TODO: rename
+        dbRefWrapped.child("pendingMatches2").child(matchId).removeEventListener(pendingMatchesListener);
         */
         // TODO: backToList.putExtra("match_Id", matchId);
         // TODO: Create intent for next activity
@@ -372,7 +417,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
                     }
                 };
-        dbRefWrapped.child("matches")
+        //TODO: rename
+        dbRefWrapped.child("matches2")
                 .child(matchId).child("players")
                 .addChildEventListener(childEventListener);
     }
