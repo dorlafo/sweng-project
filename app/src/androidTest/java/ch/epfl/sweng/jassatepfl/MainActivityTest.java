@@ -46,10 +46,4 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.main_map_button)).perform(click());
         onView(withId(R.id.maps_menu_button)).check(matches(isDisplayed()));
     }
-
-    @Test
-    public void testCanShowProfile() {
-        onView(withId(R.id.profile_button)).perform(click());
-        onView(withId(R.id.twPlayerID)).check(matches(withText("Player id : 696969")));
-    }
 }
