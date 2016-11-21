@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -62,49 +63,58 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     private LatLng userLastLocation;
     private Player currentUser;
     private ChildEventListener childEventListener;
+    private static final String TAG = MapsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_maps, drawer, false);
-        drawer.addView(contentView, 0);
+        if (fAuth.getCurrentUser() == null) {
+            Log.d(TAG, "showLogin:getCurrentUser:null");
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
+        } else {
+            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView = inflater.inflate(R.layout.activity_maps, drawer, false);
+            drawer.addView(contentView, 0);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().hide();
-        }
-
-        ImageButton menuButton = (ImageButton) findViewById(R.id.maps_menu_button);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.START);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            if (toolbar != null) {
+                setSupportActionBar(toolbar);
+                getSupportActionBar().hide();
             }
-        });
 
-        createMap();
+            ImageButton menuButton = (ImageButton) findViewById(R.id.maps_menu_button);
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+            });
 
-        locationProvider = new LocationProvider(this, true);
-        locationProvider.setProviderListener(this);
+            createMap();
 
-        try {
-            dbRefWrapped.child("players")
-                    .child(getUserSciper())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            currentUser = dataSnapshot.getValue(Player.class);
-                        }
+            locationProvider = new LocationProvider(this, true);
+            locationProvider.setProviderListener(this);
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-        } catch (NullPointerException e) {
-            Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
-                    .show();
+            try {
+                dbRefWrapped.child("players")
+                        .child(getUserSciper())
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                currentUser = dataSnapshot.getValue(Player.class);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+            } catch (NullPointerException e) {
+                Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
+                        .show();
+            }
         }
     }
 
@@ -216,7 +226,9 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        dbRefWrapped.removeEventListener(childEventListener);
+        if(childEventListener != null) {
+            dbRefWrapped.removeEventListener(childEventListener);
+        }
     }
 
     private void createMap() {

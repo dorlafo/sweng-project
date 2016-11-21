@@ -28,6 +28,8 @@ import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
 public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
+    private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
+
     private String sciper;
     private Match match;
     private String matchId;
@@ -50,9 +52,18 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_waiting_players, drawer, false);
-        drawer.addView(contentView, 0);
+        if (fAuth.getCurrentUser() == null) {
+            Log.d(TAG, "showLogin:getCurrentUser:null");
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
+        }
+        else {
+            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView = inflater.inflate(R.layout.activity_waiting_players, drawer, false);
+            drawer.addView(contentView, 0);
+        }
     }
 
     // TODO: implement pendingMatches deletion on server
@@ -256,9 +267,15 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        dbRefWrapped.removeEventListener(pendingMatchesListener);
-        dbRefWrapped.removeEventListener(childEventListener);
-        dbRefWrapped.removeEventListener(valueEventListener);
+        if(pendingMatchesListener != null) {
+            dbRefWrapped.removeEventListener(pendingMatchesListener);
+        }
+        if(childEventListener != null) {
+            dbRefWrapped.removeEventListener(childEventListener);
+        }
+        if(valueEventListener != null) {
+            dbRefWrapped.removeEventListener(valueEventListener);
+        }
     }
 
     /**
@@ -268,9 +285,13 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
      * @param view General view
      */
     public void leaveMatch(View view) {
+        //TODO: check if this still work in case of error
+        /* Useless since onDestroy() will be called
         dbRefWrapped.removeEventListener(pendingMatchesListener);
         dbRefWrapped.removeEventListener(childEventListener);
         dbRefWrapped.removeEventListener(valueEventListener);
+        */
+
         try {
             match.removePlayerById(new Player.PlayerID(sciper));
         } catch (IllegalStateException e) {
@@ -313,7 +334,10 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                 .setTitle("Feature missing")
                 .setMessage("will move to new activity")
                 .show();
+        //TODO: check if this still work in case of error
+        /* Useless since onDestroy() will be called
         dbRefWrapped.child("pendingMatches").child(matchId).removeEventListener(pendingMatchesListener);
+        */
         // TODO: backToList.putExtra("match_Id", matchId);
         // TODO: Create intent for next activity
         // TODO: In new activity, delete pendingMatches

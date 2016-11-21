@@ -3,11 +3,13 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,39 +44,50 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     private ListView listView;
     private ChildEventListener childEventListener;
 
+    private static final String TAG = BaseActivityWithNavDrawer.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_list, drawer, false);
-        drawer.addView(contentView, 0);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().hide();
+        if (fAuth.getCurrentUser() == null) {
+            Log.d(TAG, "showLogin:getCurrentUser:null");
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
         }
+        else {
+            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView = inflater.inflate(R.layout.activity_list, drawer, false);
+            drawer.addView(contentView, 0);
 
-        ImageButton menuButton = (ImageButton) findViewById(R.id.list_menu_button);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.START);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            if (toolbar != null) {
+                setSupportActionBar(toolbar);
+                getSupportActionBar().hide();
             }
-        });
 
-        TextView emptyList = new TextView(this);
-        emptyList.setText(R.string.list_empty_list);
-        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-        emptyList.setTextColor(Color.BLACK);
+            ImageButton menuButton = (ImageButton) findViewById(R.id.list_menu_button);
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+            });
 
-        listView = (ListView) findViewById(android.R.id.list);
-        ((ViewGroup) listView.getParent()).addView(emptyList);
-        listView.setEmptyView(emptyList);
+            TextView emptyList = new TextView(this);
+            emptyList.setText(R.string.list_empty_list);
+            emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+            emptyList.setTextColor(Color.BLACK);
 
-        matches = new ArrayList<>();
-        contactFirebase();
-        listView.setOnItemClickListener(this);
+            listView = (ListView) findViewById(android.R.id.list);
+            ((ViewGroup) listView.getParent()).addView(emptyList);
+            listView.setEmptyView(emptyList);
+
+            matches = new ArrayList<>();
+            contactFirebase();
+            listView.setOnItemClickListener(this);
+        }
     }
 
     @Override
@@ -110,7 +123,9 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        dbRefWrapped.removeEventListener(childEventListener);
+        if(childEventListener != null) {
+            dbRefWrapped.removeEventListener(childEventListener);
+        }
     }
 
     private void contactFirebase() {

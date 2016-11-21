@@ -29,6 +29,7 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
 /**
@@ -39,6 +40,8 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         SearchView.OnQueryTextListener,
         View.OnClickListener {
 
+    private static final String TAG = InvitePlayerToMatchActivity.class.getSimpleName();
+
     private String currentUserSciper;
     private PlayerListAdapter adapter;
     private ListView playerListView;
@@ -47,50 +50,59 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invite_player_to_match);
+        if (fAuth.getCurrentUser() == null) {
+            Log.d(TAG, "showLogin:getCurrentUser:null");
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
+        }
+        else {
+            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            setContentView(R.layout.activity_invite_player_to_match);
 
-        // TODO: maybe have a field in base activity with sciper of current user, with error management
-        currentUserSciper = getUserSciper();
-        inviteScipers = new HashSet<>();
+            // TODO: maybe have a field in base activity with sciper of current user, with error management
+            currentUserSciper = getUserSciper();
+            inviteScipers = new HashSet<>();
 
-        TextView emptyList = new TextView(this);
-        emptyList.setText(R.string.invite_welcome_text);
-        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-        emptyList.setTextColor(Color.BLACK);
-        emptyList.setTextSize(20);
+            TextView emptyList = new TextView(this);
+            emptyList.setText(R.string.invite_welcome_text);
+            emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+            emptyList.setTextColor(Color.BLACK);
+            emptyList.setTextSize(20);
 
-        playerListView = (ListView) findViewById(R.id.invite_list);
-        ((ViewGroup) playerListView.getParent()).addView(emptyList);
-        playerListView.setEmptyView(emptyList);
-        playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
-                final Player player = adapter.getItem(position);
-                new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
-                        .setTitle(R.string.dialog_add_player)
-                        .setMessage(player.toString())
-                        .setPositiveButton(R.string.dialog_add_confirmation, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                String sciper = player.getID().toString();
-                                if (sciper.equals(currentUserSciper)) {
-                                    ErrorHandlerUtils.sendErrorMessage(InvitePlayerToMatchActivity.this,
-                                            R.string.toast_invite_yourself,
-                                            R.string.error_already_in_match);
-                                } else {
-                                    inviteScipers.add(player.getID().toString());
+            playerListView = (ListView) findViewById(R.id.invite_list);
+            ((ViewGroup) playerListView.getParent()).addView(emptyList);
+            playerListView.setEmptyView(emptyList);
+            playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
+                    final Player player = adapter.getItem(position);
+                    new AlertDialog.Builder(InvitePlayerToMatchActivity.this)
+                            .setTitle(R.string.dialog_add_player)
+                            .setMessage(player.toString())
+                            .setPositiveButton(R.string.dialog_add_confirmation, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String sciper = player.getID().toString();
+                                    if (sciper.equals(currentUserSciper)) {
+                                        ErrorHandlerUtils.sendErrorMessage(InvitePlayerToMatchActivity.this,
+                                                R.string.toast_invite_yourself,
+                                                R.string.error_already_in_match);
+                                    } else {
+                                        inviteScipers.add(player.getID().toString());
+                                    }
                                 }
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing, goes back to InvitePlayerToMatchActivity
-                            }
-                        })
-                        .show();
-            }
-        });
-        Button inviteButton = (Button) findViewById(R.id.invite_button);
-        inviteButton.setOnClickListener(this);
+                            })
+                            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Do nothing, goes back to InvitePlayerToMatchActivity
+                                }
+                            })
+                            .show();
+                }
+            });
+            Button inviteButton = (Button) findViewById(R.id.invite_button);
+            inviteButton.setOnClickListener(this);
+        }
     }
 
     @Override

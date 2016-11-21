@@ -50,9 +50,6 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        Log.d("BaseActivity", "fAuth.getCurrentUser:" + fAuth.getCurrentUser());
-        showLogin();
     }
 
     @Override
@@ -120,15 +117,5 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
      */
     public String getUserSciper() {
         return fAuth.getCurrentUser().getDisplayName();
-    }
-
-    /**
-     * Launch the LoginActivity if the user is not yet logged in
-     */
-    private void showLogin() {
-        if (fAuth.getCurrentUser() == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
     }
 }

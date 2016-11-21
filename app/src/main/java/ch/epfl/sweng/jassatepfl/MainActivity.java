@@ -5,31 +5,65 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public final class MainActivity extends BaseActivityWithNavDrawer {
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
+
+public final class MainActivity extends BaseActivityWithNavDrawer  implements AdapterView.OnItemClickListener {
+
+    private BaseAdapter adapter;
+    private ListView listView;
+    private List<Match> matches;
+    private ChildEventListener childEventListener;
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_main);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
-        drawer.addView(contentView, 0);
+        if (fAuth.getCurrentUser() == null) {
+            Log.d(TAG, "showLogin:getCurrentUser:null");
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
+        }
+        else {
+            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
+            drawer.addView(contentView, 0);
 
-        TextView emptyList = new TextView(this);
-        emptyList.setText(R.string.main_empty_list);
-        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-        emptyList.setTextColor(Color.BLACK);
+            TextView emptyList = new TextView(this);
+            emptyList.setText(R.string.main_empty_list);
+            emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+            emptyList.setTextColor(Color.BLACK);
 
-        ListView listView = (ListView) findViewById(android.R.id.list);
-        ((ViewGroup) listView.getParent()).addView(emptyList);
-        listView.setEmptyView(emptyList);
+            listView = (ListView) findViewById(android.R.id.list);
+            ((ViewGroup) listView.getParent()).addView(emptyList);
+            listView.setEmptyView(emptyList);
+
+            matches = new ArrayList<>();
+            contactFirebase();
+            listView.setOnItemClickListener(this);
+        }
     }
 
     @Override
@@ -48,6 +82,14 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(childEventListener != null) {
+            dbRefWrapped.removeEventListener(childEventListener);
+        }
+    }
+
     public void createMatch(View view) {
         Intent intent = new Intent(this, CreateMatchActivity.class);
         startActivity(intent);
@@ -55,16 +97,6 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
 
     public void showEnrolledMatch(View view){
         Intent intent = new Intent(this, CreateMatchActivity.class);
-    }
-
-    /**
-     * Launch the UserProfileActivity then the Profile button is clicked
-     *
-     * @param view Required param
-     */
-    public void viewProfile(View view) {
-        Intent intent = new Intent(this, UserProfileActivity.class);
-        startActivity(intent);
     }
 
     public void displayMatchesOnMap(View view) {
@@ -75,5 +107,64 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
     public void displayMatchesInList(View view) {
         Intent intent = new Intent(this, MatchListActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * Callback method to be invoked when an item in this AdapterView has
+     * been clicked.
+     * <p>
+     * Implementers can call getItemAtPosition(position) if they need
+     * to access the data associated with the selected item.
+     *
+     * @param parent   The AdapterView where the click happened.
+     * @param view     The view within the AdapterView that was clicked (this
+     *                 will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id       The row id of the item that was clicked.
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    private void contactFirebase() {
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Match match = dataSnapshot.getValue(Match.class);
+                matches.add(match);
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Match match = dataSnapshot.getValue(Match.class);
+                matches.remove(match);
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        dbRefWrapped.child("matchesByPlayer")
+                .equalTo(getUserSciper())
+                .addChildEventListener(childEventListener);
+    }
+
+    /**
+     * Updates Match list adapter
+     */
+    private void modifyListAdapter() {
+        adapter = new MatchListAdapter(MainActivity.this, R.layout.match_list_row, matches);
+        listView.setAdapter(adapter);
     }
 }

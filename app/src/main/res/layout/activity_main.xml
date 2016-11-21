@@ -91,28 +91,6 @@
         android:layout_centerHorizontal="true"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/profile_button"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/roundedbutton"
-            android:onClick="viewProfile"
-            android:text="@string/main_button_text_profile"/>
-
-        <Button
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:background="@drawable/roundedbutton"
-            android:text="@string/main_button_text_ranking"/>
-
-        <Button
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/roundedbutton"
-            android:text="@string/main_button_text_stats"/>
-
     </LinearLayout>
 
 </RelativeLayout>
