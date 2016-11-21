@@ -2,9 +2,7 @@ package ch.epfl.sweng.jassatepfl.injections;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -16,13 +14,11 @@ import ch.epfl.sweng.jassatepfl.database.local.Leaf;
 import ch.epfl.sweng.jassatepfl.database.local.Node;
 import ch.epfl.sweng.jassatepfl.database.local.Root;
 import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
-import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;
 import dagger.Module;
 import dagger.Provides;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -105,7 +101,6 @@ public final class DebugDataModule {
         addMockedPushdMethod(dbRefWrapMock);
         addMockedGetKeyMethod(dbRefWrapMock);
         addMockedSetValueMethod(dbRefWrapMock);
-        addMockedAddListenerForSingleValueEventMethod(dbRefWrapMock);
         addMockedAddChildEventListener(dbRefWrapMock);
     }
 
@@ -144,36 +139,10 @@ public final class DebugDataModule {
             public DBReferenceWrapper answer(InvocationOnMock invocation) throws Throwable {
                 Leaf currentNode = (Leaf) dbRefWrapMock.getCurrentNode();
                 currentNode.setData(invocation.getArgument(0));
-                DBRefWrapMock dRef = spy(new DBRefWrapMock(currentNode));
-                addMockedBehaviorRef(dRef);
-                return dRef;
+                return null;
             }
 
         }).when(dbRefWrapMock).setValue(anyObject());
-    }
-
-    private void addMockedAddListenerForSingleValueEventMethod(final DBRefWrapMock dbRefWrapMock) {
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                final ValueEventListener v = invocation.getArgument(0);
-                DataSnapshot obj = mock(DataSnapshot.class);
-                Player p = null;
-                Match m = null;
-
-                if (((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Player) {
-                    p = (Player) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
-                } else if (((Leaf) dbRefWrapMock.getCurrentNode()).getData() instanceof Match) {
-                    m = (Match) ((Leaf) dbRefWrapMock.getCurrentNode()).getData();
-                }
-
-                when(obj.getValue(Player.class)).thenReturn(p);
-                when(obj.getValue(Match.class)).thenReturn(m);
-
-                v.onDataChange((DataSnapshot) obj);
-                return null;
-            }
-        }).when(dbRefWrapMock).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     private void addMockedAddChildEventListener(DBRefWrapMock dbRefWrapMock) {

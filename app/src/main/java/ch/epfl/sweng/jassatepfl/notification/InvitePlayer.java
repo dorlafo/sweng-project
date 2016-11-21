@@ -1,7 +1,6 @@
 package ch.epfl.sweng.jassatepfl.notification;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;

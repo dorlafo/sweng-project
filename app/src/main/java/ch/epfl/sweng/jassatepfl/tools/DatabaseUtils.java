@@ -46,7 +46,7 @@ public class DatabaseUtils {
                             match.addPlayer(player);
                             ref.child("matches").child(matchID).setValue(match);
                             Intent moveToMatchActivity = new Intent(context, WaitingPlayersActivity.class);
-                            moveToMatchActivity.putExtra("MATCH_ID", matchID);
+                            moveToMatchActivity.putExtra("match_Id", matchID);
                             context.startActivity(moveToMatchActivity);
                         } catch (IllegalStateException e) {
                             ErrorHandlerUtils.sendErrorMessage(context, R.string.error_cannot_join, R.string.error_match_full);

@@ -240,7 +240,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     dbRefWrapped.child("matches").child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
                     Log.d(TAG, "Pushed match " + matchId + " to database");
                     new InvitePlayer(playerArrayAdapter).execute(matchId);
-                    startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("MATCH_ID", matchId));
+                    startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("match_Id", matchId));
                 }
                 break;
             case R.id.time_picker_button:
@@ -260,6 +260,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
                     placePickerButton.setEnabled(false);
                 } catch (GooglePlayServicesRepairableException e) {
+                    //noinspection deprecation
                     GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), this, 0);
                 } catch (GooglePlayServicesNotAvailableException e) {
                     Toast.makeText(this, R.string.error_play_services_not_available, Toast.LENGTH_LONG)
