@@ -95,6 +95,15 @@ public class Match {
     }
 
     /**
+     * Getter for the number of player currently enrolled
+     *
+     * @return The number of player enrolled
+     */
+    public int getNbPlayers() {
+        return players.size();
+    }
+
+    /**
      * Getter for the location of the match.
      *
      * @return The location of the match in GPS format

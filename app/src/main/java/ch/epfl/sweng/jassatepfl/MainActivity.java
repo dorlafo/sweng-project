@@ -24,6 +24,7 @@ import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
+import ch.epfl.sweng.jassatepfl.tools.MatchListEnrolledAdapter;
 
 public final class MainActivity extends BaseActivityWithNavDrawer  implements AdapterView.OnItemClickListener {
 
@@ -38,7 +39,6 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
         if (fAuth.getCurrentUser() == null) {
             Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
@@ -131,6 +131,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 matches.add(match);
                 modifyListAdapter();
@@ -142,6 +143,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 matches.remove(match);
                 modifyListAdapter();
@@ -156,7 +158,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
             }
         };
         dbRefWrapped.child("matchesByPlayer")
-                .equalTo(getUserSciper())
+                .child(getUserSciper())
                 .addChildEventListener(childEventListener);
     }
 
@@ -164,7 +166,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
      * Updates Match list adapter
      */
     private void modifyListAdapter() {
-        adapter = new MatchListAdapter(MainActivity.this, R.layout.match_list_row, matches);
+        adapter = new MatchListEnrolledAdapter(MainActivity.this, R.layout.match_enrolled_list_row, matches);
         listView.setAdapter(adapter);
     }
 }
