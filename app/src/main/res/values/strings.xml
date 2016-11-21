@@ -33,7 +33,6 @@
     <string name="login_welcoming_text">Welcome to Jass@EPFL !\nTo use this app you need to\nlogin with your EPFL account</string>
     <string name="login_button_text">Login</string>
 
-    <string name="notification_start_game">All players have joined! The game can start!</string>
     <string name="notification_player_joined">A new player has joined your game!</string>
     <string name="notification_player_left">A player left your game</string>
     <string name="notification_match_expired">Your match has expired</string>
@@ -53,9 +52,6 @@
     <string name="dialog_add_confirmation">Add</string>
     <string name="dialog_remove_player">Remove this player?</string>
 
-    <string name="log_in">Log In</string>
-    <string name="log_out">Log Out</string>
-
     <string name="date_format_match_display">dd/MM/yyyy HH:mm:ss</string>
     <string name="date_format_match_creation">dd/MM HH:mm</string>
 
@@ -67,8 +63,7 @@
     <string name="wait_button_text_play">Play</string>
     <string name="wait_button_text_leave">Leave Match</string>
     <string name="wait_button_text_ready">Ready</string>
-    <string name="wait_player_list_field_rank">Rank : </string>
-    <string name="wait_empty_list">Sorry but you are currently enrolled in no match...</string>
+    <string name="wait_empty_list">Sorry but you are currently enrolled in no match…</string>
 
     <string name="toast_invalid_hour">Invalid hour: you cannot go back in time!</string>
     <string name="toast_invalid_date">Invalid date: you cannot go back in time!</string>
@@ -78,15 +73,12 @@
 
     <string name="error">Error!</string>
     <string name="error_cannot_join">Can not join match</string>
-    <string name="error_cannot_invite">Can not invite this player</string>
     <string name="error_match_full">Match is full.</string>
     <string name="error_already_in_match">You are already signed into that match.</string>
     <string name="error_play_services_not_available">Google Play Services is not available.</string>
     <string name="error_auth_failed">Authentication Failed</string>
     <string name="error_retry_message">We weren\'t able to authenticate you. Do you want to retry?</string>
 
-    <string name="icon_description_map_to_list">Switches to the list view</string>
-    <string name="icon_description_list_to_map">Switches to the map view</string>
     <string name="icon_description_menu_button">Displays the navigation drawer</string>
     <string name="icon_description_time_picker">Displays a time picker</string>
     <string name="icon_description_date_picker">Displays a date picker</string>
@@ -99,7 +91,6 @@
     <string name="navigation_drawer_create">Create Match</string>
     <string name="navigation_drawer_maps">Match Map</string>
     <string name="navigation_drawer_match_list">Match List</string>
-    <string name="navigation_drawer_user">User</string>
     <string name="navigation_drawer_user_profile">Profile</string>
     <string name="navigation_drawer_logout">Logout</string>
     <string name="navigation_drawer_exit">Exit</string>
@@ -108,8 +99,4 @@
     <string name="invite_welcome_text">Look for players, add them and click on Invite</string>
     <string name="invite_search_player">Search for Player</string>
 
-    <string name="enter_player_name">Enter player name</string>
-    <string name="invite_player_message">Do you want to invite this player?</string>
-    <string name="enrolled_match_list">My match</string>
-    <string name="match_description">Match description :</string>
 </resources>

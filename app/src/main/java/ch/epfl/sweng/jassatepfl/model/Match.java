@@ -223,12 +223,21 @@ public class Match {
      *
      * @param toRemove The id of the player to remove from the match
      */
-    public void removePlayerById(Player.PlayerID toRemove) {
-        for (Player p : players) {
-            if (p.getID().equals(toRemove)) {
-                players.remove(p);
+    public void removePlayerById(Player.PlayerID toRemove) throws IllegalStateException {
+        if (players.isEmpty()) {
+            throw new IllegalStateException("No players in the match.");
+        } else {
+            int index = -1;
+            for (Player p : players) {
+                if (p.getID().equals(toRemove)) {
+                    index = players.indexOf(p);
+                }
+            }
+            if(index != -1) {
+                players.remove(index);
             }
         }
+
     }
 
      /* Checks whether the given player is taking part in the match.

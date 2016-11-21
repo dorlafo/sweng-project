@@ -39,7 +39,7 @@ public class LoginActivity extends BaseAppCompatActivity {
     private static String clientID = null;
     private static String clientSecret = null;
     private static String redirectUri = null;
-    private static String[] scopes = {"Tequila.profile"};
+    private static final String[] scopes = {"Tequila.profile"};
     private static OAuth2Config config;
     private static final int REQUEST_CODE_AUTHENTICATE = 0;
 
@@ -84,7 +84,7 @@ public class LoginActivity extends BaseAppCompatActivity {
     /**
      * Creates, if it does not exist, a progress Dialog and show it
      */
-    public void showProgressDialog() {
+    private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setCancelable(false);
@@ -97,7 +97,7 @@ public class LoginActivity extends BaseAppCompatActivity {
     /**
      * Hide the progress dialog if it exist and is showing
      */
-    public void hideProgressDialog() {
+    private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
@@ -257,7 +257,6 @@ public class LoginActivity extends BaseAppCompatActivity {
         } catch (IOException ex) {
             //TODO: Handle the exception
             ex.printStackTrace();
-            return null;
         }
         return json;
     }

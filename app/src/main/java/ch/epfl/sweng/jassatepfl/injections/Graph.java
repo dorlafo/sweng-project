@@ -4,8 +4,6 @@ import javax.inject.Singleton;
 
 import ch.epfl.sweng.jassatepfl.BaseActivityWithNavDrawer;
 import ch.epfl.sweng.jassatepfl.BaseAppCompatActivity;
-import ch.epfl.sweng.jassatepfl.BaseFragmentActivity;
-import ch.epfl.sweng.jassatepfl.BaseListActivity;
 import dagger.Component;
 
 /**
@@ -26,21 +24,7 @@ public interface Graph {
     void inject(BaseActivityWithNavDrawer activity);
 
     /**
-     * Injects providers return values to the BaseListActivity
-     *
-     * @param activity the activity which will be injected
-     */
-    void inject(BaseListActivity activity);
-
-    /**
-     * Injects providers return values to the BaseFragmentActivity
-     *
-     * @param activity the activity which will be injected
-     */
-    void inject(BaseFragmentActivity activity);
-
-    /**
-     * Injects providers return values to the BaseFragmentActivity
+     * Injects providers return values to the Activity
      *
      * @param activity the activity which will be injected
      */
@@ -56,7 +40,7 @@ public interface Graph {
     /**
      * Initializer of the graph
      */
-    public final static class Initializer {
+    final class Initializer {
         public static Graph init(boolean mockMode) {
             return DaggerGraph.builder().debugDataModule(new DebugDataModule(mockMode)).build();
         }

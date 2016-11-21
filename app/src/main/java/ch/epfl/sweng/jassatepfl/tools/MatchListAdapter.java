@@ -1,51 +1,65 @@
 package ch.epfl.sweng.jassatepfl.tools;
 
-
-import android.app.Activity;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseListAdapter;
+import java.util.List;
 
-import ch.epfl.sweng.jassatepfl.BaseActivityWithNavDrawer;
 import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.model.Match;
 
-/**
- * Custom {@link android.widget.Adapter Adapter} used to display
- * matches in the {@link android.widget.ListView ListView} of
- * {@link ch.epfl.sweng.jassatepfl.MatchListActivity MatchListActivity}.
- */
-public class MatchListAdapter extends FirebaseListAdapter<Match> {
+public final class MatchListAdapter extends ArrayAdapter<Match> {
 
-    private final Activity activity;
+    private List<Match> matches;
 
-    public MatchListAdapter(Activity activity) {
-        super(activity, Match.class, R.layout.match_list_row,
-                ((BaseActivityWithNavDrawer) activity).dbRefWrapped.child("matches")
-                        .orderByChild("privateMatch").equalTo(false));
-        this.activity = activity;
+    public MatchListAdapter(Context context, int resource, List<Match> matches) {
+        super(context, resource, matches);
+        this.matches = matches;
     }
 
     @Override
-    protected void populateView(View v, Match match, int position) {
-        MatchStringifier stringifier = new MatchStringifier(activity);
+    public int getCount() {
+        return matches.size();
+    }
+
+    @Override
+    public Match getItem(int position) {
+        return matches.get(position);
+    }
+
+    @Override
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.match_list_row, null);
+        }
+
+        Match match = matches.get(position);
+        MatchStringifier stringifier = new MatchStringifier(getContext());
         stringifier.setMatch(match);
 
-        TextView description = (TextView) v.findViewById(R.id.description);
+        TextView description = (TextView) convertView.findViewById(R.id.description);
         description.setText(match.getDescription());
 
-        TextView rankData = (TextView) v.findViewById(R.id.rank_data);
+        TextView rankData = (TextView) convertView.findViewById(R.id.rank_data);
         rankData.setText(stringifier.rankToString());
 
-        TextView players = (TextView) v.findViewById(R.id.players_data);
+        TextView players = (TextView) convertView.findViewById(R.id.players_data);
         players.setText(stringifier.playersToString());
 
-        TextView variant = (TextView) v.findViewById(R.id.variant_data);
+        TextView variant = (TextView) convertView.findViewById(R.id.variant_data);
         variant.setText(stringifier.variantToString());
 
-        TextView expirationDate = (TextView) v.findViewById(R.id.expiration_date_data);
+        TextView expirationDate = (TextView) convertView.findViewById(R.id.expiration_date_data);
         expirationDate.setText(stringifier.dateToStringCustom());
+
+        return convertView;
     }
 
 }
