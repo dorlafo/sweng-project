@@ -156,7 +156,8 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        dbRefWrapped.child("matches")
+        //TODO: rename
+        dbRefWrapped.child("matches2")
                 .orderByChild("privateMatch").equalTo(false)
                 .addChildEventListener(childEventListener);
     }

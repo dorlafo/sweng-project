@@ -21,7 +21,8 @@ import static org.junit.Assert.assertTrue;
 public class DBTestUtils {
 
     public static void assertMatchContainsNPlayers(DBRefWrapMock dbRefWrapMock, String matchID, final int nPlayers) {
-        dbRefWrapMock.child("matches")
+        //TODO: rename
+        dbRefWrapMock.child("matches2")
                 .child(matchID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -37,7 +38,8 @@ public class DBTestUtils {
     }
 
     public static void assertMatchContainsPlayer(DBRefWrapMock dbRefWrapMock, String matchID, final Player.PlayerID sciper) {
-        dbRefWrapMock.child("matches")
+        //TODO: rename
+        dbRefWrapMock.child("matches2")
                 .child(matchID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

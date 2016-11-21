@@ -36,7 +36,8 @@ public class DatabaseUtils {
                                         final String matchID,
                                         final String sciper,
                                         final Match match) {
-        ref.child("players")
+        //TODO: rename
+        ref.child("players2")
                 .child(sciper)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -44,7 +45,8 @@ public class DatabaseUtils {
                         Player player = dataSnapshot.getValue(Player.class);
                         try {
                             match.addPlayer(player);
-                            ref.child("matches").child(matchID).setValue(match);
+                            //TODO: rename
+                            ref.child("matches2").child(matchID).setValue(match);
                             Intent moveToMatchActivity = new Intent(context, WaitingPlayersActivity.class);
                             moveToMatchActivity.putExtra("match_Id", matchID);
                             context.startActivity(moveToMatchActivity);

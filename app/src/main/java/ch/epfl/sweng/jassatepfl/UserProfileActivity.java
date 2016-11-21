@@ -51,7 +51,8 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             //New SingleEventListener that will change the value of the textView according to the current
             //logged in user
             dbRefWrapped
-                    .child("players")
+                    //TODO: rename
+                    .child("players2")
                     .child(sciper)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

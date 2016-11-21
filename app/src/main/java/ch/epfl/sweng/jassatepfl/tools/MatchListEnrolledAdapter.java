@@ -48,7 +48,7 @@ public final class MatchListEnrolledAdapter extends ArrayAdapter<Match> {
         description.setText(match.getDescription());
 
         TextView players = (TextView) convertView.findViewById(R.id.players_data);
-        players.setText(match.getNbPlayers() + "/" + match.getMaxPlayerNumber());
+        players.setText(match.getPlayers().size() + "/" + match.getMaxPlayerNumber());
 
         TextView variant = (TextView) convertView.findViewById(R.id.variant_data);
         variant.setText(stringifier.variantToString());

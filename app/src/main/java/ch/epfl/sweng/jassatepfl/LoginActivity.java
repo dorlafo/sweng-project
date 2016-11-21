@@ -145,7 +145,8 @@ public class LoginActivity extends BaseAppCompatActivity {
                         Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
                         if (task.isSuccessful()) {
                             //Adding the user to the database
-                            dbRefWrapped.child("players")
+                            //TODO: rename
+                            dbRefWrapped.child("players2")
                                     .child(profile.sciper).setValue(new Player(
                                     new Player.PlayerID(Long.parseLong(profile.sciper)),
                                     profile.lastNames,

@@ -30,6 +30,7 @@ public class Match {
     private int maxPlayerNumber;
     private long expirationTime;
     private String matchID;
+    private MatchStatus matchStatus;
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase.
@@ -38,7 +39,38 @@ public class Match {
     }
 
     /**
-     * Constructs a Match with a given variant.
+     * Constructs a Match with a given variant and a given status.
+     *
+     * @param players        The list of players in the match
+     * @param location       The location of the match
+     * @param description    A brief description of the match (detailed location...)
+     * @param privateMatch   The visibility of the match (public or private)
+     * @param gameVariant    The variant of the match
+     * @param expirationTime The time at which the match expires (in milliseconds after epoch)
+     * @param matchID        The unique firebase ID of the match
+     * @param status         The status of the match
+     */
+    public Match(List<Player> players,
+                 GPSPoint location,
+                 String description,
+                 boolean privateMatch,
+                 GameVariant gameVariant,
+                 long expirationTime,
+                 String matchID,
+                 MatchStatus status) {
+        this.players = new ArrayList<>(players);
+        this.location = location;
+        this.description = description;
+        rank = averageRank(players);
+        this.privateMatch = privateMatch;
+        this.gameVariant = gameVariant;
+        this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
+        this.expirationTime = expirationTime;
+        this.matchID = matchID;
+        this.matchStatus = status;
+    }
+    /**
+     * Constructs a Match with a given variant and the default status (pending).
      *
      * @param players        The list of players in the match
      * @param location       The location of the match
@@ -55,19 +87,11 @@ public class Match {
                  GameVariant gameVariant,
                  long expirationTime,
                  String matchID) {
-        this.players = new ArrayList<>(players);
-        this.location = location;
-        this.description = description;
-        rank = averageRank(players);
-        this.privateMatch = privateMatch;
-        this.gameVariant = gameVariant;
-        this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
-        this.expirationTime = expirationTime;
-        this.matchID = matchID;
+        this(players, location, description, privateMatch, gameVariant,expirationTime, matchID, MatchStatus.PENDING);
     }
 
     /**
-     * Constructs a Match with default variant (Chibre).
+     * Constructs a Match with default variant (Chibre) and the default status (pending).
      *
      * @param players        The list of players in the match
      * @param location       The location of the match
@@ -92,15 +116,6 @@ public class Match {
      */
     public List<Player> getPlayers() {
         return Collections.unmodifiableList(players);
-    }
-
-    /**
-     * Getter for the number of player currently enrolled
-     *
-     * @return The number of player enrolled
-     */
-    public int getNbPlayers() {
-        return players.size();
     }
 
     /**
@@ -176,6 +191,14 @@ public class Match {
         return matchID;
     }
 
+    /**
+     * Getter for the match' status
+     *
+     * @return True if the match is active, false if it is waiting for players
+     */
+    public MatchStatus getMatchStatus() {
+        return matchStatus;
+    }
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -226,7 +249,7 @@ public class Match {
     }
 
     /**
-     * Removes the given player to the player from list.
+     * Removes the given player to the player list and change the match status to pending
      * <p>
      * Removing a player that is not present do nothing
      *
@@ -244,9 +267,14 @@ public class Match {
             }
             if(index != -1) {
                 players.remove(index);
+                matchStatus = MatchStatus.PENDING;
             }
         }
 
+    }
+
+    public void setStatus(MatchStatus status) {
+        this.matchStatus = status;
     }
 
      /* Checks whether the given player is taking part in the match.
@@ -264,6 +292,25 @@ public class Match {
             super(rank);
         }
 
+    }
+
+    /**
+     * The different status a match can have
+     */
+    public enum MatchStatus {
+        PENDING("pending"),
+        ACTIVE("active");
+
+        private final String statusName;
+
+        MatchStatus(String statusName) {
+            this.statusName = statusName;
+        }
+
+        @Override
+        public String toString() {
+            return statusName;
+        }
     }
 
     /**
@@ -333,6 +380,7 @@ public class Match {
         private int maxPlayerNumber;
         private long expirationTime;
         private String matchID;
+        private MatchStatus matchStatus;
 
         /**
          * Constructs a new match builder with default values, but with an empty player list.
@@ -346,6 +394,7 @@ public class Match {
             maxPlayerNumber = CHIBRE.getMaxPlayerNumber();
             expirationTime = Calendar.getInstance().getTimeInMillis() + 1 * 3600 * 1000; // 1 hour after current time
             matchID = DEFAULT_ID;
+            matchStatus = MatchStatus.PENDING;
         }
 
         /**
@@ -377,6 +426,7 @@ public class Match {
                 throw new IllegalArgumentException("Player not in the Match.");
             }
             players.remove(player);
+            matchStatus = MatchStatus.PENDING;
         }
 
         public List<Player> getPlayerList() {
@@ -422,6 +472,11 @@ public class Match {
             return this;
         }
 
+        public Builder setStatus(MatchStatus status) {
+            this.matchStatus = status;
+            return this;
+        }
+
         /**
          * Builds and returns the match.
          * <p>
@@ -439,7 +494,7 @@ public class Match {
                 throw new IllegalStateException("Too many players.");
             } else {
                 return new Match(players, location, description, privateMatch,
-                        gameVariant, expirationTime, matchID);
+                        gameVariant, expirationTime, matchID, matchStatus);
             }
         }
 

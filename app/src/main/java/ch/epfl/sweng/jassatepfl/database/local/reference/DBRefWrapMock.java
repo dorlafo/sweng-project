@@ -102,8 +102,10 @@ public class DBRefWrapMock extends DBReferenceWrapper {
      */
     public void reset() {
         currentNode.dropChildren();
-        currentNode.addChild("players");
-        currentNode.addChild("matches");
+        //TODO: rename
+        currentNode.addChild("players2");
+        //TODO: rename
+        currentNode.addChild("matches2");
     }
 
     /**
@@ -114,7 +116,8 @@ public class DBRefWrapMock extends DBReferenceWrapper {
      * @param players the collection of players that needs to be added
      */
     public void addPlayers(Set<Player> players) {
-        TreeNode playersNode = ((Root) currentNode).getChild("players");
+        //TODO: rename
+        TreeNode playersNode = ((Root) currentNode).getChild("players2");
         for (Player p : players) {
             String playerId = p.getID().toString();
             playersNode.addChild(playerId);
@@ -130,7 +133,8 @@ public class DBRefWrapMock extends DBReferenceWrapper {
      * @param matches the collection of players that needs to be added
      */
     public void addMatches(Set<Match> matches) {
-        TreeNode playersNode = ((Root) currentNode).getChild("matches");
+        //TODO: rename
+        TreeNode playersNode = ((Root) currentNode).getChild("matches2");
         for (Match m : matches) {
             String matchID = m.getMatchID();
             playersNode.addChild(matchID);

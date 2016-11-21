@@ -124,7 +124,8 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
     @Override
     public boolean onQueryTextChange(String newText) {
         // Modify query when user changes the search text
-        dbRefWrapped.child("players").orderByChild("firstName")
+        //TODO: rename
+        dbRefWrapped.child("players2").orderByChild("firstName")
                 .startAt(newText).endAt(newText + "z").limitToFirst(50).addValueEventListener(
                 new ValueEventListener() {
                     @Override

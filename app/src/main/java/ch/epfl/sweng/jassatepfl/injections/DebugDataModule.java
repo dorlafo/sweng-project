@@ -83,9 +83,12 @@ public final class DebugDataModule {
 
     private void fillDB(DBRefWrapMock dbRef) {
         Root root = (Root) dbRef.getCurrentNode();
-        root.addChild("players");
-        root.addChild("matches");
-        root.getChild("players")
+        //TODO: rename
+        root.addChild("players2");
+        //TODO: rename
+        root.addChild("matches2");
+        //TODO: rename
+        root.getChild("players2")
                 .addChild("696969")
                 .setData(new Player(new Player.PlayerID("696969"), "LeBricoleur", "Bob", new Rank(1000)));
     }

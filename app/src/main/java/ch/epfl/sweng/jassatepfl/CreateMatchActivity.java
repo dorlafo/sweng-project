@@ -245,9 +245,11 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                             .show();
                     createMatchButton.setEnabled(false);
                 } else {
-                    String matchId = dbRefWrapped.child("matches").push().getKey();
+                    //TODO: rename
+                    String matchId = dbRefWrapped.child("matches2").push().getKey();
                     Match m = matchBuilder.setMatchID(matchId).build();
-                    dbRefWrapped.child("matches").child(matchId).setValue(m);
+                    //TODO: rename
+                    dbRefWrapped.child("matches2").child(matchId).setValue(m);
                     dbRefWrapped.child("matchesByPlayer").child(getUserSciper()).child(matchId).setValue(m);
                     Log.d(TAG, "Pushed match " + matchId + " to database");
                     new InvitePlayer(playerArrayAdapter).execute(matchId);
@@ -292,7 +294,8 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     int playerNum = data.getIntExtra("players_added", 0);
                     for (int i = 0; i < playerNum; i++) {
                         String sciper = data.getStringExtra("player" + i);
-                        dbRefWrapped.child("players")
+                        //TODO: rename
+                        dbRefWrapped.child("players2")
                                 .child(sciper)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -398,7 +401,8 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         // TODO: can we fuse this method with addplayer l.258, it is almost the same
         try {
             String currentUserId = fAuth.getCurrentUser().getDisplayName();
-            dbRefWrapped.child("players").child(currentUserId)
+            //TODO: rename
+            dbRefWrapped.child("players2").child(currentUserId)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

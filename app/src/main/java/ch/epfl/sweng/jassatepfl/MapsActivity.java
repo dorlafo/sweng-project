@@ -99,7 +99,8 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
             locationProvider.setProviderListener(this);
 
             try {
-                dbRefWrapped.child("players")
+                //TODO: rename
+                dbRefWrapped.child("players2")
                         .child(getUserSciper())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -182,7 +183,8 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                         .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 final String matchID = marker.getTag().toString();
-                                dbRefWrapped.child("matches").child(matchID)
+                                //TODO: rename
+                                dbRefWrapped.child("matches2").child(matchID)
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -284,7 +286,8 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 return marker;
             }
         };
-        dbRefWrapped.child("matches")
+        //TODO: rename
+        dbRefWrapped.child("matches2")
                 .orderByChild("privateMatch").equalTo(false)
                 .addChildEventListener(childEventListener);
     }
