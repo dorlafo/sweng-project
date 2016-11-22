@@ -119,6 +119,21 @@ public class Match {
     }
 
     /**
+     * Getter for the player's index in the players list
+     * @param id The player' id
+     * @return The index of the player if he is in match, -1 otherwise
+     */
+    public int getPlayerIndex(String id) {
+        Player.PlayerID pId = new Player.PlayerID(id);
+        for(int i = 0; i < players.size(); ++i) {
+            if(players.get(i).getID().equals(pId)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Getter for the location of the match.
      *
      * @return The location of the match in GPS format
