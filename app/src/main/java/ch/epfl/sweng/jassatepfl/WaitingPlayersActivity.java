@@ -178,56 +178,60 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 match = dataSnapshot.getValue(Match.class);
                 Log.d(TAG, "valueEventListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
-                description.setText(match.getDescription());
-                variant.setText(match.getGameVariant().toString());
+                if(match != null) {
+                    description.setText(match.getDescription());
+                    variant.setText(match.getGameVariant().toString());
 
-                //List<Player> players = match.getPlayers();
-                /*for (int i = 0; i < players.size(); ++i) {
-                    if (players.get(i).getID().equals(new Player.PlayerID(sciper))) {
-                        posInList = i;
+                    posInList = match.getPlayerIndex(getUserSciper());
+                    if(posInList == -1) {
+                        //TODO: handle error
                     }
-                }*/
-                posInList = match.getPlayerIndex(getUserSciper());
-                if(posInList == -1) {
-                    //TODO: handle error
-                }
-                else {
-                    innerListener = new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            int pos = Integer.parseInt(dataSnapshot.getKey());
-                            boolean ready = dataSnapshot.getValue(Boolean.class);
-                            if (ready && listView.getChildAt(pos) != null) {
-                                listView.getChildAt(pos).setBackgroundColor(0xFF00FF00);
-                                playersReady += 1;
+                    else {
+                        if(match.isFull()) {
+                            Button invite = (Button) findViewById(R.id.invite_button);
+                            invite.setEnabled(false);
+                        }
+                        innerListener = new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                int pos = Integer.parseInt(dataSnapshot.getKey());
+                                boolean ready = dataSnapshot.getValue(Boolean.class);
+                                if (ready && listView.getChildAt(pos) != null) {
+                                    listView.getChildAt(pos).setBackgroundColor(0xFF00FF00);
+                                    playersReady += 1;
+                                    if(pos == posInList) {
+                                        Button readyBtn = (Button) findViewById(R.id.ready);
+                                        readyBtn.setEnabled(false);
+                                    }
+                                }
+                                if (playersReady == match.getMaxPlayerNumber()) {
+                                    Button game = (Button) findViewById(R.id.play);
+                                    game.setEnabled(true);
+                                }
                             }
-                            if (playersReady == match.getMaxPlayerNumber()) {
-                                Button game = (Button) findViewById(R.id.play);
-                                game.setEnabled(true);
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                                //TODO: check if this is indeed not used
                             }
-                        }
 
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                            //TODO: check if this is indeed not used
-                        }
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                                //TODO: check if this is indeed not used
+                            }
 
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-                            //TODO: check if this is indeed not used
-                        }
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                            }
 
-                        }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    };
-                    dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).addChildEventListener(innerListener);
+                            }
+                        };
+                        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).addChildEventListener(innerListener);
+                    }
                 }
             }
 
