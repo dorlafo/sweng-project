@@ -106,6 +106,9 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
             case R.id.nav_user_guide:
                 intent = new Intent(this, UserGuideActivity.class);
                 break;
+            case R.id.nav_rules:
+                intent = new Intent(this, RulesActivity.class);
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);

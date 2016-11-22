@@ -70,6 +70,9 @@
         <activity
             android:name=".UserGuideActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RulesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -102,8 +105,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
-
     </application>
 
 </manifest>

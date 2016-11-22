@@ -103,6 +103,21 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     }
 
     @Test
+    public void testCanNavigateToUserGuideActivity() {
+        onView(withId(R.id.drawer_layout)).perform(open());
+        onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_user_guide));
+        onView(withId(R.id.user_guide_text)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testCanNavigateToRulesActivity() {
+        onView(withId(R.id.drawer_layout)).perform(open());
+        onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_rules));
+        onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
+    }
+
+
+    @Test
     public void testLogout() {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_logout));
