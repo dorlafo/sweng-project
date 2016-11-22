@@ -120,6 +120,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Match match = (Match) adapter.getItem(position);
+        //TODO: Make new intent with extras and move to GameActivity
         if(match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
             new AlertDialog.Builder(this)
                     .setTitle("Feature missing")
@@ -145,6 +146,13 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "onChildChanged:dataSnapshot:" + dataSnapshot.toString());
+                Match match = dataSnapshot.getValue(Match.class);
+                int matchIndex = matches.indexOf(match);
+                if(matchIndex != -1) {
+                    matches.set(matchIndex, match);
+                }
+                modifyListAdapter();
             }
 
             @Override
