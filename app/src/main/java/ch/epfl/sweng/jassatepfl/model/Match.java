@@ -289,16 +289,50 @@ public class Match {
     /**
      * Checks if the match has a participant with the given ID
      *
-     * @param userId The ID to check
+     * @param id The ID to check
      * @return true if a player with the id is in the match, false otherwise
      */
-    public boolean hasParticipantWithID(Player.PlayerID userId) {
+    public boolean hasParticipantWithID(String id) {
+        Player.PlayerID userID = new Player.PlayerID(id);
         for(Player p : players) {
-            if(p.getID().equals(userId)) {
+            if(p.getID().equals(userID)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Returns the team number the player is in
+     * @param p The player
+     * @return the team number if the player is in the match, -1 otherwise
+     */
+    public int teamNbForPlayer(Player p) {
+        if(!players.contains(p)) {
+            return -1;
+        }
+        else {
+            switch (gameVariant) {
+                case CHIBRE:
+                case PIQUE_DOUBLE:
+                case OBEN_ABE:
+                case UNDEN_UFE:
+                case SLALOM:
+                case CHICANE:
+                case JASS_MARANT:
+                    if(players.indexOf(p) < 2) {
+                        return 1;
+                    }
+                    else {
+                        return 2;
+                    }
+                case ROI:
+                case POMME:
+                    return (players.indexOf(p) + 1);
+                default:
+                    return -1;
+            }
+        }
     }
 
     public static class MatchRank extends Rank {

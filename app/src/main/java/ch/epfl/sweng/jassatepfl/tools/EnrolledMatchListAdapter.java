@@ -40,7 +40,7 @@ public final class EnrolledMatchListAdapter extends ArrayAdapter<Match> {
             convertView = inflater.inflate(R.layout.match_enrolled_list_row, null);
         }
 
-        Match match = matches.get(position);
+        Match match = getItem(position);
         MatchStringifier stringifier = new MatchStringifier(getContext());
         stringifier.setMatch(match);
 

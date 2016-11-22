@@ -424,7 +424,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     }
 
     private void modifyListAdapter() {
-        PlayerListAdapter adapter = new PlayerListAdapter(WaitingPlayersActivity.this, R.layout.player_list_element, playerList);
+        PlayerListAdapter adapter = new PlayerListAdapter(WaitingPlayersActivity.this, R.layout.player_list_element, playerList, match);
         listView.setAdapter(adapter);
     }
 

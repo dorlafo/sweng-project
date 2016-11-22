@@ -39,7 +39,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.LocationProviderListener;
@@ -260,7 +259,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                         .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory.defaultMarker(
-                                match.hasParticipantWithID(new Player.PlayerID(getUserSciper())) ? HUE_ORANGE : HUE_BLUE)));
+                                match.hasParticipantWithID(getUserSciper()) ? HUE_ORANGE : HUE_BLUE)));
                 marker.setTag(match.getMatchID());
                 return marker;
             }
