@@ -286,6 +286,21 @@ public class Match {
         return players.contains(player);
     }
 
+    /**
+     * Checks if the match has a participant with the given ID
+     *
+     * @param userId The ID to check
+     * @return true if a player with the id is in the match, false otherwise
+     */
+    public boolean hasParticipantWithID(Player.PlayerID userId) {
+        for(Player p : players) {
+            if(p.getID().equals(userId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static class MatchRank extends Rank {
 
         public MatchRank(int rank) {
