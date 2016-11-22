@@ -1,8 +1,4 @@
-package ch.epfl.sweng.jassatepfl.database.local;
-
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
+package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;

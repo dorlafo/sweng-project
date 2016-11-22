@@ -1,7 +1,6 @@
-package ch.epfl.sweng.jassatepfl.database.local;
+package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
 import java.util.List;
-import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;

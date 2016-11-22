@@ -1,12 +1,8 @@
-package ch.epfl.sweng.jassatepfl.database.local;
+package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.model.Player;
 
 /**
  * The TreeNode class is a special case of the Node interface. It represents the middle nodes of our
