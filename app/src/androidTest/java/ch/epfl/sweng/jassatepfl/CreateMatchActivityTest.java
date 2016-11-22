@@ -2,6 +2,7 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.support.test.espresso.contrib.PickerActions;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TimePicker;
 
 import org.hamcrest.Matchers;
@@ -10,10 +11,14 @@ import org.junit.Test;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcher;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -21,6 +26,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -53,6 +59,10 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        Set<Player> playerSet = new HashSet<>();
+        playerSet.add(DummyData.amaury);
+        playerSet.add(DummyData.jimmy);
+        dbRefWrapMock.addPlayers(playerSet);
         getActivity();
     }
 
@@ -165,17 +175,11 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     /* need mock queries (inviteplayer l.105)
     @Test
     public void testInvitePlayers() {
-        Set<Player> playerSet = new HashSet<>();
-        playerSet.add(DummyData.amaury);
-        playerSet.add(DummyData.jimmy);
-        dbRefWrapMock.addPlayers(playerSet);
-
         onView(withId(R.id.add_player_button)).perform(click());
         onView(withId(R.id.search)).perform(click());
         onView(isAssignableFrom(EditText.class)).perform(typeText("Hello"));
-
         dbRefWrapMock.reset();
-    }
-    */
+    }*/
+
 
 }

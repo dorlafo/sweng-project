@@ -1,8 +1,12 @@
 package ch.epfl.sweng.jassatepfl.database.local;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
 
 /**
  * The TreeNode class is a special case of the Node interface. It represents the middle nodes of our
@@ -47,9 +51,22 @@ public class TreeNode implements Node {
 
     @Override
     public Leaf addChild(String id) {
-        Leaf newLeaf = new Leaf(id);
-        children.add(newLeaf);
-        return newLeaf;
+        switch (this.id) {
+            case "players":
+                PlayerLeaf playerLeaf = new PlayerLeaf(id);
+                children.add(playerLeaf);
+                return playerLeaf;
+            case "matches":
+                MatchLeaf matchLeaf = new MatchLeaf(id);
+                children.add(matchLeaf);
+                return matchLeaf;
+            case "pendingMatches":
+                MatchStatusLeaf statusLeaf = new MatchStatusLeaf(id);
+                children.add(statusLeaf);
+                return statusLeaf;
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
     @Override
@@ -67,7 +84,20 @@ public class TreeNode implements Node {
             }
         }
 
-        Leaf newLeaf = new Leaf(tempId);
+        Leaf newLeaf;
+        switch (this.id) {
+            case "players":
+                newLeaf = new PlayerLeaf(tempId);
+                break;
+            case "matches":
+                newLeaf = new MatchLeaf(tempId);
+                break;
+            case "pendingMatches":
+                newLeaf = new MatchStatusLeaf(tempId);
+                break;
+            default:
+                throw new UnsupportedOperationException("Cannot add an auto generated child to : " + id);
+        }
         children.add(newLeaf);
         return newLeaf;
     }
@@ -79,6 +109,11 @@ public class TreeNode implements Node {
 
     private String randomStringGenerator() {
         return UUID.randomUUID().toString();
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
 }
