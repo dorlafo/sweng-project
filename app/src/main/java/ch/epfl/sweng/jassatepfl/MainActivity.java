@@ -129,9 +129,9 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
                     .show();
         }
         else {
-            Intent moveToMatchActivity = new Intent(this, WaitingPlayersActivity.class);
-            moveToMatchActivity.putExtra("match_Id", match.getMatchID());
-            startActivity(moveToMatchActivity);
+            Intent moveToWaitingPlayersActivity = new Intent(this, WaitingPlayersActivity.class);
+            moveToWaitingPlayersActivity.putExtra("match_Id", match.getMatchID());
+            startActivity(moveToWaitingPlayersActivity);
         }
     }
 
