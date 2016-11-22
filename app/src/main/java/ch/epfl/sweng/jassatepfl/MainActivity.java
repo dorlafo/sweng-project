@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
 import ch.epfl.sweng.jassatepfl.tools.MatchListEnrolledAdapter;
 
 public final class MainActivity extends BaseActivityWithNavDrawer  implements AdapterView.OnItemClickListener {
@@ -95,10 +94,6 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
         startActivity(intent);
     }
 
-    public void showEnrolledMatch(View view){
-        Intent intent = new Intent(this, CreateMatchActivity.class);
-    }
-
     public void displayMatchesOnMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
@@ -124,7 +119,18 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        final Match match = (Match) adapter.getItem(position);
+        if(match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Feature missing")
+                    .setMessage("will move to GameActivity")
+                    .show();
+        }
+        else {
+            Intent moveToMatchActivity = new Intent(this, WaitingPlayersActivity.class);
+            moveToMatchActivity.putExtra("match_Id", match.getMatchID());
+            startActivity(moveToMatchActivity);
+        }
     }
 
     private void contactFirebase() {
