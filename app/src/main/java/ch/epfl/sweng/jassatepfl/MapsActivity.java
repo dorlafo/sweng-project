@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -61,7 +60,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     private LocationProvider locationProvider;
     private Match match;
     private LatLng userLastLocation;
-    private Player currentUser;
     private ChildEventListener childEventListener;
     private static final String TAG = MapsActivity.class.getSimpleName();
 
@@ -97,25 +95,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
             locationProvider = new LocationProvider(this, true);
             locationProvider.setProviderListener(this);
-
-            try {
-                //TODO: rename
-                dbRefWrapped.child("players2")
-                        .child(getUserSciper())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                currentUser = dataSnapshot.getValue(Player.class);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
-                        });
-            } catch (NullPointerException e) {
-                Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
-                        .show();
-            }
         }
     }
 
@@ -172,7 +151,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
         /**
          * When click on one game, opens AlertDialog
-         * Provides oppotunity to join match or cancel.
+         * Provides opportunity to join match or cancel.
          */
         matchMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
             @Override
@@ -281,7 +260,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                         .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory.defaultMarker(
-                                match.hasParticipant(currentUser) ? HUE_ORANGE : HUE_BLUE)));
+                                match.hasParticipantWithID(new Player.PlayerID(getUserSciper())) ? HUE_ORANGE : HUE_BLUE)));
                 marker.setTag(match.getMatchID());
                 return marker;
             }
