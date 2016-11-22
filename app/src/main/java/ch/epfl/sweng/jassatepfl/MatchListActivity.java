@@ -132,6 +132,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 matches.add(match);
                 modifyListAdapter();
@@ -139,10 +140,18 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "onChildChanged:dataSnapshot:" + dataSnapshot.toString());
+                Match match = dataSnapshot.getValue(Match.class);
+                int matchIndex = matches.indexOf(match);
+                if(matchIndex != -1) {
+                    matches.set(matchIndex, match);
+                }
+                modifyListAdapter();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 matches.remove(match);
                 modifyListAdapter();
