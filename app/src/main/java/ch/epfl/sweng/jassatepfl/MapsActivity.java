@@ -33,7 +33,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,9 +56,13 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
     private GoogleMap matchMap;
     private LocationProvider locationProvider;
-    private Match match;
     private LatLng userLastLocation;
     private ChildEventListener childEventListener;
+    //Will contain all the marker (up to date with firebase) added to the map, with the matchID as key
+    private static HashMap<String, Marker> markers = new HashMap<>();
+    //Will contain all the matches (up to date with firebase) so when a user click on a marker we don't need to fetch the match again
+    private static Map<String, Match> matches = new HashMap<>();
+
     private static final String TAG = MapsActivity.class.getSimpleName();
 
     @Override
@@ -155,37 +158,43 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
         matchMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(final Marker marker) {
-                new AlertDialog.Builder(MapsActivity.this)
-                        .setTitle(R.string.dialog_join_match)
-                        .setMessage(R.string.dialog_join_message)
-                        .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                final String matchID = marker.getTag().toString();
-                                dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchID)
-                                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                match = dataSnapshot.getValue(Match.class);
-                                                DatabaseUtils.addPlayerToMatch(MapsActivity.this,
-                                                        dbRefWrapped,
-                                                        matchID,
-                                                        getUserSciper(),
-                                                        match);
-                                            }
+                Log.d(TAG, "MARKER:" + marker.toString() + ":TAG:" + marker.getTag());
+                Log.d(TAG, "matches:size:" + matches.size() + ":" + matches.toString());
+                final Match currMatch = matches.get(marker.getTag());//matchMarkerMap.get(marker);
+                if(currMatch.hasParticipantWithID(getUserSciper())) {
+                    if(currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
+                        new AlertDialog.Builder(MapsActivity.this)
+                                .setTitle("Feature missing")
+                                .setMessage("will move to GameActivity")
+                                .show();
+                    }
+                    else {
+                        Intent moveToWaitingPlayersActivity = new Intent(MapsActivity.this, WaitingPlayersActivity.class);
+                        moveToWaitingPlayersActivity.putExtra("match_Id", currMatch.getMatchID());
+                        startActivity(moveToWaitingPlayersActivity);
+                    }
+                }
+                else {
+                    new AlertDialog.Builder(MapsActivity.this)
+                            .setTitle(R.string.dialog_join_match)
+                            .setMessage(R.string.dialog_join_message)
+                            .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
 
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-                                                Log.e("ERROR-DATABASE", databaseError.toString());
-                                            }
-                                        });
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing, goes back to MapsActivity
-                            }
-                        })
-                        .show();
+                                    DatabaseUtils.addPlayerToMatch(MapsActivity.this,
+                                            dbRefWrapped,
+                                            currMatch.getMatchID(),
+                                            getUserSciper(),
+                                            currMatch);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Do nothing, goes back to MapsActivity
+                                }
+                            })
+                            .show();
+                }
             }
         });
 
@@ -220,30 +229,44 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
     private void displayNearbyMatches() {
         childEventListener = new ChildEventListener() {
-            private final Map<String, Marker> markers = new HashMap<>();
             private final MatchStringifier stringifier = new MatchStringifier(MapsActivity.this);
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "childEventListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
-                markers.put(dataSnapshot.getKey(), createMarker(m));
+                Marker marker = createMarker(m);
+                markers.put(m.getMatchID(), marker);
+                matches.put(m.getMatchID(), m);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                markers.get(dataSnapshot.getKey()).remove();
-                markers.put(dataSnapshot.getKey(), createMarker(dataSnapshot.getValue(Match.class)));
+                Log.d(TAG, "childEventListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
+                Match m = dataSnapshot.getValue(Match.class);
+                String id = dataSnapshot.getKey();
+                markers.get(id).remove();
+                markers.put(id, createMarker(m));
+                matches.put(m.getMatchID(), m);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                markers.get(dataSnapshot.getKey()).remove();
+                Log.d(TAG, "childEventListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
+                String id = dataSnapshot.getKey();
+                matches.remove(id);
+                markers.get(id).remove();
+                markers.remove(id);
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                markers.get(dataSnapshot.getKey()).remove();
-                markers.put(dataSnapshot.getKey(), createMarker(dataSnapshot.getValue(Match.class)));
+                Log.d(TAG, "childEventListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
+                Match m = dataSnapshot.getValue(Match.class);
+                String id = dataSnapshot.getKey();
+                markers.get(id).remove();
+                markers.put(id, createMarker(m));
+                matches.put(m.getMatchID(), m);
             }
 
             @Override

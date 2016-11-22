@@ -345,13 +345,15 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
             return;
         }
         dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(Integer.toString(posInList)).removeValue();
-        Intent backToMain = new Intent(this, MainActivity.class);
-        startActivity(backToMain);
+
         if(match.getPlayers().size() == 0) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).removeValue();
         } else {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
         }
+        Intent backToMain = new Intent(this, MainActivity.class);
+        startActivity(backToMain);
+        finish();
     }
 
     /**
