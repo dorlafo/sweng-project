@@ -23,6 +23,7 @@ import ch.epfl.sweng.jassatepfl.model.Player;
 public class DatabaseUtils {
     public static final String DATABASE_PLAYERS = "players2";
     public static final String DATABASE_MATCHES = "matches2";
+    public static final String DATABASE_MATCHES_PLAYERS = "players"; //Correspond to the players list in the match object
     public static final String DATABASE_ACTIVE_MATCHES = "activeMatches2";
     public static final String DATABASE_PENDING_MATCHES = "pendingMatches2";
     public static final String DATABASE_STATS = "stats";

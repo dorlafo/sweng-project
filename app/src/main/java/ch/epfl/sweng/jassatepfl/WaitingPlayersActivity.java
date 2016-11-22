@@ -418,7 +418,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     }
                 };
         dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
-                .child(matchId).child(DatabaseUtils.DATABASE_PLAYERS)
+                .child(matchId).child(DatabaseUtils.DATABASE_MATCHES_PLAYERS)
                 .addChildEventListener(childEventListener);
     }
 
