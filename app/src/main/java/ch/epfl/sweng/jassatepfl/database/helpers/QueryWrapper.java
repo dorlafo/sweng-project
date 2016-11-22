@@ -5,7 +5,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import ch.epfl.sweng.jassatepfl.database.local.reference.QueryWrapperMock;
 
 /**
  * @author Amaury Combes

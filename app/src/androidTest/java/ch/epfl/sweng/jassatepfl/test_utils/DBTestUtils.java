@@ -6,7 +6,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapMock;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
