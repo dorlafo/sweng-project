@@ -1,4 +1,4 @@
-package ch.epfl.sweng.jassatepfl.mocks;
+package ch.epfl.sweng.jassatepfl.test_utils.mocks.tests;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,14 +12,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.jassatepfl.database.local.Leaf;
-import ch.epfl.sweng.jassatepfl.database.local.MatchStatusLeaf;
-import ch.epfl.sweng.jassatepfl.database.local.Root;
-import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
-import ch.epfl.sweng.jassatepfl.database.local.reference.QueryWrapperMock;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeaf;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.Root;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapMock;
 
 import static org.junit.Assert.assertEquals;
 

@@ -1,7 +1,5 @@
-package ch.epfl.sweng.jassatepfl.mocks;
+package ch.epfl.sweng.jassatepfl.test_utils.mocks.tests;
 
-
-import android.widget.TextView;
 
 import org.junit.Test;
 
@@ -10,14 +8,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.jassatepfl.database.local.Leaf;
-import ch.epfl.sweng.jassatepfl.database.local.Root;
-import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
-import ch.epfl.sweng.jassatepfl.database.local.reference.QueryWrapperMock;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.Leaf;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.Root;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMock;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
