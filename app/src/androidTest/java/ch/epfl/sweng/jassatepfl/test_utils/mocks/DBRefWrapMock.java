@@ -1,4 +1,4 @@
-package ch.epfl.sweng.jassatepfl.database.local.reference;
+package ch.epfl.sweng.jassatepfl.test_utils.mocks;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -7,26 +7,24 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.database.helpers.QueryWrapper;
-import ch.epfl.sweng.jassatepfl.database.local.Leaf;
-import ch.epfl.sweng.jassatepfl.database.local.LeafField;
-import ch.epfl.sweng.jassatepfl.database.local.MatchLeaf;
-import ch.epfl.sweng.jassatepfl.database.local.MatchStatusLeaf;
-import ch.epfl.sweng.jassatepfl.database.local.Node;
-import ch.epfl.sweng.jassatepfl.database.local.PlayerLeaf;
-import ch.epfl.sweng.jassatepfl.database.local.Root;
-import ch.epfl.sweng.jassatepfl.database.local.TreeNode;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.Leaf;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafField;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchLeaf;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeaf;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.Node;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.PlayerLeaf;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.Root;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.TreeNode;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 

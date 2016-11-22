@@ -1,4 +1,4 @@
-package ch.epfl.sweng.jassatepfl.database.local.reference;
+package ch.epfl.sweng.jassatepfl.test_utils.mocks;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -10,10 +10,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.lang.reflect.Field;
-
 import ch.epfl.sweng.jassatepfl.database.helpers.QueryWrapper;
-import ch.epfl.sweng.jassatepfl.database.local.Leaf;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.Leaf;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
