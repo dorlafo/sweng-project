@@ -9,6 +9,7 @@ import java.util.List;
 import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertTrue;
@@ -21,8 +22,7 @@ import static org.junit.Assert.assertTrue;
 public class DBTestUtils {
 
     public static void assertMatchContainsNPlayers(DBRefWrapMock dbRefWrapMock, String matchID, final int nPlayers) {
-        //TODO: rename
-        dbRefWrapMock.child("matches2")
+        dbRefWrapMock.child(DatabaseUtils.DATABASE_MATCHES)
                 .child(matchID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -38,8 +38,7 @@ public class DBTestUtils {
     }
 
     public static void assertMatchContainsPlayer(DBRefWrapMock dbRefWrapMock, String matchID, final Player.PlayerID sciper) {
-        //TODO: rename
-        dbRefWrapMock.child("matches2")
+        dbRefWrapMock.child(DatabaseUtils.DATABASE_MATCHES)
                 .child(matchID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -58,6 +58,7 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.GameVariant;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.DatePickerFragment;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
@@ -245,11 +246,9 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                             .show();
                     createMatchButton.setEnabled(false);
                 } else {
-                    //TODO: rename
-                    String matchId = dbRefWrapped.child("matches2").push().getKey();
+                    String matchId = dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).push().getKey();
                     Match m = matchBuilder.setMatchID(matchId).build();
-                    //TODO: rename
-                    dbRefWrapped.child("matches2").child(matchId).setValue(m);
+                    dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(m);
                     Log.d(TAG, "Pushed match " + matchId + " to database");
                     new InvitePlayer(playerArrayAdapter).execute(matchId);
                     startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("match_Id", matchId));
@@ -293,8 +292,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     int playerNum = data.getIntExtra("players_added", 0);
                     for (int i = 0; i < playerNum; i++) {
                         String sciper = data.getStringExtra("player" + i);
-                        //TODO: rename
-                        dbRefWrapped.child("players2")
+                        dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS)
                                 .child(sciper)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -400,8 +398,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         // TODO: can we fuse this method with addplayer l.258, it is almost the same
         try {
             String currentUserId = fAuth.getCurrentUser().getDisplayName();
-            //TODO: rename
-            dbRefWrapped.child("players2").child(currentUserId)
+            dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS).child(currentUserId)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

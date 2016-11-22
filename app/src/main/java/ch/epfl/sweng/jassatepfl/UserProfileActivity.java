@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 public class UserProfileActivity extends BaseActivityWithNavDrawer {
 
@@ -51,8 +52,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             //New SingleEventListener that will change the value of the textView according to the current
             //logged in user
             dbRefWrapped
-                    //TODO: rename
-                    .child("players2")
+                    .child(DatabaseUtils.DATABASE_PLAYERS)
                     .child(sciper)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

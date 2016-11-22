@@ -2,6 +2,7 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -29,6 +30,7 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
 /**
@@ -123,8 +125,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
     @Override
     public boolean onQueryTextChange(String newText) {
         // Modify query when user changes the search text
-        //TODO: rename
-        dbRefWrapped.child("players2").orderByChild("firstName")
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS).orderByChild("firstName")
                 .startAt(newText).endAt(newText + "z").limitToFirst(50).addValueEventListener(
                 new ValueEventListener() {
                     @Override

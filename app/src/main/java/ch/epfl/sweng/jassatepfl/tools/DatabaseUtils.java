@@ -21,6 +21,13 @@ import ch.epfl.sweng.jassatepfl.model.Player;
  * @author Alexis Montavon
  */
 public class DatabaseUtils {
+    public static final String DATABASE_PLAYERS = "players2";
+    public static final String DATABASE_MATCHES = "matches2";
+    public static final String DATABASE_ACTIVE_MATCHES = "activeMatches2";
+    public static final String DATABASE_PENDING_MATCHES = "pendingMatches2";
+    public static final String DATABASE_STATS = "stats";
+    public static final String DATABASE_STATS_BUFFER = "buffer";
+    public static final String DATABASE_STATS_USER = "user";
 
     /**
      * Add player to match on the database.
@@ -36,8 +43,7 @@ public class DatabaseUtils {
                                         final String matchID,
                                         final String sciper,
                                         final Match match) {
-        //TODO: rename
-        ref.child("players2")
+        ref.child(DatabaseUtils.DATABASE_PLAYERS)
                 .child(sciper)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -45,8 +51,7 @@ public class DatabaseUtils {
                         Player player = dataSnapshot.getValue(Player.class);
                         try {
                             match.addPlayer(player);
-                            //TODO: rename
-                            ref.child("matches2").child(matchID).setValue(match);
+                            ref.child(DatabaseUtils.DATABASE_MATCHES).child(matchID).setValue(match);
                             Intent moveToMatchActivity = new Intent(context, WaitingPlayersActivity.class);
                             moveToMatchActivity.putExtra("match_Id", matchID);
                             context.startActivity(moveToMatchActivity);

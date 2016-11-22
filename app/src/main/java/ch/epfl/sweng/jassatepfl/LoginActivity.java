@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import ch.epfl.sweng.jassatepfl.tequila.AuthClient;
 import ch.epfl.sweng.jassatepfl.tequila.AuthServer;
 import ch.epfl.sweng.jassatepfl.tequila.OAuth2Config;
 import ch.epfl.sweng.jassatepfl.tequila.Profile;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 public class LoginActivity extends BaseAppCompatActivity {
 
@@ -145,8 +147,7 @@ public class LoginActivity extends BaseAppCompatActivity {
                         Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
                         if (task.isSuccessful()) {
                             //Adding the user to the database
-                            //TODO: rename
-                            dbRefWrapped.child("players2")
+                            dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS)
                                     .child(profile.sciper).setValue(new Player(
                                     new Player.PlayerID(Long.parseLong(profile.sciper)),
                                     profile.lastNames,

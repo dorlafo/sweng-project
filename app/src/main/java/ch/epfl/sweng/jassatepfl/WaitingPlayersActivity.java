@@ -30,7 +30,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
     private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
 
-    private String sciper;
+    //private String sciper;
     private Match match;
     private String matchId;
     private Player player;
@@ -71,7 +71,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     @Override
     protected void onResume() {
         super.onResume();
-        sciper = getUserSciper();
+        //sciper = getUserSciper();
         playerList = new ArrayList<>();
         matchId = getIntent().getStringExtra("match_Id");
 
@@ -95,8 +95,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     startIntent.removeExtra("match_Id");
                     break;
                 case "playerjoined":
-                    //TODO: rename
-                    dbRefWrapped.child("players2")
+                    dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS)
                             .child(startIntent.getStringExtra("sciper"))
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -119,8 +118,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     startIntent.removeExtra("sciper");
                     break;
                 case "playerleft":
-                    //TODO: rename
-                    dbRefWrapped.child("players2")
+                    dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS)
                             .child(startIntent.getStringExtra("sciper"))
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -179,16 +177,21 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 match = dataSnapshot.getValue(Match.class);
-                if(match != null) {
-                    description.setText(match.getDescription());
-                    variant.setText(match.getGameVariant().toString());
+                Log.d(TAG, "valueEventListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
+                description.setText(match.getDescription());
+                variant.setText(match.getGameVariant().toString());
 
-                    List<Player> players = match.getPlayers();
-                    for (int i = 0; i < players.size(); ++i) {
-                        if (players.get(i).getID().equals(new Player.PlayerID(sciper))) {
-                            posInList = i;
-                        }
+                //List<Player> players = match.getPlayers();
+                /*for (int i = 0; i < players.size(); ++i) {
+                    if (players.get(i).getID().equals(new Player.PlayerID(sciper))) {
+                        posInList = i;
                     }
+                }*/
+                posInList = match.getPlayerIndex(getUserSciper());
+                if(posInList == -1) {
+                    //TODO: handle error
+                }
+                else {
                     innerListener = new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -206,10 +209,12 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
                         @Override
                         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                            //TODO: check if this is indeed not used
                         }
 
                         @Override
                         public void onChildRemoved(DataSnapshot dataSnapshot) {
+                            //TODO: check if this is indeed not used
                         }
 
                         @Override
@@ -222,8 +227,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
                         }
                     };
-                    //TODO: rename
-                    dbRefWrapped.child("pendingMatches2").child(matchId).addChildEventListener(innerListener);
+                    dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).addChildEventListener(innerListener);
                 }
             }
 
@@ -232,12 +236,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                 Log.e("ERROR-DATABASE", databaseError.toString());
             }
         };
-        //TODO: rename
-        dbRefWrapped.child("matches2").child(matchId).addValueEventListener(valueEventListener);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).addValueEventListener(valueEventListener);
 
         contactFirebase();
 
-        pendingMatchesListener = new ChildEventListener() {
+        /*pendingMatchesListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 int pos = Integer.parseInt(dataSnapshot.getKey());
@@ -269,9 +272,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
-        //TODO: rename
-        dbRefWrapped.child("pendingMatches2").child(matchId).addChildEventListener(pendingMatchesListener);
+        };*/
+        //dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).addChildEventListener(pendingMatchesListener);
     }
 
     @Override
@@ -281,8 +283,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                 int playerNum = data.getIntExtra("players_added", 0);
                 for (int i = 0; i < playerNum; i++) {
                     String sciper = data.getStringExtra("player" + i);
-                    //TODO: rename
-                    dbRefWrapped.child("players2")
+                    dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS)
                             .child(sciper)
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -332,22 +333,20 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         dbRefWrapped.removeEventListener(valueEventListener);
         */
 
+        //TODO: why exception will occur here ??
         try {
-            match.removePlayerById(new Player.PlayerID(sciper));
+            match.removePlayerById(new Player.PlayerID(getUserSciper()));
         } catch (IllegalStateException e) {
             Log.e("Illegal State Exception", e.getMessage());
             return;
         }
-        //TODO: rename
-        dbRefWrapped.child("pendingMatches2").child(matchId).child(Integer.toString(posInList)).removeValue();
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(Integer.toString(posInList)).removeValue();
         Intent backToMain = new Intent(this, MainActivity.class);
         startActivity(backToMain);
         if(match.getPlayers().size() == 0) {
-            //TODO: rename
-            dbRefWrapped.child("matches2").child(matchId).removeValue();
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).removeValue();
         } else {
-            //TODO: rename
-            dbRefWrapped.child("matches2").child(matchId).setValue(match);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
         }
     }
 
@@ -357,14 +356,13 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
      * @param view General view
      */
     public void userIsReady(View view) {
-        //TODO: rename
-        dbRefWrapped.child("pendingMatches2").child(matchId).child(Integer.toString(posInList)).setValue(true);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(Integer.toString(posInList)).setValue(true);
         Button ready = (Button) findViewById(R.id.ready);
         ready.setEnabled(false);
     }
 
     /**
-     * Ridirects user to InvitePlayerToMatchActivity when
+     * Redirects user to InvitePlayerToMatchActivity when
      * clicks on "Invite" button
      *
      * @param view General view
@@ -380,8 +378,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                 .show();
         //TODO: check if this still work in case of error
         /* Useless since onDestroy() will be called
-        //TODO: rename
-        dbRefWrapped.child("pendingMatches2").child(matchId).removeEventListener(pendingMatchesListener);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).removeEventListener(pendingMatchesListener);
         */
         // TODO: backToList.putExtra("match_Id", matchId);
         // TODO: Create intent for next activity
@@ -392,6 +389,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         childEventListener = new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Log.d(TAG, "childEventListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                         Player player = dataSnapshot.getValue(Player.class);
                         playerList.add(player);
                         modifyListAdapter();
@@ -399,10 +397,12 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        Log.d(TAG, "childEventListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                     }
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "childEventListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
                         Player player = dataSnapshot.getValue(Player.class);
                         playerList.remove(player);
                         modifyListAdapter();
@@ -417,9 +417,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
                     }
                 };
-        //TODO: rename
-        dbRefWrapped.child("matches2")
-                .child(matchId).child("players")
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                .child(matchId).child(DatabaseUtils.DATABASE_PLAYERS)
                 .addChildEventListener(childEventListener);
     }
 

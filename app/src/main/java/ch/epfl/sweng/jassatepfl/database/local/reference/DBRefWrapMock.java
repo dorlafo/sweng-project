@@ -15,6 +15,7 @@ import ch.epfl.sweng.jassatepfl.database.local.Root;
 import ch.epfl.sweng.jassatepfl.database.local.TreeNode;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -102,10 +103,8 @@ public class DBRefWrapMock extends DBReferenceWrapper {
      */
     public void reset() {
         currentNode.dropChildren();
-        //TODO: rename
-        currentNode.addChild("players2");
-        //TODO: rename
-        currentNode.addChild("matches2");
+        currentNode.addChild(DatabaseUtils.DATABASE_PLAYERS);
+        currentNode.addChild(DatabaseUtils.DATABASE_MATCHES);
     }
 
     /**
@@ -116,8 +115,7 @@ public class DBRefWrapMock extends DBReferenceWrapper {
      * @param players the collection of players that needs to be added
      */
     public void addPlayers(Set<Player> players) {
-        //TODO: rename
-        TreeNode playersNode = ((Root) currentNode).getChild("players2");
+        TreeNode playersNode = ((Root) currentNode).getChild(DatabaseUtils.DATABASE_PLAYERS);
         for (Player p : players) {
             String playerId = p.getID().toString();
             playersNode.addChild(playerId);
@@ -133,8 +131,7 @@ public class DBRefWrapMock extends DBReferenceWrapper {
      * @param matches the collection of players that needs to be added
      */
     public void addMatches(Set<Match> matches) {
-        //TODO: rename
-        TreeNode playersNode = ((Root) currentNode).getChild("matches2");
+        TreeNode playersNode = ((Root) currentNode).getChild(DatabaseUtils.DATABASE_MATCHES);
         for (Match m : matches) {
             String matchID = m.getMatchID();
             playersNode.addChild(matchID);

@@ -16,6 +16,7 @@ import ch.epfl.sweng.jassatepfl.database.local.Root;
 import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import dagger.Module;
 import dagger.Provides;
 
@@ -83,12 +84,9 @@ public final class DebugDataModule {
 
     private void fillDB(DBRefWrapMock dbRef) {
         Root root = (Root) dbRef.getCurrentNode();
-        //TODO: rename
-        root.addChild("players2");
-        //TODO: rename
-        root.addChild("matches2");
-        //TODO: rename
-        root.getChild("players2")
+        root.addChild(DatabaseUtils.DATABASE_PLAYERS);
+        root.addChild(DatabaseUtils.DATABASE_MATCHES);
+        root.getChild(DatabaseUtils.DATABASE_PLAYERS)
                 .addChild("696969")
                 .setData(new Player(new Player.PlayerID("696969"), "LeBricoleur", "Bob", new Rank(1000)));
     }

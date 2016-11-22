@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.EnrolledMatchListAdapter;
 
 public final class MainActivity extends BaseActivityWithNavDrawer  implements AdapterView.OnItemClickListener {
@@ -188,8 +189,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        //TODO: rename
-        dbRefWrapped.child("matches2")
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
                 .addChildEventListener(childEventListener);
     }
 

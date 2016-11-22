@@ -161,8 +161,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                         .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 final String matchID = marker.getTag().toString();
-                                //TODO: rename
-                                dbRefWrapped.child("matches2").child(matchID)
+                                dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchID)
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -264,8 +263,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 return marker;
             }
         };
-        //TODO: rename
-        dbRefWrapped.child("matches2")
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
                 .orderByChild("privateMatch").equalTo(false)
                 .addChildEventListener(childEventListener);
     }
