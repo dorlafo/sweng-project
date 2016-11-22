@@ -44,7 +44,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     private ListView listView;
     private ChildEventListener childEventListener;
 
-    private static final String TAG = BaseActivityWithNavDrawer.class.getSimpleName();
+    private static final String TAG = MatchListActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +134,10 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
-                matches.add(match);
+                //Add match to the list if we are not in it
+                if(!match.hasParticipantWithID(getUserSciper())) {
+                    matches.add(match);
+                }
                 modifyListAdapter();
             }
 
@@ -143,8 +146,22 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
                 Log.d(TAG, "onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 int matchIndex = matches.indexOf(match);
+                //If the match is in the list (ie we were not in it)
                 if(matchIndex != -1) {
-                    matches.set(matchIndex, match);
+                    //if we now are in it, remove it from the list, otherwise modify it
+                    if(match.hasParticipantWithID(getUserSciper())) {
+                        matches.remove(match);
+                    }
+                    else {
+                        matches.set(matchIndex, match);
+                    }
+                }
+                //The match was not in the list
+                else {
+                    //Add match if we are not in it
+                    if(!match.hasParticipantWithID(getUserSciper())) {
+                        matches.add(match);
+                    }
                 }
                 modifyListAdapter();
             }

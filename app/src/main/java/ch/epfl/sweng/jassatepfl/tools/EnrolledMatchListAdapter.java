@@ -13,11 +13,11 @@ import java.util.List;
 import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.model.Match;
 
-public final class MatchListEnrolledAdapter extends ArrayAdapter<Match> {
+public final class EnrolledMatchListAdapter extends ArrayAdapter<Match> {
 
     private List<Match> matches;
 
-    public MatchListEnrolledAdapter(Context context, int resource, List<Match> matches) {
+    public EnrolledMatchListAdapter(Context context, int resource, List<Match> matches) {
         super(context, resource, matches);
         this.matches = matches;
     }

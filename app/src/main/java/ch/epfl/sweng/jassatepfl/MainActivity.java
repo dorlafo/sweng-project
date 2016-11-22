@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.tools.MatchListEnrolledAdapter;
+import ch.epfl.sweng.jassatepfl.tools.EnrolledMatchListAdapter;
 
 public final class MainActivity extends BaseActivityWithNavDrawer  implements AdapterView.OnItemClickListener {
 
@@ -140,7 +140,10 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
-                matches.add(match);
+                //Add match to the list if we are in it
+                if(match.hasParticipantWithID(getUserSciper())) {
+                    matches.add(match);
+                }
                 modifyListAdapter();
             }
 
@@ -149,8 +152,22 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
                 Log.d(TAG, "onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 int matchIndex = matches.indexOf(match);
+                //If the match is in the list (ie we were in it)
                 if(matchIndex != -1) {
-                    matches.set(matchIndex, match);
+                    //If we now are not in it, remove it from the list, otherwise modify it
+                    if(!match.hasParticipantWithID(getUserSciper())) {
+                        matches.remove(match);
+                    }
+                    else {
+                        matches.set(matchIndex, match);
+                    }
+                }
+                //The match was not in the list
+                else {
+                    //Add match if we are in it
+                    if(match.hasParticipantWithID(getUserSciper())) {
+                        matches.add(match);
+                    }
                 }
                 modifyListAdapter();
             }
@@ -171,8 +188,8 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        dbRefWrapped.child("matchesByPlayer")
-                .child(getUserSciper())
+        //TODO: rename
+        dbRefWrapped.child("matches2")
                 .addChildEventListener(childEventListener);
     }
 
@@ -180,7 +197,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
      * Updates Match list adapter
      */
     private void modifyListAdapter() {
-        adapter = new MatchListEnrolledAdapter(MainActivity.this, R.layout.match_enrolled_list_row, matches);
+        adapter = new EnrolledMatchListAdapter(MainActivity.this, R.layout.match_enrolled_list_row, matches);
         listView.setAdapter(adapter);
     }
 }

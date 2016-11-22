@@ -250,7 +250,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     Match m = matchBuilder.setMatchID(matchId).build();
                     //TODO: rename
                     dbRefWrapped.child("matches2").child(matchId).setValue(m);
-                    dbRefWrapped.child("matchesByPlayer").child(getUserSciper()).child(matchId).setValue(m);
                     Log.d(TAG, "Pushed match " + matchId + " to database");
                     new InvitePlayer(playerArrayAdapter).execute(matchId);
                     startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("match_Id", matchId));
