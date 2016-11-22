@@ -26,6 +26,10 @@
             android:icon="@drawable/ic_account_circle_black"
             android:title="@string/navigation_drawer_user_profile"/>
         <item
+            android:id="@+id/nav_user_guide"
+            android:icon="@drawable/ic_help_outline_black"
+            android:title="@string/user_guide"/>
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_highlight_off_black"
             android:title="@string/navigation_drawer_logout"/>

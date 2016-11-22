@@ -7,7 +7,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-    <!--         App's Permissions -->
+    <!-- App's Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -21,7 +21,7 @@
         android:largeHeap="true"
         android:theme="@style/AppTheme">
 
-        <!--             App Activities -->
+        <!-- App Activities -->
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -67,6 +67,9 @@
         <activity
             android:name=".InvitePlayerToMatchActivity"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".UserGuideActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -99,6 +102,7 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
 
     </application>
 
