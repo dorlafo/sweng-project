@@ -1,4 +1,4 @@
-package ch.epfl.sweng.jassatepfl.injections;
+package ch.epfl.sweng.jassatepfl;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -8,7 +8,8 @@ import javax.inject.Inject;
 
 import ch.epfl.sweng.jassatepfl.App;
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
-import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.test_utils.injections.*;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapMock;
 
 /**
  * InjectedBaseActivityTest is the base class for the tests. It needs to remains in the main folder
@@ -19,7 +20,7 @@ import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
  * Last name : LeBricoleur
  * First name : Bob
  * Rank : 1000
- */
+ **/
 @SuppressWarnings("deprecation")
 public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
 
@@ -39,14 +40,15 @@ public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
     protected void setUp() throws Exception {
         super.setUp();
         App app = (App) getInstrumentation().getTargetContext().getApplicationContext();
-        app.setMockMode(true);
-        App.getInstance().graph().inject(this);
+        FakeGraph component = DaggerFakeGraph.builder().fakeModules(new FakeModules()).build();
+        app.setGraph(component);
+        component.inject(this);
+        //App.getInstance().graph().inject(this);
         dbRefWrapMock = (DBRefWrapMock) dbReferenceWrapper;
     }
 
     @Override
     protected void tearDown() throws Exception {
-        App.getInstance().setMockMode(false);
-    }
 
+    }
 }
