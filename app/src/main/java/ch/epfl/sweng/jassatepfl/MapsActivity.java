@@ -160,7 +160,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
             public void onInfoWindowClick(final Marker marker) {
                 Log.d(TAG, "MARKER:" + marker.toString() + ":TAG:" + marker.getTag());
                 Log.d(TAG, "matches:size:" + matches.size() + ":" + matches.toString());
-                final Match currMatch = matches.get(marker.getTag());//matchMarkerMap.get(marker);
+                final Match currMatch = matches.get(marker.getTag());
                 if(currMatch.hasParticipantWithID(getUserSciper())) {
                     if(currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
                         new AlertDialog.Builder(MapsActivity.this)
