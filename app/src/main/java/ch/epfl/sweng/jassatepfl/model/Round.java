@@ -5,13 +5,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Class representing a round object. It contains the points and melds made in the round
+ * Class representing a round object. It contains the points and melds obtained in the round.
  */
-
 public class Round {
+
     private int points;
     private List<Match.Meld> melds;
-
 
     public Round() {
     }
@@ -23,6 +22,7 @@ public class Round {
 
     /**
      * Getter for the points in this round
+     *
      * @return The points made
      */
     public int getPoints() {
@@ -31,6 +31,7 @@ public class Round {
 
     /**
      * Getter for the meld made in this round
+     *
      * @return A list of the meld made
      */
     public List<Match.Meld> getMelds() {
@@ -39,6 +40,7 @@ public class Round {
 
     /**
      * Add the points passed in parameters to the current points
+     *
      * @param p The points to be add
      */
     public void addPoints(int p) {
@@ -47,10 +49,12 @@ public class Round {
 
     /**
      * Add the meld passed in parameters to the current meld list and the points for this meld to the points
+     *
      * @param m The meld to be add
      */
     public void addMeld(Match.Meld m) {
         this.melds.add(m);
         addPoints(m.value());
     }
+
 }
