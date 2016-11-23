@@ -16,9 +16,6 @@ android {
     compileSdkVersion 24
     buildToolsVersion '24.0.3'
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
 
     defaultConfig {
         applicationId "ch.epfl.sweng.jassatepfl"
@@ -37,7 +34,7 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
         }
     }
