@@ -1,4 +1,4 @@
-package ch.epfl.sweng.jassatepfl.test_utils.injections;
+package ch.epfl.sweng.jassatepfl.test_utils.injectionsTest;
 
 import javax.inject.Singleton;
 
