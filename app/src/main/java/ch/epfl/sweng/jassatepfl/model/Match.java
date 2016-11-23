@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl.model;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +31,7 @@ public class Match {
     private int maxPlayerNumber;
     private long expirationTime;
     private String matchID;
+    private List<Player.PlayerID> hasCards;
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase.
@@ -47,6 +49,7 @@ public class Match {
      * @param gameVariant    The variant of the match
      * @param expirationTime The time at which the match expires (in milliseconds after epoch)
      * @param matchID        The unique firebase ID of the match
+     * @param hasCards       A list of who has cards available for the match
      */
     public Match(List<Player> players,
                  GPSPoint location,
@@ -54,7 +57,8 @@ public class Match {
                  boolean privateMatch,
                  GameVariant gameVariant,
                  long expirationTime,
-                 String matchID) {
+                 String matchID,
+                 List<Player.PlayerID> hasCards) {
         this.players = new ArrayList<>(players);
         this.location = location;
         this.description = description;
@@ -64,6 +68,7 @@ public class Match {
         this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
         this.expirationTime = expirationTime;
         this.matchID = matchID;
+        this.hasCards = hasCards;
     }
 
     /**
@@ -75,14 +80,16 @@ public class Match {
      * @param privateMatch   The visibility of the match (public or private)
      * @param expirationTime The time at which the match expires (in milliseconds after epoch)
      * @param matchID        The unique firebase ID of the match
+     * @param hasCards       A list of who has cards available for the match
      */
     public Match(List<Player> players,
                  GPSPoint location,
                  String description,
                  boolean privateMatch,
                  long expirationTime,
-                 String matchID) {
-        this(players, location, description, privateMatch, CHIBRE, expirationTime, matchID);
+                 String matchID,
+                 List<Player.PlayerID> hasCards) {
+        this(players, location, description, privateMatch, CHIBRE, expirationTime, matchID, hasCards);
     }
 
     /**
@@ -158,6 +165,35 @@ public class Match {
         return expirationTime;
     }
 
+
+    /**
+     * Getter for the card parameter, wich is the list of who has cards.
+     *
+     * @return list of player id of the players who have cards available.
+     */
+    public List<Player.PlayerID> getHasCards() {return hasCards;}
+
+    /**
+     * Setter for the card parameter, which is the list of who has cards.
+     *
+     * @param hasCards  list of the Players who have cards.
+     */
+    public void setHasCards(List<Player.PlayerID> hasCards) {this.hasCards = hasCards;}
+
+    /**
+     * Add one player who has cards to the list hasCards
+     *
+     * @param playerID  the Id of the player who has cards
+     */
+    public void addPlayerWhoHasCards(Player.PlayerID playerID) {hasCards.add(playerID);}
+
+    /**
+     * Checker for hasCards, return false if empty, true otherwise.
+     *
+     * @return boolean true if someone have cards, false otherwise.
+     */
+    public boolean hasCards() {return !hasCards.isEmpty();}
+
     public void copy(Match m) {
         players = m.getPlayers();
         location = m.getLocation();
@@ -168,6 +204,7 @@ public class Match {
         maxPlayerNumber = m.getMaxPlayerNumber();
         expirationTime = m.getExpirationTime();
         matchID = m.getMatchID();
+        hasCards = m.getHasCards();
     }
 
     /**
@@ -222,14 +259,14 @@ public class Match {
             throw new IllegalStateException("Match is full.");
         }
         if (!players.contains(player)) {
-            players.add(player);
+                players.add(player);
         } else {
             throw new IllegalAccessException("Player already in that Match.");
         }
     }
 
     /**
-     * Removes the given player to the player from list.
+     * Removes the given player to the player from list. and from hasCards if he is inside.
      * <p>
      * Removing a player that is not present do nothing
      *
@@ -247,6 +284,9 @@ public class Match {
             }
             if(index != -1) {
                 players.remove(index);
+            }
+            if (hasCards.contains(toRemove)) {
+                hasCards.remove(toRemove);
             }
         }
 
@@ -336,6 +376,7 @@ public class Match {
         private int maxPlayerNumber;
         private long expirationTime;
         private String matchID;
+        private List<Player.PlayerID> hasCards;
 
         /**
          * Constructs a new match builder with default values, but with an empty player list.
@@ -349,6 +390,7 @@ public class Match {
             maxPlayerNumber = CHIBRE.getMaxPlayerNumber();
             expirationTime = Calendar.getInstance().getTimeInMillis() + 1 * 3600 * 1000; // 1 hour after current time
             matchID = DEFAULT_ID;
+            hasCards = new ArrayList<>();
         }
 
         /**
@@ -442,7 +484,7 @@ public class Match {
                 throw new IllegalStateException("Too many players.");
             } else {
                 return new Match(players, location, description, privateMatch,
-                        gameVariant, expirationTime, matchID);
+                        gameVariant, expirationTime, matchID, hasCards);
             }
         }
 
