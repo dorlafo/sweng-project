@@ -46,7 +46,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
             startActivity(intent);
         }
         else {
-            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
             drawer.addView(contentView, 0);
@@ -88,21 +88,6 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
         if(childEventListener != null) {
             dbRefWrapped.removeEventListener(childEventListener);
         }
-    }
-
-    public void createMatch(View view) {
-        Intent intent = new Intent(this, CreateMatchActivity.class);
-        startActivity(intent);
-    }
-
-    public void displayMatchesOnMap(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
-    }
-
-    public void displayMatchesInList(View view) {
-        Intent intent = new Intent(this, MatchListActivity.class);
-        startActivity(intent);
     }
 
     /**

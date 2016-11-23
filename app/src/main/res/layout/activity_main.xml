@@ -1,94 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:baselineAligned="false"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:weightSum="1"
     tools:context="ch.epfl.sweng.jassatepfl.MainActivity">
 
     <Space
+        android:id="@+id/create_top_space"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:layout_alignParentTop="true"/>
+        android:layout_height="?android:attr/actionBarSize" />
 
-    <FrameLayout
+    <TextView
+        android:text="My matches"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/twMyMatches"
+        android:textStyle="normal|bold"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="24sp"/>
+
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/main_layout_activity_buttons"
-        android:orientation="vertical">
+        android:background="@android:color/background_light"
+        android:divider="@color/listview_divider_color"
+        android:dividerHeight="1dp"
+        android:drawSelectorOnTop="true"/>
 
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/background_light"
-            android:divider="@color/listview_divider_color"
-            android:dividerHeight="@dimen/listview_divider_height"
-            android:drawSelectorOnTop="true">
-
-        </ListView>
-
-    </FrameLayout>
-
-    <RelativeLayout
-        android:id="@+id/main_layout_activity_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/create_match_button"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/main_list_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/main_space_match_display_delimiter"
-            android:onClick="displayMatchesInList"
-            android:text="@string/main_button_text_list"/>
-
-
-        <Space
-            android:id="@+id/main_space_match_display_delimiter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"/>
-
-        <Button
-            android:id="@+id/main_map_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/main_space_match_display_delimiter"
-            android:onClick="displayMatchesOnMap"
-            android:text="@string/main_button_text_map"/>
-
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/create_match_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/main_menu_lin_layout"
-        android:layout_centerHorizontal="true"
-        android:onClick="createMatch"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:text="@string/main_button_text_create_match"/>
-
-    <LinearLayout
-        android:id="@+id/main_menu_lin_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal" />
-
-</RelativeLayout>
+</LinearLayout>

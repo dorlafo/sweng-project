@@ -61,20 +61,6 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
             View contentView = inflater.inflate(R.layout.activity_list, drawer, false);
             drawer.addView(contentView, 0);
 
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            if (toolbar != null) {
-                setSupportActionBar(toolbar);
-                getSupportActionBar().hide();
-            }
-
-            ImageButton menuButton = (ImageButton) findViewById(R.id.list_menu_button);
-            menuButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    drawer.openDrawer(GravityCompat.START);
-                }
-            });
-
             TextView emptyList = new TextView(this);
             emptyList.setText(R.string.list_empty_list);
             emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
