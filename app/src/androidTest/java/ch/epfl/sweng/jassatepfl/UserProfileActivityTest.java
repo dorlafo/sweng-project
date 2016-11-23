@@ -55,6 +55,8 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
             TextView fnView = (TextView) playerFirstNameField.get(act);
             TextView rankView = (TextView) playerRankField.get(act);
 
+            Thread.sleep(3000);
+
             assertEquals("Player id : 696969", idView.getText().toString());
             assertEquals("Last name : LeBricoleur", lnView.getText().toString());
             assertEquals("First name : Bob", fnView.getText().toString());
