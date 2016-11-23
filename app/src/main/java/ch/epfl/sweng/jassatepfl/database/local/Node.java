@@ -55,4 +55,5 @@ public interface Node {
      */
     void dropChildren();
 
+    void initialize();
 }

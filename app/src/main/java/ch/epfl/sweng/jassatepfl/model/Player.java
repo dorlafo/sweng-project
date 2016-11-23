@@ -115,6 +115,13 @@ public class Player {
         return Objects.hash(id, lastName, firstName);
     }
 
+    public void copy(Player p) {
+        id = p.getID();
+        lastName = p.getLastName();
+        firstName = p.getLastName();
+        rank = p.getRank();
+    }
+
     /**
      * Sets the rank of the player.
      *

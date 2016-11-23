@@ -36,6 +36,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     private ChildEventListener pendingMatchesListener;
     private ChildEventListener childEventListener;
     private ValueEventListener valueEventListener;
+    private ValueEventListener contactFirebaseListener;
 
     private TextView variant;
     private TextView description;
@@ -271,6 +272,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
         dbRefWrapped.removeEventListener(pendingMatchesListener);
         dbRefWrapped.removeEventListener(childEventListener);
         dbRefWrapped.removeEventListener(valueEventListener);
+        dbRefWrapped.removeEventListener(contactFirebaseListener);
         try {
             match.removePlayerById(new Player.PlayerID(sciper));
         } catch (IllegalStateException e) {
@@ -320,7 +322,25 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     }
 
     private void contactFirebase() {
-        childEventListener = new ChildEventListener() {
+        //TODO review this (fix issue #123)
+        contactFirebaseListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Match match = dataSnapshot.getValue(Match.class);
+                playerList = new ArrayList<>(match.getPlayers());
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        dbRefWrapped.child("matches")
+                .child(matchId)
+                .addValueEventListener(valueEventListener);
+        /*childEventListener = new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Player player = dataSnapshot.getValue(Player.class);
@@ -350,7 +370,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                 };
         dbRefWrapped.child("matches")
                 .child(matchId).child("players")
-                .addChildEventListener(childEventListener);
+                .addChildEventListener(childEventListener);*/
     }
 
     private void modifyListAdapter() {

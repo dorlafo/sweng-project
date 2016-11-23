@@ -89,24 +89,8 @@ public class DBReferenceWrapper {
     /**
      * Look at the firebase documentation to see what this method does
      */
-    public Query orderByChild(String path) {
-        return dbRef.orderByChild(path);
-    }
-
-    public Query equalTo(boolean b) {
-        return dbRef.equalTo(b);
-    }
-
-    public Query equalTo(String b) {
-        return dbRef.equalTo(b);
-    }
-
-    public Query startAt(String s) {
-        return dbRef.startAt(s);
-    }
-
-    public Query endAt(String s) {
-        return dbRef.endAt(s);
+    public QueryWrapper orderByChild(String path) {
+        return new QueryWrapper(dbRef.orderByChild(path));
     }
 
     /**
