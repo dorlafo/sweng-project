@@ -187,7 +187,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                         //TODO: handle error
                     }
                     else {
-                        if(match.isFull()) {
+                        if(match.matchFull()) {
                             Button invite = (Button) findViewById(R.id.invite_button);
                             invite.setEnabled(false);
                         }

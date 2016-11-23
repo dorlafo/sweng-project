@@ -170,17 +170,6 @@ public class Match {
     }
 
     /**
-     * Getter to know if match is full
-     *
-     * @return True if the match is full
-     */
-    public boolean isFull() {
-        return players.size() == getMaxPlayerNumber();
-    }
-
-
-
-    /**
      * Getter for the variant of the match.
      *
      * @return The variant of the match
@@ -217,6 +206,9 @@ public class Match {
         return matchID;
     }
 
+    public boolean matchFull() {
+        return players.size() == getMaxPlayerNumber();
+    }
     /**
      * Getter for the match' status
      *
