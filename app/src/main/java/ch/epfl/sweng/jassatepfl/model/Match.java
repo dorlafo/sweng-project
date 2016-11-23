@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl.model;
 
-
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
@@ -10,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.*;
+import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
 import static ch.epfl.sweng.jassatepfl.tools.RankOperationsHelper.averageRank;
 
 /**
@@ -209,7 +208,7 @@ public class Match {
 
     /**
      * Adds the given player to the match.
-     * <p>
+     * <br>
      * Adding a player that is already present in the match does nothing,
      * and adding a player if the match if full throws an exception.
      *
@@ -230,7 +229,7 @@ public class Match {
 
     /**
      * Removes the given player to the player from list.
-     * <p>
+     * <br>
      * Removing a player that is not present do nothing
      *
      * @param toRemove The id of the player to remove from the match
@@ -245,14 +244,15 @@ public class Match {
                     index = players.indexOf(p);
                 }
             }
-            if(index != -1) {
+            if (index != -1) {
                 players.remove(index);
             }
         }
 
     }
 
-     /* Checks whether the given player is taking part in the match.
+    /**
+     * Checks whether the given player is taking part in the match.
      *
      * @param player The player
      * @return true if the player is in the match, false otherwise
@@ -274,7 +274,7 @@ public class Match {
      */
     public enum Meld {
         MARRIAGE("Stöck"),
-        THREE_CARDS("Trois carte"),
+        THREE_CARDS("Trois cartes"),
         FIFTY("Cinquante"),
         HUNDRED("Cent"),
         FOUR_NINE("Cent cinquante"),
@@ -288,6 +288,7 @@ public class Match {
 
         /**
          * Returns the value of the current meld
+         *
          * @return The value of the meld
          */
         public int value() {
@@ -342,6 +343,10 @@ public class Match {
          */
         public int getMaxPlayerNumber() {
             switch (this) {
+                case POMME:
+                    return 2;
+                case ROI:
+                    return 3;
                 case CHIBRE:
                 case PIQUE_DOUBLE:
                 case OBEN_ABE:
@@ -349,11 +354,6 @@ public class Match {
                 case SLALOM:
                 case CHICANE:
                 case JASS_MARANT:
-                    return 4;
-                case ROI:
-                    return 3;
-                case POMME:
-                    return 2;
                 default:
                     return 4;
             }
@@ -366,6 +366,8 @@ public class Match {
          */
         public int getNumberOfTeam() {
             switch (this) {
+                case ROI:
+                    return 3;
                 case CHIBRE:
                 case PIQUE_DOUBLE:
                 case OBEN_ABE:
@@ -374,9 +376,6 @@ public class Match {
                 case CHICANE:
                 case JASS_MARANT:
                 case POMME:
-                    return 2;
-                case ROI:
-                    return 3;
                 default:
                     return 2;
             }
@@ -384,10 +383,14 @@ public class Match {
 
         /**
          * Returns the number of player by team for the current game variant
+         *
          * @return The number of player by team
          */
         public int getNumberOfPlayerByTeam() {
             switch (this) {
+                case ROI:
+                case POMME:
+                    return 1;
                 case CHIBRE:
                 case PIQUE_DOUBLE:
                 case OBEN_ABE:
@@ -395,10 +398,6 @@ public class Match {
                 case SLALOM:
                 case CHICANE:
                 case JASS_MARANT:
-                    return 2;
-                case ROI:
-                case POMME:
-                    return 1;
                 default:
                     return 2;
             }
