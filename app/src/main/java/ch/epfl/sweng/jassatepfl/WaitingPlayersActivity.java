@@ -46,6 +46,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     private int playersReady = 0;
     private int posInList;
     private boolean playerHasCards = false;
+    private boolean matchHasCards = false;
 
     private static final int INVITE_CODE = 42;
     private List<Player> playerList;
@@ -106,6 +107,10 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
                     if(playerHasCards){
                         match.addPlayerWhoHasCards(player.getID());
                     }
+                    else{
+                        match.removePlayerWhoHasCards(player.getID());
+                    }
+                    matchHasCards = match.hasCards();
                     updateViewWhoHasCards();
                 }
             }
@@ -373,7 +378,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     }
 
     private void updateViewWhoHasCards() {
-        if (match.hasCards()){
+        if (matchHasCards){
             cardsNo.setVisibility(View.GONE);
             cardsYes.setVisibility(View.VISIBLE);
         }
@@ -384,12 +389,10 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     }
 
     public void changeCardsStatus() {
-        if (match.getHasCards().contains(player.getID())){
-            match.removePlayerWhoHasCards(player.getID());
+        if (playerHasCards){
             playerHasCards = false;
         }
         else {
-            match.addPlayerWhoHasCards(player.getID());
             playerHasCards = true;
         }
         updateViewWhoHasCards();
