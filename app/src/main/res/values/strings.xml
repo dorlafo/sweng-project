@@ -22,6 +22,10 @@
     <string name="create_button_text_create">Create Match</string>
     <string name="create_empty_list">Are you in Info? It seems you have no friends.</string>
 
+    <string name="game_team_name_1">Team 1</string>
+    <string name="game_team_name_2">Team 2</string>
+    <string name="game_team_name_3">Team 3</string>
+
     <string name="list_empty_list">No matches are available</string>
 
     <string name="profile_label_player_id">Player id :</string>
