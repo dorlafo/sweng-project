@@ -1,5 +1,6 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.SECOND_TEAM;
 public class GameActivity extends BaseAppCompatActivity implements
         OnClickListener, OnItemSelectedListener {
 
+    // TODO: max points depending on variant
     private final static int TOTAL_POINTS_IN_ROUND = 157;
     private final static int MATCH_POINTS = 257;
 
@@ -35,9 +37,6 @@ public class GameActivity extends BaseAppCompatActivity implements
 
     private TextView firstTeamScoreDisplay;
     private TextView secondTeamScoreDisplay;
-
-    private int firstTeamScore;
-    private int secondTeamScore;
 
     protected enum Caller {FIRST_TEAM, SECOND_TEAM}
 
@@ -66,8 +65,6 @@ public class GameActivity extends BaseAppCompatActivity implements
 
         firstTeamScoreDisplay = (TextView) findViewById(R.id.score_display_1);
         secondTeamScoreDisplay = (TextView) findViewById(R.id.score_display_2);
-        firstTeamScore = 0;
-        secondTeamScore = 0;
 
         ImageButton firstTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_1);
         firstTeamUpdateButton.setOnClickListener(this);
@@ -86,6 +83,15 @@ public class GameActivity extends BaseAppCompatActivity implements
         secondMeldSpinner.setAdapter(meldAdapter);
         secondMeldSpinner.setOnItemSelectedListener(this);
 
+        Button nextRoundButton = (Button) findViewById(R.id.game_button_next_round);
+        nextRoundButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                matchStats.addRound();
+            }
+        });
+
+        displayScore();
         //matchStats = new MatchStats(matchId, currentMatch.getGameVariant(), teamList); TODO: ce truc
     }
 
@@ -105,15 +111,15 @@ public class GameActivity extends BaseAppCompatActivity implements
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Meld meld = (Meld) parent.getItemAtPosition(position);
-        int meldValue = meld.value();
         switch (parent.getId()) {
             case R.id.score_meld_spinner_1:
-                updateScore(meldValue, 0);
+                matchStats.setMeld(0, meld);
                 break;
             case R.id.score_meld_spinner_2:
-                updateScore(0, meldValue);
+                matchStats.setMeld(1, meld);
                 break;
         }
+        displayScore();
     }
 
     @Override
@@ -134,16 +140,21 @@ public class GameActivity extends BaseAppCompatActivity implements
     }
 
     private void updateScore(int firstTeamScore, int secondTeamScore) {
-        this.firstTeamScore += firstTeamScore;
-        firstTeamScoreDisplay.setText(Integer.toString(this.firstTeamScore));
+        matchStats.setScore(new int[]{firstTeamScore, secondTeamScore});
+        displayScore();
+    }
 
-        this.secondTeamScore += secondTeamScore;
-        secondTeamScoreDisplay.setText(Integer.toString(this.secondTeamScore));
+    @SuppressLint("SetTextI18n")
+    private void displayScore() {
+        Integer firstTeamScore = matchStats.getCurrentRoundTeamScore(0);
+        Integer secondTeamScore = matchStats.getCurrentRoundTeamScore(1);
+        firstTeamScoreDisplay.setText(firstTeamScore.toString());
+        secondTeamScoreDisplay.setText(secondTeamScore.toString());
     }
 
     private void showScorePicker() {
         final Dialog dialog = new Dialog(this);
-        dialog.setTitle("hello");
+        dialog.setTitle(R.string.game_text_score_picker);
         dialog.setContentView(R.layout.score_picker);
         final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.score_picker);
         numberPicker.setMinValue(0);
@@ -163,6 +174,7 @@ public class GameActivity extends BaseAppCompatActivity implements
                         break;
                 }
                 dialog.dismiss();
+                displayScore();
             }
         });
 
