@@ -1,13 +1,12 @@
 package ch.epfl.sweng.jassatepfl.stats;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match.GameVariant;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
 import ch.epfl.sweng.jassatepfl.model.Round;
-import ch.epfl.sweng.jassatepfl.model.Team;
 
 /**
  * This class contains the methods and fields necessary to make statistics about a match and to
@@ -20,12 +19,10 @@ public class MatchStats {
     private String matchID;
     // The match' gameVariant. Used to choose how points are counted and so on
     private GameVariant gameVariant;
-    // Array containing the teams of this match
-    private List<Team> teams;
     private int nbTeam;
     // Array containing the score for each round by team
     private ArrayList<Round> rounds;
-    private List<Integer> totalScores;
+    private Map<String, Integer> totalScores;
     // Index to the current round
     private int currentRoundIndex;
     private boolean goalHasBeenReached;
@@ -34,79 +31,19 @@ public class MatchStats {
     public MatchStats() {
     }
 
-    public MatchStats(String matchID, GameVariant gameVariant, List<Team> teams) throws IllegalArgumentException {
-        this.nbTeam = gameVariant.getNumberOfTeam();
-        if (teams.size() != this.nbTeam) {
-            throw new IllegalArgumentException("Invalid number of teams");
-        }
-
-        for (Team t : teams) {
-            if (t.getNumberOfMembers() != gameVariant.getNumberOfPlayerByTeam()) {
-                throw new IllegalArgumentException("Invalid number of member in some team");
-            }
-        }
-
-        ArrayList<Team> tmpTeams = new ArrayList<>();
-        for (Team t : teams) {
-            if (tmpTeams.contains(t)) {
-                throw new IllegalArgumentException("Invalid list of team. A match cannot have identical teams");
-            } else {
-                tmpTeams.add(t);
-            }
-        }
-
+    public MatchStats(String matchID, GameVariant gameVariant) throws IllegalArgumentException {
         this.matchID = matchID;
         this.gameVariant = gameVariant;
-        this.teams = Collections.unmodifiableList(tmpTeams);
+        this.nbTeam = gameVariant.getNumberOfTeam();
         this.rounds = new ArrayList<>();
         this.rounds.add(new Round(nbTeam));
-        this.totalScores = new ArrayList<>(nbTeam);
+        this.totalScores = new HashMap<>();
         for (int i = 0; i < nbTeam; ++i) {
-            totalScores.add(0);
+            totalScores.put(concatKey(i), 0);
         }
         this.currentRoundIndex = 0;
         this.goalHasBeenReached = false;
         this.winnerIndex = -1;
-    }
-
-    /**
-     * Adds a new round to the match.
-     */
-    public void addRound() {
-        Round round = new Round(nbTeam);
-        rounds.add(round);
-        for (int i = 0; i < nbTeam; ++i) {
-            Integer tmp = totalScores.get(i);
-            tmp += rounds.get(currentRoundIndex).getTeamScore(i);
-            goalHasBeenReached |= tmp >= gameVariant.getPointGoal();
-            winnerIndex = goalHasBeenReached ? i : winnerIndex;
-            totalScores.set(i, tmp);
-        }
-        ++currentRoundIndex;
-    }
-
-    /**
-     * Sets the score for the current round. The array contains the number of points
-     * for each team in order.
-     *
-     * @param nbPoints the number of points made by each team in the current round
-     * @throws IllegalArgumentException If the number of score is not valid (ie not equal to the number of teams)
-     */
-    public void setScore(int[] nbPoints) throws IllegalArgumentException {
-        if (nbPoints.length != nbTeam) {
-            throw new IllegalArgumentException("Invalid number of scores");
-        }
-        rounds.get(currentRoundIndex).setScores(nbPoints);
-    }
-
-    /**
-     * Sets the meld to the corresponding team.
-     *
-     * @param teamIndex the index of the team
-     * @param meld      the meld
-     */
-    public void setMeld(int teamIndex, Meld meld) {
-        rounds.get(currentRoundIndex).addMeld(teamIndex, meld);
     }
 
     /**
@@ -115,7 +52,7 @@ public class MatchStats {
      * @return The matchID
      */
     public String getMatchID() {
-        return this.matchID;
+        return matchID;
     }
 
     /**
@@ -124,30 +61,7 @@ public class MatchStats {
      * @return The game variant
      */
     public GameVariant getGameVariant() {
-        return this.gameVariant;
-    }
-
-    /**
-     * Getter for the teams of this match
-     *
-     * @return A list of the teams
-     */
-    public List<Team> getTeams() {
-        return Collections.unmodifiableList(teams);
-    }
-
-    /**
-     * Getter for the specified team
-     *
-     * @param teamIndex The index of the team we want
-     * @return The team wanted
-     * @throws IllegalArgumentException If the teamIndex is not valid
-     */
-    public Team getTeam(int teamIndex) throws IllegalArgumentException {
-        if (teamIndex < 0 || teamIndex >= nbTeam) {
-            throw new IllegalArgumentException("Invalid team index");
-        }
-        return teams.get(teamIndex);
+        return gameVariant;
     }
 
     public int getNbTeam() {
@@ -158,19 +72,67 @@ public class MatchStats {
         return currentRoundIndex;
     }
 
-    public Integer getCurrentRoundTeamScore(int teamIndex) {
-        if (teamIndex < 0 || teamIndex >= nbTeam) {
-            throw new IllegalArgumentException("Invalid team index");
-        }
-        return rounds.get(currentRoundIndex).getTeamScore(teamIndex);
-    }
-
     public boolean goalHasBeenReached() {
         return goalHasBeenReached;
     }
 
     public int getWinnerIndex() {
         return winnerIndex;
+    }
+
+    public Integer getCurrentRoundTeamScore(int teamIndex) {
+        if (teamIndex < 0 || teamIndex >= nbTeam) {
+            throw new IllegalArgumentException("Invalid team index");
+        }
+        return rounds.get(currentRoundIndex).getTotalRoundScore(teamIndex);
+    }
+
+    public Integer getTotalMatchScore(int teamIndex) {
+        if (teamIndex < 0 || teamIndex >= nbTeam) {
+            throw new IllegalArgumentException("Invalid team index");
+        }
+        return totalScores.get(concatKey(teamIndex));
+    }
+
+    /**
+     * Adds a new round to the match.
+     */
+    public void finishRound() {
+        for (int i = 0; i < nbTeam; ++i) {
+            String key = concatKey(i);
+            Integer tmp = totalScores.get(key);
+            tmp += rounds.get(currentRoundIndex).getTotalRoundScore(i);
+            totalScores.put(key, tmp);
+            goalHasBeenReached |= tmp >= gameVariant.getPointGoal();
+            winnerIndex = goalHasBeenReached && winnerIndex == -1 ? i : winnerIndex;
+        }
+        Round round = new Round(nbTeam);
+        rounds.add(round);
+        ++currentRoundIndex;
+    }
+
+    public void setScore(int teamIndex, int score) {
+        if (teamIndex < 0 || teamIndex >= nbTeam) {
+            throw new IndexOutOfBoundsException();
+        }
+        rounds.get(currentRoundIndex).setScore(teamIndex, score);
+    }
+
+    /**
+     * Sets the meld to the corresponding team.
+     *
+     * @param teamIndex the index of the team
+     * @param meld      the meld
+     */
+    public void setMeld(int teamIndex, Meld meld) {
+        if (teamIndex < 0 || teamIndex >= nbTeam) {
+            throw new IndexOutOfBoundsException();
+        }
+        rounds.get(currentRoundIndex).addMeld(teamIndex, meld);
+    }
+
+    private String concatKey(int index) {
+        return "Team" + index;
     }
 
 }

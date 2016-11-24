@@ -14,11 +14,10 @@ import ch.epfl.sweng.jassatepfl.model.Match.Meld;
  */
 public class Round {
 
-    private final static String TEAM = "Team ";
-
     private int teamCount;
     private Map<String, Integer> scores;
     private Map<String, List<Meld>> melds;
+    private Map<String, Integer> meldScores;
 
     public Round() {
     }
@@ -27,9 +26,13 @@ public class Round {
         this.teamCount = teamCount;
         this.scores = new HashMap<>();
         this.melds = new HashMap<>();
+        this.meldScores = new HashMap<>();
+
         for (int i = 0; i < teamCount; ++i) {
-            scores.put(TEAM + i, 0);
-            melds.put(TEAM + i, new ArrayList<Meld>());
+            String key = concatKey(i);
+            scores.put(key, 0);
+            melds.put(key, new ArrayList<Meld>());
+            meldScores.put(key, 0);
         }
     }
 
@@ -42,7 +45,7 @@ public class Round {
      *
      * @return The points made
      */
-    public Collection<Integer> getScores() {
+    public Collection<Integer> getScores() { // TODO: maybe delete this
         return scores.values();
     }
 
@@ -52,11 +55,25 @@ public class Round {
      * @param teamIndex the index of the team
      * @return the score of the team for this round
      */
-    public Integer getTeamScore(int teamIndex) {
+    public Integer getRoundTeamScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= teamCount) {
             throw new IndexOutOfBoundsException();
         }
-        return scores.get(TEAM + teamIndex);
+        return scores.get(concatKey(teamIndex));
+    }
+
+    public Integer getRoundMeldScore(int teamIndex) {
+        if (teamIndex < 0 || teamIndex >= teamCount) {
+            throw new IndexOutOfBoundsException();
+        }
+        return meldScores.get(concatKey(teamIndex));
+    }
+
+    public Integer getTotalRoundScore(int teamIndex) {
+        if (teamIndex < 0 || teamIndex >= teamCount) {
+            throw new IndexOutOfBoundsException();
+        }
+        return getRoundTeamScore(teamIndex) + getRoundMeldScore(teamIndex);
     }
 
     /**
@@ -69,29 +86,14 @@ public class Round {
         if (teamIndex < 0 || teamIndex >= teamCount) {
             throw new IndexOutOfBoundsException();
         }
-        return Collections.unmodifiableList(melds.get(TEAM + teamIndex));
+        return Collections.unmodifiableList(melds.get(concatKey(teamIndex)));
     }
 
-    /**
-     * Adds the points to the round.
-     *
-     * @param scores the points made by the teams
-     */
-    public void setScores(int... scores) {
-        if (scores.length != teamCount) {
-            throw new IllegalArgumentException("Number of points does not match number of teams.");
-        }
-        for (int i = 0; i < teamCount; ++i) {
-            this.scores.put(TEAM + i, scores[i]);
-        }
-    }
-
-    public void addToTeamScore(int teamIndex, int points) {
+    public void setScore(int teamIndex, int score) {
         if (teamIndex < 0 || teamIndex >= teamCount) {
             throw new IndexOutOfBoundsException();
         }
-        Integer currentPoints = scores.get(TEAM + teamIndex);
-        scores.put(TEAM + teamIndex, currentPoints + points);
+        scores.put(concatKey(teamIndex), score);
     }
 
     /**
@@ -105,8 +107,15 @@ public class Round {
         if (teamIndex < 0 || teamIndex >= teamCount) {
             throw new IndexOutOfBoundsException();
         }
-        melds.get(TEAM + teamIndex).add(meld);
-        addToTeamScore(teamIndex, meld.value());
+
+        String key = concatKey(teamIndex);
+        melds.get(key).add(meld);
+        Integer tmp = meldScores.get(key);
+        meldScores.put(key, tmp + meld.value());
+    }
+
+    private String concatKey(int index) {
+        return "Team" + index;
     }
 
 }
