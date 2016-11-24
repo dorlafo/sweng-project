@@ -407,6 +407,25 @@ public class Match {
                     return 2;
             }
         }
+
+        public int getPointGoal() {
+            switch (this) {
+                case ROI:
+                case POMME:
+                    return 20;
+                case CHIBRE:
+                    return 1000;
+                case PIQUE_DOUBLE:
+                    return 1500;
+                case OBEN_ABE:
+                case UNDEN_UFE:
+                case SLALOM:
+                case CHICANE:
+                case JASS_MARANT:
+                default:
+                    return 2500;
+            }
+        }
     }
 
     /**
