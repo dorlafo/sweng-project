@@ -24,6 +24,12 @@
             android:text="@string/dialog_cancel"/>
 
         <Button
+            android:id="@+id/score_picker_match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_match"/>
+
+        <Button
             android:id="@+id/score_picker_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

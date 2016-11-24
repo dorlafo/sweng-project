@@ -28,6 +28,7 @@ public class GameActivity extends BaseAppCompatActivity implements
         OnClickListener, OnItemSelectedListener {
 
     private final static int TOTAL_POINTS_IN_ROUND = 157;
+    private final static int MATCH_POINTS = 257;
 
     private Match currentMatch;
     private MatchStats matchStats;
@@ -120,10 +121,8 @@ public class GameActivity extends BaseAppCompatActivity implements
 
     }
 
-    private void computeScores(int newVal) {
-        // Check if there was match
-        int callerScore = newVal == TOTAL_POINTS_IN_ROUND ? TOTAL_POINTS_IN_ROUND + 100 : newVal;
-        int otherTeamScore = TOTAL_POINTS_IN_ROUND - newVal;
+    private void computeScores(int callerScore) {
+        int otherTeamScore = TOTAL_POINTS_IN_ROUND - callerScore;
         switch (caller) {
             case FIRST_TEAM:
                 updateScore(callerScore, otherTeamScore);
@@ -150,6 +149,22 @@ public class GameActivity extends BaseAppCompatActivity implements
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(TOTAL_POINTS_IN_ROUND);
         numberPicker.setWrapSelectorWheel(false);
+
+        Button match = (Button) dialog.findViewById(R.id.score_picker_match);
+        match.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (caller) {
+                    case FIRST_TEAM:
+                        updateScore(MATCH_POINTS, 0);
+                        break;
+                    case SECOND_TEAM:
+                        updateScore(0, MATCH_POINTS);
+                        break;
+                }
+                dialog.dismiss();
+            }
+        });
 
         Button confirmScore = (Button) dialog.findViewById(R.id.score_picker_confirm);
         confirmScore.setOnClickListener(new OnClickListener() {
