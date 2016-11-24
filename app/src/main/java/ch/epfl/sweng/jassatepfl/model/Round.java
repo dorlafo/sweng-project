@@ -1,23 +1,40 @@
 package ch.epfl.sweng.jassatepfl.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import ch.epfl.sweng.jassatepfl.model.Match.Meld;
 
 /**
  * Class representing a round object. It contains the points and melds obtained in the round.
  */
 public class Round {
 
-    private int points;
-    private List<Match.Meld> melds;
+    private final static String TEAM = "Team ";
+
+    private int teamCount;
+    private Map<String, Integer> scores;
+    private Map<String, List<Meld>> melds;
 
     public Round() {
     }
 
-    public Round(int points, List<Match.Meld> melds) {
-        this.points = points;
-        this.melds = new ArrayList<>(melds);
+    public Round(int teamCount) {
+        this.teamCount = teamCount;
+        this.scores = new HashMap<>();
+        this.melds = new HashMap<>();
+        for (int i = 0; i < teamCount; ++i) {
+            scores.put(TEAM + i, 0);
+            melds.put(TEAM + i, new ArrayList<Meld>());
+        }
+    }
+
+    public int getTeamCount() {
+        return teamCount;
     }
 
     /**
@@ -25,36 +42,71 @@ public class Round {
      *
      * @return The points made
      */
-    public int getPoints() {
-        return points;
+    public Collection<Integer> getScores() {
+        return scores.values();
     }
 
     /**
-     * Getter for the meld made in this round
+     * Returns the score of the specified team.
      *
-     * @return A list of the meld made
+     * @param teamIndex the index of the team
+     * @return the score of the team for this round
      */
-    public List<Match.Meld> getMelds() {
-        return Collections.unmodifiableList(melds);
+    public Integer getTeamScore(int teamIndex) {
+        if (teamIndex < 0 || teamIndex >= teamCount) {
+            throw new IndexOutOfBoundsException();
+        }
+        return scores.get(TEAM + teamIndex);
     }
 
     /**
-     * Add the points passed in parameters to the current points
+     * Returns the melds obtained by the specified team in this round.
      *
-     * @param p The points to be add
+     * @param teamIndex the index of the team
+     * @return the melds
      */
-    public void addPoints(int p) {
-        this.points += p;
+    public List<Meld> getMelds(int teamIndex) {
+        if (teamIndex < 0 || teamIndex >= teamCount) {
+            throw new IndexOutOfBoundsException();
+        }
+        return Collections.unmodifiableList(melds.get(TEAM + teamIndex));
     }
 
     /**
-     * Add the meld passed in parameters to the current meld list and the points for this meld to the points
+     * Adds the points to the round.
      *
-     * @param m The meld to be add
+     * @param scores the points made by the teams
      */
-    public void addMeld(Match.Meld m) {
-        this.melds.add(m);
-        addPoints(m.value());
+    public void setScores(int... scores) {
+        if (scores.length != teamCount) {
+            throw new IllegalArgumentException("Number of points does not match number of teams.");
+        }
+        for (int i = 0; i < teamCount; ++i) {
+            this.scores.put(TEAM + i, scores[i]);
+        }
+    }
+
+    public void addToTeamScore(int teamIndex, int points) {
+        if (teamIndex < 0 || teamIndex >= teamCount) {
+            throw new IndexOutOfBoundsException();
+        }
+        Integer currentPoints = scores.get(TEAM + teamIndex);
+        scores.put(TEAM + teamIndex, currentPoints + points);
+    }
+
+    /**
+     * Adds the meld passed in parameters to the current meld list and the points
+     * for this meld to the points.
+     *
+     * @param teamIndex the index of the team that got the meld
+     * @param meld      the meld
+     */
+    public void addMeld(int teamIndex, Meld meld) {
+        if (teamIndex < 0 || teamIndex >= teamCount) {
+            throw new IndexOutOfBoundsException();
+        }
+        melds.get(TEAM + teamIndex).add(meld);
+        addToTeamScore(teamIndex, meld.value());
     }
 
 }
