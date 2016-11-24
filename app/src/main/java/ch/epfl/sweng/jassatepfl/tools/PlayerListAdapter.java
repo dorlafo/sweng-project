@@ -58,6 +58,9 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         if(match == null) {
             playerName.setText(p.toString());
         }
+        else if (match.teamNbForPlayer(p) == -1){
+            playerName.setText(p.toString() + " : no team assigned yet");
+        }
         else {
             playerName.setText(p.toString() + " : team " + match.teamNbForPlayer(p));
         }
