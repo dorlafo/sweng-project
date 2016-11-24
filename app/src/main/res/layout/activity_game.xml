@@ -51,18 +51,16 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/score_update_cancel_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#FAFAFA"
-                    android:src="@drawable/ic_undo_black"/>
-
-                <ImageButton
                     android:id="@+id/score_meld_spinner_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#FAFAFA"
                     android:src="@drawable/ic_chat_bubble_outline_black"/>
+
+                <Space
+                    android:layout_width="@dimen/game_button_padding"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"/>
 
                 <ImageButton
                     android:id="@+id/score_update_1"
@@ -82,6 +80,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_centerVertical="true"/>
+
+    <ImageButton
+        android:id="@+id/score_update_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="#FAFAFA"
+        android:src="@drawable/ic_undo_black"/>
 
     <TextView
         android:id="@+id/game_playing_to"
@@ -131,18 +138,16 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/score_update_cancel_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#FAFAFA"
-                    android:src="@drawable/ic_undo_black"/>
-
-                <ImageButton
                     android:id="@+id/score_meld_spinner_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#FAFAFA"
                     android:src="@drawable/ic_chat_bubble_outline_black"/>
+
+                <Space
+                    android:layout_width="@dimen/game_button_padding"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"/>
 
                 <ImageButton
                     android:id="@+id/score_update_2"

@@ -11,7 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/game_text_score_picker"/>
+        android:text="@string/game_text_score_picker"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"/>
 
     <NumberPicker
         android:id="@+id/score_picker"
@@ -23,7 +25,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/score_picker">
+        android:layout_below="@+id/score_picker"
+        android:layout_centerHorizontal="true">
 
         <Button
             android:id="@+id/score_picker_cancel"

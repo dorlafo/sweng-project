@@ -111,6 +111,20 @@ public class MatchStats {
         ++currentRoundIndex;
     }
 
+    public void cancelLastRound() {
+        if (currentRoundIndex == 0) {
+            throw new IllegalStateException();
+        }
+        --currentRoundIndex;
+        for (int i = 0; i < nbTeam; ++i) {
+            String key = concatKey(i);
+            Integer tmp = totalScores.get(key);
+            tmp -= rounds.get(currentRoundIndex).getTotalRoundScore(i);
+            totalScores.put(key, tmp);
+        }
+        rounds.remove(currentRoundIndex);
+    }
+
     public void setScore(int teamIndex, int score) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
             throw new IndexOutOfBoundsException();
