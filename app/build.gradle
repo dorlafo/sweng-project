@@ -119,7 +119,8 @@ task jacocoReport(type: JacocoReport, dependsOn: "connectedAndroidTest") {
                     '**/Manifest*.*',
                     '**/*Test*.*',
                     '**/android/**/*.*',
-                    '**/injections/*.*/'
+                    '**/injections/*.*/',
+                    '**/helpers/*.*/'
             ]
     )
 
