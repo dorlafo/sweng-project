@@ -1,11 +1,12 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
-import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -18,8 +19,7 @@ import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.SECOND_TEAM;
 
-public class GameActivity extends BaseAppCompatActivity implements
-        OnClickListener, OnValueChangeListener {
+public class GameActivity extends BaseAppCompatActivity implements OnClickListener {
 
     private final static int TOTAL_POINTS_IN_ROUND = 157;
 
@@ -72,7 +72,6 @@ public class GameActivity extends BaseAppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        // TODO: numberPicker
         switch (v.getId()) {
             case R.id.score_update_1:
                 caller = FIRST_TEAM;
@@ -81,10 +80,10 @@ public class GameActivity extends BaseAppCompatActivity implements
                 caller = SECOND_TEAM;
                 break;
         }
+        showScorePicker();
     }
 
-    @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+    private void computeScores(int newVal) {
         // Check if there was match
         int callerScore = newVal == TOTAL_POINTS_IN_ROUND ? TOTAL_POINTS_IN_ROUND + 100 : newVal;
         int otherTeamScore = TOTAL_POINTS_IN_ROUND - newVal;
@@ -104,6 +103,35 @@ public class GameActivity extends BaseAppCompatActivity implements
 
         this.secondTeamScore += secondTeamScore;
         secondTeamScoreDisplay.setText(Integer.toString(this.secondTeamScore));
+    }
+
+    private void showScorePicker() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setTitle("hello");
+        dialog.setContentView(R.layout.score_picker);
+        final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.score_picker);
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(TOTAL_POINTS_IN_ROUND);
+        numberPicker.setWrapSelectorWheel(false);
+
+        Button confirmScore = (Button) dialog.findViewById(R.id.score_picker_confirm);
+        confirmScore.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                computeScores(numberPicker.getValue());
+                dialog.dismiss();
+            }
+        });
+
+        Button cancel = (Button) dialog.findViewById(R.id.score_picker_cancel);
+        cancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 }

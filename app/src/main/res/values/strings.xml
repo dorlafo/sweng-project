@@ -25,6 +25,7 @@
     <string name="game_team_name_1">Team 1</string>
     <string name="game_team_name_2">Team 2</string>
     <string name="game_team_name_3">Team 3</string>
+    <string name="game_text_score_picker">Your score for this round</string>
 
     <string name="list_empty_list">No matches are available</string>
 
