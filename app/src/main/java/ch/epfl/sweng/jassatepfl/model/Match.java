@@ -273,6 +273,7 @@ public class Match {
      * The different meld available
      */
     public enum Meld {
+        LAST_TRICK("Cinq de der"),
         MARRIAGE("Stöck"),
         THREE_CARDS("Trois cartes"),
         FIFTY("Cinquante"),
@@ -298,6 +299,8 @@ public class Match {
          */
         public int value() {
             switch (this) {
+                case LAST_TRICK:
+                    return 5;
                 case MARRIAGE:
                 case THREE_CARDS:
                     return 20;
