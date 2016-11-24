@@ -4,9 +4,13 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -14,12 +18,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Match.Meld;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.SECOND_TEAM;
 
-public class GameActivity extends BaseAppCompatActivity implements OnClickListener {
+public class GameActivity extends BaseAppCompatActivity implements
+        OnClickListener, OnItemSelectedListener {
 
     private final static int TOTAL_POINTS_IN_ROUND = 157;
 
@@ -67,6 +73,18 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         ImageButton secondTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_2);
         secondTeamUpdateButton.setOnClickListener(this);
 
+        ArrayAdapter<Meld> meldAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, Meld.values());
+        meldAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        Spinner firstMeldSpinner = (Spinner) findViewById(R.id.score_meld_spinner_1);
+        firstMeldSpinner.setAdapter(meldAdapter);
+        firstMeldSpinner.setOnItemSelectedListener(this);
+
+        Spinner secondMeldSpinner = (Spinner) findViewById(R.id.score_meld_spinner_2);
+        secondMeldSpinner.setAdapter(meldAdapter);
+        secondMeldSpinner.setOnItemSelectedListener(this);
+
         //matchStats = new MatchStats(matchId, currentMatch.getGameVariant(), teamList); TODO: ce truc
     }
 
@@ -81,6 +99,25 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                 break;
         }
         showScorePicker();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Meld meld = (Meld) parent.getItemAtPosition(position);
+        int meldValue = meld.value();
+        switch (parent.getId()) {
+            case R.id.score_meld_spinner_1:
+                updateScore(meldValue, 0);
+                break;
+            case R.id.score_meld_spinner_2:
+                updateScore(0, meldValue);
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private void computeScores(int newVal) {

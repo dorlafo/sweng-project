@@ -282,8 +282,13 @@ public class Match {
 
         private final String meldName;
 
-        private Meld(String meldName) {
+        Meld(String meldName) {
             this.meldName = meldName;
+        }
+
+        @Override
+        public String toString() {
+            return meldName;
         }
 
         /**

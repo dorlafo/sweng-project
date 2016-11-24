@@ -58,6 +58,12 @@
                     android:background="#FAFAFA"
                     android:src="@drawable/ic_replay_black"/>
 
+                <Spinner
+                    android:id="@+id/score_meld_spinner_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"/>
+
                 <ImageButton
                     android:id="@+id/score_update_1"
                     android:layout_width="wrap_content"
@@ -123,6 +129,12 @@
                     android:layout_height="wrap_content"
                     android:background="#FAFAFA"
                     android:src="@drawable/ic_replay_black"/>
+
+                <Spinner
+                    android:id="@+id/score_meld_spinner_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"/>
 
                 <ImageButton
                     android:id="@+id/score_update_2"
