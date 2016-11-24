@@ -98,6 +98,10 @@
     <string name="invite_button_text_invite">Invite</string>
     <string name="invite_welcome_text">Look for players, add them and click on Invite</string>
     <string name="invite_search_player">Search for Player</string>
+    <string name="dialog_cards">Cards ?</string>
+    <string name="dialog_have_cards">Do you have cards available for this game ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 
     <color name="greenCardBoard">#2B6C3E</color>
