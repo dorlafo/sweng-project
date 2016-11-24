@@ -32,6 +32,7 @@ public class Match {
     private long expirationTime;
     private String matchID;
     private List<Player.PlayerID> hasCards;
+    private Player.PlayerID nobody = new Player.PlayerID(1);
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase.
@@ -69,6 +70,7 @@ public class Match {
         this.expirationTime = expirationTime;
         this.matchID = matchID;
         this.hasCards = hasCards;
+        if (hasCards.isEmpty()){this.hasCards.add(nobody);}
     }
 
     /**
@@ -178,14 +180,24 @@ public class Match {
      *
      * @param hasCards  list of the Players who have cards.
      */
-    public void setHasCards(List<Player.PlayerID> hasCards) {this.hasCards = hasCards;}
+    public void setHasCards(List<Player.PlayerID> hasCards) {
+        this.hasCards = hasCards;
+        if (hasCards.isEmpty()){this.hasCards.add(nobody);}
+    }
 
     /**
      * Add one player who has cards to the list hasCards
      *
      * @param playerID  the Id of the player who has cards
      */
-    public void addPlayerWhoHasCards(Player.PlayerID playerID) {hasCards.add(playerID);}
+    public void addPlayerWhoHasCards(Player.PlayerID playerID) {
+        if (playerID != null && !hasCards.contains(playerID)) {
+            hasCards.add(playerID);
+            if (hasCards.contains(nobody)){
+                hasCards.remove(nobody);
+            }
+        }
+    }
 
     /**
      * Checker for hasCards, return false if empty, true otherwise.
@@ -193,8 +205,17 @@ public class Match {
      * @return boolean true if someone have cards, false otherwise.
      */
     public boolean hasCards() {
-        if(hasCards.isEmpty()){return false;}
+        if(hasCards.isEmpty() || hasCards.contains(nobody)){return false;}
         else return true; }
+
+    public void removePlayerWhoHasCards(Player.PlayerID playerID){
+        if (playerID != null && hasCards.contains(playerID)) {
+            hasCards.remove(playerID);
+            if (hasCards.isEmpty()) {
+                hasCards.add(nobody);
+            }
+        }
+    }
 
     public void copy(Match m) {
         players = m.getPlayers();
