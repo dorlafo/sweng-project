@@ -25,8 +25,11 @@ public class MatchStats {
     private int nbTeam;
     // Array containing the score for each round by team
     private ArrayList<Round> rounds;
+    private List<Integer> totalScores;
     // Index to the current round
     private int currentRoundIndex;
+    private boolean goalHasBeenReached;
+    private int winnerIndex;
 
     public MatchStats() {
     }
@@ -56,7 +59,14 @@ public class MatchStats {
         this.gameVariant = gameVariant;
         this.teams = Collections.unmodifiableList(tmpTeams);
         this.rounds = new ArrayList<>();
-        this.currentRoundIndex = -1;
+        this.rounds.add(new Round(nbTeam));
+        this.totalScores = new ArrayList<>(nbTeam);
+        for (int i = 0; i < nbTeam; ++i) {
+            totalScores.add(0);
+        }
+        this.currentRoundIndex = 0;
+        this.goalHasBeenReached = false;
+        this.winnerIndex = -1;
     }
 
     /**
@@ -65,6 +75,13 @@ public class MatchStats {
     public void addRound() {
         Round round = new Round(nbTeam);
         rounds.add(round);
+        for (int i = 0; i < nbTeam; ++i) {
+            Integer tmp = totalScores.get(i);
+            tmp += rounds.get(currentRoundIndex).getTeamScore(i);
+            goalHasBeenReached |= tmp >= gameVariant.getPointGoal();
+            winnerIndex = goalHasBeenReached ? i : winnerIndex;
+            totalScores.set(i, tmp);
+        }
         ++currentRoundIndex;
     }
 
@@ -146,6 +163,14 @@ public class MatchStats {
             throw new IllegalArgumentException("Invalid team index");
         }
         return rounds.get(currentRoundIndex).getTeamScore(teamIndex);
+    }
+
+    public boolean goalHasBeenReached() {
+        return goalHasBeenReached;
+    }
+
+    public int getWinnerIndex() {
+        return winnerIndex;
     }
 
 }
