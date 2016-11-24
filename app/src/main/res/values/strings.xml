@@ -51,6 +51,8 @@
     <string name="dialog_add_player">Invite Player</string>
     <string name="dialog_add_confirmation">Add</string>
     <string name="dialog_remove_player">Remove this player?</string>
+    <string name="dialog_select_team">Choose the team for player </string>
+    <string name="dialog_team_selection_confirmation">Select</string>
 
     <string name="date_format_match_display">dd/MM/yyyy HH:mm:ss</string>
     <string name="date_format_match_creation">dd/MM HH:mm</string>
@@ -98,5 +100,4 @@
     <string name="invite_button_text_invite">Invite</string>
     <string name="invite_welcome_text">Look for players, add them and click on Invite</string>
     <string name="invite_search_player">Search for Player</string>
-
 </resources>
