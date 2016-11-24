@@ -192,7 +192,9 @@ public class Match {
      *
      * @return boolean true if someone have cards, false otherwise.
      */
-    public boolean hasCards() {return !hasCards.isEmpty();}
+    public boolean hasCards() {
+        if(hasCards.isEmpty()){return false;}
+        else return true; }
 
     public void copy(Match m) {
         players = m.getPlayers();
