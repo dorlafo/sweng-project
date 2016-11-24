@@ -11,28 +11,28 @@ import ch.epfl.sweng.jassatepfl.model.Rank;
 /**
  * @author Amaury Combes
  */
-public class MatchLeaf extends Leaf<Match> {
-    private LeafField<List<Player>> playersLeaf = new LeafField<>("players");
-    private LeafField<GPSPoint> locationLeaf = new LeafField<>("location");
-    private LeafField<String> descriptionLeaf = new LeafField<>("description");
-    private LeafField<Rank> rankLeaf = new LeafField<>("rank");
-    private LeafField<Boolean> privateMatchLeaf = new LeafField<>("privateMatch");
-    private LeafField<Match.GameVariant> gameVariantLeaf = new LeafField<>("gameVariant");
-    private LeafField<Integer> maxPlayerNumberLeaf = new LeafField<>("maxPlayerNumber");
-    private LeafField<Long> expirationTimeLeaf = new LeafField<>("expirationTime");
-    private LeafField<String> matchIDLeaf = new LeafField<>("matchID");
+public class MatchLeafTest extends LeafTest<Match> {
+    private LeafFieldTest<List<Player>> playersLeaf = new LeafFieldTest<>("players");
+    private LeafFieldTest<GPSPoint> locationLeaf = new LeafFieldTest<>("location");
+    private LeafFieldTest<String> descriptionLeaf = new LeafFieldTest<>("description");
+    private LeafFieldTest<Rank> rankLeaf = new LeafFieldTest<>("rank");
+    private LeafFieldTest<Boolean> privateMatchLeaf = new LeafFieldTest<>("privateMatch");
+    private LeafFieldTest<Match.GameVariant> gameVariantLeaf = new LeafFieldTest<>("gameVariant");
+    private LeafFieldTest<Integer> maxPlayerNumberLeaf = new LeafFieldTest<>("maxPlayerNumber");
+    private LeafFieldTest<Long> expirationTimeLeaf = new LeafFieldTest<>("expirationTime");
+    private LeafFieldTest<String> matchIDLeaf = new LeafFieldTest<>("matchID");
 
     /**
-     * Constructor of the Leaf class
+     * Constructor of the LeafTest class
      *
-     * @param id the id of the Leaf that is created
+     * @param id the id of the LeafTest that is created
      */
-    public MatchLeaf(String id) {
+    public MatchLeafTest(String id) {
         super(id);
     }
 
     @Override
-    public LeafField getChild(String id) {
+    public LeafFieldTest getChild(String id) {
         switch (id) {
             case "players":
                 return playersLeaf;

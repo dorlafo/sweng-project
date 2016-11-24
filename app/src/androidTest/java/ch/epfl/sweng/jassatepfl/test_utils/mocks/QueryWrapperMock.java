@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.QueryWrapper;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.Leaf;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
@@ -22,18 +22,18 @@ import static org.mockito.Mockito.when;
  * @author Amaury Combes
  */
 public class QueryWrapperMock extends QueryWrapper{
-    private final List<Leaf> elements;
+    private final List<LeafTest> elements;
     private String childOrder;
     private int numOfValueListener = 0;
     private int numOfChildListener = 0;
 
-    public QueryWrapperMock(List<Leaf> elems, String childOrder) {
+    public QueryWrapperMock(List<LeafTest> elems, String childOrder) {
         super();
         elements = new ArrayList<>(elems);
         this.childOrder = childOrder;
     }
 
-    private QueryWrapperMock(List<Leaf> elems, int numOfValueListener, int numOfChildListener) {
+    private QueryWrapperMock(List<LeafTest> elems, int numOfValueListener, int numOfChildListener) {
         super();
         elements = new ArrayList<>(elems);
         this.numOfValueListener = numOfValueListener;
@@ -44,8 +44,8 @@ public class QueryWrapperMock extends QueryWrapper{
     public QueryWrapper startAt(String path) {
         int i = 0;
         int listSize = elements.size();
-        List<Leaf> elems = new ArrayList<>(elements);
-        for(Leaf l: elems) {
+        List<LeafTest> elems = new ArrayList<>(elements);
+        for(LeafTest l: elems) {
             if(!l.getId().startsWith(path)) elems.remove(l);
         }
         return new QueryWrapperMock(elems, numOfValueListener, numOfChildListener);
@@ -63,8 +63,8 @@ public class QueryWrapperMock extends QueryWrapper{
 
     @Override
     public QueryWrapper equalTo(Boolean b) {
-        List<Leaf> newLeafs = new ArrayList<>();
-        for(Leaf l: elements) {
+        List<LeafTest> newLeafs = new ArrayList<>();
+        for(LeafTest l: elements) {
             Match p = (Match) l.getData();
             if(p.isPrivateMatch() == b) {
                 newLeafs.add(l);
@@ -78,7 +78,7 @@ public class QueryWrapperMock extends QueryWrapper{
         ++numOfValueListener;
         new Thread() {
             public void run() {
-                for(Leaf l: elements) {
+                for(LeafTest l: elements) {
                     Player p = null;
                     Match m = null;
                     DataSnapshot dSnap = mock(DataSnapshot.class);
@@ -103,7 +103,7 @@ public class QueryWrapperMock extends QueryWrapper{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (final Leaf l : elements) {
+                for (final LeafTest l : elements) {
 
                     Handler uiHandler = new Handler(Looper.getMainLooper());
                     Runnable toRun = new Runnable() {

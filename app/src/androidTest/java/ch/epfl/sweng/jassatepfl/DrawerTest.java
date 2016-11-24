@@ -32,7 +32,7 @@ public final class DrawerTest extends InjectedBaseActivityTest {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.twoPlayersMatch());
         matches.add(DummyDataTest.onePlayerMatch());
-        dbRefWrapMock.addMatches(matches);
+        dbRefWrapTest.addMatches(matches);
 
         getActivity();
     }
@@ -72,7 +72,7 @@ public final class DrawerTest extends InjectedBaseActivityTest {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_maps));
         onView(withId(R.id.maps_menu_button)).check(matches(isDisplayed()));
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test

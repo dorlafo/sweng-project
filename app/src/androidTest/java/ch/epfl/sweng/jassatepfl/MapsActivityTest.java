@@ -32,21 +32,21 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.twoPlayersMatch());
         matches.add(DummyDataTest.onePlayerMatch());
-        dbRefWrapMock.addMatches(matches);
+        dbRefWrapTest.addMatches(matches);
 
         getActivity();
 
         onView(withId(R.id.drawer_layout)).check(matches(isClosed()));
         onView(withId(R.id.maps_menu_button)).perform(click());
         onView(withId(R.id.drawer_layout)).check(matches(isOpen()));
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     /*@Test PASSES ONLY LOCALY
     public void testMarkerDisplaysDialog() {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.match_one_p_california());
-        dbRefWrapMock.addMatches(matches);
+        dbRefWrapTest.addMatches(matches);
 
         getActivity();
 
@@ -67,42 +67,42 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
             e.printStackTrace();
             fail();
         }
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }*/
 
     /*@Test WAIT NEW WAITING PLAYER ACTIVITY
     public void testAddPlayerOnMatchActivity() {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.onePlayerMatch());
-        dbRefWrapMock.addMatches(matches);
+        dbRefWrapTest.addMatches(matches);
 
         getActivity();
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Rolex"));
-        assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
+        assertMatchContainsNPlayers(dbRefWrapTest, "one_player", 1);
         try {
             marker.click();
             onData(withText("Rolex")).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
-            assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
-            assertMatchContainsPlayer(dbRefWrapMock, "one_player", new Player.PlayerID("696969"));
+            assertMatchContainsNPlayers(dbRefWrapTest, "one_player", 2);
+            assertMatchContainsPlayer(dbRefWrapTest, "one_player", new Player.PlayerID("696969"));
         } catch(Exception e) {
             fail();
         }
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }*/
 
    /* @Test PASSES LOCALY
     public void testDoNoAddWhenMatchFull() {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.matchFullCalifornia());
-        dbRefWrapMock.addMatches(matches);
+        dbRefWrapTest.addMatches(matches);
 
         getActivity();
 
-        assertMatchContainsNPlayers(dbRefWrapMock, "fullCalifornia", 4);
+        assertMatchContainsNPlayers(dbRefWrapTest, "fullCalifornia", 4);
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("CO"));
         try {
@@ -118,21 +118,21 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         } catch(Exception e) {
             fail();
         }
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test
     public void testDoNotAddWhenAlreadyInMatch() {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.matchBobCalifornia());
-        dbRefWrapMock.addMatches(matches);
+        dbRefWrapTest.addMatches(matches);
 
         getActivity();
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("CO"));
-        assertMatchContainsNPlayers(dbRefWrapMock, "bobCalifornia", 1);
-        assertMatchContainsPlayer(dbRefWrapMock, "bobCalifornia", new Player.PlayerID("696969"));
+        assertMatchContainsNPlayers(dbRefWrapTest, "bobCalifornia", 1);
+        assertMatchContainsPlayer(dbRefWrapTest, "bobCalifornia", new Player.PlayerID("696969"));
         try {
             Thread.sleep(3000);
             marker.click();
@@ -146,7 +146,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         } catch (Exception e) {
             fail();
         }
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }*/
 
 }

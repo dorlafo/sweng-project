@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.*;
-import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 
 /**
  * InjectedBaseActivityTest is the base class for the tests. It needs to remains in the main folder
@@ -29,7 +29,7 @@ public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
     @Inject
     protected FirebaseAuth fAuth;
 
-    protected DBRefWrapMock dbRefWrapMock;
+    protected DBRefWrapTest dbRefWrapTest;
 
     public InjectedBaseActivityTest(Class activityClass) {
         super(activityClass);
@@ -39,11 +39,11 @@ public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
     protected void setUp() throws Exception {
         super.setUp();
         App app = (App) getInstrumentation().getTargetContext().getApplicationContext();
-        FakeGraph component = DaggerFakeGraph.builder().fakeModules(new FakeModules()).build();
+        FakeGraphTest component = DaggerFakeGraph.builder().fakeModules(new FakeModulesTest()).build();
         app.setGraph(component);
         component.inject(this);
         //App.getInstance().graph().inject(this);
-        dbRefWrapMock = (DBRefWrapMock) dbReferenceWrapper;
+        dbRefWrapTest = (DBRefWrapTest) dbReferenceWrapper;
     }
 
     @Override

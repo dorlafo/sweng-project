@@ -35,13 +35,13 @@ import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContain
         Set<Match> matches = new HashSet<>();
         Match matchOne = DummyDataTest.onePlayerMatch();
         matches.add(matchOne);
-        dbRefWrapMock.addMatches(matches);
+        dbRefWrapTest.addMatches(matches);
 
         act = getActivity();
         assertEquals(fAuth.getCurrentUser().getDisplayName(), "696969");
 
-        assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
-        DatabaseUtils.addPlayerToMatch(act, dbRefWrapMock, "one_player", "696969", matchOne);
-        assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
+        assertMatchContainsNPlayers(dbRefWrapTest, "one_player", 1);
+        DatabaseUtils.addPlayerToMatch(act, dbRefWrapTest, "one_player", "696969", matchOne);
+        assertMatchContainsNPlayers(dbRefWrapTest, "one_player", 2);
     }
 }*/

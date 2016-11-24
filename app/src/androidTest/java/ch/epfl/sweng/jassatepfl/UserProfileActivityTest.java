@@ -35,13 +35,14 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
         //Fill the database as you want with addPlayers and addMatches
         Set<Player> playerSet = new HashSet<Player>();
         playerSet.add(new Player(new Player.PlayerID("123456"), "Not Pass", "You Shall", new Rank(123)));
-        dbRefWrapMock.addPlayers(playerSet);
+        dbRefWrapTest.addPlayers(playerSet);
 
         //Start the activity
         act = (UserProfileActivity) getActivity();
 
         //Write your assertions
         try {
+            Thread.sleep(3000);
             Field playerIDField = act.getClass().getDeclaredField("mtwPlayerID");
             Field playerLastNameField = act.getClass().getDeclaredField("mtwLastName");
             Field playerFirstNameField = act.getClass().getDeclaredField("mtwFirstName");
@@ -55,7 +56,6 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
             TextView fnView = (TextView) playerFirstNameField.get(act);
             TextView rankView = (TextView) playerRankField.get(act);
 
-            Thread.sleep(3000);
 
             assertEquals("Player id : 696969", idView.getText().toString());
             assertEquals("Last name : LeBricoleur", lnView.getText().toString());
@@ -66,7 +66,7 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
         }
 
         //Reset the local database
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
 }

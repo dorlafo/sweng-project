@@ -11,9 +11,9 @@ import dagger.Component;
  */
 @Singleton
 @Component(modules = {
-        FakeModules.class
+        FakeModulesTest.class
 })
-public interface FakeGraph extends Graph {
+public interface FakeGraphTest extends Graph {
 
     void inject(InjectedBaseActivityTest activityTest);
 

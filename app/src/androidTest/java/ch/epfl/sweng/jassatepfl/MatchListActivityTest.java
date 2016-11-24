@@ -37,7 +37,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testEmptyListDisplay() {
         Set<Match> emptyMatchSet = new HashSet<>();
-        dbRefWrapMock.addMatches(emptyMatchSet);
+        dbRefWrapTest.addMatches(emptyMatchSet);
 
         getActivity();
         try {
@@ -46,7 +46,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
             fail();
         }
 
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test
@@ -54,7 +54,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.onePlayerMatch());
         matches.add(DummyDataTest.twoPlayersMatch());
-        dbRefWrapMock.addMatches(matches);
+        dbRefWrapTest.addMatches(matches);
 
         getActivity();
 
@@ -68,16 +68,16 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
             fail();
         }
 
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     /*@Test WAITING NEW WAITING PLAYER ACTIVITY
     public void testAddPlayerOnListMatchActivity() {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.onePlayerMatch());
-        dbRefWrapMock.addMatches(matches);
-        dbRefWrapMock.addPendingMatch(DummyDataTest.onePlayerMatch(), Arrays.asList(false, false, false, false));
-        assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
+        dbRefWrapTest.addMatches(matches);
+        dbRefWrapTest.addPendingMatch(DummyDataTest.onePlayerMatch(), Arrays.asList(false, false, false, false));
+        assertMatchContainsNPlayers(dbRefWrapTest, "one_player", 1);
 
         getActivity();
 
@@ -85,21 +85,21 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
             onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
-            assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
-            assertMatchContainsPlayer(dbRefWrapMock, "one_player", new Player.PlayerID("696969"));
+            assertMatchContainsNPlayers(dbRefWrapTest, "one_player", 2);
+            assertMatchContainsPlayer(dbRefWrapTest, "one_player", new Player.PlayerID("696969"));
         } catch (Exception e) {
             fail();
         }
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }*/
 
     @Test
     public void testDoNotAddWhenMatchFull() {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.fullMatch());
-        dbRefWrapMock.addMatches(matches);
-        dbRefWrapMock.addPendingMatch(DummyDataTest.fullMatch(), Arrays.asList(false, false, false, false));
-        assertMatchContainsNPlayers(dbRefWrapMock, "full", 4);
+        dbRefWrapTest.addMatches(matches);
+        dbRefWrapTest.addPendingMatch(DummyDataTest.fullMatch(), Arrays.asList(false, false, false, false));
+        assertMatchContainsNPlayers(dbRefWrapTest, "full", 4);
 
         getActivity();
 
@@ -112,17 +112,17 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         } catch (Exception e) {
             fail();
         }
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test
     public void testDoNotAddWhenAlreadyInMatch() {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.matchWithBob());
-        dbRefWrapMock.addMatches(matches);
-        dbRefWrapMock.addPendingMatch(DummyDataTest.onePlayerMatch(), Arrays.asList(false, false, false, false));
-        assertMatchContainsNPlayers(dbRefWrapMock, "bob", 1);
-        assertMatchContainsPlayer(dbRefWrapMock, "bob", new Player.PlayerID("696969"));
+        dbRefWrapTest.addMatches(matches);
+        dbRefWrapTest.addPendingMatch(DummyDataTest.onePlayerMatch(), Arrays.asList(false, false, false, false));
+        assertMatchContainsNPlayers(dbRefWrapTest, "bob", 1);
+        assertMatchContainsPlayer(dbRefWrapTest, "bob", new Player.PlayerID("696969"));
 
         getActivity();
 
@@ -132,11 +132,11 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             onView(withText(R.string.error_cannot_join)).check(matches(isDisplayed()));
             onView(withText(R.string.error_already_in_match)).check(matches(isDisplayed()));
-            assertMatchContainsNPlayers(dbRefWrapMock, "bob", 1);
+            assertMatchContainsNPlayers(dbRefWrapTest, "bob", 1);
         } catch (Exception e){
             e.printStackTrace();
             fail();
         }
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 }

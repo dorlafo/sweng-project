@@ -7,8 +7,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import javax.inject.Singleton;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.Root;
-import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;
 import dagger.Module;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
  * @author Amaury Combes
  */
 @Module
-public class FakeModules {
+public class FakeModulesTest {
 
     /**
      * A DatabaseReference provider
@@ -32,9 +32,9 @@ public class FakeModules {
     @Provides
     @Singleton
     public DBReferenceWrapper provideDBReference() {
-            DBRefWrapMock dbRefWrapMock = new DBRefWrapMock(FirebaseDatabase.getInstance().getReference());
-            fillDB(dbRefWrapMock);
-            return dbRefWrapMock;
+            DBRefWrapTest dbRefWrapTest = new DBRefWrapTest(FirebaseDatabase.getInstance().getReference());
+            fillDB(dbRefWrapTest);
+            return dbRefWrapTest;
     }
 
     /**
@@ -50,8 +50,8 @@ public class FakeModules {
             return fAuth;
     }
 
-    private void fillDB(DBRefWrapMock dbRef) {
-        Root root = (Root) dbRef.getCurrentNode();
+    private void fillDB(DBRefWrapTest dbRef) {
+        RootTest root = (RootTest) dbRef.getCurrentNode();
         root.initialize();
         root.getChild("players")
                 .addChild("696969")

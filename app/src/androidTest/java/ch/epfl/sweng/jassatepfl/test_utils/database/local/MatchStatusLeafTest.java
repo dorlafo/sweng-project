@@ -7,18 +7,18 @@ import java.util.List;
 /**
  * @author Amaury Combes
  */
-public class MatchStatusLeaf extends Leaf<List<Boolean>> {
-    private LeafField<Boolean> statusP0 = new LeafField<>("0");
-    private LeafField<Boolean> statusP1 = new LeafField<>("1");
-    private LeafField<Boolean> statusP2 = new LeafField<>("2");
-    private LeafField<Boolean> statusP3 = new LeafField<>("3");
+public class MatchStatusLeafTest extends LeafTest<List<Boolean>> {
+    private LeafFieldTest<Boolean> statusP0 = new LeafFieldTest<>("0");
+    private LeafFieldTest<Boolean> statusP1 = new LeafFieldTest<>("1");
+    private LeafFieldTest<Boolean> statusP2 = new LeafFieldTest<>("2");
+    private LeafFieldTest<Boolean> statusP3 = new LeafFieldTest<>("3");
 
-    public MatchStatusLeaf(String id) {
+    public MatchStatusLeafTest(String id) {
         super(id);
     }
 
     @Override
-    public LeafField getChild(String id) {
+    public LeafFieldTest getChild(String id) {
         switch (id) {
             case "0":
                 return statusP0;

@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeaf;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.Root;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeafTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,15 +25,15 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Amaury Combes
  */
-public class DBRefWrapMockTest {
+public class DBRefWrapTestTest {
     List<Player> playerList;
 
     @Test
     public void valueEventListenerOnMatchTest() {
-        Root root = new Root("jass@Epfl");
+        RootTest root = new RootTest("jass@Epfl");
         root.addChild("matches");
         root.addChild("players");
-        DBRefWrapMock localRef = new DBRefWrapMock(root);
+        DBRefWrapTest localRef = new DBRefWrapTest(root);
 
         Set<Player> players = new HashSet<>();
         players.add(DummyDataTest.amaury);
@@ -42,7 +42,7 @@ public class DBRefWrapMockTest {
         localRef.addPlayers(players);
         localRef.addMatches(matches);
 
-        DBRefWrapMock refToPrivate = (DBRefWrapMock) localRef.child("matches").child("private");
+        DBRefWrapTest refToPrivate = (DBRefWrapTest) localRef.child("matches").child("private");
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -64,11 +64,11 @@ public class DBRefWrapMockTest {
 
     @Test
     public void setValueOnStatusPendingMatchTest() {
-        Root root = new Root("jass@Epfl");
+        RootTest root = new RootTest("jass@Epfl");
         root.addChild("matches");
         root.addChild("players");
         root.addChild("pendingMatches");
-        DBRefWrapMock localRef = new DBRefWrapMock(root);
+        DBRefWrapTest localRef = new DBRefWrapTest(root);
 
         Set<Player> players = new HashSet<>();
         players.add(DummyDataTest.amaury);
@@ -78,14 +78,14 @@ public class DBRefWrapMockTest {
         localRef.addMatches(matches);
         List<Boolean> status = Arrays.asList(true, false, false ,false);
         localRef.addPendingMatch(DummyDataTest.privateMatch(), status);
-        DBRefWrapMock refToMatchStatus = (DBRefWrapMock) localRef.child("pendingMatches").child(DummyDataTest.privateMatch().getMatchID().toString());
+        DBRefWrapTest refToMatchStatus = (DBRefWrapTest) localRef.child("pendingMatches").child(DummyDataTest.privateMatch().getMatchID().toString());
         refToMatchStatus.child("0").setValue(false);
         refToMatchStatus.child("1").setValue(true);
 
         waitCompletion();
 
-        assertEquals(false, ((MatchStatusLeaf) refToMatchStatus.getCurrentNode()).getData().get(0));
-        assertEquals(true, ((MatchStatusLeaf) refToMatchStatus.getCurrentNode()).getData().get(1));
+        assertEquals(false, ((MatchStatusLeafTest) refToMatchStatus.getCurrentNode()).getData().get(0));
+        assertEquals(true, ((MatchStatusLeafTest) refToMatchStatus.getCurrentNode()).getData().get(1));
     }
 
     private void waitCompletion() {

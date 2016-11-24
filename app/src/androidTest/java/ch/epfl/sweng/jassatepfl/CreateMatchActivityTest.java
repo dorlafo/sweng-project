@@ -59,7 +59,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         Set<Player> playerSet = new HashSet<>();
         playerSet.add(DummyDataTest.amaury);
         playerSet.add(DummyDataTest.jimmy);
-        dbRefWrapMock.addPlayers(playerSet);
+        dbRefWrapTest.addPlayers(playerSet);
         getActivity();
     }
 
@@ -175,7 +175,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.add_player_button)).perform(click());
         onView(withId(R.id.search)).perform(click());
         onView(isAssignableFrom(EditText.class)).perform(typeText("Hello"));
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }*/
 
 
