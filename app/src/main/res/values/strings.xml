@@ -27,6 +27,7 @@
     <string name="game_team_name_3">Team 3</string>
     <string name="game_button_text_next_round">Next Round</string>
     <string name="game_text_score_picker">Your score for this round</string>
+    <string name="game_text_point_goal">Playing to %d points</string>
 
     <string name="list_empty_list">No matches are available</string>
 
@@ -58,6 +59,8 @@
     <string name="dialog_add_confirmation">Add</string>
     <string name="dialog_remove_player">Remove this player?</string>
     <string name="dialog_match">Match!</string>
+    <string name="dialog_game_end">%s won the match. Congratulations!</string>
+    <string name="dialog_leave">Leave</string>
 
     <string name="date_format_match_display">dd/MM/yyyy HH:mm:ss</string>
     <string name="date_format_match_creation">dd/MM HH:mm</string>
