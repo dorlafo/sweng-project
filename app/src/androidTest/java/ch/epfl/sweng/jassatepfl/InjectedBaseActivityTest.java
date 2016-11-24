@@ -39,7 +39,7 @@ public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
     protected void setUp() throws Exception {
         super.setUp();
         App app = (App) getInstrumentation().getTargetContext().getApplicationContext();
-        FakeGraphTest component = DaggerFakeGraph.builder().fakeModules(new FakeModulesTest()).build();
+        FakeGraphTest component = DaggerFakeGraphTest.builder().fakeModulesTest(new FakeModulesTest()).build();
         app.setGraph(component);
         component.inject(this);
         //App.getInstance().graph().inject(this);
