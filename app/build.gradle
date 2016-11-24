@@ -81,6 +81,8 @@ dependencies {
 
     compile 'com.google.code.gson:gson:2.7'
 
+    compile 'com.github.mukeshsolanki:MarkdownView-Android:1.0.3'
+
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
     testCompile 'junit:junit:4.12'
