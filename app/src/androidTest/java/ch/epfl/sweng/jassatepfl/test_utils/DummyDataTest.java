@@ -13,7 +13,7 @@ import ch.epfl.sweng.jassatepfl.model.Rank;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
 
-public class DummyData {
+public class DummyDataTest {
 
     public static Player amaury = new Player(new PlayerID(235400), "Combes", "Amaury", new Rank(123));
     public static Player vincenzo = new Player(new PlayerID(249733), "Bazzucchi", "Vincenzo", new Rank(456));

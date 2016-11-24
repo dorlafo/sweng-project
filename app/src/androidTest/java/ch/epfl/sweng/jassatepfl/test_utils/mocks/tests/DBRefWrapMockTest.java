@@ -12,11 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeaf;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.Root;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapMock;
 
 import static org.junit.Assert.assertEquals;
@@ -36,9 +36,9 @@ public class DBRefWrapMockTest {
         DBRefWrapMock localRef = new DBRefWrapMock(root);
 
         Set<Player> players = new HashSet<>();
-        players.add(DummyData.amaury);
+        players.add(DummyDataTest.amaury);
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.privateMatch());
+        matches.add(DummyDataTest.privateMatch());
         localRef.addPlayers(players);
         localRef.addMatches(matches);
 
@@ -59,7 +59,7 @@ public class DBRefWrapMockTest {
         refToPrivate.addValueEventListener(listener);
         waitCompletion();
         refToPrivate.removeEventListener(listener);
-        assertEquals(playerList.get(0), DummyData.jimmy);
+        assertEquals(playerList.get(0), DummyDataTest.jimmy);
     }
 
     @Test
@@ -71,14 +71,14 @@ public class DBRefWrapMockTest {
         DBRefWrapMock localRef = new DBRefWrapMock(root);
 
         Set<Player> players = new HashSet<>();
-        players.add(DummyData.amaury);
+        players.add(DummyDataTest.amaury);
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.privateMatch());
+        matches.add(DummyDataTest.privateMatch());
         localRef.addPlayers(players);
         localRef.addMatches(matches);
         List<Boolean> status = Arrays.asList(true, false, false ,false);
-        localRef.addPendingMatch(DummyData.privateMatch(), status);
-        DBRefWrapMock refToMatchStatus = (DBRefWrapMock) localRef.child("pendingMatches").child(DummyData.privateMatch().getMatchID().toString());
+        localRef.addPendingMatch(DummyDataTest.privateMatch(), status);
+        DBRefWrapMock refToMatchStatus = (DBRefWrapMock) localRef.child("pendingMatches").child(DummyDataTest.privateMatch().getMatchID().toString());
         refToMatchStatus.child("0").setValue(false);
         refToMatchStatus.child("1").setValue(true);
 

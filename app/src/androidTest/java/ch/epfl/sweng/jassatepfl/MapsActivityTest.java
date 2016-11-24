@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
 
 import static android.support.test.espresso.Espresso.onView;
@@ -30,8 +30,8 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testDrawerOpens() {
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.twoPlayersMatch());
-        matches.add(DummyData.onePlayerMatch());
+        matches.add(DummyDataTest.twoPlayersMatch());
+        matches.add(DummyDataTest.onePlayerMatch());
         dbRefWrapMock.addMatches(matches);
 
         getActivity();
@@ -45,7 +45,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
     /*@Test PASSES ONLY LOCALY
     public void testMarkerDisplaysDialog() {
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.match_one_p_california());
+        matches.add(DummyDataTest.match_one_p_california());
         dbRefWrapMock.addMatches(matches);
 
         getActivity();
@@ -73,7 +73,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
     /*@Test WAIT NEW WAITING PLAYER ACTIVITY
     public void testAddPlayerOnMatchActivity() {
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.onePlayerMatch());
+        matches.add(DummyDataTest.onePlayerMatch());
         dbRefWrapMock.addMatches(matches);
 
         getActivity();
@@ -97,7 +97,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
    /* @Test PASSES LOCALY
     public void testDoNoAddWhenMatchFull() {
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.matchFullCalifornia());
+        matches.add(DummyDataTest.matchFullCalifornia());
         dbRefWrapMock.addMatches(matches);
 
         getActivity();
@@ -124,7 +124,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testDoNotAddWhenAlreadyInMatch() {
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.matchBobCalifornia());
+        matches.add(DummyDataTest.matchBobCalifornia());
         dbRefWrapMock.addMatches(matches);
 
         getActivity();

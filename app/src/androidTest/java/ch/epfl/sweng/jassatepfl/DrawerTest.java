@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -30,8 +30,8 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public void setUp() throws Exception {
         super.setUp();
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.twoPlayersMatch());
-        matches.add(DummyData.onePlayerMatch());
+        matches.add(DummyDataTest.twoPlayersMatch());
+        matches.add(DummyDataTest.onePlayerMatch());
         dbRefWrapMock.addMatches(matches);
 
         getActivity();

@@ -33,7 +33,7 @@ import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContain
     @Test
     public void testAddPlayerWithMethod() {
         Set<Match> matches = new HashSet<>();
-        Match matchOne = DummyData.onePlayerMatch();
+        Match matchOne = DummyDataTest.onePlayerMatch();
         matches.add(matchOne);
         dbRefWrapMock.addMatches(matches);
 

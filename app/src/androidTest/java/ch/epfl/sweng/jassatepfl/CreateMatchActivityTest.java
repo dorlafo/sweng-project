@@ -16,7 +16,7 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcher;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -57,8 +57,8 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     public void setUp() throws Exception {
         super.setUp();
         Set<Player> playerSet = new HashSet<>();
-        playerSet.add(DummyData.amaury);
-        playerSet.add(DummyData.jimmy);
+        playerSet.add(DummyDataTest.amaury);
+        playerSet.add(DummyDataTest.jimmy);
         dbRefWrapMock.addPlayers(playerSet);
         getActivity();
     }

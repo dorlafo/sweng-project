@@ -12,7 +12,7 @@ import ch.epfl.sweng.jassatepfl.test_utils.database.local.Leaf;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.Root;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapMock;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMock;
 
@@ -29,9 +29,9 @@ public class QueryWrapperMockTest {
         DBRefWrapMock localRef = new DBRefWrapMock(root);
 
         Set<Player> players = new HashSet<>();
-        players.add(DummyData.amaury);
+        players.add(DummyDataTest.amaury);
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.privateMatch());
+        matches.add(DummyDataTest.privateMatch());
         localRef.addPlayers(players);
         localRef.addMatches(matches);
         QueryWrapperMock query = (QueryWrapperMock) localRef.child("matches").orderByChild("privateMatch").equalTo(true);
