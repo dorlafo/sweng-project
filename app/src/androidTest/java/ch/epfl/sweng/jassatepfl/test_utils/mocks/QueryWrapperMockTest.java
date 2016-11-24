@@ -21,19 +21,19 @@ import static org.mockito.Mockito.when;
 /**
  * @author Amaury Combes
  */
-public class QueryWrapperMock extends QueryWrapper{
+public class QueryWrapperMockTest extends QueryWrapper{
     private final List<LeafTest> elements;
     private String childOrder;
     private int numOfValueListener = 0;
     private int numOfChildListener = 0;
 
-    public QueryWrapperMock(List<LeafTest> elems, String childOrder) {
+    public QueryWrapperMockTest(List<LeafTest> elems, String childOrder) {
         super();
         elements = new ArrayList<>(elems);
         this.childOrder = childOrder;
     }
 
-    private QueryWrapperMock(List<LeafTest> elems, int numOfValueListener, int numOfChildListener) {
+    private QueryWrapperMockTest(List<LeafTest> elems, int numOfValueListener, int numOfChildListener) {
         super();
         elements = new ArrayList<>(elems);
         this.numOfValueListener = numOfValueListener;
@@ -48,17 +48,17 @@ public class QueryWrapperMock extends QueryWrapper{
         for(LeafTest l: elems) {
             if(!l.getId().startsWith(path)) elems.remove(l);
         }
-        return new QueryWrapperMock(elems, numOfValueListener, numOfChildListener);
+        return new QueryWrapperMockTest(elems, numOfValueListener, numOfChildListener);
     }
 
     @Override
     public QueryWrapper endAt(String path) {
-        return new QueryWrapperMock(elements,  numOfValueListener, numOfChildListener);
+        return new QueryWrapperMockTest(elements,  numOfValueListener, numOfChildListener);
     }
 
     @Override
     public QueryWrapper limitToFirst(int num) {
-        return new QueryWrapperMock(elements.subList(0, num - 1),  numOfValueListener, numOfChildListener);
+        return new QueryWrapperMockTest(elements.subList(0, num - 1),  numOfValueListener, numOfChildListener);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class QueryWrapperMock extends QueryWrapper{
                 newLeafs.add(l);
             }
         }
-        return new QueryWrapperMock(newLeafs,  numOfValueListener, numOfChildListener);
+        return new QueryWrapperMockTest(newLeafs,  numOfValueListener, numOfChildListener);
     }
 
     @Override

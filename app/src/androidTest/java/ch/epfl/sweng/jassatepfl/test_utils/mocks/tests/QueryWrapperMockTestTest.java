@@ -14,12 +14,11 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
-import ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMock;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 
-public class QueryWrapperMockTest {
+public class QueryWrapperMockTestTest {
 
     @Test
     public void queryMockTest() {
@@ -34,7 +33,7 @@ public class QueryWrapperMockTest {
         matches.add(DummyDataTest.privateMatch());
         localRef.addPlayers(players);
         localRef.addMatches(matches);
-        QueryWrapperMock query = (QueryWrapperMock) localRef.child("matches").orderByChild("privateMatch").equalTo(true);
+        ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMockTest query = (ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMockTest) localRef.child("matches").orderByChild("privateMatch").equalTo(true);
 
         try {
             Field f = query.getClass().getDeclaredField("elements");

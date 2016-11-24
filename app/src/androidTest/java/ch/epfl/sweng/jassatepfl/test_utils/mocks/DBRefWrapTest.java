@@ -269,7 +269,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                 }
             });
             childOrder = "firstName";
-            return new QueryWrapperMock(leafList, childOrder);
+            return new QueryWrapperMockTest(leafList, childOrder);
         } else if(path.equals("privateMatch")) {
             Collections.sort(leafList, new Comparator<LeafTest>() {
                 @Override
@@ -288,7 +288,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                 }
             });
             childOrder = "privateMatch";
-            return new QueryWrapperMock(leafList, childOrder);
+            return new QueryWrapperMockTest(leafList, childOrder);
         }
 
         throw new IllegalArgumentException("Path : " + path + " is not supported");
