@@ -14,7 +14,6 @@ import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
 
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -25,9 +24,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsNPlayers;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsPlayer;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.hasToString;
-import static org.mockito.ArgumentMatchers.startsWith;
 
 public final class MapsActivityTest extends InjectedBaseActivityTest {
 
@@ -63,20 +59,16 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         dbRefWrapMock.addMatches(matches);
 
         getActivity();
-        try {
-            Thread.sleep(2000);
-        } catch (Exception e) {
-
-        }
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Rolex"));
 
         try {
+            Thread.sleep(5000);
             marker.click();
-            Thread.sleep(2000);
+            Thread.sleep(5000);
             device.click(device.getDisplayWidth()/2, device.getDisplayHeight()/3);
-            Thread.sleep(2000);
+            Thread.sleep(5000);
             onView(withText(R.string.dialog_join_match)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_message)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
@@ -119,20 +111,16 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         dbRefWrapMock.addMatches(matches);
 
         getActivity();
-        try {
-            Thread.sleep(2000);
-        } catch (Exception e) {
-
-        }
 
         assertMatchContainsNPlayers(dbRefWrapMock, "fullCalifornia", 4);
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("CO"));
         try {
+            Thread.sleep(5000);
             marker.click();
-            Thread.sleep(2000);
+            Thread.sleep(5000);
             device.click(device.getDisplayWidth()/2, device.getDisplayHeight()/3);
-            Thread.sleep(2000);
+            Thread.sleep(5000);
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             onView(withText(R.string.error_cannot_join)).check(matches(isDisplayed()));
@@ -150,21 +138,17 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         dbRefWrapMock.addMatches(matches);
 
         getActivity();
-        try {
-            Thread.sleep(2000);
-        } catch (Exception e) {
-
-        }
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("CO"));
         assertMatchContainsNPlayers(dbRefWrapMock, "bobCalifornia", 1);
         assertMatchContainsPlayer(dbRefWrapMock, "bobCalifornia", new Player.PlayerID("696969"));
         try {
+            Thread.sleep(5000);
             marker.click();
-            Thread.sleep(2000);
+            Thread.sleep(5000);
             device.click(device.getDisplayWidth()/2, device.getDisplayHeight()/3);
-            Thread.sleep(2000);
+            Thread.sleep(5000);
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             onView(withText(R.string.error_cannot_join)).check(matches(isDisplayed()));
