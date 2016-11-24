@@ -38,7 +38,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/team_name_1"
                 android:layout_centerHorizontal="true"
-                android:text="150"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/score_text_size"
                 android:textStyle="bold"/>
@@ -56,13 +55,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#FAFAFA"
-                    android:src="@drawable/ic_replay_black"/>
+                    android:src="@drawable/ic_undo_black"/>
 
-                <Spinner
+                <ImageButton
                     android:id="@+id/score_meld_spinner_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:spinnerMode="dialog"/>
+                    android:background="#FAFAFA"
+                    android:src="@drawable/ic_chat_bubble_outline_black"/>
 
                 <ImageButton
                     android:id="@+id/score_update_1"
@@ -87,18 +87,9 @@
         android:id="@+id/game_playing_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:textColor="@android:color/black"/>
-
-    <Button
-        android:id="@+id/game_button_next_round"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:text="@string/game_button_text_next_round"/>
 
     <RelativeLayout
         android:id="@+id/game_bottom_row"
@@ -127,7 +118,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/team_name_2"
                 android:layout_centerHorizontal="true"
-                android:text="150"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/score_text_size"
                 android:textStyle="bold"/>
@@ -145,13 +135,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#FAFAFA"
-                    android:src="@drawable/ic_replay_black"/>
+                    android:src="@drawable/ic_undo_black"/>
 
-                <Spinner
+                <ImageButton
                     android:id="@+id/score_meld_spinner_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:spinnerMode="dialog"/>
+                    android:background="#FAFAFA"
+                    android:src="@drawable/ic_chat_bubble_outline_black"/>
 
                 <ImageButton
                     android:id="@+id/score_update_2"
