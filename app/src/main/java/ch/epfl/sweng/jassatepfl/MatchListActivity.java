@@ -6,9 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -56,7 +53,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
             startActivity(intent);
         }
         else {
-            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_list, drawer, false);
             drawer.addView(contentView, 0);
