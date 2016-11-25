@@ -71,6 +71,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
             matchId = getIntent().getStringExtra("match_Id");
 
+            match = Match.sentinelMatch();
+
             gameBtn = (Button) findViewById(R.id.play);
             readyBtn = (Button) findViewById(R.id.ready_button);
             inviteBtn = (Button) findViewById(R.id.invite_button);

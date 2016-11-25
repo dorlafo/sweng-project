@@ -149,6 +149,16 @@ public class Match {
         return -1;
     }
 
+    public static Match sentinelMatch() {
+        Player bricoloBob = new Player(new Player.PlayerID(696969), "LeBricoleur", "Bob", new Rank(1000));
+        List<Player> players = new ArrayList<>();
+        players.add(bricoloBob);
+        GPSPoint BCCoord = new GPSPoint(46.518470, 6.561907);
+        return new Match(players, BCCoord, "Sentinel match", true,
+                GameVariant.CHIBRE, Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000,
+                "sentiMatch", MatchStatus.PENDING);
+    }
+
     /**
      * Getter for the location of the match.
      *
