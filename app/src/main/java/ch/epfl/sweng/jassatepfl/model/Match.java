@@ -10,9 +10,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.*;
 import static ch.epfl.sweng.jassatepfl.tools.RankOperationsHelper.averageRank;
@@ -311,11 +313,10 @@ public class Match {
      *
      * @param toRemove The id of the player to remove from the match
      */
-    public void removePlayerById(Player.PlayerID toRemove) throws IllegalStateException {
-        if (players.isEmpty()) {
-            throw new IllegalStateException("No players in the match.");
-        } else {
+    public void removePlayerById(Player.PlayerID toRemove) {
+        if (!players.isEmpty()) {
             int index = -1;
+
             for (Player p : players) {
                 if (p.getID().equals(toRemove)) {
                     index = players.indexOf(p);
@@ -325,8 +326,52 @@ public class Match {
                 players.remove(index);
                 matchStatus = MatchStatus.PENDING;
             }
+            //Remove player from team if he was in one
+            for(List<String> t : teams.values()) {
+                t.remove(toRemove.toString());
+                if(t.isEmpty()) {
+                    t.add("42");
+                }
+            }
         }
 
+    }
+
+    public boolean teamAssignmentIsCorrect() {
+        //Test if all player of the match are in the team list and no more
+        //Test that each team
+        Set<String> assignedPlayer = new HashSet<>();
+        //Correct number of team
+        if(teams.size() != gameVariant.getNumberOfTeam()) {
+            return false;
+        }
+
+        //For all team
+        for(List<String> team : teams.values()) {
+            //Correct number of player by team
+            if(team.size() != gameVariant.getNumberOfPlayerByTeam()) {
+                return false;
+            }
+            //The team does not contain the sentinel
+            else if(team.contains("42")) {
+                return false;
+            }
+            assignedPlayer.addAll(team);
+        }
+
+        //The teams does not contain duplicates
+        if(assignedPlayer.size() != players.size()) {
+            return false;
+        }
+        else {
+            //Every player from the team is in the match
+            for(String s : assignedPlayer) {
+                if(!hasParticipantWithID(s)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void setStatus(MatchStatus status) {
