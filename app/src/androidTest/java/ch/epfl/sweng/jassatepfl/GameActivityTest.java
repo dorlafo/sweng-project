@@ -17,6 +17,7 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcher;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -26,10 +27,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.jassatepfl.model.Match.Meld.LAST_TRICK;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 public final class GameActivityTest extends InjectedBaseActivityTest {
+
+    private final Match ownedMatch = DummyData.ownedMatch();
 
     public GameActivityTest() {
         super(GameActivity.class);
@@ -42,13 +49,17 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testElementsAreDisplayedForOwner() {
-        //ownedMatchSetUp();
+        ownedMatchSetUp();
         getActivity();
         onView(withId(R.id.score_update_cancel)).check(matches(isDisplayed()));
+        int pointsGoal = ownedMatch.getGameVariant().getPointGoal();
+        String playingTo = String.format(getInstrumentation().getTargetContext().getResources()
+                .getString(R.string.game_text_point_goal), pointsGoal);
+        onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
         dbRefWrapMock.reset();
     }
 
-   /* @Test
+    @Test
     public void testElementsAreHiddenForRegularPlayer() {
         Intent intent = new Intent();
         intent.putExtra("match_Id", "three_players");
@@ -61,11 +72,11 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.score_update_1)).check(matches(not(isDisplayed())));
         onView(withId(R.id.score_meld_spinner_2)).check(matches(not(isDisplayed())));
         dbRefWrapMock.reset();
-    }*/
+    }
 
     @Test
     public void testCancelDisplaysToastWhenNoCancelAvailable() {
-        //ownedMatchSetUp();
+        ownedMatchSetUp();
         getActivity();
         onView(withId(R.id.score_update_cancel)).perform(click());
         onView(withText(R.string.toast_cannot_cancel)).inRoot(new ToastMatcher())
@@ -76,7 +87,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testUpdateScore() {
-        //ownedMatchSetUp();
+        ownedMatchSetUp();
         getActivity();
         incrementScore(0, 2);
         checkScoreDisplay("2", "155");
@@ -87,7 +98,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testMatchButton() {
-        //ownedMatchSetUp();
+        ownedMatchSetUp();
         getActivity();
         onView(withId(R.id.score_update_1)).perform(click());
         onView(withId(R.id.score_picker_match)).perform(click());
@@ -100,7 +111,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testCancelUpdateDoesNotUpdateScore() {
-        //ownedMatchSetUp();
+        ownedMatchSetUp();
         getActivity();
         incrementScore(0, 50);
         checkScoreDisplay("50", "107");
@@ -115,7 +126,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testCancelLastRoundResetsScore() {
-        //ownedMatchSetUp();
+        ownedMatchSetUp();
         getActivity();
         incrementScore(0, 60);
         checkScoreDisplay("60", "97");
@@ -130,7 +141,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testDisplayEndOfMatchMessage() {
-        //ownedMatchSetUp();
+        ownedMatchSetUp();
         getActivity();
         for (int i = 0; i < 4; ++i) {
             onView(withId(R.id.score_update_1)).perform(click());
@@ -141,6 +152,16 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withText(message)).check(matches(isDisplayed()));
         onView(withId(android.R.id.button1)).perform(click());
         dbRefWrapMock.reset();
+    }
+
+    @Test
+    public void testMelds() {
+        ownedMatchSetUp();
+        getActivity();
+        onView(withId(R.id.score_meld_spinner_1)).perform(click());
+        onData(allOf(is(instanceOf(Match.Meld.class)), is(LAST_TRICK))).perform(click());
+        incrementScore(0, 5);
+        checkScoreDisplay("10", "152");
     }
 
     private void checkScoreDisplay(String firstDisplay, String secondDisplay) {
@@ -176,7 +197,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         intent.putExtra("match_Id", "owned");
         setActivityIntent(intent);
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.ownedMatch());
+        matches.add(ownedMatch);
         dbRefWrapMock.addMatches(matches);
     }
 
