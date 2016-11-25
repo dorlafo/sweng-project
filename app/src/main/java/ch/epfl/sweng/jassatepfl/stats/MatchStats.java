@@ -22,7 +22,6 @@ public class MatchStats {
     // The match' gameVariant. Used to choose how points are counted and so on
     private GameVariant gameVariant;
     private int nbTeam;
-    // Array containing the score for each round by team
     private List<Round> rounds;
     private Map<String, Integer> totalScores;
     // Index to the current round
@@ -33,7 +32,13 @@ public class MatchStats {
     public MatchStats() {
     }
 
-    public MatchStats(String matchID, GameVariant gameVariant) throws IllegalArgumentException {
+    /**
+     * Constructs a MatchStats with the given id and variant.
+     *
+     * @param matchID     the id of the match you want to record the stats of
+     * @param gameVariant the variant of the match
+     */
+    public MatchStats(String matchID, GameVariant gameVariant) {
         this.matchID = matchID;
         this.gameVariant = gameVariant;
         this.nbTeam = gameVariant.getNumberOfTeam();
@@ -90,13 +95,25 @@ public class MatchStats {
         return winnerIndex;
     }
 
+    /**
+     * Returns the score of the team at the given index for the current Round.
+     *
+     * @param teamIndex the index of the team
+     * @return the score of the team, for the currentRound
+     */
     public Integer getCurrentRoundTeamScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
             throw new IllegalArgumentException("Invalid team index");
         }
-        return rounds.get(currentRoundIndex).getTotalRoundScore(teamIndex);
+        return rounds.get(currentRoundIndex).getTeamTotalScore(teamIndex);
     }
 
+    /**
+     * Returns the total score of the team at the given index.
+     *
+     * @param teamIndex the index of the team
+     * @return the total score of the team for the match
+     */
     public Integer getTotalMatchScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
             throw new IllegalArgumentException("Invalid team index");
@@ -105,13 +122,13 @@ public class MatchStats {
     }
 
     /**
-     * Adds a new round to the match.
+     * Closes the currentRound, updating the scores, and starts a new round.
      */
     public void finishRound() {
         for (int i = 0; i < nbTeam; ++i) {
             String key = concatKey(i);
             Integer tmp = totalScores.get(key);
-            tmp += rounds.get(currentRoundIndex).getTotalRoundScore(i);
+            tmp += rounds.get(currentRoundIndex).getTeamTotalScore(i);
             totalScores.put(key, tmp);
             goalHasBeenReached |= tmp >= gameVariant.getPointGoal();
             winnerIndex = goalHasBeenReached && winnerIndex == -1 ? i : winnerIndex;
@@ -121,42 +138,53 @@ public class MatchStats {
         ++currentRoundIndex;
     }
 
-    public void cancelLastRound() {
+    /**
+     * Cancels the last round, deleting the points obtained in that round.
+     *
+     * @throws UnsupportedOperationException if there is no round to cancel
+     */
+    public void cancelLastRound() throws UnsupportedOperationException {
         if (currentRoundIndex == 0) {
-            throw new IllegalStateException();
+            throw new UnsupportedOperationException("No round to cancel");
         }
         --currentRoundIndex;
         for (int i = 0; i < nbTeam; ++i) {
             String key = concatKey(i);
             Integer tmp = totalScores.get(key);
-            tmp -= rounds.get(currentRoundIndex).getTotalRoundScore(i);
+            tmp -= rounds.get(currentRoundIndex).getTeamTotalScore(i);
             totalScores.put(key, tmp);
         }
         rounds.remove(currentRoundIndex);
     }
 
+    /**
+     * Sets the score of the team at the given index to the given points.
+     *
+     * @param teamIndex the index of the team
+     * @param score     the score of the team
+     */
     public void setScore(int teamIndex, int score) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Invalid team index");
         }
-        rounds.get(currentRoundIndex).setScore(teamIndex, score);
+        rounds.get(currentRoundIndex).setTeamScore(teamIndex, score);
     }
 
     /**
-     * Sets the meld to the corresponding team.
+     * Adds the given meld to the team at the given index.
      *
      * @param teamIndex the index of the team
      * @param meld      the meld
      */
     public void setMeld(int teamIndex, Meld meld) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Invalid team index");
         }
-        rounds.get(currentRoundIndex).addMeld(teamIndex, meld);
+        rounds.get(currentRoundIndex).addMeldToTeam(teamIndex, meld);
     }
 
     private String concatKey(int index) {
-        return "Team" + index;
+        return "TEAM" + index;
     }
 
 }

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.jassatepfl.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +22,9 @@ public class Round {
     }
 
     public Round(int teamCount) {
+        if (teamCount <= 0) {
+            throw new IllegalArgumentException("Invalid number of teams");
+        }
         this.teamCount = teamCount;
         this.scores = new HashMap<>();
         this.melds = new HashMap<>();
@@ -40,72 +42,95 @@ public class Round {
         return teamCount;
     }
 
-    /**
-     * Getter for the points in this round
-     *
-     * @return The points made
-     */
-    public Collection<Integer> getScores() { // TODO: maybe delete this
-        return scores.values();
+    public Map<String, Integer> getScores() {
+        return Collections.unmodifiableMap(scores);
+    }
+
+    public Map<String, List<Meld>> getMelds() {
+        return Collections.unmodifiableMap(melds);
+    }
+
+    public Map<String, Integer> getMeldScores() {
+        return Collections.unmodifiableMap(meldScores);
     }
 
     /**
-     * Returns the score of the specified team.
+     * Returns the points of the specified team, excluding points obtained
+     * with melds.
      *
      * @param teamIndex the index of the team
-     * @return the score of the team for this round
+     * @return the points of the team for this round
      */
-    public Integer getRoundTeamScore(int teamIndex) {
+    public Integer getTeamCardScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= teamCount) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Invalid team index");
         }
         return scores.get(concatKey(teamIndex));
     }
 
-    public Integer getRoundMeldScore(int teamIndex) {
+    /**
+     * Returns the points obtained with melds for the specified team.
+     *
+     * @param teamIndex the index of the team
+     * @return the meld points of the team
+     */
+    public Integer getTeamMeldScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= teamCount) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Invalid team index");
         }
         return meldScores.get(concatKey(teamIndex));
     }
 
-    public Integer getTotalRoundScore(int teamIndex) {
+    /**
+     * Returns the total points obtained by the given team for this round
+     * (melds and card points).
+     *
+     * @param teamIndex the index of the team
+     * @return the total points for this round
+     */
+    public Integer getTeamTotalScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= teamCount) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Invalid team index");
         }
-        return getRoundTeamScore(teamIndex) + getRoundMeldScore(teamIndex);
+        return getTeamCardScore(teamIndex) + getTeamMeldScore(teamIndex);
     }
 
     /**
-     * Returns the melds obtained by the specified team in this round.
+     * Returns the melds obtained by the specified team for this round.
      *
      * @param teamIndex the index of the team
      * @return the melds
      */
-    public List<Meld> getMelds(int teamIndex) {
+    public List<Meld> getTeamMelds(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= teamCount) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Invalid team index");
         }
         return Collections.unmodifiableList(melds.get(concatKey(teamIndex)));
     }
 
-    public void setScore(int teamIndex, int score) {
+    /**
+     * Sets the score of the given team.
+     *
+     * @param teamIndex the index of the team
+     * @param score     the score of the team
+     */
+    public void setTeamScore(int teamIndex, int score) {
         if (teamIndex < 0 || teamIndex >= teamCount) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Invalid team index");
         }
         scores.put(concatKey(teamIndex), score);
     }
 
     /**
-     * Adds the meld passed in parameters to the current meld list and the points
-     * for this meld to the points.
+     * Adds the given meld to the current meld list and adds its point value
+     * to the meld score.
      *
      * @param teamIndex the index of the team that got the meld
      * @param meld      the meld
      */
-    public void addMeld(int teamIndex, Meld meld) {
+    public void addMeldToTeam(int teamIndex, Meld meld) {
         if (teamIndex < 0 || teamIndex >= teamCount) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Invalid team index");
         }
 
         String key = concatKey(teamIndex);
@@ -115,7 +140,7 @@ public class Round {
     }
 
     private String concatKey(int index) {
-        return "Team" + index;
+        return "TEAM" + index;
     }
 
 }
