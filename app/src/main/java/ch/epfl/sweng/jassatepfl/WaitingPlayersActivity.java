@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,25 +31,28 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
     private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
 
-    private BaseAdapter adapter;
+    private PlayerListAdapter adapter;
     private Match match;
     private String matchId;
     private Player player;
 
     private ValueEventListener matchListener;
-    private ChildEventListener matchPlayersListener;
-    private ChildEventListener innerListener;
+    private ChildEventListener pendingMatchListener;
 
     private TextView variant;
     private TextView description;
     private ListView listView;
 
-    private int playersReady = 0;
     private int posInList;
     private int teamSelected;
 
+    private List<String> playersReady;
+
+    private Button gameBtn;
+    private Button readyBtn;
+    private Button inviteBtn;
+
     private static final int INVITE_CODE = 42;
-    private List<Player> playerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +64,16 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             startActivity(intent);
         }
         else {
-            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_waiting_players, drawer, false);
             drawer.addView(contentView, 0);
 
             matchId = getIntent().getStringExtra("match_Id");
 
-            playerList = new ArrayList<>();
+            gameBtn = (Button) findViewById(R.id.play);
+            readyBtn = (Button) findViewById(R.id.ready_button);
+            inviteBtn = (Button) findViewById(R.id.invite_button);
 
             listView = (ListView) findViewById(android.R.id.list);
             listView.setEmptyView(findViewById(android.R.id.empty));
@@ -77,16 +81,19 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             description = (TextView) findViewById(R.id.match_description);
             variant = (TextView) findViewById(R.id.match_variant);
 
-            contactFirebase();
+            playersReady = new ArrayList<>();
 
             listView.setOnItemClickListener(this);
+
+            adapter = new PlayerListAdapter(WaitingPlayersActivity.this, R.layout.player_list_element, new ArrayList<Player>());
+            listView.setAdapter(adapter);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        contactFirebase();
         Intent startIntent = getIntent();
 
         /* Notification onClick handler.
@@ -179,6 +186,21 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if(matchListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                    .child(matchId)
+                    .removeEventListener(matchListener);
+        }
+        if(pendingMatchListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
+                    .child(matchId)
+                    .removeEventListener(pendingMatchListener);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
             if(requestCode == INVITE_CODE) {
@@ -207,14 +229,15 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(matchPlayersListener != null) {
-            dbRefWrapped.removeEventListener(matchPlayersListener);
-        }
         if(matchListener != null) {
-            dbRefWrapped.removeEventListener(matchListener);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                    .child(matchId)
+                    .removeEventListener(matchListener);
         }
-        if(innerListener != null) {
-            dbRefWrapped.removeEventListener(innerListener);
+        if(pendingMatchListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
+                    .child(matchId)
+                    .removeEventListener(pendingMatchListener);
         }
     }
 
@@ -225,20 +248,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
      * @param view General view
      */
     public void leaveMatch(View view) {
-        //TODO: check if this still work in case of error
-        /* Useless since onDestroy() will be called
-        dbRefWrapped.removeEventListener(pendingMatchesListener);
-        dbRefWrapped.removeEventListener(childEventListener);
-        dbRefWrapped.removeEventListener(valueEventListener);
-        */
+        match.removePlayerById(new Player.PlayerID(getUserSciper()));
 
-        //TODO: why exception will occur here ??
-        try {
-            match.removePlayerById(new Player.PlayerID(getUserSciper()));
-        } catch (IllegalStateException e) {
-            Log.e("Illegal State Exception", e.getMessage());
-            return;
-        }
         dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(Integer.toString(posInList)).removeValue();
 
         if(match.getPlayers().size() == 0) {
@@ -258,8 +269,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
      */
     public void userIsReady(View view) {
         dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(Integer.toString(posInList)).setValue(true);
-        Button ready = (Button) findViewById(R.id.ready_button);
-        ready.setEnabled(false);
     }
 
     /**
@@ -278,9 +287,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                 .setMessage("will move to new activity")
                 .show();
         //TODO: check if this still work in case of error
-        /* Useless since onDestroy() will be called
-        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).removeEventListener(pendingMatchesListener);
-        */
         // TODO: backToList.putExtra("match_Id", matchId);
         // TODO: Create intent for next activity
         // TODO: In new activity, delete pendingMatches
@@ -297,54 +303,20 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                     variant.setText(match.getGameVariant().toString());
 
                     posInList = match.getPlayerIndex(getUserSciper());
-                    if(posInList == -1) {
-                        //TODO: handle error
-                    }
-                    else {
+                    if(posInList != -1) {
                         if(match.matchFull()) {
-                            Button invite = (Button) findViewById(R.id.invite_button);
-                            invite.setEnabled(false);
+                            inviteBtn.setEnabled(false);
                         }
-                        innerListener = new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                int pos = Integer.parseInt(dataSnapshot.getKey());
-                                boolean ready = dataSnapshot.getValue(Boolean.class);
-                                if (ready && listView.getChildAt(pos) != null) {
-                                    listView.getChildAt(pos).setBackgroundColor(0xFF00FF00);
-                                    playersReady += 1;
-                                    if(pos == posInList) {
-                                        Button readyBtn = (Button) findViewById(R.id.ready_button);
-                                        readyBtn.setEnabled(false);
-                                    }
-                                }
-                                if (playersReady == match.getMaxPlayerNumber()) {
-                                    Button game = (Button) findViewById(R.id.play);
-                                    game.setEnabled(true);
-                                }
-                            }
+                        else {
+                            inviteBtn.setEnabled(true);
+                        }
 
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                                //TODO: check if this is indeed not used
-                            }
-
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                                //TODO: check if this is indeed not used
-                            }
-
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        };
-                        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).addChildEventListener(innerListener);
+                        if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
+                            gameBtn.setEnabled(true);
+                        }
+                        else {
+                            gameBtn.setEnabled(false);
+                        }
                     }
                 }
                 modifyListAdapter();
@@ -359,46 +331,65 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                 .child(matchId)
                 .addValueEventListener(matchListener);
 
-        matchPlayersListener = new ChildEventListener() {
+        pendingMatchListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "matchPlayersListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
-                Player player = dataSnapshot.getValue(Player.class);
-                playerList.add(player);
+                Log.d(TAG, "pendingMatchListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
+                playersReady.add(dataSnapshot.getKey());
+                int pos = Integer.parseInt(dataSnapshot.getKey());
+                if(pos == posInList) {
+                    readyBtn.setEnabled(false);
+                }
+                if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
+                    gameBtn.setEnabled(true);
+                }
+                else {
+                    gameBtn.setEnabled(false);
+                }
                 modifyListAdapter();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "matchPlayersListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
+                //TODO: check if this is indeed not used
+                Log.d(TAG, "pendingMatchListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "matchPlayersListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
-                Player player = dataSnapshot.getValue(Player.class);
-                playerList.remove(player);
+                Log.d(TAG, "pendingMatchListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
+                playersReady.remove(dataSnapshot.getKey());
+                int pos = Integer.parseInt(dataSnapshot.getKey());
+                if(pos == posInList) {
+                    readyBtn.setEnabled(true);
+                }
+                if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
+                    gameBtn.setEnabled(true);
+                }
+                else {
+                    gameBtn.setEnabled(false);
+                }
                 modifyListAdapter();
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                //TODO: check if this is indeed not used
+                Log.d(TAG, "pendingMatchListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.e("ERROR-DATABASE", databaseError.toString());
             }
         };
-        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
                 .child(matchId)
-                .child(DatabaseUtils.DATABASE_MATCHES_PLAYERS)
-                .addChildEventListener(matchPlayersListener);
+                .addChildEventListener(pendingMatchListener);
     }
 
     private void modifyListAdapter() {
-        adapter = new PlayerListAdapter(WaitingPlayersActivity.this, R.layout.player_list_element, playerList, match);
-        listView.setAdapter(adapter);
+        adapter.refreshData(match.getPlayers(), match, playersReady);
     }
 
     /**
@@ -416,7 +407,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        final Player p = (Player) adapter.getItem(position);
+        final Player p = adapter.getItem(position);
         if(p != null) {
             teamSelected = match.teamNbForPlayer(p) - 1;
             int nbTeam = match.getGameVariant().getNumberOfTeam();
