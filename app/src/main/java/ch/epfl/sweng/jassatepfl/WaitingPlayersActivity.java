@@ -319,8 +319,9 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                             gameBtn.setEnabled(false);
                         }
                     }
+                    modifyListAdapter();
                 }
-                modifyListAdapter();
+
             }
 
             @Override
