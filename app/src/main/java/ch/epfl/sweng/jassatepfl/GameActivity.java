@@ -141,7 +141,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         displayScore(matchStats);
         updateMatchStats();
         if (matchStats.goalHasBeenReached()) {
-            dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats);
+            // dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats); TODO: mock the buffer
             displayEndOfMatchMessage();
         }
     }
@@ -216,7 +216,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     }
 
     private void updateMatchStats() {
-        dbRefWrapped.child("stats").child("matchStats").child(matchId).setValue(matchStats);
+        dbRefWrapped.child("matchStats").child(matchId).setValue(matchStats);
         // TODO: finish activity, destroy listeners, ...
     }
 
@@ -256,7 +256,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             matchStats = new MatchStats(matchId, currentMatch.getGameVariant());
             displayScore(matchStats);
         } else {
-            dbRefWrapped.child("stats").child("matchStats").child(matchId)
+            dbRefWrapped.child("matchStats").child(matchId)
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
