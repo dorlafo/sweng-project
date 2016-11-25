@@ -89,7 +89,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                 displayMeldSpinner(1);
                 break;
             case R.id.score_update_cancel:
-                if (matchStats.getCurrentRoundIndex() == 0) {
+                if (matchStats.getCurrentRoundIndex() == 0 && !matchStats.meldWasSetThisRound()) {
                     Toast.makeText(this, R.string.toast_cannot_cancel, Toast.LENGTH_SHORT)
                             .show();
                     cancelButton.setEnabled(false);
@@ -115,6 +115,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                         dialog.dismiss();
                         displayScore(matchStats);
                         updateMatchStats();
+                        cancelButton.setEnabled(true);
                     }
                 })
                 .create().show();
@@ -147,8 +148,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
 
     @SuppressLint("SetTextI18n")
     private void displayScore(MatchStats stats) {
-        Integer firstTeamScore = stats.getTotalMatchScore(0);
-        Integer secondTeamScore = stats.getTotalMatchScore(1);
+        Integer firstTeamScore = stats.getTotalMatchScore(0) + stats.getCurrentRoundTeamScore(0);
+        Integer secondTeamScore = stats.getTotalMatchScore(1) + stats.getCurrentRoundTeamScore(1);
         firstTeamScoreDisplay.setText(firstTeamScore.toString());
         secondTeamScoreDisplay.setText(secondTeamScore.toString());
     }
