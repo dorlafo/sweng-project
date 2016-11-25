@@ -6,7 +6,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
@@ -21,8 +21,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class DBTestUtils {
 
-    public static void assertMatchContainsNPlayers(DBRefWrapMock dbRefWrapMock, String matchID, final int nPlayers) {
-        dbRefWrapMock.child(DatabaseUtils.DATABASE_MATCHES)
+    public static void assertMatchContainsNPlayers(DBRefWrapTest dbRefWrapTest, String matchID, final int nPlayers) {
+        dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES)
                 .child(matchID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -37,8 +37,8 @@ public class DBTestUtils {
         });
     }
 
-    public static void assertMatchContainsPlayer(DBRefWrapMock dbRefWrapMock, String matchID, final Player.PlayerID sciper) {
-        dbRefWrapMock.child(DatabaseUtils.DATABASE_MATCHES)
+    public static void assertMatchContainsPlayer(DBRefWrapTest dbRefWrapTest, String matchID, final Player.PlayerID sciper) {
+        dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES)
                 .child(matchID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

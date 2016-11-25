@@ -100,4 +100,8 @@
     <string name="invite_button_text_invite">Invite</string>
     <string name="invite_welcome_text">Look for players, add them and click on Invite</string>
     <string name="invite_search_player">Search for Player</string>
+
+    <string name="user_guide">User Guide</string>
+    <string name="select_game_variant">Select Game Variant:</string>
+    <string name="rules">Rules</string>
 </resources>
