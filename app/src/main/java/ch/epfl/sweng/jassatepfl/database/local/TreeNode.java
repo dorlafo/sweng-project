@@ -1,12 +1,8 @@
 package ch.epfl.sweng.jassatepfl.database.local;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.model.Player;
 
 /**
  * The TreeNode class is a special case of the Node interface. It represents the middle nodes of our
@@ -64,6 +60,10 @@ public class TreeNode implements Node {
                 MatchStatusLeaf statusLeaf = new MatchStatusLeaf(id);
                 children.add(statusLeaf);
                 return statusLeaf;
+            case "matchStats":
+                MatchStatsLeaf statsLeaf = new MatchStatsLeaf(id);
+                children.add(statsLeaf);
+                return statsLeaf;
             default:
                 throw new UnsupportedOperationException();
         }
@@ -94,6 +94,9 @@ public class TreeNode implements Node {
                 break;
             case "pendingMatches":
                 newLeaf = new MatchStatusLeaf(tempId);
+                break;
+            case "stats":
+                newLeaf = new MatchStatsLeaf(tempId);
                 break;
             default:
                 throw new UnsupportedOperationException("Cannot add an auto generated child to : " + id);

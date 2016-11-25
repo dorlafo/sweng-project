@@ -66,6 +66,7 @@ public class Root implements Node {
         addChild("matches");
         addChild("players");
         addChild("pendingMatches");
+        addChild("matchStats");
     }
 
 }
