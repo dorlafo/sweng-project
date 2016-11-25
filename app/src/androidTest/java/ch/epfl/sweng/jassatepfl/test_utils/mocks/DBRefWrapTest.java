@@ -262,16 +262,16 @@ public class DBRefWrapTest extends DBReferenceWrapper {
             leafList.add(l);
         }
 
-        if(path.equals("firstName")) {
+        if(path.equals(DatabaseUtils.DATABASE_PLAYERS_FIRST_NAME)) {
             Collections.sort(leafList, new Comparator<LeafTest>() {
                 @Override
                 public int compare(LeafTest l1, LeafTest l2) {
                     return ((Player)l1.getData()).getFirstName().compareTo(((Player)l2.getData()).getFirstName());
                 }
             });
-            childOrder = "firstName";
+            childOrder = DatabaseUtils.DATABASE_PLAYERS_FIRST_NAME;
             return new QueryWrapperMockTest(leafList, childOrder);
-        } else if(path.equals("privateMatch")) {
+        } else if(path.equals(DatabaseUtils.DATABASE_MATCHES_PRIVATE)) {
             Collections.sort(leafList, new Comparator<LeafTest>() {
                 @Override
                 public int compare(LeafTest o1, LeafTest o2) {
@@ -288,7 +288,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                     }
                 }
             });
-            childOrder = "privateMatch";
+            childOrder = DatabaseUtils.DATABASE_MATCHES_PRIVATE;
             return new QueryWrapperMockTest(leafList, childOrder);
         }
 
