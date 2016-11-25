@@ -163,10 +163,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
         new Thread(new Runnable() {
 
             public void run() {
-                Handler uiHandler = new Handler(Looper.getMainLooper());
-                Runnable toRun = new Runnable() {
-                    @Override
-                    public void run() {
+
                         Player p = null;
                         Match m = null;
 
@@ -194,12 +191,17 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                             when(obj.getValue(Match.class)).thenReturn(m);
 
                             if(callDataChange) {
-                                listener.onDataChange((DataSnapshot) obj);
+                                Handler uiHandler = new Handler(Looper.getMainLooper());
+                                Runnable toRun = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        listener.onDataChange((DataSnapshot) obj);
+                                    }
+                                };
+                                uiHandler.post(toRun);
                             }
                     }
-                }
-                };
-                uiHandler.post(toRun);
+
             }
         }).start();
         return listener;
