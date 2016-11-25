@@ -68,7 +68,6 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
             listView.setEmptyView(emptyList);
 
             matches = new ArrayList<>();
-            contactFirebase();
             listView.setOnItemClickListener(this);
         }
     }
@@ -76,8 +75,19 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     @Override
     public void onResume() {
         super.onResume();
+        contactFirebase();
     }
 
+    @Override
+    public void onPause() {
+        super.onResume();
+        if(childEventListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                    .orderByChild("privateMatch")
+                    .equalTo(false)
+                    .removeEventListener(childEventListener);
+        }
+    }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
         // Opens dialog box to ask user if he wants to join match
@@ -107,7 +117,10 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     protected void onDestroy() {
         super.onDestroy();
         if(childEventListener != null) {
-            dbRefWrapped.removeEventListener(childEventListener);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                    .orderByChild("privateMatch")
+                    .equalTo(false)
+                    .removeEventListener(childEventListener);
         }
     }
 
