@@ -27,6 +27,7 @@ import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.TreeNodeTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -315,7 +316,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
      * @param players the collection of players that needs to be added
      */
     public void addPlayers(Set<Player> players) {
-        TreeNodeTest playersNode = ((RootTest) currentNode).getChild("players");
+        TreeNodeTest playersNode = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_PLAYERS);
         for (Player p : players) {
             String playerId = p.getID().toString();
             playersNode.addChild(playerId);
@@ -331,7 +332,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
      * @param matches the collection of players that needs to be added
      */
     public void addMatches(Set<Match> matches) {
-        TreeNodeTest playersNode = ((RootTest) currentNode).getChild("matches");
+        TreeNodeTest playersNode = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_MATCHES);
         for (Match m : matches) {
             String matchID = m.getMatchID();
             playersNode.addChild(matchID);
@@ -340,7 +341,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
     }
 
     public void addPendingMatch(Match match, List<Boolean> status) {
-        TreeNodeTest pendingMatch = ((RootTest) currentNode).getChild("pendingMatches");
+        TreeNodeTest pendingMatch = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_PENDING_MATCHES);
         MatchStatusLeafTest statusLeaf = (MatchStatusLeafTest) pendingMatch.addChild(match.getMatchID().toString());
         statusLeaf.setData(status);
     }

@@ -3,6 +3,8 @@ package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
+
 /**
  * The root class is a special case of the NodeTest interface. It represents the top of our tree
  * structure.
@@ -63,9 +65,9 @@ public class RootTest implements NodeTest {
 
     @Override
     public void initialize() {
-        addChild("matches");
-        addChild("players");
-        addChild("pendingMatches");
+        addChild(DatabaseUtils.DATABASE_MATCHES);
+        addChild(DatabaseUtils.DATABASE_PLAYERS);
+        addChild(DatabaseUtils.DATABASE_PENDING_MATCHES);
     }
 
 }

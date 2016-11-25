@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
+
 /**
  * The TreeNodeTest class is a special case of the NodeTest interface. It represents the middle nodes of our
  * tree structure
@@ -48,15 +50,15 @@ public class TreeNodeTest implements NodeTest {
     @Override
     public LeafTest addChild(String id) {
         switch (this.id) {
-            case "players":
+            case DatabaseUtils.DATABASE_PLAYERS:
                 PlayerLeafTest playerLeaf = new PlayerLeafTest(id);
                 children.add(playerLeaf);
                 return playerLeaf;
-            case "matches":
+            case DatabaseUtils.DATABASE_MATCHES:
                 MatchLeafTest matchLeaf = new MatchLeafTest(id);
                 children.add(matchLeaf);
                 return matchLeaf;
-            case "pendingMatches":
+            case DatabaseUtils.DATABASE_PENDING_MATCHES:
                 MatchStatusLeafTest statusLeaf = new MatchStatusLeafTest(id);
                 children.add(statusLeaf);
                 return statusLeaf;
@@ -82,13 +84,13 @@ public class TreeNodeTest implements NodeTest {
 
         LeafTest newLeaf;
         switch (this.id) {
-            case "players":
+            case DatabaseUtils.DATABASE_PLAYERS:
                 newLeaf = new PlayerLeafTest(tempId);
                 break;
-            case "matches":
+            case DatabaseUtils.DATABASE_MATCHES:
                 newLeaf = new MatchLeafTest(tempId);
                 break;
-            case "pendingMatches":
+            case DatabaseUtils.DATABASE_PENDING_MATCHES:
                 newLeaf = new MatchStatusLeafTest(tempId);
                 break;
             default:
