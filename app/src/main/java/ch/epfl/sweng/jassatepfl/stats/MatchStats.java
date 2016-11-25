@@ -1,7 +1,9 @@
 package ch.epfl.sweng.jassatepfl.stats;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match.GameVariant;
@@ -21,7 +23,7 @@ public class MatchStats {
     private GameVariant gameVariant;
     private int nbTeam;
     // Array containing the score for each round by team
-    private ArrayList<Round> rounds;
+    private List<Round> rounds;
     private Map<String, Integer> totalScores;
     // Index to the current round
     private int currentRoundIndex;
@@ -66,6 +68,14 @@ public class MatchStats {
 
     public int getNbTeam() {
         return nbTeam;
+    }
+
+    public List<Round> getRounds() {
+        return Collections.unmodifiableList(rounds);
+    }
+
+    public Map<String, Integer> getTotalScores() {
+        return Collections.unmodifiableMap(totalScores);
     }
 
     public int getCurrentRoundIndex() {
