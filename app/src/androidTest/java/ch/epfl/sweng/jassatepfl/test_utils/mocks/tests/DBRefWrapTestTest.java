@@ -43,7 +43,7 @@ public class DBRefWrapTestTest {
         localRef.addPlayers(players);
         localRef.addMatches(matches);
 
-        DBRefWrapTest refToPrivate = (DBRefWrapTest) localRef.child(DatabaseUtils.DATABASE_MATCHES).child(DatabaseUtils.DATABASE_MATCHES_PRIVATE);
+        DBRefWrapTest refToPrivate = (DBRefWrapTest) localRef.child(DatabaseUtils.DATABASE_MATCHES).child("private"); //Here "private" is the matchID of the match
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

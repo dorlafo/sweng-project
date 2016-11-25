@@ -66,7 +66,6 @@ public final class DrawerTest extends InjectedBaseActivityTest {
         onView(withId(R.id.create_create_button)).check(matches(isDisplayed()));
     }
 
-    //NEED MOCKITO ORDERBYCHILD
     @Test
     public void testCanNavigateToMapsActivity() {
         onView(withId(R.id.drawer_layout)).perform(open());
