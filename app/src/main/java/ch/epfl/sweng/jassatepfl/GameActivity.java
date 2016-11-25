@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -34,9 +35,9 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     private final static int TOTAL_POINTS_IN_ROUND = 157;
     private final static int MATCH_POINTS = 257;
 
+    private String matchId;
     private Match currentMatch;
     private MatchStats matchStats;
-    private String matchId;
 
     private TextView firstTeamScoreDisplay;
     private TextView secondTeamScoreDisplay;
@@ -51,77 +52,23 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        /*Intent intent = getIntent();
-        String matchId = intent.getStringExtra("match_Id");
-        //matchId = "-KXNh5i1z_ze2QTstS6o";
+        Intent intent = getIntent();
+        matchId = intent.getStringExtra("match_Id");
         dbRefWrapped.child("matches").child(matchId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         currentMatch = dataSnapshot.getValue(Match.class);
+                        if (currentMatch != null) {
+                            setUp();
+                        }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        Log.e("ERROR-DATABASE", databaseError.toString());
                     }
                 });
-*/
-        //      int pointsGoal = currentMatch.getGameVariant().getPointGoal();
-        int pointsGoal = 1000;
-        //final boolean isOwner = currentMatch.createdBy().getID().toString().equals(fAuth.getCurrentUser().getDisplayName());
-        boolean isOwner = true;
-        final int visibility = isOwner ? VISIBLE : INVISIBLE;
-
-        matchStats = new MatchStats("hello", Match.GameVariant.CHIBRE);
-        //matchStats = new MatchStats(matchId, currentMatch.getGameVariant());
-        firstTeamScoreDisplay = (TextView) findViewById(R.id.score_display_1);
-        secondTeamScoreDisplay = (TextView) findViewById(R.id.score_display_2);
-
-        ImageButton firstTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_1);
-        firstTeamUpdateButton.setOnClickListener(this);
-        firstTeamUpdateButton.setVisibility(visibility);
-
-        ImageButton secondTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_2);
-        secondTeamUpdateButton.setOnClickListener(this);
-        secondTeamUpdateButton.setVisibility(visibility);
-
-        ImageButton firstMeldSpinner = (ImageButton) findViewById(R.id.score_meld_spinner_1);
-        firstMeldSpinner.setOnClickListener(this);
-        firstMeldSpinner.setVisibility(visibility);
-
-        ImageButton secondMeldSpinner = (ImageButton) findViewById(R.id.score_meld_spinner_2);
-        secondMeldSpinner.setOnClickListener(this);
-        secondMeldSpinner.setVisibility(visibility);
-
-        cancelButton = (ImageButton) findViewById(R.id.score_update_cancel);
-        cancelButton.setOnClickListener(this);
-        cancelButton.setVisibility(visibility);
-
-        TextView goal = (TextView) findViewById(R.id.game_playing_to);
-        String goalText = String.format(getString(R.string.game_text_point_goal), pointsGoal);
-        goal.setText(goalText);
-
-        /*if (!isOwner) {
-            dbRefWrapped.child("stats").child("matchStats").child(matchId)
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            MatchStats modifiedMatchStats = dataSnapshot.getValue(MatchStats.class);
-                            displayScore(modifiedMatchStats);
-                            if (modifiedMatchStats.goalHasBeenReached()) {
-                                displayEndOfMatchMessage();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.e("ERROR-DATABASE", databaseError.toString());
-                        }
-                    });
-        }*/
-
-        displayScore(matchStats);
     }
 
     @Override
@@ -193,7 +140,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         displayScore(matchStats);
         updateMatchStats();
         if (matchStats.goalHasBeenReached()) {
-            //dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats);
+            dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats);
             displayEndOfMatchMessage();
         }
     }
@@ -261,14 +208,72 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(GameActivity.this, MainActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 })
                 .show();
     }
 
     private void updateMatchStats() {
-        //dbRefWrapped.child("stats").child("matchStats").child(matchId).setValue(matchStats);
+        dbRefWrapped.child("stats").child("matchStats").child(matchId).setValue(matchStats);
         // TODO: finish activity, destroy listeners, ...
+    }
+
+    private void setUp() {
+        firstTeamScoreDisplay = (TextView) findViewById(R.id.score_display_1);
+        secondTeamScoreDisplay = (TextView) findViewById(R.id.score_display_2);
+
+        final boolean isOwner = currentMatch.createdBy().getID().toString().equals(fAuth.getCurrentUser().getDisplayName());
+        final int visibility = isOwner ? VISIBLE : INVISIBLE;
+
+        ImageButton firstTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_1);
+        firstTeamUpdateButton.setOnClickListener(this);
+        firstTeamUpdateButton.setVisibility(visibility);
+
+        ImageButton secondTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_2);
+        secondTeamUpdateButton.setOnClickListener(this);
+        secondTeamUpdateButton.setVisibility(visibility);
+
+        ImageButton firstMeldSpinner = (ImageButton) findViewById(R.id.score_meld_spinner_1);
+        firstMeldSpinner.setOnClickListener(this);
+        firstMeldSpinner.setVisibility(visibility);
+
+        ImageButton secondMeldSpinner = (ImageButton) findViewById(R.id.score_meld_spinner_2);
+        secondMeldSpinner.setOnClickListener(this);
+        secondMeldSpinner.setVisibility(visibility);
+
+        cancelButton = (ImageButton) findViewById(R.id.score_update_cancel);
+        cancelButton.setOnClickListener(this);
+        cancelButton.setVisibility(visibility);
+
+        TextView goal = (TextView) findViewById(R.id.game_playing_to);
+        int pointsGoal = currentMatch.getGameVariant().getPointGoal();
+        String goalText = String.format(getString(R.string.game_text_point_goal), pointsGoal);
+        goal.setText(goalText);
+
+        if (isOwner) {
+            matchStats = new MatchStats(matchId, currentMatch.getGameVariant());
+            displayScore(matchStats);
+        } else {
+            dbRefWrapped.child("stats").child("matchStats").child(matchId)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            MatchStats modifiedMatchStats = dataSnapshot.getValue(MatchStats.class);
+                            if (modifiedMatchStats != null) {
+                                displayScore(modifiedMatchStats);
+                                if (modifiedMatchStats.goalHasBeenReached()) {
+                                    displayEndOfMatchMessage();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e("ERROR-DATABASE", databaseError.toString());
+                        }
+                    });
+        }
     }
 
 }
