@@ -218,11 +218,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
 
             @Override
             public void run() {
-                try {
-                    Thread.sleep(500);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
+
 
                 Handler uiHandler = new Handler(Looper.getMainLooper());
                 Runnable toRun = new Runnable() {

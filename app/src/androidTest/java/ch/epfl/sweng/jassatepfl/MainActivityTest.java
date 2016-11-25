@@ -21,7 +21,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsNPlayers;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsPlayer;
+import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.core.IsAnything.anything;
+import static org.mockito.ArgumentMatchers.startsWith;
 
 public final class MainActivityTest extends InjectedBaseActivityTest {
 
@@ -36,27 +38,27 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testDoNotAddWhenAlreadyInMatch() {
+        dbRefWrapTest.reset();
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyDataTest.matchWithBob());
+        Match m = DummyDataTest.matchWithBob();
+        matches.add(m);
         dbRefWrapTest.addMatches(matches);
-        dbRefWrapTest.addPendingMatch(DummyDataTest.onePlayerMatch(), Arrays.asList(false, false, false, false));
+        dbRefWrapTest.addPendingMatch(DummyDataTest.matchWithBob(), Arrays.asList(false, false, false, false));
         assertMatchContainsNPlayers(dbRefWrapTest, "bob", 1);
         assertMatchContainsPlayer(dbRefWrapTest, "bob", new Player.PlayerID("696969"));
 
         getActivity();
 
+
         try {
+            Thread.sleep(1000);
             onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
-            onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
-            onView(withText(R.string.dialog_join_confirmation)).perform(click());
-            onView(withText(R.string.error_cannot_join)).check(matches(isDisplayed()));
-            onView(withText(R.string.error_already_in_match)).check(matches(isDisplayed()));
-            assertMatchContainsNPlayers(dbRefWrapTest, "bob", 1);
+            Thread.sleep(1000);
+            onView(withText(R.string.wait_button_text_ready)).check(matches(isDisplayed()));
         } catch (Exception e){
             e.printStackTrace();
             fail();
         }
-        dbRefWrapTest.reset();
     }
 
 /* Need support of queries orderByChild and equalTo in mockito
