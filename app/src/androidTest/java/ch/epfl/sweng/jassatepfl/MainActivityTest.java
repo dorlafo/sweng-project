@@ -37,7 +37,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
     }
 
     @Test
-    public void testDoNotAddWhenAlreadyInMatch() {
+    public void testSwitchToWaitingPlayersActivityWhenClickOnAMatch() {
         dbRefWrapTest.reset();
         Set<Match> matches = new HashSet<>();
         Match m = DummyDataTest.matchWithBob();
@@ -51,9 +51,9 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
 
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
             onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
-            Thread.sleep(2000);
+            Thread.sleep(5000);
             onView(withText(R.string.wait_button_text_ready)).check(matches(isDisplayed()));
         } catch (Exception e){
             e.printStackTrace();
