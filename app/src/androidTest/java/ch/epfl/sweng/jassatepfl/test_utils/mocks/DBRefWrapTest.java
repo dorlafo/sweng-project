@@ -39,8 +39,8 @@ import static org.mockito.Mockito.when;
 public class DBRefWrapTest extends DBReferenceWrapper {
 
     private NodeTest currentNode;
-    private static int numValueEventListener = 0;
-    private static int numChildEventListener = 0;
+    private int numValueEventListener = 0;
+    private int numChildEventListener = 0;
 
     public DBRefWrapTest(DatabaseReference dbRef) {
         super();
