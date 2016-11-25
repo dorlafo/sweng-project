@@ -1,6 +1,6 @@
 # Jass@EPFL
 
-## STATUS
+## Status
 
 [![Build Status](http://jenkins.epfl.ch/buildStatus/icon?job=team-println-debugging)](http://jenkins.epfl.ch/job/team-println-debugging/)
 
