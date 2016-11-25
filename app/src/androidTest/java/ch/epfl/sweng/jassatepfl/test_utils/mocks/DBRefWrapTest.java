@@ -216,6 +216,12 @@ public class DBRefWrapTest extends DBReferenceWrapper {
 
             @Override
             public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+
                 Handler uiHandler = new Handler(Looper.getMainLooper());
                 Runnable toRun = new Runnable() {
                     @Override
@@ -230,7 +236,14 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                                             when(snap.getValue()).thenReturn(value);
                                             listener.onChildAdded(snap, currentNode.getId());
                                         }
+                                    } else if(currentNode.getId().equals(DatabaseUtils.DATABASE_MATCHES)) {
+                                        Set<NodeTest> matches = currentNode.getChildren();
+                                        for(NodeTest matchLeaf: matches) {
+                                            Match m = ((MatchLeafTest) matchLeaf).getData();
 
+                                            when(snap.getValue(Match.class)).thenReturn(m);
+                                            listener.onChildAdded(snap, m.getMatchID());
+                                        }
                                     }
                             }
                         };
