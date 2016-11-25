@@ -215,7 +215,10 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     public void onDestroy() {
         super.onDestroy();
         if(childEventListener != null) {
-            dbRefWrapped.removeEventListener(childEventListener);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                    .orderByChild("privateMatch")
+                    .equalTo(false)
+                    .removeEventListener(childEventListener);
         }
     }
 
