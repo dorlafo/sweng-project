@@ -2,7 +2,6 @@ package ch.epfl.sweng.jassatepfl;
 
 import org.junit.Test;
 
-import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
