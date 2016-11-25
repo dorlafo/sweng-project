@@ -87,6 +87,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
                     .equalTo(false)
                     .removeEventListener(childEventListener);
         }
+        matches.clear();
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
