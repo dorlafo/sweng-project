@@ -1,7 +1,5 @@
-package ch.epfl.sweng.jassatepfl.mocks;
+package ch.epfl.sweng.jassatepfl.test_utils.mocks.tests;
 
-
-import android.widget.TextView;
 
 import org.junit.Test;
 
@@ -10,39 +8,37 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.jassatepfl.database.local.Leaf;
-import ch.epfl.sweng.jassatepfl.database.local.Root;
-import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
-import ch.epfl.sweng.jassatepfl.database.local.reference.QueryWrapperMock;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
-import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 
-public class QueryWrapperMockTest {
+public class QueryWrapperMockTestTest {
 
     @Test
     public void queryMockTest() {
-        Root root = new Root("jass@Epfl");
+        RootTest root = new RootTest("jass@Epfl");
         root.addChild("matches");
         root.addChild("players");
-        DBRefWrapMock localRef = new DBRefWrapMock(root);
+        DBRefWrapTest localRef = new DBRefWrapTest(root);
 
         Set<Player> players = new HashSet<>();
-        players.add(DummyData.amaury);
+        players.add(DummyDataTest.amaury);
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.privateMatch());
+        matches.add(DummyDataTest.privateMatch());
         localRef.addPlayers(players);
         localRef.addMatches(matches);
-        QueryWrapperMock query = (QueryWrapperMock) localRef.child("matches").orderByChild("privateMatch").equalTo(true);
+        ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMockTest query = (ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMockTest) localRef.child("matches").orderByChild("privateMatch").equalTo(true);
 
         try {
             Field f = query.getClass().getDeclaredField("elements");
             f.setAccessible(true);
-            List<Leaf> matchs = (List<Leaf>) f.get(query);
+            List<LeafTest> matchs = (List<LeafTest>) f.get(query);
             assertEquals(1 , matchs.size());
             assertEquals("private", ((Match) matchs.get(0).getData()).getMatchID());
         } catch (Exception e) {

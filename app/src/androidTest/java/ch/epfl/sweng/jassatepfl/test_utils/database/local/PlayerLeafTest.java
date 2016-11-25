@@ -1,8 +1,4 @@
-package ch.epfl.sweng.jassatepfl.database.local;
-
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
+package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;
@@ -10,23 +6,23 @@ import ch.epfl.sweng.jassatepfl.model.Rank;
 /**
  * @author Amaury Combes
  */
-public class PlayerLeaf extends Leaf<Player> {
-    private LeafField<Player.PlayerID> idLeaf = new LeafField<>("id");
-    private LeafField<String> lastNameLeaf = new LeafField<>("lastName");
-    private LeafField<String> firstNameLeaf = new LeafField<>("fistName");
-    private LeafField<Rank> rankLeaf = new LeafField<>("rank");
+public class PlayerLeafTest extends LeafTest<Player> {
+    private LeafFieldTest<Player.PlayerID> idLeaf = new LeafFieldTest<>("id");
+    private LeafFieldTest<String> lastNameLeaf = new LeafFieldTest<>("lastName");
+    private LeafFieldTest<String> firstNameLeaf = new LeafFieldTest<>("fistName");
+    private LeafFieldTest<Rank> rankLeaf = new LeafFieldTest<>("rank");
 
     /**
-     * Constructor of the Leaf class
+     * Constructor of the LeafTest class
      *
-     * @param id the id of the Leaf that is created
+     * @param id the id of the LeafTest that is created
      */
-    public PlayerLeaf(String id) {
+    public PlayerLeafTest(String id) {
         super(id);
     }
 
     @Override
-    public LeafField getChild(String id) {
+    public LeafFieldTest getChild(String id) {
         switch (id) {
             case "id":
                 return idLeaf;

@@ -34,7 +34,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     private Player player;
 
     private ChildEventListener pendingMatchesListener;
-    private ChildEventListener childEventListener;
     private ValueEventListener valueEventListener;
     private ValueEventListener contactFirebaseListener;
 
@@ -258,8 +257,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     public void onDestroy() {
         super.onDestroy();
         dbRefWrapped.removeEventListener(pendingMatchesListener);
-        dbRefWrapped.removeEventListener(childEventListener);
         dbRefWrapped.removeEventListener(valueEventListener);
+        dbRefWrapped.removeEventListener(contactFirebaseListener);
     }
 
     /**
@@ -270,7 +269,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
      */
     public void leaveMatch(View view) {
         dbRefWrapped.removeEventListener(pendingMatchesListener);
-        dbRefWrapped.removeEventListener(childEventListener);
         dbRefWrapped.removeEventListener(valueEventListener);
         dbRefWrapped.removeEventListener(contactFirebaseListener);
         try {
@@ -322,7 +320,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
     }
 
     private void contactFirebase() {
-        //TODO review this (fix issue #123)
         contactFirebaseListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -339,7 +336,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer {
 
         dbRefWrapped.child("matches")
                 .child(matchId)
-                .addValueEventListener(valueEventListener);
+                .addValueEventListener(contactFirebaseListener);
         /*childEventListener = new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {

@@ -5,9 +5,8 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -31,9 +30,9 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public void setUp() throws Exception {
         super.setUp();
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyData.twoPlayersMatch());
-        matches.add(DummyData.onePlayerMatch());
-        dbRefWrapMock.addMatches(matches);
+        matches.add(DummyDataTest.twoPlayersMatch());
+        matches.add(DummyDataTest.onePlayerMatch());
+        dbRefWrapTest.addMatches(matches);
 
         getActivity();
     }
@@ -73,7 +72,7 @@ public final class DrawerTest extends InjectedBaseActivityTest {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_maps));
         onView(withId(R.id.maps_menu_button)).check(matches(isDisplayed()));
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test
