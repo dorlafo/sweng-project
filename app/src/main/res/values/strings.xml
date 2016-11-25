@@ -103,4 +103,8 @@
     <color name="greenCardBoard">#2B6C3E</color>
     <color name="greenCardBoardDark">#21432B</color>
     <color name="greenCardBoardAccent">#D493C1</color>
+
+    <string name="user_guide">User Guide</string>
+    <string name="select_game_variant">Select Game Variant:</string>
+    <string name="rules">Rules</string>
 </resources>
