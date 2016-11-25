@@ -61,7 +61,6 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
             listView.setEmptyView(emptyList);
 
             matches = new ArrayList<>();
-            contactFirebase();
             listView.setOnItemClickListener(this);
         }
     }
@@ -69,6 +68,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
     @Override
     public void onResume() {
         super.onResume();
+        contactFirebase();
         Intent startIntent = getIntent();
 
         // Notification onClick handler.
@@ -83,10 +83,18 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if(childEventListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).removeEventListener(childEventListener);
+        }
+        matches.clear();
+    }
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if(childEventListener != null) {
-            dbRefWrapped.removeEventListener(childEventListener);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).removeEventListener(childEventListener);
         }
     }
 
