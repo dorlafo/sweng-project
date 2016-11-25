@@ -92,7 +92,7 @@
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_stat_logonotification" />
+            android:resource="@drawable/ic_stat_notify" />
 
         <!-- App required serviced -->
         <service android:name=".notification.FirebaseMessagingHandler">
