@@ -15,6 +15,10 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
@@ -47,11 +51,11 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        //Intent intent = getIntent();
-        //String matchId = intent.getStringExtra("match_Id");
-        /*matchId = "-KXNh5i1z_ze2QTstS6o";
+        /*Intent intent = getIntent();
+        String matchId = intent.getStringExtra("match_Id");
+        //matchId = "-KXNh5i1z_ze2QTstS6o";
         dbRefWrapped.child("matches").child(matchId)
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         currentMatch = dataSnapshot.getValue(Match.class);
@@ -61,9 +65,9 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
-                });*/
-
-        // int pointsGoal = currentMatch.getGameVariant().getPointGoal();
+                });
+*/
+        //      int pointsGoal = currentMatch.getGameVariant().getPointGoal();
         int pointsGoal = 1000;
         //final boolean isOwner = currentMatch.createdBy().getID().toString().equals(fAuth.getCurrentUser().getDisplayName());
         boolean isOwner = true;
@@ -264,6 +268,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
 
     private void updateMatchStats() {
         //dbRefWrapped.child("stats").child("matchStats").child(matchId).setValue(matchStats);
+        // TODO: finish activity, destroy listeners, ...
     }
 
 }
