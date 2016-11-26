@@ -98,6 +98,48 @@ public final class RoundTest {
         assertEquals(melds, round.getTeamMelds(0));
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testTeamCardScoreGetterThrowsException() {
+        Round round = new Round(1);
+        round.getTeamCardScore(2);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testTeamMeldScoreGetterThrowsException() {
+        Round round = new Round(1);
+        round.getTeamMeldScore(2);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testTeamTotalScoreGetterThrowsException() {
+        Round round = new Round(1);
+        round.getTeamTotalScore(2);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testTeamMeldsGetterThrowsException() {
+        Round round = new Round(1);
+        round.getTeamMelds(2);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSetTeamScoreThrowsException() {
+        Round round = new Round(1);
+        round.setTeamScore(2, 12);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testAddMeldThrowsException() {
+        Round round = new Round(1);
+        round.addMeldToTeam(2, FOUR_JACKS);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testCancelMeldThrowsException() {
+        Round round = new Round(1);
+        round.cancelLastMeld(2);
+    }
+
     private void updateScore(Round round, int teamIndex, int score) {
         round.setTeamScore(teamIndex, score);
     }

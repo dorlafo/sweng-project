@@ -57,6 +57,42 @@ public class MatchStatsTest {
         assertEquals(1, stats.getWinnerIndex());
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testRoundScoreGetterThrowsException() {
+        MatchStats stats = new MatchStats("hello", CHIBRE);
+        stats.getCurrentRoundTeamScore(2);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testMatchScoreGetterThrowsException() {
+        MatchStats stats = new MatchStats("hello", CHIBRE);
+        stats.getTotalMatchScore(2);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSetScoreThrowsException() {
+        MatchStats stats = new MatchStats("hello", CHIBRE);
+        stats.setScore(2, 50);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSetMeldThrowsException() {
+        MatchStats stats = new MatchStats("hello", CHIBRE);
+        stats.setMeld(2, FOUR_JACKS);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testCancelThrowsExceptionForInvalidIndex() {
+        MatchStats stats = new MatchStats("hello", CHIBRE);
+        stats.cancelLastRound(2);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testCancelThrowsExceptionWhenNothingToCancel() {
+        MatchStats stats = new MatchStats("hello", CHIBRE);
+        stats.cancelLastRound(0);
+    }
+
     private void setTeamScores(MatchStats stats, int firstTeamScore, int secondTeamScore) {
         stats.setScore(0, firstTeamScore);
         stats.setScore(1, secondTeamScore);
