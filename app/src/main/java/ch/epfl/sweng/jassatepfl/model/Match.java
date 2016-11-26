@@ -157,18 +157,6 @@ public class Match {
         return expirationTime;
     }
 
-    public void copy(Match m) {
-        players = m.getPlayers();
-        location = m.getLocation();
-        description = m.getDescription();
-        rank = m.getRank();
-        privateMatch = m.isPrivateMatch();
-        gameVariant = m.getGameVariant();
-        maxPlayerNumber = m.getMaxPlayerNumber();
-        expirationTime = m.getExpirationTime();
-        matchID = m.getMatchID();
-    }
-
     /**
      * Getter for the firebase ID of the match.
      *

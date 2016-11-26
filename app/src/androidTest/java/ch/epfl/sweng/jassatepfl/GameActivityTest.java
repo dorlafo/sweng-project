@@ -12,11 +12,10 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
-import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
-import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcher;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
+import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -38,7 +37,7 @@ import static org.hamcrest.Matchers.not;
 
 public final class GameActivityTest extends InjectedBaseActivityTest {
 
-    private final Match ownedMatch = DummyData.ownedMatch();
+    private final Match ownedMatch = DummyDataTest.ownedMatch();
 
     public GameActivityTest() {
         super(GameActivity.class);
@@ -58,7 +57,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         String playingTo = String.format(getInstrumentation().getTargetContext().getResources()
                 .getString(R.string.game_text_point_goal), pointsGoal);
         onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     /* TODO: fix this
@@ -70,15 +69,15 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         setActivityIntent(intent);
         Set<Match> matches = new HashSet<>();
         matches.add(threePlayerMatch);
-        dbRefWrapMock.addMatches(matches);
+        dbRefWrapTest.addMatches(matches);
         Set<MatchStats> stats = new HashSet<>();
         stats.add(new MatchStats(threePlayerMatch.getMatchID(), threePlayerMatch.getGameVariant()));
-        dbRefWrapMock.addStats(stats);
+        dbRefWrapTest.addStats(stats);
         getActivity();
         onView(withId(R.id.score_picker_cancel)).check(matches(not(isDisplayed())));
         onView(withId(R.id.score_update_1)).check(matches(not(isDisplayed())));
         onView(withId(R.id.score_meld_spinner_2)).check(matches(not(isDisplayed())));
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
     */
 
@@ -87,10 +86,10 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         ownedMatchSetUp();
         getActivity();
         onView(withId(R.id.score_update_cancel)).perform(click());
-        onView(withText(R.string.toast_cannot_cancel)).inRoot(new ToastMatcher())
+        onView(withText(R.string.toast_cannot_cancel)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
         onView(withId(R.id.score_update_cancel)).check(matches(not(isEnabled())));
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test
@@ -101,7 +100,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         checkScoreDisplay("2", "155");
         incrementScore(1, 5);
         checkScoreDisplay("154", "160");
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test
@@ -114,7 +113,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.score_update_2)).perform(click());
         onView(withId(R.id.score_picker_match)).perform(click());
         checkScoreDisplay("257", "257");
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test
@@ -129,7 +128,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.score_update_2)).perform(click());
         onView(withId(R.id.score_picker_cancel)).perform(click());
         checkScoreDisplay("50", "107");
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test
@@ -144,7 +143,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         checkScoreDisplay("60", "97");
         onView(withId(R.id.score_update_cancel)).perform(click());
         checkScoreDisplay("0", "0");
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test
@@ -159,7 +158,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
                 .getResources().getString(R.string.dialog_game_end), "Team 1");
         onView(withText(message)).check(matches(isDisplayed()));
         onView(withId(android.R.id.button1)).perform(click());
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }
 
     @Test
@@ -221,10 +220,10 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         setActivityIntent(intent);
         Set<Match> matches = new HashSet<>();
         matches.add(ownedMatch);
-        dbRefWrapMock.addMatches(matches);
+        dbRefWrapTest.addMatches(matches);
         Set<MatchStats> stats = new HashSet<>();
         stats.add(new MatchStats(ownedMatch.getMatchID(), ownedMatch.getGameVariant()));
-        dbRefWrapMock.addStats(stats);
+        dbRefWrapTest.addStats(stats);
     }
 
 }
