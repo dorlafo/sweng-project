@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -182,6 +183,27 @@ public class Round {
             toReturn |= !melds.get(key).contains(SENTINEL);
         }
         return toReturn;
+    }
+
+    public String meldsToString(int teamIndex) {
+        if (teamIndex < 0 || teamIndex >= teamCount) {
+            throw new IndexOutOfBoundsException("Invalid team index");
+        }
+
+        List<Meld> teamMelds = melds.get(concatKey(teamIndex));
+
+        if (teamMelds.contains(SENTINEL)) {
+            return "-";
+        }
+
+        StringBuilder meldsString = new StringBuilder();
+        for (Iterator<Meld> iterator = teamMelds.iterator(); iterator.hasNext(); ) {
+            meldsString.append(iterator.next().toString());
+            if (iterator.hasNext()) {
+                meldsString.append(", ");
+            }
+        }
+        return meldsString.toString();
     }
 
     private String concatKey(int index) {

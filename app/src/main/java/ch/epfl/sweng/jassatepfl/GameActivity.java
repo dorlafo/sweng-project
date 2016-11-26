@@ -347,7 +347,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             score.setText(round.getTeamTotalScore(teamIndex).toString());
 
             TextView melds = (TextView) row.findViewById(R.id.score_table_row_melds);
-            melds.setText(round.getTeamMelds(teamIndex).toString());
+            melds.setText(round.meldsToString(teamIndex));
 
             tableLayout.addView(row);
         }
