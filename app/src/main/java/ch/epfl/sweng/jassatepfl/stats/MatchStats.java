@@ -26,7 +26,6 @@ public class MatchStats {
     private Map<String, Integer> totalScores;
     // Index to the current round
     private int currentRoundIndex;
-    private boolean goalHasBeenReached;
     private int winnerIndex;
 
     public MatchStats() {
@@ -49,7 +48,6 @@ public class MatchStats {
             totalScores.put(concatKey(i), 0);
         }
         this.currentRoundIndex = 0;
-        this.goalHasBeenReached = false;
         this.winnerIndex = -1;
     }
 
@@ -87,16 +85,24 @@ public class MatchStats {
         return currentRoundIndex;
     }
 
-    public boolean goalHasBeenReached() {
-        return goalHasBeenReached;
-    }
-
     public int getWinnerIndex() {
         return winnerIndex;
     }
 
+    public boolean goalHasBeenReached() {
+        return updateGoalAndWinner();
+    }
+
     public boolean meldWasSetThisRound() {
         return rounds.get(currentRoundIndex).meldWasSetThisRound();
+    }
+
+    public boolean allTeamsHaveReachedGoal() {
+        boolean allTeamSHaveReachedGoal = true;
+        for (String key : totalScores.keySet()) {
+            allTeamSHaveReachedGoal &= totalScores.get(key) >= gameVariant.getPointGoal();
+        }
+        return allTeamSHaveReachedGoal;
     }
 
     /**
@@ -129,7 +135,7 @@ public class MatchStats {
      * Closes the currentRound, updating the scores, and starts a new round.
      */
     public void finishRound() {
-        if (!goalHasBeenReached) {
+        if (!goalHasBeenReached()) {
             rounds.add(new Round(nbTeam));
             ++currentRoundIndex;
         }
@@ -191,6 +197,10 @@ public class MatchStats {
         updateTotalScore(teamIndex, meld.value());
     }
 
+    public void setWinnerIndex(int winnerIndex) {
+        this.winnerIndex = winnerIndex;
+    }
+
     private String concatKey(int index) {
         return "TEAM" + index;
     }
@@ -200,8 +210,18 @@ public class MatchStats {
         Integer tmp = totalScores.get(key);
         tmp += score;
         totalScores.put(key, tmp);
-        goalHasBeenReached |= tmp >= gameVariant.getPointGoal();
-        winnerIndex = goalHasBeenReached && winnerIndex == -1 ? teamIndex : winnerIndex;
+        updateGoalAndWinner();
+    }
+
+    private boolean updateGoalAndWinner() {
+        boolean goalHasBeenReached = false;
+        for (String key : totalScores.keySet()) {
+            if (!goalHasBeenReached && totalScores.get(key) >= gameVariant.getPointGoal()) {
+                goalHasBeenReached = true;
+                winnerIndex = winnerIndex == -1 ? key.charAt(4) - '0' : winnerIndex;
+            }
+        }
+        return goalHasBeenReached;
     }
 
 }

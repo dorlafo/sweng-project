@@ -158,11 +158,14 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         matchStats.finishRound();
         cancelButton.setEnabled(true);
         displayScore(matchStats);
-        updateMatchStats();
         if (matchStats.goalHasBeenReached()) {
+            if (matchStats.allTeamsHaveReachedGoal()) {
+                matchStats.setWinnerIndex(caller.ordinal());
+            }
             // dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats); TODO: mock the buffer
-            displayEndOfMatchMessage();
+            displayEndOfMatchMessage(matchStats.getWinnerIndex());
         }
+        updateMatchStats();
     }
 
     @SuppressLint("SetTextI18n")
@@ -218,8 +221,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         dialog.show();
     }
 
-    private void displayEndOfMatchMessage() {
-        String winningTeam = "Team " + (matchStats.getWinnerIndex() + 1);
+    private void displayEndOfMatchMessage(int winningTeamIndex) {
+        String winningTeam = "Team " + (winningTeamIndex + 1);
         String message = String.format(getString(R.string.dialog_game_end), winningTeam);
         new AlertDialog.Builder(this)
                 .setTitle(message)
@@ -281,7 +284,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                     if (modifiedMatchStats != null) {
                         displayScore(modifiedMatchStats);
                         if (modifiedMatchStats.goalHasBeenReached()) {
-                            displayEndOfMatchMessage();
+                            displayEndOfMatchMessage(modifiedMatchStats.getWinnerIndex());
                         }
                     }
                 }
