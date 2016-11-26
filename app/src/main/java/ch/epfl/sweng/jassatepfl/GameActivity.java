@@ -2,17 +2,23 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +30,7 @@ import java.util.Stack;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
+import ch.epfl.sweng.jassatepfl.model.Round;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 
 import static android.view.View.INVISIBLE;
@@ -90,6 +97,12 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.score_display_1:
+                displayScoreHistory(0);
+                break;
+            case R.id.score_display_2:
+                displayScoreHistory(1);
+                break;
             case R.id.score_update_1:
                 caller = FIRST_TEAM;
                 showScorePicker();
@@ -243,7 +256,11 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
 
     private void setUp() {
         firstTeamScoreDisplay = (TextView) findViewById(R.id.score_display_1);
+        firstTeamScoreDisplay.setOnClickListener(this);
+        firstTeamScoreDisplay.setEnabled(false);
         secondTeamScoreDisplay = (TextView) findViewById(R.id.score_display_2);
+        secondTeamScoreDisplay.setOnClickListener(this);
+        secondTeamScoreDisplay.setEnabled(false);
 
         final boolean isOwner = currentMatch.createdBy().getID().toString().equals(fAuth.getCurrentUser().getDisplayName());
         final int visibility = isOwner ? VISIBLE : INVISIBLE;
@@ -275,16 +292,20 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
 
         if (isOwner) {
             matchStats = new MatchStats(matchId, currentMatch.getGameVariant());
+            firstTeamScoreDisplay.setEnabled(true);
+            secondTeamScoreDisplay.setEnabled(true);
             displayScore(matchStats);
         } else {
             statsListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    MatchStats modifiedMatchStats = dataSnapshot.getValue(MatchStats.class);
-                    if (modifiedMatchStats != null) {
-                        displayScore(modifiedMatchStats);
-                        if (modifiedMatchStats.goalHasBeenReached()) {
-                            displayEndOfMatchMessage(modifiedMatchStats.getWinnerIndex());
+                    matchStats = dataSnapshot.getValue(MatchStats.class);
+                    if (matchStats != null) {
+                        firstTeamScoreDisplay.setEnabled(true);
+                        secondTeamScoreDisplay.setEnabled(true);
+                        displayScore(matchStats);
+                        if (matchStats.goalHasBeenReached()) {
+                            displayEndOfMatchMessage(matchStats.getWinnerIndex());
                         }
                     }
                 }
@@ -297,6 +318,41 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             dbRefWrapped.child("matchStats").child(matchId)
                     .addValueEventListener(statsListener);
         }
+    }
+
+    private void displayScoreHistory(int teamIndex) {
+        final Dialog dialog = new Dialog(this) {
+            @Override
+            public boolean onTouchEvent(@NonNull MotionEvent event) {
+                this.dismiss();
+                return true;
+            }
+        };
+        dialog.setContentView(R.layout.score_table_layout);
+
+        TableLayout tableLayout = (TableLayout) dialog.findViewById(R.id.score_table_layout);
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        int roundIndex = 1;
+
+        for (Round round : matchStats.getRounds()) {
+            TableRow row = (TableRow) inflater.inflate(R.layout.score_table_row, null);
+
+            TextView roundIndexView = (TextView) row.findViewById(R.id.score_table_row_round_index);
+            roundIndexView.setText(Integer.toString(roundIndex));
+            ++roundIndex;
+
+            TextView score = (TextView) row.findViewById(R.id.score_table_row_points);
+            score.setText(round.getTeamTotalScore(teamIndex).toString());
+
+            TextView melds = (TextView) row.findViewById(R.id.score_table_row_melds);
+            melds.setText(round.getTeamMelds(teamIndex).toString());
+
+            tableLayout.addView(row);
+        }
+
+        dialog.show();
     }
 
 }

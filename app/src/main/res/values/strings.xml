@@ -30,6 +30,9 @@
     <string name="game_text_score_picker">Enter your score for this round</string>
     <string name="game_text_point_goal">Playing to %d points</string>
     <string name="game_select_meld">Select your meld</string>
+    <string name="game_score_table_round">Round</string>
+    <string name="game_score_table_points">Points</string>
+    <string name="game_score_table_melds">Melds</string>
 
     <string name="list_empty_list">No matches are available</string>
 
