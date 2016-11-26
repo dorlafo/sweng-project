@@ -261,6 +261,7 @@ public class Match {
      * The different meld available
      */
     public enum Meld {
+        SENTINEL("Sentinel"),
         LAST_TRICK("Cinq de der"),
         MARRIAGE("Stöck"),
         THREE_CARDS("Trois cartes"),
@@ -300,6 +301,7 @@ public class Match {
                     return 150;
                 case FOUR_JACKS:
                     return 200;
+                case SENTINEL:
                 default:
                     return 0;
             }

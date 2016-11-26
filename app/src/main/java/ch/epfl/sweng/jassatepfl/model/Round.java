@@ -8,6 +8,8 @@ import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
 
+import static ch.epfl.sweng.jassatepfl.model.Match.Meld.SENTINEL;
+
 /**
  * Class representing a round object. It contains the points and melds obtained in the round.
  */
@@ -33,7 +35,9 @@ public class Round {
         for (int i = 0; i < teamCount; ++i) {
             String key = concatKey(i);
             scores.put(key, 0);
-            melds.put(key, new ArrayList<Meld>());
+            List<Meld> sentinelList = new ArrayList<>();
+            sentinelList.add(SENTINEL);
+            melds.put(key, sentinelList);
             meldScores.put(key, 0);
         }
     }
@@ -134,6 +138,7 @@ public class Round {
         }
 
         String key = concatKey(teamIndex);
+        melds.get(key).remove(SENTINEL);
         melds.get(key).add(meld);
         Integer tmp = meldScores.get(key);
         meldScores.put(key, tmp + meld.value());
@@ -153,11 +158,14 @@ public class Round {
         String key = concatKey(teamIndex);
         List<Meld> teamMelds = melds.get(key);
         int meldValue = 0;
-        if (!teamMelds.isEmpty()) {
+        if (!teamMelds.contains(SENTINEL)) {
             Meld meld = teamMelds.remove(teamMelds.size() - 1);
             Integer tmp = meldScores.get(key);
             meldValue = meld.value();
             meldScores.put(key, tmp - meldValue);
+            if (teamMelds.isEmpty()) {
+                teamMelds.add(SENTINEL);
+            }
         }
         return meldValue;
     }
@@ -171,7 +179,7 @@ public class Round {
         boolean toReturn = false;
         for (int i = 0; i < teamCount; ++i) {
             String key = concatKey(i);
-            toReturn |= !melds.get(key).isEmpty();
+            toReturn |= !melds.get(key).contains(SENTINEL);
         }
         return toReturn;
     }
