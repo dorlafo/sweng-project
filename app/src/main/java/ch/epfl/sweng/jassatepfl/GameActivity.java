@@ -20,6 +20,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Stack;
+
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
@@ -46,11 +48,14 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     protected enum Caller {FIRST_TEAM, SECOND_TEAM}
 
     private Caller caller;
+    private Stack<Caller> meldCallers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        meldCallers = new Stack<>();
 
         Intent intent = getIntent();
         matchId = intent.getStringExtra("match_Id");
@@ -83,9 +88,11 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                 showScorePicker();
                 break;
             case R.id.score_meld_spinner_1:
+                meldCallers.push(FIRST_TEAM);
                 displayMeldSpinner(0);
                 break;
             case R.id.score_meld_spinner_2:
+                meldCallers.push(SECOND_TEAM);
                 displayMeldSpinner(1);
                 break;
             case R.id.score_update_cancel:
@@ -94,11 +101,12 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                             .show();
                     cancelButton.setEnabled(false);
                 } else {
-                    matchStats.cancelLastRound();
+                    int teamIndex = matchStats.meldWasSetThisRound() ? meldCallers.pop().ordinal() : 0;
+                    matchStats.cancelLastRound(teamIndex);
                     displayScore(matchStats);
                     updateMatchStats();
-                    break;
                 }
+                break;
         }
     }
 
@@ -148,8 +156,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
 
     @SuppressLint("SetTextI18n")
     private void displayScore(MatchStats stats) {
-        Integer firstTeamScore = stats.getTotalMatchScore(0) + stats.getCurrentRoundTeamScore(0);
-        Integer secondTeamScore = stats.getTotalMatchScore(1) + stats.getCurrentRoundTeamScore(1);
+        Integer firstTeamScore = stats.getTotalMatchScore(0);
+        Integer secondTeamScore = stats.getTotalMatchScore(1);
         firstTeamScoreDisplay.setText(firstTeamScore.toString());
         secondTeamScoreDisplay.setText(secondTeamScore.toString());
     }

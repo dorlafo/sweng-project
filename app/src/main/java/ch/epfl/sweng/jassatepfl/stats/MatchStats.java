@@ -28,7 +28,6 @@ public class MatchStats {
     private int currentRoundIndex;
     private boolean goalHasBeenReached;
     private int winnerIndex;
-    private boolean meldWasSetThisRound;
 
     public MatchStats() {
     }
@@ -52,7 +51,6 @@ public class MatchStats {
         this.currentRoundIndex = 0;
         this.goalHasBeenReached = false;
         this.winnerIndex = -1;
-        this.meldWasSetThisRound = false;
     }
 
     /**
@@ -98,7 +96,7 @@ public class MatchStats {
     }
 
     public boolean meldWasSetThisRound() {
-        return meldWasSetThisRound;
+        return rounds.get(currentRoundIndex).meldWasSetThisRound();
     }
 
     /**
@@ -131,14 +129,6 @@ public class MatchStats {
      * Closes the currentRound, updating the scores, and starts a new round.
      */
     public void finishRound() {
-        for (int i = 0; i < nbTeam; ++i) {
-            String key = concatKey(i);
-            Integer tmp = totalScores.get(key);
-            tmp += rounds.get(currentRoundIndex).getTeamTotalScore(i);
-            totalScores.put(key, tmp);
-            goalHasBeenReached |= tmp >= gameVariant.getPointGoal();
-            winnerIndex = goalHasBeenReached && winnerIndex == -1 ? i : winnerIndex;
-        }
         if (!goalHasBeenReached) {
             rounds.add(new Round(nbTeam));
             ++currentRoundIndex;
@@ -148,24 +138,25 @@ public class MatchStats {
     /**
      * Cancels the last round, deleting the points obtained in that round.
      *
+     * @param teamIndex the index of the last team that updated its score
      * @throws UnsupportedOperationException if there is no round to cancel
      */
-    public void cancelLastRound() throws UnsupportedOperationException {
-        if (currentRoundIndex == 0 && !meldWasSetThisRound) {
+    public void cancelLastRound(int teamIndex) throws UnsupportedOperationException {
+        if (currentRoundIndex == 0 && !meldWasSetThisRound()) {
             throw new UnsupportedOperationException("Nothing to cancel");
         }
-        if (meldWasSetThisRound) {
-            rounds.set(currentRoundIndex, new Round(nbTeam));
-            meldWasSetThisRound = false;
+        if (meldWasSetThisRound()) {
+            Round currentRound = rounds.get(currentRoundIndex);
+            int meldValue = currentRound.cancelLastMeld(teamIndex);
+            updateTotalScore(teamIndex, -meldValue);
         } else {
+            rounds.remove(currentRoundIndex);
             --currentRoundIndex;
             for (int i = 0; i < nbTeam; ++i) {
-                String key = concatKey(i);
-                Integer tmp = totalScores.get(key);
-                tmp -= rounds.get(currentRoundIndex).getTeamTotalScore(i);
-                totalScores.put(key, tmp);
+                int cardValue = rounds.get(currentRoundIndex).getTeamCardScore(i);
+                updateTotalScore(i, -cardValue);
+                rounds.get(currentRoundIndex).setTeamScore(i, 0);
             }
-            rounds.remove(currentRoundIndex);
         }
     }
 
@@ -180,6 +171,7 @@ public class MatchStats {
             throw new IndexOutOfBoundsException("Invalid team index");
         }
         rounds.get(currentRoundIndex).setTeamScore(teamIndex, score);
+        updateTotalScore(teamIndex, score);
     }
 
     /**
@@ -193,11 +185,20 @@ public class MatchStats {
             throw new IndexOutOfBoundsException("Invalid team index");
         }
         rounds.get(currentRoundIndex).addMeldToTeam(teamIndex, meld);
-        meldWasSetThisRound = true;
+        updateTotalScore(teamIndex, meld.value());
     }
 
     private String concatKey(int index) {
         return "TEAM" + index;
+    }
+
+    private void updateTotalScore(int teamIndex, int score) {
+        String key = concatKey(teamIndex);
+        Integer tmp = totalScores.get(key);
+        tmp += score;
+        totalScores.put(key, tmp);
+        goalHasBeenReached |= tmp >= gameVariant.getPointGoal();
+        winnerIndex = goalHasBeenReached && winnerIndex == -1 ? teamIndex : winnerIndex;
     }
 
 }

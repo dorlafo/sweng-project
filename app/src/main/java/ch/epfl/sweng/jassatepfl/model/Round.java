@@ -139,6 +139,43 @@ public class Round {
         meldScores.put(key, tmp + meld.value());
     }
 
+    /**
+     * Cancels the last meld obtained by the specified team, and updates the score.
+     *
+     * @param teamIndex the index of the team
+     * @return the value of the meld that was cancelled
+     */
+    public int cancelLastMeld(int teamIndex) {
+        if (teamIndex < 0 || teamIndex >= teamCount) {
+            throw new IndexOutOfBoundsException("Invalid team index");
+        }
+
+        String key = concatKey(teamIndex);
+        List<Meld> teamMelds = melds.get(key);
+        int meldValue = 0;
+        if (!teamMelds.isEmpty()) {
+            Meld meld = teamMelds.remove(teamMelds.size() - 1);
+            Integer tmp = meldScores.get(key);
+            meldValue = meld.value();
+            meldScores.put(key, tmp - meldValue);
+        }
+        return meldValue;
+    }
+
+    /**
+     * Checks whether a meld was obtained by a team this round.
+     *
+     * @return true if a meld was obtained, false otherwise
+     */
+    public boolean meldWasSetThisRound() {
+        boolean toReturn = false;
+        for (int i = 0; i < teamCount; ++i) {
+            String key = concatKey(i);
+            toReturn |= !melds.get(key).isEmpty();
+        }
+        return toReturn;
+    }
+
     private String concatKey(int index) {
         return "TEAM" + index;
     }
