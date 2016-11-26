@@ -12,7 +12,6 @@ import ch.epfl.sweng.jassatepfl.model.Player.PlayerID;
 import ch.epfl.sweng.jassatepfl.model.Rank;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
-import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.PIQUE_DOUBLE;
 
 public class DummyDataTest {
 
@@ -60,7 +59,7 @@ public class DummyDataTest {
         List<Player> matchPlayers = new ArrayList<>();
         matchPlayers.add(bricoloBob);
         matchPlayers.add(jimmy);
-        return new Match(matchPlayers, flonCoord, "Flon", false, PIQUE_DOUBLE, expirationTime(2), "owned");
+        return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
     }
 
     public static Match noPlayersMatch() {

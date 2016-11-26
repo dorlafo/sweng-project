@@ -154,7 +154,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     public void testDisplayEndOfMatchMessage() {
         ownedMatchSetUp();
         getActivity();
-        for (int i = 0; i < 6; ++i) {
+        for (int i = 0; i < 4; ++i) {
             onView(withId(R.id.score_update_1)).perform(click());
             onView(withId(R.id.score_picker_match)).perform(click());
         }
@@ -212,6 +212,25 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         checkScoreDisplay("5", "0");
         onView(withId(R.id.score_update_cancel)).perform(click());
         checkScoreDisplay("0", "0");
+        dbRefWrapTest.reset();
+    }
+
+    @Test
+    public void testCorrectWinnerIsDisplayedWhenBothTeamsHaveReachedGoal() {
+        ownedMatchSetUp();
+        getActivity();
+        for (int i = 0; i < 3; ++i) {
+            onView(withId(R.id.score_update_1)).perform(click());
+            onView(withId(R.id.score_picker_match)).perform(click());
+            onView(withId(R.id.score_update_2)).perform(click());
+            onView(withId(R.id.score_picker_match)).perform(click());
+        }
+        addMeld(0, FOUR_JACKS);
+        addMeld(1, FOUR_JACKS);
+        incrementScore(1, 50);
+        String message = String.format(getInstrumentation().getTargetContext()
+                .getResources().getString(R.string.dialog_game_end), "Team 2");
+        onView(withText(message)).check(matches(isDisplayed()));
         dbRefWrapTest.reset();
     }
 

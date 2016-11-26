@@ -93,6 +93,20 @@ public class MatchStatsTest {
         stats.cancelLastRound(0);
     }
 
+    @Test
+    public void testAllTeamsHaveReachedGoalReturnsTrue() {
+        MatchStats stats = new MatchStats("hello", CHIBRE);
+        setTeamScores(stats, 1020, 1050);
+        assertTrue(stats.allTeamsHaveReachedGoal());
+    }
+
+    @Test
+    public void testAllTeamsHaveReachedGoalReturnsFalse() {
+        MatchStats stats = new MatchStats("hello", CHIBRE);
+        setTeamScores(stats, 1020, 500);
+        assertFalse(stats.allTeamsHaveReachedGoal());
+    }
+
     private void setTeamScores(MatchStats stats, int firstTeamScore, int secondTeamScore) {
         stats.setScore(0, firstTeamScore);
         stats.setScore(1, secondTeamScore);
