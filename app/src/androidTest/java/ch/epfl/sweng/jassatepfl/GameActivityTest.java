@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Match.Meld;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
@@ -27,8 +28,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.jassatepfl.model.Match.Meld.FIFTY;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.FOUR_JACKS;
+import static ch.epfl.sweng.jassatepfl.model.Match.Meld.HUNDRED;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.LAST_TRICK;
+import static ch.epfl.sweng.jassatepfl.model.Match.Meld.THREE_CARDS;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -165,25 +169,50 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     public void testAddingMeldUpdatesScore() {
         ownedMatchSetUp();
         getActivity();
-        onView(withId(R.id.score_meld_spinner_1)).perform(click());
-        onData(allOf(is(instanceOf(Match.Meld.class)), is(LAST_TRICK))).perform(click());
+        addMeld(0, LAST_TRICK);
         checkScoreDisplay("5", "0");
-        onView(withId(R.id.score_meld_spinner_2)).perform(click());
-        onData(allOf(is(instanceOf(Match.Meld.class)), is(FOUR_JACKS))).perform(click());
+        addMeld(1, FOUR_JACKS);
         checkScoreDisplay("5", "200");
+        dbRefWrapTest.reset();
     }
 
     @Test
-    public void testCancelLastMelds() {
+    public void testCancelLastMeld() {
         ownedMatchSetUp();
         getActivity();
         incrementScore(1, 100);
         checkScoreDisplay("57", "100");
-        onView(withId(R.id.score_meld_spinner_1)).perform(click());
-        onData(allOf(is(instanceOf(Match.Meld.class)), is(FOUR_JACKS))).perform(click());
+        addMeld(0, FOUR_JACKS);
         checkScoreDisplay("257", "100");
         onView(withId(R.id.score_update_cancel)).perform(click());
         checkScoreDisplay("57", "100");
+        dbRefWrapTest.reset();
+    }
+
+    @Test
+    public void testCancelSequenceIsCorrect() {
+        ownedMatchSetUp();
+        getActivity();
+        addMeld(0, LAST_TRICK);
+        incrementScore(0, 100);
+        addMeld(1, FIFTY);
+        incrementScore(1, 50);
+        addMeld(0, HUNDRED);
+        addMeld(0, THREE_CARDS);
+        checkScoreDisplay("332", "157");
+        onView(withId(R.id.score_update_cancel)).perform(click());
+        checkScoreDisplay("312", "157");
+        onView(withId(R.id.score_update_cancel)).perform(click());
+        checkScoreDisplay("212", "157");
+        onView(withId(R.id.score_update_cancel)).perform(click());
+        checkScoreDisplay("105", "107");
+        onView(withId(R.id.score_update_cancel)).perform(click());
+        checkScoreDisplay("105", "57");
+        onView(withId(R.id.score_update_cancel)).perform(click());
+        checkScoreDisplay("5", "0");
+        onView(withId(R.id.score_update_cancel)).perform(click());
+        checkScoreDisplay("0", "0");
+        dbRefWrapTest.reset();
     }
 
     private void checkScoreDisplay(String firstDisplay, String secondDisplay) {
@@ -212,6 +241,12 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
             }
         });
         onView(withId(R.id.score_picker_confirm)).perform(click());
+    }
+
+    private void addMeld(int teamIndex, Meld meld) {
+        int meldSpinner = teamIndex == 0 ? R.id.score_meld_spinner_1 : R.id.score_meld_spinner_2;
+        onView(withId(meldSpinner)).perform(click());
+        onData(allOf(is(instanceOf(Meld.class)), is(meld))).perform(click());
     }
 
     private void ownedMatchSetUp() {

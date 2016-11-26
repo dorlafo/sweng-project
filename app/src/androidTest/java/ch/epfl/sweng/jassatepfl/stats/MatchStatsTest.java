@@ -43,7 +43,7 @@ public class MatchStatsTest {
         setTeamScores(stats, 100, 57);
         assertEquals(Integer.valueOf(157), stats.getTotalMatchScore(0));
         assertEquals(Integer.valueOf(157), stats.getTotalMatchScore(1));
-        stats.cancelLastRound();
+        stats.cancelLastRound(0);
         assertEquals(Integer.valueOf(57), stats.getTotalMatchScore(0));
         assertEquals(Integer.valueOf(100), stats.getTotalMatchScore(1));
     }
