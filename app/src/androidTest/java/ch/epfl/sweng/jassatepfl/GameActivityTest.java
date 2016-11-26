@@ -234,6 +234,29 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.reset();
     }
 
+    @Test
+    public void testHistoryDisplay() {
+        ownedMatchSetUp();
+        getActivity();
+        onView(withId(R.id.score_display_1)).perform(click());
+        onView(withId(R.id.score_table_layout)).check(matches(isDisplayed()));
+        dbRefWrapTest.reset();
+    }
+
+    /* TODO: custom matcher for this
+    @Test
+    public void testHistoryIsCorrect() {
+        ownedMatchSetUp();
+        getActivity();
+        incrementScore(1, 50);
+        onView(withId(R.id.score_display_2)).perform(click());
+        onView(withId(R.id.score_table_row_round_index)).check(matches(withText("0")));
+        onView(withId(R.id.score_table_row_points)).check(matches(withText("50")));
+        onView(withId(R.id.score_table_row_melds)).check(matches(withText("-")));
+        dbRefWrapTest.reset();
+    }
+    */
+
     private void checkScoreDisplay(String firstDisplay, String secondDisplay) {
         onView(withId(R.id.score_display_1)).check(matches(withText(firstDisplay)));
         onView(withId(R.id.score_display_2)).check(matches(withText(secondDisplay)));
