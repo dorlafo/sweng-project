@@ -73,7 +73,9 @@
         <activity
             android:name=".RulesActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".GameActivity"/>
+        <activity
+            android:name=".GameActivity"
+            android:label="@string/title_activity_game"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
