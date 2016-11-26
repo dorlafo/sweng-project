@@ -107,7 +107,7 @@ public class MatchStats {
      */
     public Integer getCurrentRoundTeamScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
-            throw new IllegalArgumentException("Invalid team index");
+            throw new IndexOutOfBoundsException("Invalid team index");
         }
         return rounds.get(currentRoundIndex).getTeamTotalScore(teamIndex);
     }
@@ -120,7 +120,7 @@ public class MatchStats {
      */
     public Integer getTotalMatchScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
-            throw new IllegalArgumentException("Invalid team index");
+            throw new IndexOutOfBoundsException("Invalid team index");
         }
         return totalScores.get(concatKey(teamIndex));
     }
@@ -142,6 +142,9 @@ public class MatchStats {
      * @throws UnsupportedOperationException if there is no round to cancel
      */
     public void cancelLastRound(int teamIndex) throws UnsupportedOperationException {
+        if (teamIndex < 0 || teamIndex >= nbTeam) {
+            throw new IndexOutOfBoundsException("Invalid team index");
+        }
         if (currentRoundIndex == 0 && !meldWasSetThisRound()) {
             throw new UnsupportedOperationException("Nothing to cancel");
         }
