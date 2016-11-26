@@ -41,6 +41,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     private Match currentMatch;
     private MatchStats matchStats;
 
+    private ValueEventListener statsListener;
+
     private TextView firstTeamScoreDisplay;
     private TextView secondTeamScoreDisplay;
     private ImageButton cancelButton;
@@ -74,6 +76,15 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                         Log.e("ERROR-DATABASE", databaseError.toString());
                     }
                 });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (statsListener != null) {
+            dbRefWrapped.child("matchStats").child(matchId)
+                    .removeEventListener(statsListener);
+        }
     }
 
     @Override
@@ -225,7 +236,6 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
 
     private void updateMatchStats() {
         dbRefWrapped.child("matchStats").child(matchId).setValue(matchStats);
-        // TODO: finish activity, destroy listeners, ...
     }
 
     private void setUp() {
@@ -264,24 +274,25 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             matchStats = new MatchStats(matchId, currentMatch.getGameVariant());
             displayScore(matchStats);
         } else {
-            dbRefWrapped.child("matchStats").child(matchId)
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            MatchStats modifiedMatchStats = dataSnapshot.getValue(MatchStats.class);
-                            if (modifiedMatchStats != null) {
-                                displayScore(modifiedMatchStats);
-                                if (modifiedMatchStats.goalHasBeenReached()) {
-                                    displayEndOfMatchMessage();
-                                }
-                            }
+            statsListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    MatchStats modifiedMatchStats = dataSnapshot.getValue(MatchStats.class);
+                    if (modifiedMatchStats != null) {
+                        displayScore(modifiedMatchStats);
+                        if (modifiedMatchStats.goalHasBeenReached()) {
+                            displayEndOfMatchMessage();
                         }
+                    }
+                }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.e("ERROR-DATABASE", databaseError.toString());
-                        }
-                    });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("ERROR-DATABASE", databaseError.toString());
+                }
+            };
+            dbRefWrapped.child("matchStats").child(matchId)
+                    .addValueEventListener(statsListener);
         }
     }
 

@@ -67,7 +67,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     /* TODO: fix this
     @Test
     public void testElementsAreHiddenForRegularPlayer() {
-        Match threePlayerMatch = DummyData.threePlayersMatch();
+        Match threePlayerMatch = DummyDataTest.threePlayersMatch();
         Intent intent = new Intent();
         intent.putExtra("match_Id", threePlayerMatch.getMatchID());
         setActivityIntent(intent);
