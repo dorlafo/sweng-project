@@ -21,7 +21,9 @@ public class TeamTest {
         Player.PlayerID p1 = new Player.PlayerID(234832);
         Player.PlayerID p2 = new Player.PlayerID(244532);
 
-        List<Player.PlayerID> players = Arrays.asList(p1, p2);
+        List<Player.PlayerID> players = new ArrayList<>();
+        players.add(p1);
+        players.add(p2);
         Team t = new Team(players);
         players.clear();
 

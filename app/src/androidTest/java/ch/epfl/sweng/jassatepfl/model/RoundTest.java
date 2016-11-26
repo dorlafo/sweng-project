@@ -30,7 +30,7 @@ public final class RoundTest {
 
     @Test
     public void testScoresGetter() {
-        Round round = new Round(1);
+        Round round = new Round(2);
         updateScore(round, 0, 25);
         updateScore(round, 1, 37);
         Map<String, Integer> map = new HashMap<>();
@@ -49,7 +49,7 @@ public final class RoundTest {
         melds.add(THREE_CARDS);
         Map<String, List<Meld>> map = new HashMap<>();
         map.put("TEAM0", melds);
-        assertEquals(melds, round.getMelds());
+        assertEquals(map, round.getMelds());
     }
 
     @Test
@@ -76,7 +76,7 @@ public final class RoundTest {
         Round round = new Round(2);
         addMeld(round, 0, HUNDRED);
         addMeld(round, 0, FOUR_JACKS);
-        assertEquals(Integer.valueOf(250), round.getTeamMeldScore(0));
+        assertEquals(Integer.valueOf(300), round.getTeamMeldScore(0));
     }
 
     @Test
@@ -84,7 +84,7 @@ public final class RoundTest {
         Round round = new Round(1);
         updateScore(round, 0, 25);
         addMeld(round, 0, FOUR_JACKS);
-        assertEquals(Integer.valueOf(175), round.getTeamTotalScore(0));
+        assertEquals(Integer.valueOf(225), round.getTeamTotalScore(0));
     }
 
     @Test

@@ -41,8 +41,8 @@ public class MatchStatsTest {
         MatchStats stats = new MatchStats("hello", CHIBRE);
         setTeamScores(stats, 57, 100);
         setTeamScores(stats, 100, 57);
-        assertEquals(Integer.valueOf(257), stats.getTotalMatchScore(0));
-        assertEquals(Integer.valueOf(257), stats.getTotalMatchScore(1));
+        assertEquals(Integer.valueOf(157), stats.getTotalMatchScore(0));
+        assertEquals(Integer.valueOf(157), stats.getTotalMatchScore(1));
         stats.cancelLastRound();
         assertEquals(Integer.valueOf(57), stats.getTotalMatchScore(0));
         assertEquals(Integer.valueOf(100), stats.getTotalMatchScore(1));
@@ -52,7 +52,7 @@ public class MatchStatsTest {
     public void testMatchIsOver() {
         MatchStats stats = new MatchStats("hello", CHIBRE);
         assertFalse(stats.goalHasBeenReached());
-        stats.setScore(1, 1000);
+        setTeamScores(stats, 500, 1000);
         assertTrue(stats.goalHasBeenReached());
         assertEquals(1, stats.getWinnerIndex());
     }
