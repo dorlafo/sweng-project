@@ -33,6 +33,7 @@
     <string name="game_score_table_round">Round</string>
     <string name="game_score_table_points">Points</string>
     <string name="game_score_table_melds">Melds</string>
+    <string name="game_default_score">-</string>
 
     <string name="list_empty_list">No matches are available</string>
 

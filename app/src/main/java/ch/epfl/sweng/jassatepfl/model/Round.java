@@ -200,7 +200,7 @@ public class Round {
         for (Iterator<Meld> iterator = teamMelds.iterator(); iterator.hasNext(); ) {
             meldsString.append(iterator.next().toString());
             if (iterator.hasNext()) {
-                meldsString.append(", ");
+                meldsString.append(",").append(System.getProperty("line.separator"));
             }
         }
         return meldsString.toString();

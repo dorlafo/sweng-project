@@ -26,6 +26,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -37,6 +40,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.SECOND_TEAM;
+import static ch.epfl.sweng.jassatepfl.model.Match.Meld.SENTINEL;
 
 public class GameActivity extends BaseAppCompatActivity implements OnClickListener {
 
@@ -92,6 +96,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             dbRefWrapped.child("matchStats").child(matchId)
                     .removeEventListener(statsListener);
         }
+        // TODO: remove matchstats from firebase
     }
 
     @Override
@@ -127,7 +132,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                 } else {
                     int teamIndex = matchStats.meldWasSetThisRound() ? meldCallers.pop().ordinal() : 0;
                     matchStats.cancelLastRound(teamIndex);
-                    displayScore(matchStats);
+                    displayScore();
                     updateMatchStats();
                 }
                 break;
@@ -135,8 +140,10 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     }
 
     private void displayMeldSpinner(final int teamIndex) {
+        List<Meld> melds = new ArrayList<>(Arrays.asList(Meld.values()));
+        melds.remove(SENTINEL);
         final ArrayAdapter<Meld> meldAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, Meld.values());
+                android.R.layout.simple_spinner_dropdown_item, melds);
         new AlertDialog.Builder(this)
                 .setTitle(R.string.game_select_meld)
                 .setAdapter(meldAdapter, new DialogInterface.OnClickListener() {
@@ -145,7 +152,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                         Meld meld = meldAdapter.getItem(which);
                         matchStats.setMeld(teamIndex, meld);
                         dialog.dismiss();
-                        displayScore(matchStats);
+                        displayScore();
                         updateMatchStats();
                         cancelButton.setEnabled(true);
                     }
@@ -170,7 +177,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         matchStats.setScore(1, secondTeamScore);
         matchStats.finishRound();
         cancelButton.setEnabled(true);
-        displayScore(matchStats);
+        displayScore();
         if (matchStats.goalHasBeenReached()) {
             if (matchStats.allTeamsHaveReachedGoal()) {
                 matchStats.setWinnerIndex(caller.ordinal());
@@ -182,9 +189,9 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     }
 
     @SuppressLint("SetTextI18n")
-    private void displayScore(MatchStats stats) {
-        Integer firstTeamScore = stats.getTotalMatchScore(0);
-        Integer secondTeamScore = stats.getTotalMatchScore(1);
+    private void displayScore() {
+        Integer firstTeamScore = matchStats.getTotalMatchScore(0);
+        Integer secondTeamScore = matchStats.getTotalMatchScore(1);
         firstTeamScoreDisplay.setText(firstTeamScore.toString());
         secondTeamScoreDisplay.setText(secondTeamScore.toString());
     }
@@ -210,7 +217,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                         break;
                 }
                 dialog.dismiss();
-                displayScore(matchStats);
+                displayScore();
             }
         });
 
@@ -294,7 +301,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             matchStats = new MatchStats(matchId, currentMatch.getGameVariant());
             firstTeamScoreDisplay.setEnabled(true);
             secondTeamScoreDisplay.setEnabled(true);
-            displayScore(matchStats);
+            displayScore();
         } else {
             statsListener = new ValueEventListener() {
                 @Override
@@ -303,10 +310,13 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                     if (matchStats != null) {
                         firstTeamScoreDisplay.setEnabled(true);
                         secondTeamScoreDisplay.setEnabled(true);
-                        displayScore(matchStats);
+                        displayScore();
                         if (matchStats.goalHasBeenReached()) {
                             displayEndOfMatchMessage(matchStats.getWinnerIndex());
                         }
+                    } else {
+                        firstTeamScoreDisplay.setEnabled(false);
+                        secondTeamScoreDisplay.setEnabled(false);
                     }
                 }
 
