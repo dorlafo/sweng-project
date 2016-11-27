@@ -140,6 +140,34 @@ public final class RoundTest {
         round.cancelLastMeld(2);
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testMeldToStringThrowsException() {
+        Round round = new Round(1);
+        round.meldsToString(-1);
+    }
+
+    @Test
+    public void testMeldToStringNoMelds() {
+        Round round = new Round(1);
+        assertEquals("-", round.meldsToString(0));
+    }
+
+    @Test
+    public void testMeldToStringOneMeld() {
+        Round round = new Round(1);
+        addMeld(round, 0, THREE_CARDS);
+        assertEquals(THREE_CARDS.toString(), round.meldsToString(0));
+    }
+
+    @Test
+    public void testMeldToStringTwoMelds() {
+        Round round = new Round(1);
+        addMeld(round, 0, THREE_CARDS);
+        addMeld(round, 0, FOUR_JACKS);
+        String expected = THREE_CARDS.toString() + ", " + FOUR_JACKS.toString();
+        assertEquals(expected, round.meldsToString(0));
+    }
+
     private void updateScore(Round round, int teamIndex, int score) {
         round.setTeamScore(teamIndex, score);
     }
