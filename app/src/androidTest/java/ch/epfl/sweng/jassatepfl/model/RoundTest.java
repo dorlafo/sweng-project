@@ -164,7 +164,8 @@ public final class RoundTest {
         Round round = new Round(1);
         addMeld(round, 0, THREE_CARDS);
         addMeld(round, 0, FOUR_JACKS);
-        String expected = THREE_CARDS.toString() + ", " + FOUR_JACKS.toString();
+        String expected = THREE_CARDS.toString() + "," +
+                System.getProperty("line.separator") + FOUR_JACKS.toString();
         assertEquals(expected, round.meldsToString(0));
     }
 
