@@ -60,6 +60,10 @@ public class TreeNodeTest implements NodeTest {
                 MatchStatusLeafTest statusLeaf = new MatchStatusLeafTest(id);
                 children.add(statusLeaf);
                 return statusLeaf;
+            case "matchStats":
+                MatchStatsLeafTest statsLeaf = new MatchStatsLeafTest(id);
+                children.add(statsLeaf);
+                return statsLeaf;
             default:
                 throw new UnsupportedOperationException();
         }
@@ -90,6 +94,9 @@ public class TreeNodeTest implements NodeTest {
                 break;
             case "pendingMatches":
                 newLeaf = new MatchStatusLeafTest(tempId);
+                break;
+            case "matchStats":
+                newLeaf = new MatchStatsLeafTest(tempId);
                 break;
             default:
                 throw new UnsupportedOperationException("Cannot add an auto generated child to : " + id);

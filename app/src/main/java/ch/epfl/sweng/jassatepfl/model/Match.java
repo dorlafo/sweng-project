@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl.model;
 
-
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
@@ -10,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.*;
+import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
 import static ch.epfl.sweng.jassatepfl.tools.RankOperationsHelper.averageRank;
 
 /**
@@ -197,7 +196,7 @@ public class Match {
 
     /**
      * Adds the given player to the match.
-     * <p>
+     * <br>
      * Adding a player that is already present in the match does nothing,
      * and adding a player if the match if full throws an exception.
      *
@@ -218,7 +217,7 @@ public class Match {
 
     /**
      * Removes the given player to the player from list.
-     * <p>
+     * <br>
      * Removing a player that is not present do nothing
      *
      * @param toRemove The id of the player to remove from the match
@@ -233,14 +232,15 @@ public class Match {
                     index = players.indexOf(p);
                 }
             }
-            if(index != -1) {
+            if (index != -1) {
                 players.remove(index);
             }
         }
 
     }
 
-     /* Checks whether the given player is taking part in the match.
+    /**
+     * Checks whether the given player is taking part in the match.
      *
      * @param player The player
      * @return true if the player is in the match, false otherwise
@@ -253,6 +253,58 @@ public class Match {
 
         public MatchRank(int rank) {
             super(rank);
+        }
+
+    }
+
+    /**
+     * The different meld available
+     */
+    public enum Meld {
+        SENTINEL("Sentinel"),
+        LAST_TRICK("Cinq de der"),
+        MARRIAGE("Stöck"),
+        THREE_CARDS("Trois cartes"),
+        FIFTY("Cinquante"),
+        HUNDRED("Cent"),
+        FOUR_NINE("Cent cinquante"),
+        FOUR_JACKS("Deux cent");
+
+        private final String meldName;
+
+        Meld(String meldName) {
+            this.meldName = meldName;
+        }
+
+        @Override
+        public String toString() {
+            return meldName;
+        }
+
+        /**
+         * Returns the value of the current meld
+         *
+         * @return The value of the meld
+         */
+        public int value() {
+            switch (this) {
+                case LAST_TRICK:
+                    return 5;
+                case MARRIAGE:
+                case THREE_CARDS:
+                    return 20;
+                case FIFTY:
+                    return 50;
+                case HUNDRED:
+                    return 100;
+                case FOUR_NINE:
+                    return 150;
+                case FOUR_JACKS:
+                    return 200;
+                case SENTINEL:
+                default:
+                    return 0;
+            }
         }
 
     }
@@ -289,6 +341,10 @@ public class Match {
          */
         public int getMaxPlayerNumber() {
             switch (this) {
+                case POMME:
+                    return 2;
+                case ROI:
+                    return 3;
                 case CHIBRE:
                 case PIQUE_DOUBLE:
                 case OBEN_ABE:
@@ -296,16 +352,73 @@ public class Match {
                 case SLALOM:
                 case CHICANE:
                 case JASS_MARANT:
-                    return 4;
-                case ROI:
-                    return 3;
-                case POMME:
-                    return 2;
                 default:
                     return 4;
             }
         }
 
+        /**
+         * Returns the number of team for the current game variant
+         *
+         * @return The number of team
+         */
+        public int getNumberOfTeam() {
+            switch (this) {
+                case ROI:
+                    return 3;
+                case CHIBRE:
+                case PIQUE_DOUBLE:
+                case OBEN_ABE:
+                case UNDEN_UFE:
+                case SLALOM:
+                case CHICANE:
+                case JASS_MARANT:
+                case POMME:
+                default:
+                    return 2;
+            }
+        }
+
+        /**
+         * Returns the number of player by team for the current game variant
+         *
+         * @return The number of player by team
+         */
+        public int getNumberOfPlayerByTeam() {
+            switch (this) {
+                case ROI:
+                case POMME:
+                    return 1;
+                case CHIBRE:
+                case PIQUE_DOUBLE:
+                case OBEN_ABE:
+                case UNDEN_UFE:
+                case SLALOM:
+                case CHICANE:
+                case JASS_MARANT:
+                default:
+                    return 2;
+            }
+        }
+
+        public int getPointGoal() {
+            switch (this) {
+                case ROI:
+                case POMME:
+                    return 20;
+                case CHIBRE:
+                    return 1000;
+                case PIQUE_DOUBLE:
+                    return 1500;
+                case OBEN_ABE:
+                case UNDEN_UFE:
+                case SLALOM:
+                case CHICANE:
+                case JASS_MARANT:
+                default:
+                    return 2500;
+            }
+        }
     }
 
     /**
