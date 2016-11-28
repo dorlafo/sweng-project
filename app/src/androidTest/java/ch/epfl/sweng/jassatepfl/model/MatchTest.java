@@ -1,10 +1,16 @@
 package ch.epfl.sweng.jassatepfl.model;
 
-
 import org.junit.Test;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
+
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.alexis;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.amaury;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.dorian;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotSame;
@@ -14,12 +20,6 @@ import static org.junit.Assert.assertNotEquals;
 
 @SuppressWarnings({"EqualsBetweenInconvertibleTypes", "EqualsWithItself", "ObjectEqualsNull"})
 public final class MatchTest {
-
-    private final Player amaury = new Player(new Player.PlayerID(1), "Combes", "Amaury", new Rank(123));
-    private final Player vincenzo = new Player(new Player.PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
-    private final Player dorian = new Player(new Player.PlayerID(3), "Laforest", "Dorian", new Rank(567));
-    private final Player alexis = new Player(new Player.PlayerID(4), "Montavon", "Alexis", new Rank(789));
-    private final Player random = new Player(new Player.PlayerID(5), "Smith", "John", new Rank(7));
 
     public Match.Builder defaultBuilder() {
         Match.Builder match = null;
@@ -154,6 +154,21 @@ public final class MatchTest {
         Match match = defaultBuilder().build();
         assertFalse(match.hasParticipant(null));
         assertFalse(match.hasParticipant(dorian));
+    }
+
+    @Test
+    public void testRemovePlayerReturnsFalseWhenNoPlayersToRemove() {
+        boolean removed = DummyDataTest.noPlayersMatch().removePlayerById(new Player.PlayerID(12));
+        assertFalse(removed);
+    }
+
+    @Test
+    public void testRemovePlayerById() {
+        Match match = DummyDataTest.threePlayersMatch();
+        assertTrue(match.hasParticipant(alexis));
+        boolean removed = match.removePlayerById(new Player.PlayerID(245433));
+        assertTrue(removed);
+        assertFalse(match.hasParticipant(alexis));
     }
 
 }

@@ -8,7 +8,6 @@ import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
-
 /**
  * @author Amaury Combes
  */
@@ -76,7 +75,6 @@ public class MatchLeafTest extends LeafTest<Match> {
         expirationTimeLeaf.setData(data.getExpirationTime());
         matchIDLeaf.setData(data.getMatchID());
     }
-
 
     @Override
     public void initialize() {

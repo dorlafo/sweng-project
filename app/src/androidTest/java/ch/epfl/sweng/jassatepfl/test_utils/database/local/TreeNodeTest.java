@@ -62,6 +62,10 @@ public class TreeNodeTest implements NodeTest {
                 MatchStatusLeafTest statusLeaf = new MatchStatusLeafTest(id);
                 children.add(statusLeaf);
                 return statusLeaf;
+            case DatabaseUtils.DATABASE_MATCH_STATS:
+                MatchStatsLeafTest statsLeaf = new MatchStatsLeafTest(id);
+                children.add(statsLeaf);
+                return statsLeaf;
             default:
                 throw new UnsupportedOperationException();
         }
@@ -92,6 +96,9 @@ public class TreeNodeTest implements NodeTest {
                 break;
             case DatabaseUtils.DATABASE_PENDING_MATCHES:
                 newLeaf = new MatchStatusLeafTest(tempId);
+                break;
+            case DatabaseUtils.DATABASE_MATCH_STATS:
+                newLeaf = new MatchStatsLeafTest(tempId);
                 break;
             default:
                 throw new UnsupportedOperationException("Cannot add an auto generated child to : " + id);

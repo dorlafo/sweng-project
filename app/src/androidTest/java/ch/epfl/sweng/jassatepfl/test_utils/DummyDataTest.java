@@ -55,6 +55,13 @@ public class DummyDataTest {
         return new Match(match3Players, CECoord, "CE", false, CHIBRE, expirationTime(3), "three_players");
     }
 
+    public static Match ownedMatch() {
+        List<Player> matchPlayers = new ArrayList<>();
+        matchPlayers.add(bricoloBob);
+        matchPlayers.add(jimmy);
+        return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+    }
+
     public static Match noPlayersMatch() {
         return new Match(new ArrayList<Player>(), lemanCoord,
                 "Cette String est beaucoup trop longue, je me demande si l'affichage va foirer???",
