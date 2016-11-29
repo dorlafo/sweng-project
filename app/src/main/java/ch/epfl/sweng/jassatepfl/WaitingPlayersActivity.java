@@ -305,7 +305,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                     description.setText(match.getDescription());
                     variant.setText(match.getGameVariant().toString());
 
-                    posInList = match.getPlayerIndex(getUserSciper());
+                    posInList = match.getPlayerIndex(new Player.PlayerID(getUserSciper()));
                     if(posInList != -1) {
                         if(match.matchFull()) {
                             inviteBtn.setEnabled(false);
@@ -447,7 +447,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if(teamSelected != (match.teamNbForPlayer(p) - 1)) {
-                                match.setTeam(teamSelected, p.getID().toString());
+                                match.setTeam(teamSelected, p.getID());
                                 dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
                             }
                         }

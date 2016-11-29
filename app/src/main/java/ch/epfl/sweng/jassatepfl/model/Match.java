@@ -138,10 +138,9 @@ public class Match {
      * @param id The player' id
      * @return The index of the player if he is in match, -1 otherwise
      */
-    public int getPlayerIndex(String id) {
-        Player.PlayerID pId = new Player.PlayerID(id);
+    public int getPlayerIndex(Player.PlayerID id) {
         for(int i = 0; i < players.size(); ++i) {
-            if(players.get(i).getID().equals(pId)) {
+            if(players.get(i).getID().equals(id)) {
                 return i;
             }
         }
@@ -235,18 +234,28 @@ public class Match {
         return players.size() == getMaxPlayerNumber();
     }
 
-    public void setTeam(int teamNb, String id) {
+    /**
+     * Set the player with the specified id in the specified team
+     * @param teamNb The team we want to add a player
+     * @param id The id of the player
+     * @throws IllegalArgumentException If the team number is not valid or if the id is not one of a match player
+     */
+    public void setTeam(int teamNb, Player.PlayerID id) throws IllegalArgumentException {
         List<String> team = teams.get("Team" + Integer.toString(teamNb));
-        if(team.contains("42")) {
-            team.set(team.indexOf("42"), id);
+        if(team == null) {
+            throw new IllegalArgumentException("Invalid team number specified.");
         }
-        else if(!team.contains(id)) {
-            team.add(id);
+        if(hasParticipantWithID(id))
+        if(team.contains("42")) {
+            team.set(team.indexOf("42"), id.toString());
+        }
+        else if(!team.contains(id.toString())) {
+            team.add(id.toString());
         }
         //remove it from other team if he was in one
         for(List<String> t : teams.values()) {
             if(t != team) {
-                t.remove(id);
+                t.remove(id.toString());
                 if(t.isEmpty()) {
                     t.add("42");
                 }
@@ -348,7 +357,6 @@ public class Match {
 
     public boolean teamAssignmentIsCorrect() {
         //Test if all player of the match are in the team list and no more
-        //Test that each team
         Set<String> assignedPlayer = new HashSet<>();
         //Correct number of team
         if(teams.size() != gameVariant.getNumberOfTeam()) {
@@ -375,7 +383,7 @@ public class Match {
         else {
             //Every player from the team is in the match
             for(String s : assignedPlayer) {
-                if(!hasParticipantWithID(s)) {
+                if(!hasParticipantWithID(new Player.PlayerID(s))) {
                     return false;
                 }
             }
@@ -400,11 +408,10 @@ public class Match {
     /**
      * Checks if the match has a participant with the given ID
      *
-     * @param id The ID to check
+     * @param userID The ID to check
      * @return true if a player with the id is in the match, false otherwise
      */
-    public boolean hasParticipantWithID(String id) {
-        Player.PlayerID userID = new Player.PlayerID(id);
+    public boolean hasParticipantWithID(Player.PlayerID userID) {
         for(Player p : players) {
             if(p.getID().equals(userID)) {
                 return true;

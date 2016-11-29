@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.LocationProviderListener;
@@ -161,7 +162,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 Log.d(TAG, "MARKER:" + marker.toString() + ":TAG:" + marker.getTag());
                 Log.d(TAG, "matches:size:" + matches.size() + ":" + matches.toString());
                 final Match currMatch = matches.get(marker.getTag());
-                if(currMatch.hasParticipantWithID(getUserSciper())) {
+                if(currMatch.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                     if(currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
                         new AlertDialog.Builder(MapsActivity.this)
                                 .setTitle("Feature missing")
@@ -284,7 +285,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                         .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory.defaultMarker(
-                                match.hasParticipantWithID(getUserSciper()) ? HUE_ORANGE : HUE_BLUE)));
+                                match.hasParticipantWithID(new Player.PlayerID(getUserSciper())) ? HUE_ORANGE : HUE_BLUE)));
                 marker.setTag(match.getMatchID());
                 return marker;
             }

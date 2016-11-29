@@ -171,4 +171,16 @@ public final class MatchTest {
         assertFalse(match.hasParticipant(alexis));
     }
 
+    @Test
+    public void getPlayerIndexReturnsCorrectIndexWhenPlayerIsInMatch() {
+        Match match = DummyDataTest.fullMatch();
+        assertEquals(2, match.getPlayerIndex(new Player.PlayerID("234832")));
+    }
+
+    @Test
+    public void getPlayerIndexReturnsCorrectIndexWhenPlayerIsNotInMatch() {
+        Match match = DummyDataTest.fullMatch();
+        assertEquals(-1, match.getPlayerIndex(new Player.PlayerID("123")));
+    }
+
 }

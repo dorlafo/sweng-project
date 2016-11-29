@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.EnrolledMatchListAdapter;
 
@@ -135,7 +136,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
                 Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 //Add match to the list if we are in it
-                if(match.hasParticipantWithID(getUserSciper())) {
+                if(match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                     matches.add(match);
                 }
                 modifyListAdapter();
@@ -149,7 +150,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
                 //If the match is in the list (ie we were in it)
                 if(matchIndex != -1) {
                     //If we now are not in it, remove it from the list, otherwise modify it
-                    if(!match.hasParticipantWithID(getUserSciper())) {
+                    if(!match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                         matches.remove(match);
                     }
                     else {
@@ -159,7 +160,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
                 //The match was not in the list
                 else {
                     //Add match if we are in it
-                    if(match.hasParticipantWithID(getUserSciper())) {
+                    if(match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                         matches.add(match);
                     }
                 }
