@@ -1,11 +1,10 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.support.test.filters.Suppress;
-
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -21,9 +20,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsNPlayers;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsPlayer;
-import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.core.IsAnything.anything;
-import static org.mockito.ArgumentMatchers.startsWith;
 
 public final class MainActivityTest extends InjectedBaseActivityTest {
 
@@ -43,7 +40,9 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         Match m = DummyDataTest.matchWithBob();
         matches.add(m);
         dbRefWrapTest.addMatches(matches);
-        dbRefWrapTest.addPendingMatch(DummyDataTest.matchWithBob(), Arrays.asList(false, false, false, false));
+        Map<String, Boolean> pendingMatches = new HashMap<>();
+        pendingMatches.put(DummyDataTest.bricoloBob.getID().toString(), false);
+        dbRefWrapTest.addPendingMatch(DummyDataTest.matchWithBob(), pendingMatches);
         assertMatchContainsNPlayers(dbRefWrapTest, "bob", 1);
         assertMatchContainsPlayer(dbRefWrapTest, "bob", new Player.PlayerID("696969"));
 

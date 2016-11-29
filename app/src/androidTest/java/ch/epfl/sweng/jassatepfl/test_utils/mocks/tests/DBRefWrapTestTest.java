@@ -7,9 +7,10 @@ import com.google.firebase.database.ValueEventListener;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
@@ -72,21 +73,24 @@ public class DBRefWrapTestTest {
         DBRefWrapTest localRef = new DBRefWrapTest(root);
 
         Set<Player> players = new HashSet<>();
-        players.add(DummyDataTest.amaury);
+        players.add(DummyDataTest.vincenzo);
+        players.add(DummyDataTest.dorian);
         Set<Match> matches = new HashSet<>();
-        matches.add(DummyDataTest.privateMatch());
+        matches.add(DummyDataTest.twoPlayersMatch());
         localRef.addPlayers(players);
         localRef.addMatches(matches);
-        List<Boolean> status = Arrays.asList(true, false, false ,false);
-        localRef.addPendingMatch(DummyDataTest.privateMatch(), status);
-        DBRefWrapTest refToMatchStatus = (DBRefWrapTest) localRef.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(DummyDataTest.privateMatch().getMatchID().toString());
-        refToMatchStatus.child("0").setValue(false);
-        refToMatchStatus.child("1").setValue(true);
+        Map<String, Boolean> status = new HashMap<>();
+        status.put(DummyDataTest.dorian.getID().toString(), true);
+        status.put(DummyDataTest.vincenzo.getID().toString(), false);
+        localRef.addPendingMatch(DummyDataTest.twoPlayersMatch(), status);
+        DBRefWrapTest refToMatchStatus = (DBRefWrapTest) localRef.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(DummyDataTest.twoPlayersMatch().getMatchID().toString());
+        refToMatchStatus.child(DummyDataTest.dorian.getID().toString()).setValue(false);
+        refToMatchStatus.child(DummyDataTest.vincenzo.getID().toString()).setValue(true);
 
         waitCompletion();
 
-        assertEquals(false, ((MatchStatusLeafTest) refToMatchStatus.getCurrentNode()).getData().get(0));
-        assertEquals(true, ((MatchStatusLeafTest) refToMatchStatus.getCurrentNode()).getData().get(1));
+        assertEquals(false, ((MatchStatusLeafTest) refToMatchStatus.getCurrentNode()).getData().get(DummyDataTest.dorian.getID().toString()));
+        assertEquals(true, ((MatchStatusLeafTest) refToMatchStatus.getCurrentNode()).getData().get(DummyDataTest.vincenzo.getID().toString()));
     }
 
     private void waitCompletion() {

@@ -19,7 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
@@ -46,7 +47,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     private int posInList;
     private int teamSelected;
 
-    private List<String> playersReady;
+    private Map<String, Boolean> playersReady;
 
     private Button gameBtn;
     private Button readyBtn;
@@ -73,6 +74,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
             match = Match.sentinelMatch();
 
+            playersReady = new HashMap<>();
+
             gameBtn = (Button) findViewById(R.id.play);
             readyBtn = (Button) findViewById(R.id.ready_button);
             inviteBtn = (Button) findViewById(R.id.invite_button);
@@ -82,8 +85,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
             description = (TextView) findViewById(R.id.match_description);
             variant = (TextView) findViewById(R.id.match_variant);
-
-            playersReady = new ArrayList<>();
 
             listView.setOnItemClickListener(this);
 
@@ -253,7 +254,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     public void leaveMatch(View view) {
         match.removePlayerById(new Player.PlayerID(getUserSciper()));
 
-        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(Integer.toString(posInList)).removeValue();
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).removeValue();
 
         if(match.getPlayers().size() == 0) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).removeValue();
@@ -271,7 +272,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
      * @param view General view
      */
     public void userIsReady(View view) {
-        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(Integer.toString(posInList)).setValue(true);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).setValue(true);
     }
 
     /**
@@ -339,9 +340,9 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAG, "pendingMatchListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
-                playersReady.add(dataSnapshot.getKey());
-                int pos = Integer.parseInt(dataSnapshot.getKey());
-                if(pos == posInList) {
+                playersReady.put(dataSnapshot.getKey(), (boolean)dataSnapshot.getValue());
+                String id = dataSnapshot.getKey();
+                if(id == getUserSciper()) {
                     readyBtn.setEnabled(false);
                 }
                 if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {

@@ -12,7 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
@@ -99,14 +101,14 @@ public class DBRefWrapTest extends DBReferenceWrapper {
         final DataSnapshot obj = mock(DataSnapshot.class);
         Player p = null;
         Match m = null;
-        List<Boolean> status = null;
+        Map<String, Boolean> status = null;
 
         if (this.getCurrentNode() instanceof PlayerLeafTest) {
             p = ((PlayerLeafTest) this.getCurrentNode()).getData();
         } else if (this.getCurrentNode() instanceof MatchLeafTest) {
             m = ((MatchLeafTest) this.getCurrentNode()).getData();
         } else if (this.getCurrentNode() instanceof MatchStatusLeafTest) {
-            status = new ArrayList<>(((MatchStatusLeafTest) this.getCurrentNode()).getData());
+            status = new HashMap<>(((MatchStatusLeafTest) this.getCurrentNode()).getData());
         }
 
         when(obj.getValue(Player.class)).thenReturn(p);
@@ -172,7 +174,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                         while (numValueEventListener > 0) {
                             final DataSnapshot obj = mock(DataSnapshot.class);
 
-                            List<Boolean> status = null;
+                            Map<String, Boolean> status = null;
                             boolean callDataChange = false;
 
                             if (currentNode instanceof PlayerLeafTest) {
@@ -186,7 +188,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                                 }
                                 m = ((MatchLeafTest) currentNode).getData();
                             } else if (currentNode instanceof MatchStatusLeafTest) {
-                                status = new ArrayList<>(((MatchStatusLeafTest) currentNode).getData());
+                                status = new HashMap<>(((MatchStatusLeafTest) currentNode).getData());
                             } else if (currentNode instanceof MatchStatsLeafTest) {
                                 if (stats == null || !stats.equals(((MatchStatsLeafTest) currentNode).getData())) {
                                     callDataChange = true;
@@ -234,10 +236,10 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                                     final DataSnapshot snap = mock(DataSnapshot.class);
 
                                     if(currentNode instanceof MatchStatusLeafTest) {
-                                        List<Boolean> statusList = ((MatchStatusLeafTest) currentNode).getData();
-                                        for(int i = 0; i < statusList.size(); ++i) {
-                                            boolean value = statusList.get(i);
-                                            when(snap.getKey()).thenReturn(Integer.toString(i));
+                                        Map<String, Boolean> statusMap = ((MatchStatusLeafTest) currentNode).getData();
+                                        for(String key : statusMap.keySet()) {
+                                            boolean value = statusMap.get(key);
+                                            when(snap.getKey()).thenReturn(key);
                                             when(snap.getValue()).thenReturn(value);
                                             listener.onChildAdded(snap, currentNode.getId());
                                         }
@@ -358,7 +360,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
         }
     }
 
-    public void addPendingMatch(Match match, List<Boolean> status) {
+    public void addPendingMatch(Match match, Map<String, Boolean> status) {
         TreeNodeTest pendingMatch = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_PENDING_MATCHES);
         MatchStatusLeafTest statusLeaf = (MatchStatusLeafTest) pendingMatch.addChild(match.getMatchID().toString());
         statusLeaf.setData(status);

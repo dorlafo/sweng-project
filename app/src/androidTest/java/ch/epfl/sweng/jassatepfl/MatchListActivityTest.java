@@ -4,7 +4,9 @@ package ch.epfl.sweng.jassatepfl;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -98,7 +100,8 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.fullMatch());
         dbRefWrapTest.addMatches(matches);
-        dbRefWrapTest.addPendingMatch(DummyDataTest.fullMatch(), Arrays.asList(false, false, false, false));
+        Map<String, Boolean> pendingMatches = new HashMap<>();
+        dbRefWrapTest.addPendingMatch(DummyDataTest.fullMatch(), pendingMatches);
         assertMatchContainsNPlayers(dbRefWrapTest, "full", 4);
 
         getActivity();

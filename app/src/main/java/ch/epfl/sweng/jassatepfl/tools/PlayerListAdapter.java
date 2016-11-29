@@ -5,12 +5,12 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -25,9 +25,9 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
 
     private List<Player> players;
     private Match match;
-    private List<String> playersReady;
+    private Map<String, Boolean> playersReady;
 
-    public PlayerListAdapter(Context context, int resource, List<Player> players, Match match, List<String> playersReady) {
+    public PlayerListAdapter(Context context, int resource, List<Player> players, Match match, Map<String, Boolean> playersReady) {
         super(context, resource, players);
         this.players = players;
         this.match = match;
@@ -35,7 +35,7 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
     }
 
     public PlayerListAdapter(Context context, int resource, List<Player> players) {
-        this(context, resource, players, null, new ArrayList<String>());
+        this(context, resource, players, null, new HashMap<String, Boolean>());
     }
 
     @Override
@@ -69,7 +69,7 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
                 playerName.setText(getFirstFirstName(p.getFirstName()) + " : team " + match.teamNbForPlayer(p));
             }
 
-            if(playersReady.contains(Integer.toString(position))) {
+            if(playersReady.containsKey(p.getID().toString()) && playersReady.get(p.getID().toString())) {
                 playerName.setBackgroundColor(0xFF00FF00);
             }
             else {
@@ -91,12 +91,12 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         }
     }
 
-    public void refreshData(List<Player> p, Match m, List<String> pr) {
+    public void refreshData(List<Player> p, Match m, Map<String, Boolean> pr) {
         this.players.clear();
         this.players.addAll(p);
         this.match = m;
         this.playersReady.clear();
-        this.playersReady.addAll(pr);
+        this.playersReady.putAll(pr);
         notifyDataSetChanged();
     }
 

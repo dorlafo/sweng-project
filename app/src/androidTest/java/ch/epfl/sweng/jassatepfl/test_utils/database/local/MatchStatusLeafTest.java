@@ -1,17 +1,14 @@
 package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
-
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Amaury Combes
  */
-public class MatchStatusLeafTest extends LeafTest<List<Boolean>> {
-    private LeafFieldTest<Boolean> statusP0 = new LeafFieldTest<>("0");
-    private LeafFieldTest<Boolean> statusP1 = new LeafFieldTest<>("1");
-    private LeafFieldTest<Boolean> statusP2 = new LeafFieldTest<>("2");
-    private LeafFieldTest<Boolean> statusP3 = new LeafFieldTest<>("3");
+public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
+
+    private Map<String, LeafFieldTest<Boolean>> status = new HashMap<>();
 
     public MatchStatusLeafTest(String id) {
         super(id);
@@ -19,32 +16,30 @@ public class MatchStatusLeafTest extends LeafTest<List<Boolean>> {
 
     @Override
     public LeafFieldTest getChild(String id) {
-        switch (id) {
-            case "0":
-                return statusP0;
-            case "1":
-                return statusP1;
-            case "2":
-                return statusP2;
-            case "3":
-                return statusP3;
-            default:
-                throw new IllegalArgumentException("Could not get player number : " + id);
+        if(status.containsKey(id)) {
+            return status.get(id);
         }
-
+        else {
+            throw new IllegalArgumentException("Could not get player : " + id);
+        }
     }
 
     @Override
-    public void setData(List<Boolean> data) {
+    public void setData(Map<String, Boolean> data) {
         this.data = data;
-        statusP0.setData(data.get(0));
-        statusP1.setData(data.get(1));
-        statusP2.setData(data.get(2));
-        statusP3.setData(data.get(3));
+        for(String key : data.keySet()) {
+            LeafFieldTest<Boolean> s = new LeafFieldTest<>(key);
+            s.setData(data.get(key));
+            status.put(key, s);
+        }
     }
 
     @Override
-    public List<Boolean> getData() {
-        return Arrays.asList(statusP0.getData(), statusP1.getData(), statusP2.getData(), statusP3.getData());
+    public Map<String, Boolean> getData() {
+        Map<String, Boolean> data = new HashMap<>();
+        for(String key : status.keySet()) {
+            data.put(key, status.get(key).getData());
+        }
+        return data;
     }
 }
