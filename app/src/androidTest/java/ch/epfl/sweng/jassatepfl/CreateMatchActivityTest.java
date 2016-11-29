@@ -10,7 +10,6 @@ import org.junit.Test;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -32,11 +31,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.*;
-import static java.util.GregorianCalendar.DAY_OF_MONTH;
-import static java.util.GregorianCalendar.HOUR_OF_DAY;
-import static java.util.GregorianCalendar.MINUTE;
-import static java.util.GregorianCalendar.MONTH;
-import static java.util.GregorianCalendar.YEAR;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -91,7 +90,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testTimePickerSetsTime() {
-        Calendar calendar = GregorianCalendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.add(HOUR_OF_DAY, 1);
         calendar.add(MINUTE, 5);
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
@@ -101,19 +100,19 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testTimePickerDisplaysToastForInvalidTime() {
-        Calendar calendar = GregorianCalendar.getInstance();
-        int currentHour = calendar.get(HOUR_OF_DAY);
-        //calendar.setTimeInMillis(calendar.getTimeInMillis() - 5 * 60 * 1000);
-        calendar.add(MINUTE, -5);
+        Calendar calendar = Calendar.getInstance();
+        //int currentHour = calendar.get(HOUR_OF_DAY);
+        calendar.setTimeInMillis(calendar.getTimeInMillis() - 5 * 60 * 1000);
+        //calendar.add(MINUTE, -5);
         //setTime(currentHour == 23 ? 0 : currentHour, calendar.get(MINUTE));
-        setTime(currentHour, calendar.get(MINUTE));
+        setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         onView(withText(R.string.toast_invalid_hour)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
     }
 
     @Test
     public void testDatePickerSetsDate() {
-        Calendar calendar = GregorianCalendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.add(HOUR_OF_DAY, 1);
         calendar.add(DAY_OF_MONTH, 3);
         calendar.add(MONTH, 1);
@@ -124,7 +123,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testDatePickerDisplaysToastForInvalidDate() {
-        Calendar calendar = GregorianCalendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.add(DAY_OF_MONTH, -5);
         setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         onView(withText(R.string.toast_invalid_date)).inRoot(new ToastMatcherTest())
@@ -133,7 +132,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testDatePickerSetsHourWhenConflictWithCurrentHour() {
-        Calendar calendar = GregorianCalendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         int currentYear = calendar.get(YEAR);
         int currentMonth = calendar.get(MONTH);
         int currentDay = calendar.get(DAY_OF_MONTH);
@@ -142,7 +141,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         calendar.add(MINUTE, -5);
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         setDate(currentYear, currentMonth, currentDay);
-        calendar = GregorianCalendar.getInstance();
+        calendar = Calendar.getInstance();
         onView(withId(R.id.current_expiration_time))
                 .check(matches(withText(dateFormat.format(calendar.getTimeInMillis()))));
     }
