@@ -2,10 +2,8 @@ package ch.epfl.sweng.jassatepfl.model;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.annotation.StringDef;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,6 +35,7 @@ public class Match {
     private String matchID;
     private MatchStatus matchStatus;
     private Map<String, List<String>> teams;
+    private static String SENTINEL = "SENTINEL";
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase.
@@ -80,7 +79,7 @@ public class Match {
             //We need the key to be a string without beginning by a number of Firebase with think it's an array...
             this.teams.put("Team" + Integer.toString(teamNb), new ArrayList<String>());
 
-            this.teams.get("Team" + Integer.toString(teamNb)).add("42");
+            this.teams.get("Team" + Integer.toString(teamNb)).add(SENTINEL);
         }
     }
 
@@ -127,7 +126,7 @@ public class Match {
     /**
      * Getter for the players' list of the match.
      *
-     * @return The players' list of the match
+     * @return An immutable list of the players in the match
      */
     public List<Player> getPlayers() {
         return Collections.unmodifiableList(players);
@@ -147,6 +146,11 @@ public class Match {
         return -1;
     }
 
+    /**
+     * Return a sentinelMatch that can be used to avoid null pointer exception
+     *
+     * @return a sentinel match
+     */
     public static Match sentinelMatch() {
         Player bricoloBob = new Player(new Player.PlayerID(696969), "LeBricoleur", "Bob", new Rank(1000));
         List<Player> players = new ArrayList<>();
@@ -245,9 +249,11 @@ public class Match {
         if(team == null) {
             throw new IllegalArgumentException("Invalid team number specified.");
         }
-        if(hasParticipantWithID(id))
-        if(team.contains("42")) {
-            team.set(team.indexOf("42"), id.toString());
+        if(!hasParticipantWithID(id)) {
+            throw new IllegalArgumentException("The player is not in this match.");
+        }
+        if(team.contains(SENTINEL)) {
+            team.set(team.indexOf(SENTINEL), id.toString());
         }
         else if(!team.contains(id.toString())) {
             team.add(id.toString());
@@ -257,14 +263,22 @@ public class Match {
             if(t != team) {
                 t.remove(id.toString());
                 if(t.isEmpty()) {
-                    t.add("42");
+                    t.add(SENTINEL);
                 }
             }
         }
     }
 
+    /**
+     * Getter for the team map
+     * @return An immutable map of the team in this match
+     */
     public Map<String, List<String>> getTeams() {
-        return teams;
+        Map<String, List<String>> tmp = new HashMap<>();
+        for(String k : teams.keySet()) {
+            tmp.put(k, Collections.unmodifiableList(teams.get(k)));
+        }
+        return Collections.unmodifiableMap(tmp);
     }
 
     /**
@@ -347,7 +361,7 @@ public class Match {
             for(List<String> t : teams.values()) {
                 t.remove(toRemove.toString());
                 if(t.isEmpty()) {
-                    t.add("42");
+                    t.add(SENTINEL);
                 }
             }
             return true;
@@ -355,10 +369,16 @@ public class Match {
         return false;
     }
 
+    /**
+     * Check if the team assignment is correct regarding the match' GameVariant
+     *
+     * @return True if the team assignment is correct
+     */
     public boolean teamAssignmentIsCorrect() {
         //Test if all player of the match are in the team list and no more
         Set<String> assignedPlayer = new HashSet<>();
         //Correct number of team
+        //this could only happen if the teams map is modified inside the Match class without caution
         if(teams.size() != gameVariant.getNumberOfTeam()) {
             return false;
         }
@@ -370,18 +390,20 @@ public class Match {
                 return false;
             }
             //The team does not contain the sentinel
-            else if(team.contains("42")) {
+            else if(team.contains(SENTINEL)) {
                 return false;
             }
             assignedPlayer.addAll(team);
         }
 
         //The teams does not contain duplicates
+        //this could only happen if the teams map is modified inside the Match class without caution
         if(assignedPlayer.size() != players.size()) {
             return false;
         }
         else {
             //Every player from the team is in the match
+            //this could only happen if the teams map is modified inside the Match class without caution
             for(String s : assignedPlayer) {
                 if(!hasParticipantWithID(new Player.PlayerID(s))) {
                     return false;
@@ -391,6 +413,10 @@ public class Match {
         return true;
     }
 
+    /**
+     * Setter for the match status
+     * @param status The status we want to give to this match
+     */
     public void setStatus(MatchStatus status) {
         this.matchStatus = status;
     }
@@ -607,6 +633,11 @@ public class Match {
             }
         }
 
+        /**
+         * Returns the point goal for the current game variant
+         *
+         * @return The point goal
+         */
         public int getPointGoal() {
             switch (this) {
                 case ROI:
@@ -681,6 +712,13 @@ public class Match {
             return this;
         }
 
+        /**
+         * Removes a player from this matchBuilder players list
+         *
+         * @param player The player to remove
+         * @throws IllegalStateException If the players list is empty
+         * @throws IllegalArgumentException If the player to be removed is not in the list
+         */
         public void removePlayer(Player player) throws IllegalStateException, IllegalArgumentException {
             if (players.isEmpty()) {
                 throw new IllegalStateException("No players in the match.");
@@ -692,20 +730,40 @@ public class Match {
             matchStatus = MatchStatus.PENDING;
         }
 
+        /**
+         * Getter for this matchBuilder players list
+         *
+         * @return The players lists
+         */
         public List<Player> getPlayerList() {
             return new ArrayList<>(players);
         }
 
+        /**
+         * Setter for the location of this match
+         * @param location the location to be set
+         * @return A builder containing this location
+         */
         public Builder setLocation(GPSPoint location) {
             this.location = location;
             return this;
         }
 
+        /**
+         * Setter for the description of this match
+         * @param description the description to be set
+         * @return A builder containing this description
+         */
         public Builder setDescription(String description) {
             this.description = description;
             return this;
         }
 
+        /**
+         * Setter for the privacy of the match
+         * @param privateMatch the privacy of the match
+         * @return A builder containing this privacy
+         */
         public Builder setPrivacy(boolean privateMatch) {
             this.privateMatch = privateMatch;
             return this;
@@ -725,16 +783,31 @@ public class Match {
             return this;
         }
 
+        /**
+         * Setter for the expiration time of this match
+         * @param expirationTime the expiration time to be set
+         * @return A builder containing this expiration time
+         */
         public Builder setExpirationTime(long expirationTime) {
             this.expirationTime = expirationTime;
             return this;
         }
 
+        /**
+         * Setter for the match ID of this match
+         * @param matchID the match ID to be set
+         * @return A builder containing this match id
+         */
         public Builder setMatchID(String matchID) {
             this.matchID = matchID;
             return this;
         }
 
+        /**
+         * Setter for the match status
+         * @param status The match status to set
+         * @return A builder containing this match status
+         */
         public Builder setStatus(MatchStatus status) {
             this.matchStatus = status;
             return this;

@@ -3,6 +3,10 @@ package ch.epfl.sweng.jassatepfl.model;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
@@ -183,4 +187,98 @@ public final class MatchTest {
         assertEquals(-1, match.getPlayerIndex(new Player.PlayerID("123")));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void setTeamThrowsExceptionWhenTeamNumberIsInvalid() {
+        Match m = DummyDataTest.fullMatch();
+        m.setTeam(3, new Player.PlayerID("234832"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setTeamThrowsExceptionWhenPlayerIsNotInMatch() {
+        Match m = DummyDataTest.fullMatch();
+        m.setTeam(0, new Player.PlayerID("000000"));
+    }
+
+    @Test
+    public void getTeamsWorks() {
+        Match m = DummyDataTest.fullMatch();
+        assertEquals(2, m.getTeams().size());
+        assertEquals(1, m.getTeams().get("Team0").size());
+        assertEquals(1, m.getTeams().get("Team1").size());
+        assertEquals("SENTINEL", m.getTeams().get("Team0").get(0));
+        assertEquals("SENTINEL", m.getTeams().get("Team1").get(0));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getTeamsReturnsImmutableMap() {
+        Match m = DummyDataTest.fullMatch();
+        Map<String, List<String>> hm = m.getTeams();
+        hm.put("Team42", new ArrayList<>(Arrays.asList("TEST")));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getTeamsReturnsImmutableListInMap() {
+        Match m = DummyDataTest.fullMatch();
+        Map<String, List<String>> hm = m.getTeams();
+        hm.get("Team0").add("TEST");
+    }
+
+    @Test
+    public void setTeamRemoveSentinelIfOnlyOneMemberIsAssigned() {
+        Match m = DummyDataTest.fullMatch();
+        m.setTeam(0, new Player.PlayerID("234832"));
+        assertEquals("234832", m.getTeams().get("Team0").get(0));
+        assertEquals(1, m.getTeams().get("Team0").size());
+    }
+
+    @Test
+    public void setTeamDoesNotAddDuplicateMemberInOneTeam() {
+        Match m = DummyDataTest.fullMatch();
+        m.setTeam(0, new Player.PlayerID("234832"));
+        m.setTeam(0, new Player.PlayerID("234832"));
+        assertEquals("234832", m.getTeams().get("Team0").get(0));
+        assertEquals(1, m.getTeams().get("Team0").size());
+    }
+
+    @Test
+    public void setTeamChangeSwitchPlayerFromTeamCorrectly() {
+        Match m = DummyDataTest.fullMatch();
+        m.setTeam(0, new Player.PlayerID("234832"));
+        m.setTeam(1, new Player.PlayerID("234832"));
+        assertEquals("234832", m.getTeams().get("Team1").get(0));
+        assertEquals(1, m.getTeams().get("Team1").size());
+
+        assertEquals("SENTINEL", m.getTeams().get("Team0").get(0));
+        assertEquals(1, m.getTeams().get("Team0").size());
+    }
+
+    @Test
+    public void teamAssignmentIsCorrectReturnsTrueWhenAssignmentIsCorrect() {
+        Match m = DummyDataTest.fullMatch();
+        m.setTeam(0, new Player.PlayerID("234832"));
+        m.setTeam(0, new Player.PlayerID("999999"));
+        m.setTeam(1, new Player.PlayerID("666666"));
+        m.setTeam(1, new Player.PlayerID("249733"));
+        assertTrue(m.teamAssignmentIsCorrect());
+    }
+
+    @Test
+    public void teamAssignmentIsCorrectReturnsFalseWhenATeamContainsASentinel() {
+        Match m = DummyDataTest.matchPomme();
+        assertFalse(m.teamAssignmentIsCorrect());
+    }
+
+    @Test
+    public void teamAssignmentIsCorrectReturnsFalseWhenWrongNumberOfPlayerInTeam() {
+        Match m = DummyDataTest.fullMatch();
+        m.setTeam(0, new Player.PlayerID("234832"));
+        m.setTeam(0, new Player.PlayerID("999999"));
+        m.setTeam(1, new Player.PlayerID("666666"));
+        assertFalse(m.teamAssignmentIsCorrect());
+    }
+
+    @Test
+    public void teamAssignmentIsCorrectReturnsFalseWhen() {
+
+    }
 }

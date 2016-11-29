@@ -12,6 +12,7 @@ import ch.epfl.sweng.jassatepfl.model.Player.PlayerID;
 import ch.epfl.sweng.jassatepfl.model.Rank;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
+import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.POMME;
 
 public class DummyDataTest {
 
@@ -87,6 +88,13 @@ public class DummyDataTest {
         List<Player> playerList = new ArrayList<>();
         playerList.add(bricoloBob);
         return new Match(playerList, COCoord, "CO", false, CHIBRE, expirationTime(3), "bob");
+    }
+
+    public static Match matchPomme() {
+        List<Player> playerList = new ArrayList<>();
+        playerList.add(bricoloBob);
+        playerList.add(random);
+        return new Match(playerList, COCoord, "CO", false, POMME, expirationTime(3), "pomme");
     }
 
     public static Match match_one_p_california() {
