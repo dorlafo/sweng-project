@@ -89,6 +89,7 @@
     <string name="toast_cannot_create_with_no_player">You cannot create a match with no player in it.</string>
     <string name="toast_invite_yourself">You cannot invite yourself</string>
     <string name="toast_cannot_cancel">There is nothing to cancel</string>
+    <string name="toast_team_assignment_incorrect">Team assignment incorrect</string>
 
     <string name="error">Error!</string>
     <string name="error_cannot_join">Can not join match</string>
