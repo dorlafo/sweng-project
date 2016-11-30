@@ -367,7 +367,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
     }
 
     public void addStats(Set<MatchStats> stats) {
-        TreeNodeTest statsNode = ((RootTest) currentNode).getChild("matchStats");
+        TreeNodeTest statsNode = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_MATCH_STATS);
         for (MatchStats stat : stats) {
             String statId = stat.getMatchID();
             statsNode.addChild(statId);
