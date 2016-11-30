@@ -26,6 +26,7 @@ import java.util.Map;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
+import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
@@ -66,8 +67,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_waiting_players, drawer, false);
@@ -197,16 +197,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     @Override
     public void onPause() {
         super.onPause();
-        if(matchListener != null) {
-            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
-                    .child(matchId)
-                    .removeEventListener(matchListener);
-        }
-        if(pendingMatchListener != null) {
-            dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
-                    .child(matchId)
-                    .removeEventListener(pendingMatchListener);
-        }
+        removeListener();
     }
 
     @Override
@@ -238,16 +229,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(matchListener != null) {
-            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
-                    .child(matchId)
-                    .removeEventListener(matchListener);
-        }
-        if(pendingMatchListener != null) {
-            dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
-                    .child(matchId)
-                    .removeEventListener(pendingMatchListener);
-        }
+        removeListener();
     }
 
     /**
@@ -291,14 +273,20 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     public void goToMatch(View view) {
-        new AlertDialog.Builder(this)
-                .setTitle("Feature missing")
-                .setMessage("will move to new activity")
-                .show();
-        //TODO: check if this still work in case of error
-        // TODO: backToList.putExtra("match_Id", matchId);
-        // TODO: Create intent for next activity
-        // TODO: In new activity, delete pendingMatches
+        Intent goToGameActivity = new Intent(this, GameActivity.class);
+        goToGameActivity.putExtra("match_Id", matchId);
+        removeListener();
+
+        MatchStats matchStats = new MatchStats(matchId, match.getGameVariant());
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId).setValue(matchStats);
+
+        match.setStatus(Match.MatchStatus.ACTIVE);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).removeValue();
+
+        startActivity(goToGameActivity);
+        finish();
     }
 
     private void contactFirebase() {
@@ -308,6 +296,12 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                 match = dataSnapshot.getValue(Match.class);
                 Log.d(TAG, "matchListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
                 if(match != null) {
+                    if(match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
+                        Intent goToGameActivity = new Intent(WaitingPlayersActivity.this, GameActivity.class);
+                        goToGameActivity.putExtra("match_Id", matchId);
+                        startActivity(goToGameActivity);
+                        finish();
+                    }
                     if(match.createdBy().getID().toString().equals(getUserSciper())) {
                         creator = true;
                         gameBtn.setVisibility(View.VISIBLE);
@@ -407,6 +401,19 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
         dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
                 .child(matchId)
                 .addChildEventListener(pendingMatchListener);
+    }
+
+    private void removeListener() {
+        if(matchListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                    .child(matchId)
+                    .removeEventListener(matchListener);
+        }
+        if(pendingMatchListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
+                    .child(matchId)
+                    .removeEventListener(pendingMatchListener);
+        }
     }
 
     private void modifyListAdapter() {

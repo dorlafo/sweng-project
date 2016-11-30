@@ -252,6 +252,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     Log.d(TAG, "Pushed match " + matchId + " to database");
                     new InvitePlayer(playerArrayAdapter).execute(matchId);
                     startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("match_Id", matchId));
+                    finish();
                 }
                 break;
             case R.id.time_picker_button:
@@ -347,7 +348,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         tempCalendar.set(MINUTE, minute);
 
         final Calendar currentTime = Calendar.getInstance();
-
         if (tempCalendar.compareTo(currentTime) > 0) {
             matchCalendar.setTimeInMillis(tempCalendar.getTimeInMillis());
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());

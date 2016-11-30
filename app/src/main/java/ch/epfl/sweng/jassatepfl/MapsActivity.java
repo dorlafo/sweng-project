@@ -164,10 +164,9 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 final Match currMatch = matches.get(marker.getTag());
                 if(currMatch.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                     if(currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
-                        new AlertDialog.Builder(MapsActivity.this)
-                                .setTitle("Feature missing")
-                                .setMessage("will move to GameActivity")
-                                .show();
+                        Intent goToGameActivity = new Intent(MapsActivity.this, GameActivity.class);
+                        goToGameActivity.putExtra("match_Id", currMatch.getMatchID());
+                        startActivity(goToGameActivity);
                     }
                     else {
                         Intent moveToWaitingPlayersActivity = new Intent(MapsActivity.this, WaitingPlayersActivity.class);
@@ -217,8 +216,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
         super.onDestroy();
         if(childEventListener != null) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
-                    .orderByChild("privateMatch")
-                    .equalTo(false)
                     .removeEventListener(childEventListener);
         }
     }
@@ -239,9 +236,12 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAG, "childEventListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
-                Marker marker = createMarker(m);
-                markers.put(m.getMatchID(), marker);
-                matches.put(m.getMatchID(), m);
+                if(m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
+                        || (m.getMatchStatus().equals(Match.MatchStatus.PENDING) && !m.isPrivateMatch())) {
+                    Marker marker = createMarker(m);
+                    markers.put(m.getMatchID(), marker);
+                    matches.put(m.getMatchID(), m);
+                }
             }
 
             @Override
@@ -249,9 +249,15 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 Log.d(TAG, "childEventListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
                 String id = dataSnapshot.getKey();
-                markers.get(id).remove();
-                markers.put(id, createMarker(m));
-                matches.put(m.getMatchID(), m);
+                if(markers.containsKey(id)) {
+                    markers.get(id).remove();
+                    matches.remove(id);
+                }
+                if(m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
+                        || (m.getMatchStatus().equals(Match.MatchStatus.PENDING) && !m.isPrivateMatch())) {
+                    markers.put(id, createMarker(m));
+                    matches.put(m.getMatchID(), m);
+                }
             }
 
             @Override
@@ -268,9 +274,15 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 Log.d(TAG, "childEventListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
                 String id = dataSnapshot.getKey();
-                markers.get(id).remove();
-                markers.put(id, createMarker(m));
-                matches.put(m.getMatchID(), m);
+                if(markers.containsKey(id)) {
+                    markers.get(id).remove();
+                    matches.remove(id);
+                }
+                if(m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
+                        || (m.getMatchStatus().equals(Match.MatchStatus.PENDING) && !m.isPrivateMatch())) {
+                    markers.put(id, createMarker(m));
+                    matches.put(m.getMatchID(), m);
+                }
             }
 
             @Override
@@ -291,7 +303,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
             }
         };
         dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
-                .orderByChild("privateMatch").equalTo(false)
                 .addChildEventListener(childEventListener);
     }
 

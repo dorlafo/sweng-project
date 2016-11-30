@@ -115,12 +115,10 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Match match = (Match) adapter.getItem(position);
-        //TODO: Make new intent with extras and move to GameActivity
         if(match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Feature missing")
-                    .setMessage("will move to GameActivity")
-                    .show();
+            Intent goToGameActivity = new Intent(this, GameActivity.class);
+            goToGameActivity.putExtra("match_Id", match.getMatchID());
+            startActivity(goToGameActivity);
         }
         else {
             Intent moveToWaitingPlayersActivity = new Intent(this, WaitingPlayersActivity.class);

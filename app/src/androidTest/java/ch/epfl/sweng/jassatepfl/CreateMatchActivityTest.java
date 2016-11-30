@@ -32,6 +32,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.*;
 import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.HOUR;
 import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.MONTH;
@@ -101,10 +102,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testTimePickerDisplaysToastForInvalidTime() {
         Calendar calendar = Calendar.getInstance();
-        //int currentHour = calendar.get(HOUR_OF_DAY);
-        calendar.setTimeInMillis(calendar.getTimeInMillis() - 5 * 60 * 1000);
-        //calendar.add(MINUTE, -5);
-        //setTime(currentHour == 23 ? 0 : currentHour, calendar.get(MINUTE));
+        calendar.add(MINUTE, -5);
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         onView(withText(R.string.toast_invalid_hour)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
