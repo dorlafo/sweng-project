@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -309,16 +310,18 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                     posInList = match.getPlayerIndex(new Player.PlayerID(getUserSciper()));
                     if(posInList != -1) {
                         if(match.matchFull()) {
+                            if(!match.teamAssignmentIsCorrect()) {
+                                Toast.makeText(WaitingPlayersActivity.this, R.string.toast_team_assignment_incorrect, Toast.LENGTH_SHORT)
+                                        .show();
+                            }
                             inviteBtn.setEnabled(false);
-                        }
-                        else {
+                        } else {
                             inviteBtn.setEnabled(true);
                         }
 
                         if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
                             gameBtn.setEnabled(true);
-                        }
-                        else {
+                        } else {
                             gameBtn.setEnabled(false);
                         }
                     }
@@ -342,7 +345,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                 Log.d(TAG, "pendingMatchListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 playersReady.put(dataSnapshot.getKey(), (boolean)dataSnapshot.getValue());
                 String id = dataSnapshot.getKey();
-                if(id == getUserSciper()) {
+                if(id.equals(getUserSciper())) {
                     readyBtn.setEnabled(false);
                 }
                 if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
