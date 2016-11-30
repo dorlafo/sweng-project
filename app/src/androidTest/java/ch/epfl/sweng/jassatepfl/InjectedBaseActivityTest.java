@@ -50,6 +50,7 @@ public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
 
     @Override
     protected void tearDown() throws Exception {
-
+        super.tearDown();
     }
+
 }

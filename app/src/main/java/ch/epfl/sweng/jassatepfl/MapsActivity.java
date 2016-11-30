@@ -173,8 +173,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                         moveToWaitingPlayersActivity.putExtra("match_Id", currMatch.getMatchID());
                         startActivity(moveToWaitingPlayersActivity);
                     }
-                }
-                else {
+                } else {
                     new AlertDialog.Builder(MapsActivity.this)
                             .setTitle(R.string.dialog_join_match)
                             .setMessage(R.string.dialog_join_message)
@@ -214,10 +213,14 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(childEventListener != null) {
+        if (childEventListener != null) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
                     .removeEventListener(childEventListener);
         }
+    }
+
+    public void setMockLocation(Location location) {
+        locationProvider.setMockLocation(location);
     }
 
     private void createMap() {
