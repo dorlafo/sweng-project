@@ -56,12 +56,12 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
     @SuppressWarnings({"MissingPermission"})
     public void onConnected(@Nullable Bundle bundle) {
         if (permissionHandler.permissionIsGranted()) {
+            if (updatesRequested) {
+                startLocationUpdates();
+            }
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (lastLocation != null) {
                 notifyListener(lastLocation);
-            }
-            if (updatesRequested) {
-                startLocationUpdates();
             }
         }
     }
