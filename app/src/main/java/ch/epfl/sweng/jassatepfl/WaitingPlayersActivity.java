@@ -48,6 +48,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     private int posInList;
     private int teamSelected;
 
+    private boolean creator = false;
+
     private Map<String, Boolean> playersReady;
 
     private Button gameBtn;
@@ -78,6 +80,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             playersReady = new HashMap<>();
 
             gameBtn = (Button) findViewById(R.id.play);
+            gameBtn.setVisibility(View.GONE);
+
             readyBtn = (Button) findViewById(R.id.ready_button);
             inviteBtn = (Button) findViewById(R.id.invite_button);
 
@@ -304,13 +308,22 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                 match = dataSnapshot.getValue(Match.class);
                 Log.d(TAG, "matchListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
                 if(match != null) {
+                    if(match.createdBy().getID().toString().equals(getUserSciper())) {
+                        creator = true;
+                        gameBtn.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        creator = false;
+                        gameBtn.setVisibility(View.GONE);
+                    }
+
                     description.setText(match.getDescription());
                     variant.setText(match.getGameVariant().toString());
 
                     posInList = match.getPlayerIndex(new Player.PlayerID(getUserSciper()));
                     if(posInList != -1) {
                         if(match.matchFull()) {
-                            if(!match.teamAssignmentIsCorrect()) {
+                            if(!match.teamAssignmentIsCorrect() && creator) {
                                 Toast.makeText(WaitingPlayersActivity.this, R.string.toast_team_assignment_incorrect, Toast.LENGTH_SHORT)
                                         .show();
                             }
@@ -415,62 +428,64 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        final Player p = adapter.getItem(position);
-        if(p != null) {
-            teamSelected = match.teamNbForPlayer(p);
-            int nbTeam = match.getGameVariant().getNumberOfTeam();
-            CharSequence[] teams = new CharSequence[nbTeam];
-            for(int i = 0; i < nbTeam; ++i) {
-                teams[i] = "Team " + Integer.toString(i+1);
-            }
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.dialog_select_team) + p.toString() + " :")
-                    .setSingleChoiceItems(teams, teamSelected, new DialogInterface.OnClickListener() {
+        if(creator) {
+            final Player p = adapter.getItem(position);
+            if(p != null) {
+                teamSelected = match.teamNbForPlayer(p);
+                int nbTeam = match.getGameVariant().getNumberOfTeam();
+                CharSequence[] teams = new CharSequence[nbTeam];
+                for(int i = 0; i < nbTeam; ++i) {
+                    teams[i] = "Team " + Integer.toString(i+1);
+                }
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.dialog_select_team) + p.toString() + " :")
+                        .setSingleChoiceItems(teams, teamSelected, new DialogInterface.OnClickListener() {
 
-                        /**
-                         * This method will be invoked when a button in the dialog is clicked.
-                         *
-                         * @param dialog The dialog that received the click.
-                         * @param which  The button that was clicked (e.g.
-                         *               {@link DialogInterface#BUTTON1}) or the position
-                         */
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            teamSelected = which;
-                        }
-                    })
-                    .setPositiveButton(R.string.dialog_team_selection_confirmation, new DialogInterface.OnClickListener() {
-
-                        /**
-                         * This method will be invoked when a button in the dialog is clicked.
-                         *
-                         * @param dialog The dialog that received the click.
-                         * @param which  The button that was clicked (e.g.
-                         *               {@link DialogInterface#BUTTON1}) or the position
-                         */
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if(teamSelected != (match.teamNbForPlayer(p))) {
-                                match.setTeam(teamSelected, p.getID());
-                                dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+                            /**
+                             * This method will be invoked when a button in the dialog is clicked.
+                             *
+                             * @param dialog The dialog that received the click.
+                             * @param which  The button that was clicked (e.g.
+                             *               {@link DialogInterface#BUTTON1}) or the position
+                             */
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                teamSelected = which;
                             }
-                        }
-                    })
-                    .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                        })
+                        .setPositiveButton(R.string.dialog_team_selection_confirmation, new DialogInterface.OnClickListener() {
 
-                        /**
-                         * This method will be invoked when a button in the dialog is clicked.
-                         *
-                         * @param dialog The dialog that received the click.
-                         * @param which  The button that was clicked (e.g.
-                         *               {@link DialogInterface#BUTTON1}) or the position
-                         */
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //Nothing to be done, goes back to WaitingPlayersActivity
-                        }
-                    })
-                    .show();
+                            /**
+                             * This method will be invoked when a button in the dialog is clicked.
+                             *
+                             * @param dialog The dialog that received the click.
+                             * @param which  The button that was clicked (e.g.
+                             *               {@link DialogInterface#BUTTON1}) or the position
+                             */
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(teamSelected != (match.teamNbForPlayer(p))) {
+                                    match.setTeam(teamSelected, p.getID());
+                                    dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+
+                            /**
+                             * This method will be invoked when a button in the dialog is clicked.
+                             *
+                             * @param dialog The dialog that received the click.
+                             * @param which  The button that was clicked (e.g.
+                             *               {@link DialogInterface#BUTTON1}) or the position
+                             */
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Nothing to be done, goes back to WaitingPlayersActivity
+                            }
+                        })
+                        .show();
+            }
         }
     }
 }
