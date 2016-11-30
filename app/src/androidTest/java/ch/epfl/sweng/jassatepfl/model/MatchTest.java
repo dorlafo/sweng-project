@@ -12,6 +12,7 @@ import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.alexis;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.amaury;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.dorian;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.marco;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static junit.framework.Assert.assertEquals;
@@ -160,18 +161,38 @@ public final class MatchTest {
     }
 
     @Test
-    public void testRemovePlayerReturnsFalseWhenNoPlayersToRemove() {
+    public void testRemovePlayerByIdReturnsFalseWhenNoPlayersToRemove() {
         boolean removed = DummyDataTest.noPlayersMatch().removePlayerById(new Player.PlayerID(12));
         assertFalse(removed);
     }
 
     @Test
-    public void testRemovePlayerById() {
+    public void testRemovePlayerByIdRemovesPlayer() {
         Match match = DummyDataTest.threePlayersMatch();
         assertTrue(match.hasParticipant(alexis));
         boolean removed = match.removePlayerById(new Player.PlayerID(245433));
         assertTrue(removed);
         assertFalse(match.hasParticipant(alexis));
+    }
+
+    @Test
+    public void testRemovePlayerByIdRemovePlayerAndAddSentinelWhenNoPlayerInTeam() {
+        Match m = DummyDataTest.twoPlayersMatch();
+        assertTrue(m.hasParticipant(vincenzo));
+        assertTrue(m.hasParticipant(dorian));
+        Map<String, List<String>> teams = m.getTeams();
+        assertEquals("SENTINEL", teams.get("Team0").get(0));
+        assertEquals("SENTINEL", teams.get("Team1").get(0));
+
+        m.setTeam(0, dorian.getID());
+        assertEquals(dorian.getID().toString(), teams.get("Team0").get(0));
+        boolean removed = m.removePlayerById(dorian.getID());
+
+        assertTrue(removed);
+        assertFalse(m.hasParticipant(dorian));
+        teams = m.getTeams();
+        assertEquals("SENTINEL", teams.get("Team0").get(0));
+        assertEquals("SENTINEL", teams.get("Team1").get(0));
     }
 
     @Test
@@ -277,7 +298,36 @@ public final class MatchTest {
     }
 
     @Test
-    public void teamAssignmentIsCorrectReturnsFalseWhen() {
+    public void setStatusWorksCorrectly() {
+        Match m = DummyDataTest.fullMatch();
+        assertEquals(Match.MatchStatus.PENDING, m.getMatchStatus());
+        m.setStatus(Match.MatchStatus.ACTIVE);
+        assertEquals(Match.MatchStatus.ACTIVE, m.getMatchStatus());
+    }
 
+    @Test
+    public void teamNbForPlayerReturnsMinusOneWhenNoTeamIsAssigned() {
+        Match m = DummyDataTest.fullMatch();
+        assertEquals(-1, m.teamNbForPlayer(dorian));
+    }
+
+    @Test
+    public void teamNbForPlayerReturnsMinusOneWhenTheRequestedPlayerIsNotInTheMatch() {
+        Match m = DummyDataTest.fullMatch();
+        assertEquals(-1, m.teamNbForPlayer(alexis));
+    }
+
+    @Test
+    public void teamNbForPlayerReturnsCorrectTeamNumber() {
+        Match m = DummyDataTest.fullMatch();
+        m.setTeam(0, random.getID());
+        m.setTeam(1, marco.getID());
+        m.setTeam(0, vincenzo.getID());
+        m.setTeam(1, dorian.getID());
+        assertTrue(m.teamAssignmentIsCorrect());
+        assertEquals(0, m.teamNbForPlayer(random));
+        assertEquals(1, m.teamNbForPlayer(marco));
+        assertEquals(0, m.teamNbForPlayer(vincenzo));
+        assertEquals(1, m.teamNbForPlayer(dorian));
     }
 }

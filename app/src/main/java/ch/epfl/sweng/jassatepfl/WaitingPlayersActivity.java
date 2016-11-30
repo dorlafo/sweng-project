@@ -414,7 +414,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Player p = adapter.getItem(position);
         if(p != null) {
-            teamSelected = match.teamNbForPlayer(p) - 1;
+            teamSelected = match.teamNbForPlayer(p);
             int nbTeam = match.getGameVariant().getNumberOfTeam();
             CharSequence[] teams = new CharSequence[nbTeam];
             for(int i = 0; i < nbTeam; ++i) {
@@ -447,7 +447,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                          */
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(teamSelected != (match.teamNbForPlayer(p) - 1)) {
+                            if(teamSelected != (match.teamNbForPlayer(p))) {
                                 match.setTeam(teamSelected, p.getID());
                                 dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
                             }

@@ -176,4 +176,10 @@ public final class MatchBuilderTest {
         assertTrue(matchBuilder.getPlayerList().isEmpty());
     }
 
+    @Test
+    public void setStatusWorksCorrectly() {
+        setUp();
+        matchBuilder.setStatus(Match.MatchStatus.ACTIVE);
+        assertEquals(Match.MatchStatus.ACTIVE, matchBuilder.getMatchStatus());
+    }
 }

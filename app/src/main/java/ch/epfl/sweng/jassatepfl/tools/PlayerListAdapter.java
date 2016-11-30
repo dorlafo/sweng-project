@@ -66,7 +66,7 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
                 playerName.setText(getFirstFirstName(p.getFirstName()) + " : no team assigned yet");
             }
             else {
-                playerName.setText(getFirstFirstName(p.getFirstName()) + " : team " + match.teamNbForPlayer(p));
+                playerName.setText(getFirstFirstName(p.getFirstName()) + " : team " + (match.teamNbForPlayer(p)+1));
             }
 
             if(playersReady.containsKey(p.getID().toString()) && playersReady.get(p.getID().toString())) {

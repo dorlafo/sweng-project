@@ -455,7 +455,7 @@ public class Match {
         if(players.contains(p)) {
             for(int teamNb = 0; teamNb < teams.size(); teamNb++) {
                 if(teams.get("Team" + teamNb).contains(p.getID().toString())) {
-                    return teamNb+1;
+                    return teamNb;
                 }
             }
         }
@@ -811,6 +811,14 @@ public class Match {
         public Builder setStatus(MatchStatus status) {
             this.matchStatus = status;
             return this;
+        }
+
+        /**
+         * Getter for the match status
+         * @return The match status
+         */
+        public MatchStatus getMatchStatus() {
+            return this.matchStatus;
         }
 
         /**
