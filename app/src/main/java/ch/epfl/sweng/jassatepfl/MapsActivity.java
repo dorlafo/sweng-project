@@ -162,20 +162,18 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 Log.d(TAG, "MARKER:" + marker.toString() + ":TAG:" + marker.getTag());
                 Log.d(TAG, "matches:size:" + matches.size() + ":" + matches.toString());
                 final Match currMatch = matches.get(marker.getTag());
-                if(currMatch.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
-                    if(currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
+                if (currMatch.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                    if (currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
                         new AlertDialog.Builder(MapsActivity.this)
                                 .setTitle("Feature missing")
                                 .setMessage("will move to GameActivity")
                                 .show();
-                    }
-                    else {
+                    } else {
                         Intent moveToWaitingPlayersActivity = new Intent(MapsActivity.this, WaitingPlayersActivity.class);
                         moveToWaitingPlayersActivity.putExtra("match_Id", currMatch.getMatchID());
                         startActivity(moveToWaitingPlayersActivity);
                     }
-                }
-                else {
+                } else {
                     new AlertDialog.Builder(MapsActivity.this)
                             .setTitle(R.string.dialog_join_match)
                             .setMessage(R.string.dialog_join_message)
@@ -215,12 +213,16 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(childEventListener != null) {
+        if (childEventListener != null) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
                     .orderByChild("privateMatch")
                     .equalTo(false)
                     .removeEventListener(childEventListener);
         }
+    }
+
+    public void setMockLocation(Location location) {
+        locationProvider.setMockLocation(location);
     }
 
     private void createMap() {

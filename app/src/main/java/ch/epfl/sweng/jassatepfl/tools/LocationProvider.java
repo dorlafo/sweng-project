@@ -123,6 +123,12 @@ public final class LocationProvider implements ConnectionCallbacks, LocationList
         return permissionHandler.permissionIsGranted();
     }
 
+    @SuppressWarnings({"MissingPermission"})
+    public void setMockLocation(Location location) {
+        LocationServices.FusedLocationApi.setMockMode(googleApiClient, true);
+        LocationServices.FusedLocationApi.setMockLocation(googleApiClient, location);
+    }
+
     /**
      * Builds a new googleApiClient to provide access to location services.
      */
