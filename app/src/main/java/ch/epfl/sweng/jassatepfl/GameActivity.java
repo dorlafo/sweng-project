@@ -37,13 +37,15 @@ import ch.epfl.sweng.jassatepfl.model.Round;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
-import static android.view.View.INVISIBLE;
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.SECOND_TEAM;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.SENTINEL;
 
 public class GameActivity extends BaseAppCompatActivity implements OnClickListener {
+
+    private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
 
     // TODO: max points depending on variant?
     private final static int TOTAL_POINTS_IN_ROUND = 157;
@@ -67,12 +69,29 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        if (fAuth.getCurrentUser() == null) {
+            Log.d(TAG, "showLogin:getCurrentUser:null");
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
+        } else {
+            Log.d(TAG, "showLogin:getCurrentUser:notNull");
 
-        meldCallers = new Stack<>();
+            setContentView(R.layout.activity_game);
 
-        Intent intent = getIntent();
-        matchId = intent.getStringExtra("match_Id");
+            //Sentinel matchStats to avoid null pointer exception
+            matchStats = new MatchStats(matchId, Match.GameVariant.CHIBRE);
+
+            meldCallers = new Stack<>();
+
+            Intent intent = getIntent();
+            matchId = intent.getStringExtra("match_Id");
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -97,7 +116,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId)
                     .removeEventListener(statsListener);
         }
-        // TODO: remove matchstats from firebase
+        // TODO: remove matchstats from firebase (are you sure ? If the player exit
+        // the app when the match is still active, it should not delete it)
     }
 
     @Override
@@ -255,6 +275,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                         finish();
                     }
                 })
+                .setCancelable(false)
                 .show();
     }
 
@@ -270,8 +291,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         secondTeamScoreDisplay.setOnClickListener(this);
         secondTeamScoreDisplay.setEnabled(false);
 
-        final boolean isOwner = currentMatch.createdBy().getID().toString().equals(fAuth.getCurrentUser().getDisplayName());
-        final int visibility = isOwner ? VISIBLE : INVISIBLE;
+        final boolean isOwner = currentMatch.createdBy().getID().toString().equals(getUserSciper());
+        final int visibility = isOwner ? VISIBLE : GONE;
 
         ImageButton firstTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_1);
         firstTeamUpdateButton.setOnClickListener(this);
@@ -299,36 +320,33 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         goal.setText(goalText);
 
         if (isOwner) {
-            matchStats = new MatchStats(matchId, currentMatch.getGameVariant());
             firstTeamScoreDisplay.setEnabled(true);
             secondTeamScoreDisplay.setEnabled(true);
-            displayScore();
-        } else {
-            statsListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    matchStats = dataSnapshot.getValue(MatchStats.class);
-                    if (matchStats != null) {
-                        firstTeamScoreDisplay.setEnabled(true);
-                        secondTeamScoreDisplay.setEnabled(true);
-                        displayScore();
-                        if (matchStats.goalHasBeenReached()) {
-                            displayEndOfMatchMessage(matchStats.getWinnerIndex());
-                        }
-                    } else {
-                        firstTeamScoreDisplay.setEnabled(false);
-                        secondTeamScoreDisplay.setEnabled(false);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.e("ERROR-DATABASE", databaseError.toString());
-                }
-            };
-            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId)
-                    .addValueEventListener(statsListener);
         }
+        statsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                matchStats = dataSnapshot.getValue(MatchStats.class);
+                if (matchStats != null) {
+                    firstTeamScoreDisplay.setEnabled(true);
+                    secondTeamScoreDisplay.setEnabled(true);
+                    displayScore();
+                    if (matchStats.goalHasBeenReached()) {
+                        displayEndOfMatchMessage(matchStats.getWinnerIndex());
+                    }
+                } else {
+                    firstTeamScoreDisplay.setEnabled(false);
+                    secondTeamScoreDisplay.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("ERROR-DATABASE", databaseError.toString());
+            }
+        };
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId)
+                .addValueEventListener(statsListener);
     }
 
     private void displayScoreHistory(int teamIndex) {
