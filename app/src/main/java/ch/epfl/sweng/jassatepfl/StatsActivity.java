@@ -1,5 +1,6 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.Toolbar;
 
@@ -18,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.stats.UserStats;
 
-public class StatsActivity extends BaseAppCompatActivity {
+public class StatsActivity extends BaseActivityWithNavDrawer {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -38,7 +39,9 @@ public class StatsActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stats);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_stats, drawer, false);
+        drawer.addView(contentView, 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
