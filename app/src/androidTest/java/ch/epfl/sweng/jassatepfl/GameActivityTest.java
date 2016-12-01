@@ -26,7 +26,6 @@ import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -87,9 +86,9 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.addPlayers(DummyDataTest.players());
         getActivity();
 
-        onView(withId(R.id.score_picker_cancel)).check(doesNotExist());
-        onView(withId(R.id.score_update_1)).check(doesNotExist());
-        onView(withId(R.id.score_meld_spinner_2)).check(doesNotExist());
+        onView(withId(R.id.score_picker_cancel)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.score_update_1)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.score_meld_spinner_2)).check(matches(not(isDisplayed())));
     }
 
     @Test
