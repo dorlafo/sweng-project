@@ -97,11 +97,13 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testDoNotAddWhenMatchFull() {
+        dbRefWrapTest.reset();
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.fullMatch());
         dbRefWrapTest.addMatches(matches);
         Map<String, Boolean> pendingMatches = new HashMap<>();
         dbRefWrapTest.addPendingMatch(DummyDataTest.fullMatch(), pendingMatches);
+        dbRefWrapTest.addPlayers(DummyDataTest.players());
         assertMatchContainsNPlayers(dbRefWrapTest, "full", 4);
 
         getActivity();
@@ -113,8 +115,8 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
             onView(withText(R.string.error_cannot_join)).check(matches(isDisplayed()));
             onView(withText(R.string.error_match_full)).check(matches(isDisplayed()));
         } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
-        dbRefWrapTest.reset();
     }
 }

@@ -3,7 +3,9 @@ package ch.epfl.sweng.jassatepfl.test_utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -116,6 +118,21 @@ public class DummyDataTest {
         List<Player> playerList = new ArrayList<>();
         playerList.add(bricoloBob);
         return new Match(playerList, new GPSPoint(37.422, -122.084), "CO", false, CHIBRE, expirationTime(3), "bobCalifornia");
+    }
+
+    public static Set<Player> players() {
+        Set<Player> players = new HashSet<>();
+        players.add(amaury);
+        players.add(vincenzo);
+        players.add(dorian);
+        players.add(alexis);
+        players.add(nicolas);
+        players.add(jimmy);
+        players.add(random);
+        players.add(colin);
+        players.add(marco);
+        players.add(bricoloBob);
+        return players;
     }
 
     private static long expirationTime(int hourOffset) {
