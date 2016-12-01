@@ -4,9 +4,14 @@ import android.content.Intent;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.NumberPicker;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -64,7 +69,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
     }
 
-    /* TODO: fix this
     @Test
     public void testElementsAreHiddenForRegularPlayer() {
         dbRefWrapTest.reset();
@@ -76,14 +80,15 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         matches.add(threePlayerMatch);
         dbRefWrapTest.addMatches(matches);
         Set<MatchStats> stats = new HashSet<>();
-        stats.add(new MatchStats(threePlayerMatch.getMatchID(), threePlayerMatch.getGameVariant()));
+        stats.add(new MatchStats(threePlayerMatch));
         dbRefWrapTest.addStats(stats);
+        dbRefWrapTest.addPlayers(DummyDataTest.players());
         getActivity();
+
         onView(withId(R.id.score_picker_cancel)).check(matches(not(isDisplayed())));
         onView(withId(R.id.score_update_1)).check(matches(not(isDisplayed())));
         onView(withId(R.id.score_meld_spinner_2)).check(matches(not(isDisplayed())));
     }
-    */
 
     @Test
     public void testCancelDisplaysToastWhenNoCancelAvailable() {
@@ -243,20 +248,19 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.score_table_layout)).check(matches(isDisplayed()));
     }
 
-    /* TODO: custom matcher for this
     @Test
     public void testHistoryIsCorrect() {
         dbRefWrapTest.reset();
         ownedMatchSetUp();
         getActivity();
         incrementScore(1, 50);
+        incrementScore(0, 7);
+        addMeld(1, THREE_CARDS);
         onView(withId(R.id.score_display_2)).perform(click());
-        onView(withId(R.id.score_table_row_round_index)).check(matches(withText("0")));
-        onView(withId(R.id.score_table_row_points)).check(matches(withText("50")));
-        onView(withId(R.id.score_table_row_melds)).check(matches(withText("-")));
-
+        onView(atPositionInTable(1, 1)).check(matches(withText("50")));
+        onView(atPositionInTable(1, 2)).check(matches(withText("100")));
+        onView(atPositionInTable(2, 3)).check(matches(withText(THREE_CARDS.toString())));
     }
-    */
 
     private void checkScoreDisplay(String firstDisplay, String secondDisplay) {
         onView(withId(R.id.score_display_1)).check(matches(withText(firstDisplay)));
@@ -302,6 +306,32 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         Set<MatchStats> stats = new HashSet<>();
         stats.add(new MatchStats(ownedMatch));
         dbRefWrapTest.addStats(stats);
+        dbRefWrapTest.addPlayers(DummyDataTest.players());
+    }
+
+    private static Matcher<View> atPositionInTable(final int x, final int y) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("is at position # " + x + " , " + y);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent viewParent = view.getParent();
+                if (!(viewParent instanceof TableRow)) {
+                    return false;
+                }
+                TableRow row = (TableRow) viewParent;
+                TableLayout table = (TableLayout) row.getParent();
+                if (table.indexOfChild(row) != y)
+                    return false;
+                if (row.indexOfChild(view) == x)
+                    return true;
+                else
+                    return false;
+            }
+        };
     }
 
 }
