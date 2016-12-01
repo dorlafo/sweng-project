@@ -13,6 +13,7 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
@@ -22,7 +23,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsNPlayers;
 
 public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
 
@@ -44,10 +44,13 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.leave_match_button)).perform(click());
         onView(withId(R.id.twMyMatches)).check(matches(isDisplayed()));
         String matchID = DummyDataTest.fullMatchWithBob().getMatchID();
-        ((DBRefWrapTest)dbRefWrapTest).child(DatabaseUtils.DATABASE_MATCHES).child(matchID);
-        assertMatchContainsNPlayers(dbRefWrapTest, matchID, 3);
+        Match m = ((MatchLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES).child(matchID)).getCurrentNode()).getData();
+        assertEquals(3, m.getPlayers().size());
+
+        /*
         Map<String, Boolean> status = ((MatchStatusLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID)).getCurrentNode()).getData();
         assertEquals(3, status.size());
+        */
     }
 
     private void fullMatchSetUp() {
