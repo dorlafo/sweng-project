@@ -12,23 +12,23 @@ import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
  * @author Amaury Combes
  */
 public class MatchLeafTest extends LeafTest<Match> {
-    private LeafFieldTest<List<Player>> playersLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PLAYERS);
-    private LeafFieldTest<GPSPoint> locationLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_LOCATION);
-    private LeafFieldTest<String> descriptionLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_DESCRIPTION);
-    private LeafFieldTest<Rank> rankLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_RANK);
-    private LeafFieldTest<Boolean> privateMatchLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PRIVATE);
-    private LeafFieldTest<Match.GameVariant> gameVariantLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_GAME_VARIANT);
-    private LeafFieldTest<Integer> maxPlayerNumberLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MAX_NB_PLAYER);
-    private LeafFieldTest<Long> expirationTimeLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_EXPIRATION_TIME);
-    private LeafFieldTest<String> matchIDLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MATCH_ID);
+    private LeafFieldTest<List<Player>> playersLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PLAYERS, this);
+    private LeafFieldTest<GPSPoint> locationLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_LOCATION, this);
+    private LeafFieldTest<String> descriptionLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_DESCRIPTION, this);
+    private LeafFieldTest<Rank> rankLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_RANK, this);
+    private LeafFieldTest<Boolean> privateMatchLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PRIVATE, this);
+    private LeafFieldTest<Match.GameVariant> gameVariantLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_GAME_VARIANT, this);
+    private LeafFieldTest<Integer> maxPlayerNumberLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MAX_NB_PLAYER, this);
+    private LeafFieldTest<Long> expirationTimeLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_EXPIRATION_TIME, this);
+    private LeafFieldTest<String> matchIDLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MATCH_ID, this);
 
     /**
      * Constructor of the LeafTest class
      *
      * @param id the id of the LeafTest that is created
      */
-    public MatchLeafTest(String id) {
-        super(id);
+    public MatchLeafTest(String id, NodeTest parent) {
+        super(id, parent);
     }
 
     @Override

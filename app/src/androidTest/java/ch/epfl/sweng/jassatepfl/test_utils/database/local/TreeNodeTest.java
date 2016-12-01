@@ -16,15 +16,17 @@ public class TreeNodeTest implements NodeTest {
 
     private String id;
     private Set<NodeTest> children;
+    private NodeTest parent;
 
     /**
      * Constructor of the TreeNodeTest class
      *
      * @param id the id of the TreeNodeTest that is created
      */
-    public TreeNodeTest(String id) {
+    public TreeNodeTest(String id, NodeTest parent) {
         this.id = id;
         children = new HashSet<>();
+        this.parent = parent;
     }
 
     @Override
@@ -35,6 +37,11 @@ public class TreeNodeTest implements NodeTest {
     @Override
     public Set<NodeTest> getChildren() {
         return new HashSet<>(children);
+    }
+
+    @Override
+    public NodeTest getParent() {
+        return parent;
     }
 
     @Override
@@ -51,19 +58,19 @@ public class TreeNodeTest implements NodeTest {
     public LeafTest addChild(String id) {
         switch (this.id) {
             case DatabaseUtils.DATABASE_PLAYERS:
-                PlayerLeafTest playerLeaf = new PlayerLeafTest(id);
+                PlayerLeafTest playerLeaf = new PlayerLeafTest(id, this);
                 children.add(playerLeaf);
                 return playerLeaf;
             case DatabaseUtils.DATABASE_MATCHES:
-                MatchLeafTest matchLeaf = new MatchLeafTest(id);
+                MatchLeafTest matchLeaf = new MatchLeafTest(id, this);
                 children.add(matchLeaf);
                 return matchLeaf;
             case DatabaseUtils.DATABASE_PENDING_MATCHES:
-                MatchStatusLeafTest statusLeaf = new MatchStatusLeafTest(id);
+                MatchStatusLeafTest statusLeaf = new MatchStatusLeafTest(id, this);
                 children.add(statusLeaf);
                 return statusLeaf;
             case DatabaseUtils.DATABASE_MATCH_STATS:
-                MatchStatsLeafTest statsLeaf = new MatchStatsLeafTest(id);
+                MatchStatsLeafTest statsLeaf = new MatchStatsLeafTest(id, this);
                 children.add(statsLeaf);
                 return statsLeaf;
             default:
@@ -89,16 +96,16 @@ public class TreeNodeTest implements NodeTest {
         LeafTest newLeaf;
         switch (this.id) {
             case DatabaseUtils.DATABASE_PLAYERS:
-                newLeaf = new PlayerLeafTest(tempId);
+                newLeaf = new PlayerLeafTest(tempId, this);
                 break;
             case DatabaseUtils.DATABASE_MATCHES:
-                newLeaf = new MatchLeafTest(tempId);
+                newLeaf = new MatchLeafTest(tempId, this);
                 break;
             case DatabaseUtils.DATABASE_PENDING_MATCHES:
-                newLeaf = new MatchStatusLeafTest(tempId);
+                newLeaf = new MatchStatusLeafTest(tempId, this);
                 break;
             case DatabaseUtils.DATABASE_MATCH_STATS:
-                newLeaf = new MatchStatsLeafTest(tempId);
+                newLeaf = new MatchStatsLeafTest(tempId, this);
                 break;
             default:
                 throw new UnsupportedOperationException("Cannot add an auto generated child to : " + id);
@@ -119,6 +126,16 @@ public class TreeNodeTest implements NodeTest {
     @Override
     public void initialize() {
 
+    }
+
+    @Override
+    public void removeSelf() {
+        parent.removeChild(this);
+    }
+
+    @Override
+    public void removeChild(NodeTest child) {
+        children.remove(child);
     }
 
 }

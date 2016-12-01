@@ -26,6 +26,8 @@ public interface NodeTest {
      */
     Set<NodeTest> getChildren();
 
+    NodeTest getParent();
+
     /**
      * Tries to get a specific child of the current node
      *
@@ -49,6 +51,13 @@ public interface NodeTest {
      * @return the child that was just added
      */
     NodeTest addChild(String id);
+
+    /**
+     * Remove the current node from the database
+     */
+    void removeSelf();
+
+    void removeChild(NodeTest child);
 
     /**
      * Remove all chidren of the current node

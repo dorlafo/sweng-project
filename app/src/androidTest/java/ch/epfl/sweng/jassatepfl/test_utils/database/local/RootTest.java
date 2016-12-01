@@ -37,6 +37,11 @@ public class RootTest implements NodeTest {
     }
 
     @Override
+    public NodeTest getParent() {
+        throw new UnsupportedOperationException("RootTest does not support getParent()");
+    }
+
+    @Override
     public TreeNodeTest getChild(String id) {
         for (NodeTest n : children) {
             if (n.getId().equals(id)) {
@@ -48,7 +53,7 @@ public class RootTest implements NodeTest {
 
     @Override
     public TreeNodeTest addChild(String id) {
-        TreeNodeTest tNode = new TreeNodeTest(id);
+        TreeNodeTest tNode = new TreeNodeTest(id, this);
         children.add(tNode);
         return tNode;
     }
@@ -69,6 +74,16 @@ public class RootTest implements NodeTest {
         addChild(DatabaseUtils.DATABASE_PLAYERS);
         addChild(DatabaseUtils.DATABASE_PENDING_MATCHES);
         addChild(DatabaseUtils.DATABASE_MATCH_STATS);
+    }
+
+    @Override
+    public void removeSelf() {
+        throw new UnsupportedOperationException("Root does not support removeValue()");
+    }
+
+    @Override
+    public void removeChild(NodeTest child) {
+        children.remove(child);
     }
 
 }

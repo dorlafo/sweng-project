@@ -9,8 +9,9 @@ import java.util.Set;
 public class LeafFieldTest<T> implements NodeTest {
     private final String id;
     private T data;
+    private NodeTest parent;
 
-    public LeafFieldTest(String id) {
+    public LeafFieldTest(String id, NodeTest parent) {
         this.id = id;
     }
 
@@ -38,6 +39,11 @@ public class LeafFieldTest<T> implements NodeTest {
     }
 
     @Override
+    public NodeTest getParent() {
+        throw new UnsupportedOperationException("LeafFieldTest does not support getParent()");
+    }
+
+    @Override
     public NodeTest getChild(String id) throws IllegalArgumentException {
         throw new UnsupportedOperationException("LeafFieldTest does not support getChild()");
     }
@@ -60,5 +66,16 @@ public class LeafFieldTest<T> implements NodeTest {
     @Override
     public void initialize() {
         throw new UnsupportedOperationException("LeafFieldTest does not support initialize()");
+    }
+
+    @Override
+    public void removeSelf() {
+        throw new UnsupportedOperationException("LeafFieldTest does not support removeSelf()");
+    }
+
+    @Override
+    public void removeChild(NodeTest child) {
+        throw new UnsupportedOperationException("LeafFieldTest does not support removeChild()");
+
     }
 }

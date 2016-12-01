@@ -10,8 +10,8 @@ public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
 
     private Map<String, LeafFieldTest<Boolean>> status = new HashMap<>();
 
-    public MatchStatusLeafTest(String id) {
-        super(id);
+    public MatchStatusLeafTest(String id, NodeTest parent) {
+        super(id, parent);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
     public void setData(Map<String, Boolean> data) {
         this.data = data;
         for(String key : data.keySet()) {
-            LeafFieldTest<Boolean> s = new LeafFieldTest<>(key);
+            LeafFieldTest<Boolean> s = new LeafFieldTest<>(key, this);
             s.setData(data.get(key));
             status.put(key, s);
         }

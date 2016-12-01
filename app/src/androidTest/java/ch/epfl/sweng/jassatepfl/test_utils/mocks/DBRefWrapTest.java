@@ -317,6 +317,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
 
     @Override
     public void removeValue() {
+        currentNode.removeSelf();
 
     }
 
