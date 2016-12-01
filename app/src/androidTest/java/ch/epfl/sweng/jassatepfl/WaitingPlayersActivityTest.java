@@ -34,11 +34,11 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        dbRefWrapTest.reset();
     }
 
     @Test
     public void testLeaveButton() {
+        dbRefWrapTest.reset();
         fullMatchSetUp();
         getActivity();
         onView(withId(R.id.leave_match_button)).perform(click());
