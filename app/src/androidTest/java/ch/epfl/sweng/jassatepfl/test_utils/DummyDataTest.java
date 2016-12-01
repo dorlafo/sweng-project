@@ -86,6 +86,15 @@ public class DummyDataTest {
         return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full");
     }
 
+    public static Match fullMatchWithBob() {
+        List<Player> fullPlayers = new ArrayList<>();
+        fullPlayers.add(bricoloBob);
+        fullPlayers.add(marco);
+        fullPlayers.add(dorian);
+        fullPlayers.add(vincenzo);
+        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full");
+    }
+
     public static Match matchWithBob() {
         List<Player> playerList = new ArrayList<>();
         playerList.add(bricoloBob);
