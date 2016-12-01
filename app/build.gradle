@@ -16,10 +16,6 @@ android {
     compileSdkVersion 24
     buildToolsVersion '24.0.3'
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
     defaultConfig {
         applicationId "ch.epfl.sweng.jassatepfl"
         minSdkVersion 19
@@ -37,7 +33,7 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
         }
     }
@@ -79,16 +75,24 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.8.0'
     compile 'com.google.firebase:firebase-auth:9.8.0'
     compile 'com.google.firebase:firebase-messaging:9.8.0'
+    apt 'com.google.dagger:dagger-compiler:2.7'
+    androidTestApt 'com.google.dagger:dagger-compiler:2.7'
     compile 'com.firebaseui:firebase-ui-database:0.6.1'
     compile 'com.google.android.gms:play-services-maps:9.8.0'
     compile 'com.google.android.gms:play-services-location:9.8.0'
     compile 'com.google.android.gms:play-services-places:9.8.0'
     compile 'com.google.code.gson:gson:2.7'
-    compile 'com.github.blueapron:dexmaker:2.0'
-    compile 'org.mockito:mockito-core:2.1.0'
-    compile 'com.android.support:support-v4:24.2.1'
+
+    compile 'com.github.mukeshsolanki:MarkdownView-Android:1.0.3'
+
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+
     testCompile 'junit:junit:4.12'
     androidTestCompile 'junit:junit:4.12'
+
+    androidTestCompile 'com.github.blueapron:dexmaker:2.0'
+    androidTestCompile 'org.mockito:mockito-core:2.1.0'
+
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
     apt 'com.google.dagger:dagger-compiler:2.7'
@@ -113,7 +117,9 @@ task jacocoReport(type: JacocoReport, dependsOn: "connectedAndroidTest") {
                     '**/BuildConfig.*',
                     '**/Manifest*.*',
                     '**/*Test*.*',
-                    '**/android/**/*.*'
+                    '**/android/**/*.*',
+                    '**/injections/*.*/',
+                    '**/helpers/*.*/'
             ]
     )
 

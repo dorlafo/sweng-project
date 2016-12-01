@@ -1,10 +1,16 @@
 package ch.epfl.sweng.jassatepfl.model;
 
-
 import org.junit.Test;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
+
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.alexis;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.amaury;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.dorian;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotSame;
@@ -154,6 +160,19 @@ public final class MatchTest {
         Match match = defaultBuilder().build();
         assertFalse(match.hasParticipant(null));
         assertFalse(match.hasParticipant(dorian));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testRemovePlayerThrowsExceptionWhenEmpty() {
+        DummyDataTest.noPlayersMatch().removePlayerById(new Player.PlayerID(12));
+    }
+
+    @Test
+    public void testRemovePlayerById() {
+        Match match = DummyDataTest.threePlayersMatch();
+        assertTrue(match.hasParticipant(alexis));
+        match.removePlayerById(new Player.PlayerID(245433));
+        assertFalse(match.hasParticipant(alexis));
     }
 
 }

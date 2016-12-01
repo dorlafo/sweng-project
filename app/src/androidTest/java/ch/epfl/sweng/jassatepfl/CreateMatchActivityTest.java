@@ -2,7 +2,6 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.support.test.espresso.contrib.PickerActions;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TimePicker;
 
 import org.hamcrest.Matchers;
@@ -15,18 +14,16 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
-import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcher;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
+import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -60,9 +57,9 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     public void setUp() throws Exception {
         super.setUp();
         Set<Player> playerSet = new HashSet<>();
-        playerSet.add(DummyData.amaury);
-        playerSet.add(DummyData.jimmy);
-        dbRefWrapMock.addPlayers(playerSet);
+        playerSet.add(DummyDataTest.amaury);
+        playerSet.add(DummyDataTest.jimmy);
+        dbRefWrapTest.addPlayers(playerSet);
         getActivity();
     }
 
@@ -107,7 +104,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         int currentHour = calendar.get(HOUR_OF_DAY);
         calendar.add(MINUTE, -5);
         setTime(currentHour == 23 ? 0 : currentHour, calendar.get(MINUTE));
-        onView(withText(R.string.toast_invalid_hour)).inRoot(new ToastMatcher())
+        onView(withText(R.string.toast_invalid_hour)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
     }
 
@@ -127,7 +124,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         Calendar calendar = Calendar.getInstance();
         calendar.add(DAY_OF_MONTH, -5);
         setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
-        onView(withText(R.string.toast_invalid_date)).inRoot(new ToastMatcher())
+        onView(withText(R.string.toast_invalid_date)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
     }
 
@@ -178,7 +175,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.add_player_button)).perform(click());
         onView(withId(R.id.search)).perform(click());
         onView(isAssignableFrom(EditText.class)).perform(typeText("Hello"));
-        dbRefWrapMock.reset();
+        dbRefWrapTest.reset();
     }*/
 
 

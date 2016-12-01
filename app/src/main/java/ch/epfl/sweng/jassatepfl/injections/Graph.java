@@ -25,13 +25,6 @@ public interface Graph {
     void inject(BaseActivityWithNavDrawer activity);
 
     /**
-     * Injects providers return values to the Activity
-     *
-     * @param activity the activity which will be injected
-     */
-    void inject(InjectedBaseActivityTest activity);
-
-    /**
      * Injects providers return values to the BaseAppCompatActivity
      *
      * @param activity the activity which will be injected
@@ -50,7 +43,7 @@ public interface Graph {
      */
     final class Initializer {
         public static Graph init(boolean mockMode) {
-            return DaggerGraph.builder().debugDataModule(new DebugDataModule(mockMode)).build();
+            return DaggerGraph.builder().debugDataModule(new DebugDataModule()).build();
         }
     }
 
