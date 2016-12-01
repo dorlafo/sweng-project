@@ -101,7 +101,7 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_stat_notify)
+                .setSmallIcon(R.drawable.ic_stat_logonotification)
                 .setContentTitle("Jass@EPFL - " + msgData.get("title"))
                 .setContentText(msgData.get("body"))
                 .setAutoCancel(true)
