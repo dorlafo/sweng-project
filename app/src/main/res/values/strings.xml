@@ -102,6 +102,7 @@
     <string name="dialog_have_cards">Do you have cards available for this game ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="someone_has_card">Someone has a deck of cards:</string>
 
 
     <color name="greenCardBoard">#2B6C3E</color>

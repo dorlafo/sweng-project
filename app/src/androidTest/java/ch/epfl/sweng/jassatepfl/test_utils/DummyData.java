@@ -33,18 +33,19 @@ public class DummyData {
     public static GPSPoint CECoord = new GPSPoint(46.520525, 6.569554);
     public static GPSPoint flonCoord = new GPSPoint(46.520858, 6.629570);
     public static GPSPoint lemanCoord = new GPSPoint(46.453986, 6.553145);
+    public static List<PlayerID> hasCardsEmpty = new ArrayList<>();
 
     public static Match onePlayerMatch() {
         List<Player> match1Players = new ArrayList<>();
         match1Players.add(amaury);
-        return new Match(match1Players, rolexCoord, "Rolex", false, CHIBRE, expirationTime(2), "one_player");
+        return new Match(match1Players, rolexCoord, "Rolex", false, CHIBRE, expirationTime(2), "one_player", hasCardsEmpty);
     }
 
     public static Match twoPlayersMatch() {
         List<Player> match2Players = new ArrayList<>();
         match2Players.add(vincenzo);
         match2Players.add(dorian);
-        return new Match(match2Players, BCCoord, "BC", false, CHIBRE, expirationTime(24), "two_players");
+        return new Match(match2Players, BCCoord, "BC", false, CHIBRE, expirationTime(24), "two_players", hasCardsEmpty);
     }
 
     public static Match threePlayersMatch() {
@@ -52,19 +53,19 @@ public class DummyData {
         match3Players.add(colin);
         match3Players.add(nicolas);
         match3Players.add(alexis);
-        return new Match(match3Players, CECoord, "CE", false, CHIBRE, expirationTime(3), "three_players");
+        return new Match(match3Players, CECoord, "CE", false, CHIBRE, expirationTime(3), "three_players", hasCardsEmpty);
     }
 
     public static Match noPlayersMatch() {
         return new Match(new ArrayList<Player>(), lemanCoord,
                 "Cette String est beaucoup trop longue, je me demande si l'affichage va foirer???",
-                false, CHIBRE, expirationTime(12), "no_players");
+                false, CHIBRE, expirationTime(12), "no_players", hasCardsEmpty);
     }
 
     public static Match privateMatch() {
         List<Player> privatePlayers = new ArrayList<>();
         privatePlayers.add(jimmy);
-        return new Match(privatePlayers, swissTechCoord, "SwissTech", true, CHIBRE, expirationTime(1), "private");
+        return new Match(privatePlayers, swissTechCoord, "SwissTech", true, CHIBRE, expirationTime(1), "private", hasCardsEmpty);
     }
 
     public static Match fullMatch() {
@@ -73,7 +74,7 @@ public class DummyData {
         fullPlayers.add(marco);
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
-        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full");
+        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full", hasCardsEmpty);
     }
 
     private static long expirationTime(int hourOffset) {

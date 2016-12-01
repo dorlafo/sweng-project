@@ -43,6 +43,19 @@ public final class MatchStringifier {
     }
 
     /**
+     * Set String depending if someone has cards or not
+     *
+     * @param match The Match
+     */
+    public String getStringHasCard(Match match) {
+        if(match.getHasCards().isEmpty()) {
+            return "No";
+        } else {
+            return "Yes";
+        }
+    }
+
+    /**
      * Builds and returns a String representation of all useful
      * fields of a Match to be used in a googleMaps
      * {@link com.google.android.gms.maps.model.Marker Marker}.
@@ -64,7 +77,10 @@ public final class MatchStringifier {
                 .append(match.getGameVariant().toString())
                 .append(newLine)
                 .append(res.getString(R.string.snippet_expiration_date))
-                .append(dateToStringCustom());
+                .append(dateToStringCustom())
+                .append(newLine)
+                .append(res.getString(R.string.someone_has_card))
+                .append(getStringHasCard(match));
 
         return builder.toString();
     }

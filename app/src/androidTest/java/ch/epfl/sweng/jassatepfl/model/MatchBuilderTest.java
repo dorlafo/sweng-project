@@ -37,10 +37,11 @@ public final class MatchBuilderTest {
         Match match = matchBuilder.build();
 
         List<Player> players = new ArrayList<>();
+        List<PlayerID> hasCards = new ArrayList<>();
         players.add(amaury);
         Match defaultMatch = new Match(players, new GPSPoint(46.520407, 6.565802),
                 Match.Builder.DEFAULT_DESCRIPTION, false, Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000,
-                Match.Builder.DEFAULT_ID);
+                Match.Builder.DEFAULT_ID, hasCards);
 
         assertEquals(defaultMatch, match);
     }
@@ -72,6 +73,7 @@ public final class MatchBuilderTest {
         assertEquals(4, setMatch.getMaxPlayerNumber());
         assertEquals(newExpirationTime, setMatch.getExpirationTime(), 10);
         assertEquals("new match id", setMatch.getMatchID());
+        assertTrue(!matchBuilder.getHasCards().isEmpty());
     }
 
     @Test

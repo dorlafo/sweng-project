@@ -3,7 +3,6 @@ package ch.epfl.sweng.jassatepfl.model;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,7 +31,7 @@ public class Match {
     private long expirationTime;
     private String matchID;
     private List<Player.PlayerID> hasCards;
-    private Player.PlayerID nobody = new Player.PlayerID(1);
+    private Player.PlayerID sentinel = new Player.PlayerID(1);
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase.
@@ -70,7 +69,7 @@ public class Match {
         this.expirationTime = expirationTime;
         this.matchID = matchID;
         this.hasCards = hasCards;
-        if (hasCards.isEmpty()){this.hasCards.add(nobody);}
+        if (hasCards.isEmpty()){this.hasCards.add(sentinel);}
     }
 
     /**
@@ -182,7 +181,7 @@ public class Match {
      */
     public void setHasCards(List<Player.PlayerID> hasCards) {
         this.hasCards = hasCards;
-        if (hasCards.isEmpty()){this.hasCards.add(nobody);}
+        if (hasCards.isEmpty()){this.hasCards.add(sentinel);}
     }
 
     /**
@@ -193,8 +192,8 @@ public class Match {
     public void addPlayerWhoHasCards(Player.PlayerID playerID) {
         if (playerID != null && !hasCards.contains(playerID)) {
             hasCards.add(playerID);
-            if (hasCards.contains(nobody)){
-                hasCards.remove(nobody);
+            if (hasCards.contains(sentinel)){
+                hasCards.remove(sentinel);
             }
         }
     }
@@ -205,14 +204,14 @@ public class Match {
      * @return boolean true if someone have cards, false otherwise.
      */
     public boolean hasCards() {
-        if(hasCards.isEmpty() || hasCards.contains(nobody)){return false;}
+        if(hasCards.isEmpty() || hasCards.contains(sentinel)){return false;}
         else return true; }
 
     public void removePlayerWhoHasCards(Player.PlayerID playerID){
         if (playerID != null && hasCards.contains(playerID)) {
             hasCards.remove(playerID);
             if (hasCards.isEmpty()) {
-                hasCards.add(nobody);
+                hasCards.add(sentinel);
             }
         }
     }
@@ -464,6 +463,10 @@ public class Match {
         public Builder setPrivacy(boolean privateMatch) {
             this.privateMatch = privateMatch;
             return this;
+        }
+
+        public List<Player.PlayerID> getHasCards() {
+            return new ArrayList<>(hasCards);
         }
 
         /**
