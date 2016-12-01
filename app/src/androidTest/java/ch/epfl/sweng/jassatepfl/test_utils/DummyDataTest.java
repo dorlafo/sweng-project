@@ -13,7 +13,7 @@ import ch.epfl.sweng.jassatepfl.model.Rank;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
 
-public class DummyData {
+public class DummyDataTest {
 
     public static Player amaury = new Player(new PlayerID(235400), "Combes", "Amaury", new Rank(123));
     public static Player vincenzo = new Player(new PlayerID(249733), "Bazzucchi", "Vincenzo", new Rank(456));
@@ -75,6 +75,36 @@ public class DummyData {
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
         return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full", hasCardsEmpty);
+    }
+
+    public static Match matchWithBob() {
+        List<Player> playerList = new ArrayList<>();
+        playerList.add(bricoloBob);
+        return new Match(playerList, COCoord, "CO", false, CHIBRE, expirationTime(3), "bob", hasCardsEmpty);
+    }
+
+    public static Match match_one_p_california() {
+        List<Player> playerList = new ArrayList<>();
+        playerList.add(amaury);
+        return new Match(playerList, new GPSPoint(37.422, -122.084), "Rolex", false, CHIBRE,
+                expirationTime(3), "one_player_california", hasCardsEmpty);
+    }
+
+    public static Match matchFullCalifornia() {
+        List<Player> fullPlayers = new ArrayList<>();
+        fullPlayers.add(random);
+        fullPlayers.add(marco);
+        fullPlayers.add(dorian);
+        fullPlayers.add(vincenzo);
+        return new Match(fullPlayers, new GPSPoint(37.422, -122.084), "CO", false, CHIBRE,
+                expirationTime(3), "fullCalifornia", hasCardsEmpty);
+    }
+
+    public static Match matchBobCalifornia() {
+        List<Player> playerList = new ArrayList<>();
+        playerList.add(bricoloBob);
+        return new Match(playerList, new GPSPoint(37.422, -122.084), "CO", false, CHIBRE,
+                expirationTime(3), "bobCalifornia", hasCardsEmpty);
     }
 
     private static long expirationTime(int hourOffset) {

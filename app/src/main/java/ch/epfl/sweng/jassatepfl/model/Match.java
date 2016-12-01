@@ -166,7 +166,6 @@ public class Match {
         return expirationTime;
     }
 
-
     /**
      * Getter for the card parameter, wich is the list of who has cards.
      *

@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import ch.epfl.sweng.jassatepfl.MainActivity;
 import ch.epfl.sweng.jassatepfl.R;
-import ch.epfl.sweng.jassatepfl.injections.InjectedBaseActivityTest;
+import ch.epfl.sweng.jassatepfl.InjectedBaseActivityTest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;

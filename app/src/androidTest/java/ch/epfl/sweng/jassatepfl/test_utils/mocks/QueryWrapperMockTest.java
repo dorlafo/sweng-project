@@ -1,4 +1,4 @@
-package ch.epfl.sweng.jassatepfl.database.local.reference;
+package ch.epfl.sweng.jassatepfl.test_utils.mocks;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -10,10 +10,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.lang.reflect.Field;
-
 import ch.epfl.sweng.jassatepfl.database.helpers.QueryWrapper;
-import ch.epfl.sweng.jassatepfl.database.local.Leaf;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
@@ -23,19 +21,19 @@ import static org.mockito.Mockito.when;
 /**
  * @author Amaury Combes
  */
-public class QueryWrapperMock extends QueryWrapper{
-    private final List<Leaf> elements;
+public class QueryWrapperMockTest extends QueryWrapper{
+    private final List<LeafTest> elements;
     private String childOrder;
     private int numOfValueListener = 0;
     private int numOfChildListener = 0;
 
-    public QueryWrapperMock(List<Leaf> elems, String childOrder) {
+    public QueryWrapperMockTest(List<LeafTest> elems, String childOrder) {
         super();
         elements = new ArrayList<>(elems);
         this.childOrder = childOrder;
     }
 
-    private QueryWrapperMock(List<Leaf> elems, int numOfValueListener, int numOfChildListener) {
+    private QueryWrapperMockTest(List<LeafTest> elems, int numOfValueListener, int numOfChildListener) {
         super();
         elements = new ArrayList<>(elems);
         this.numOfValueListener = numOfValueListener;
@@ -46,33 +44,33 @@ public class QueryWrapperMock extends QueryWrapper{
     public QueryWrapper startAt(String path) {
         int i = 0;
         int listSize = elements.size();
-        List<Leaf> elems = new ArrayList<>(elements);
-        for(Leaf l: elems) {
+        List<LeafTest> elems = new ArrayList<>(elements);
+        for(LeafTest l: elems) {
             if(!l.getId().startsWith(path)) elems.remove(l);
         }
-        return new QueryWrapperMock(elems, numOfValueListener, numOfChildListener);
+        return new QueryWrapperMockTest(elems, numOfValueListener, numOfChildListener);
     }
 
     @Override
     public QueryWrapper endAt(String path) {
-        return new QueryWrapperMock(elements,  numOfValueListener, numOfChildListener);
+        return new QueryWrapperMockTest(elements,  numOfValueListener, numOfChildListener);
     }
 
     @Override
     public QueryWrapper limitToFirst(int num) {
-        return new QueryWrapperMock(elements.subList(0, num - 1),  numOfValueListener, numOfChildListener);
+        return new QueryWrapperMockTest(elements.subList(0, num - 1),  numOfValueListener, numOfChildListener);
     }
 
     @Override
     public QueryWrapper equalTo(Boolean b) {
-        List<Leaf> newLeafs = new ArrayList<>();
-        for(Leaf l: elements) {
+        List<LeafTest> newLeafs = new ArrayList<>();
+        for(LeafTest l: elements) {
             Match p = (Match) l.getData();
             if(p.isPrivateMatch() == b) {
                 newLeafs.add(l);
             }
         }
-        return new QueryWrapperMock(newLeafs,  numOfValueListener, numOfChildListener);
+        return new QueryWrapperMockTest(newLeafs,  numOfValueListener, numOfChildListener);
     }
 
     @Override
@@ -80,7 +78,7 @@ public class QueryWrapperMock extends QueryWrapper{
         ++numOfValueListener;
         new Thread() {
             public void run() {
-                for(Leaf l: elements) {
+                for(LeafTest l: elements) {
                     Player p = null;
                     Match m = null;
                     DataSnapshot dSnap = mock(DataSnapshot.class);
@@ -105,7 +103,7 @@ public class QueryWrapperMock extends QueryWrapper{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (final Leaf l : elements) {
+                for (final LeafTest l : elements) {
 
                     Handler uiHandler = new Handler(Looper.getMainLooper());
                     Runnable toRun = new Runnable() {

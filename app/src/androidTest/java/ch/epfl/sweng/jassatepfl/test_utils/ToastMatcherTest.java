@@ -8,7 +8,7 @@ import android.view.WindowManager;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
-public final class ToastMatcher extends TypeSafeMatcher<Root> {
+public final class ToastMatcherTest extends TypeSafeMatcher<Root> {
 
     @Override
     public void describeTo(Description description) {
