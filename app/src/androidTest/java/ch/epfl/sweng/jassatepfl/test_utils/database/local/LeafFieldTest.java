@@ -13,6 +13,7 @@ public class LeafFieldTest<T> implements NodeTest {
 
     public LeafFieldTest(String id, NodeTest parent) {
         this.id = id;
+        this.parent = parent;
     }
 
     public LeafFieldTest(String id, T data) {

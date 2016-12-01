@@ -47,10 +47,9 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         Match m = ((MatchLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES).child(matchID)).getCurrentNode()).getData();
         assertEquals(3, m.getPlayers().size());
 
-        /*
+
         Map<String, Boolean> status = ((MatchStatusLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID)).getCurrentNode()).getData();
         assertEquals(3, status.size());
-        */
     }
 
     private void fullMatchSetUp() {
