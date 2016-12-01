@@ -300,7 +300,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         matches.add(ownedMatch);
         dbRefWrapTest.addMatches(matches);
         Set<MatchStats> stats = new HashSet<>();
-        stats.add(new MatchStats(ownedMatch.getMatchID(), ownedMatch.getGameVariant()));
+        stats.add(new MatchStats(ownedMatch));
         dbRefWrapTest.addStats(stats);
     }
 

@@ -202,8 +202,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
-            if(requestCode == INVITE_CODE) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == INVITE_CODE) {
                 int playerNum = data.getIntExtra("players_added", 0);
                 for (int i = 0; i < playerNum; i++) {
                     String sciper = data.getStringExtra("player" + i);
@@ -243,7 +243,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
         dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).removeValue();
 
-        if(match.getPlayers().size() == 0) {
+        if (match.getPlayers().size() == 0) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).removeValue();
         } else {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
@@ -277,11 +277,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
         goToGameActivity.putExtra("match_Id", matchId);
         removeListener();
 
-        MatchStats matchStats = new MatchStats(matchId, match.getGameVariant());
-        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId).setValue(matchStats);
-
         match.setStatus(Match.MatchStatus.ACTIVE);
         dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+
+        MatchStats matchStats = new MatchStats(match);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId).setValue(matchStats);
 
         dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).removeValue();
 
@@ -295,18 +295,17 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             public void onDataChange(DataSnapshot dataSnapshot) {
                 match = dataSnapshot.getValue(Match.class);
                 Log.d(TAG, "matchListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
-                if(match != null) {
-                    if(match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
+                if (match != null) {
+                    if (match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
                         Intent goToGameActivity = new Intent(WaitingPlayersActivity.this, GameActivity.class);
                         goToGameActivity.putExtra("match_Id", matchId);
                         startActivity(goToGameActivity);
                         finish();
                     }
-                    if(match.createdBy().getID().toString().equals(getUserSciper())) {
+                    if (match.createdBy().getID().toString().equals(getUserSciper())) {
                         creator = true;
                         gameBtn.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         creator = false;
                         gameBtn.setVisibility(View.GONE);
                     }
@@ -315,9 +314,9 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                     variant.setText(match.getGameVariant().toString());
 
                     posInList = match.getPlayerIndex(new Player.PlayerID(getUserSciper()));
-                    if(posInList != -1) {
-                        if(match.matchFull()) {
-                            if(!match.teamAssignmentIsCorrect() && creator) {
+                    if (posInList != -1) {
+                        if (match.matchFull()) {
+                            if (!match.teamAssignmentIsCorrect() && creator) {
                                 Toast.makeText(WaitingPlayersActivity.this, R.string.toast_team_assignment_incorrect, Toast.LENGTH_SHORT)
                                         .show();
                             }
@@ -350,15 +349,14 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAG, "pendingMatchListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
-                playersReady.put(dataSnapshot.getKey(), (boolean)dataSnapshot.getValue());
+                playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
                 String id = dataSnapshot.getKey();
-                if(id.equals(getUserSciper())) {
+                if (id.equals(getUserSciper())) {
                     readyBtn.setEnabled(false);
                 }
                 if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
                     gameBtn.setEnabled(true);
-                }
-                else {
+                } else {
                     gameBtn.setEnabled(false);
                 }
                 modifyListAdapter();
@@ -375,13 +373,12 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                 Log.d(TAG, "pendingMatchListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
                 playersReady.remove(dataSnapshot.getKey());
                 int pos = Integer.parseInt(dataSnapshot.getKey());
-                if(pos == posInList) {
+                if (pos == posInList) {
                     readyBtn.setEnabled(true);
                 }
                 if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
                     gameBtn.setEnabled(true);
-                }
-                else {
+                } else {
                     gameBtn.setEnabled(false);
                 }
                 modifyListAdapter();
@@ -404,12 +401,12 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     private void removeListener() {
-        if(matchListener != null) {
+        if (matchListener != null) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
                     .child(matchId)
                     .removeEventListener(matchListener);
         }
-        if(pendingMatchListener != null) {
+        if (pendingMatchListener != null) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
                     .child(matchId)
                     .removeEventListener(pendingMatchListener);
@@ -435,14 +432,14 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(creator) {
+        if (creator) {
             final Player p = adapter.getItem(position);
-            if(p != null) {
+            if (p != null) {
                 teamSelected = match.teamNbForPlayer(p);
                 int nbTeam = match.getGameVariant().getNumberOfTeam();
                 CharSequence[] teams = new CharSequence[nbTeam];
-                for(int i = 0; i < nbTeam; ++i) {
-                    teams[i] = "Team " + Integer.toString(i+1);
+                for (int i = 0; i < nbTeam; ++i) {
+                    teams[i] = "Team " + Integer.toString(i + 1);
                 }
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.dialog_select_team) + p.toString() + " :")
@@ -471,7 +468,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                              */
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(teamSelected != (match.teamNbForPlayer(p))) {
+                                if (teamSelected != (match.teamNbForPlayer(p))) {
                                     match.setTeam(teamSelected, p.getID());
                                     dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
                                 }
