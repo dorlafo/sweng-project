@@ -74,7 +74,7 @@ public class Match {
         this.matchID = matchID;
         this.matchStatus = status;
         this.teams = new HashMap<>();
-        for(int teamNb = 0; teamNb < gameVariant.getNumberOfTeam(); ++teamNb) {
+        for (int teamNb = 0; teamNb < gameVariant.getNumberOfTeam(); ++teamNb) {
             //If we don't do this, Firebase will not add the team map since the value are 0.....
             //We need the key to be a string without beginning by a number of Firebase with think it's an array...
             this.teams.put("Team" + Integer.toString(teamNb), new ArrayList<String>());
@@ -101,7 +101,7 @@ public class Match {
                  GameVariant gameVariant,
                  long expirationTime,
                  String matchID) {
-        this(players, location, description, privateMatch, gameVariant,expirationTime, matchID, MatchStatus.PENDING);
+        this(players, location, description, privateMatch, gameVariant, expirationTime, matchID, MatchStatus.PENDING);
     }
 
     /**
@@ -134,12 +134,13 @@ public class Match {
 
     /**
      * Getter for the player's index in the players list
+     *
      * @param id The player' id
      * @return The index of the player if he is in match, -1 otherwise
      */
     public int getPlayerIndex(Player.PlayerID id) {
-        for(int i = 0; i < players.size(); ++i) {
-            if(players.get(i).getID().equals(id)) {
+        for (int i = 0; i < players.size(); ++i) {
+            if (players.get(i).getID().equals(id)) {
                 return i;
             }
         }
@@ -240,29 +241,29 @@ public class Match {
 
     /**
      * Set the player with the specified id in the specified team
+     *
      * @param teamNb The team we want to add a player
-     * @param id The id of the player
+     * @param id     The id of the player
      * @throws IllegalArgumentException If the team number is not valid or if the id is not one of a match player
      */
     public void setTeam(int teamNb, Player.PlayerID id) throws IllegalArgumentException {
         List<String> team = teams.get("Team" + Integer.toString(teamNb));
-        if(team == null) {
+        if (team == null) {
             throw new IllegalArgumentException("Invalid team number specified.");
         }
-        if(!hasParticipantWithID(id)) {
+        if (!hasParticipantWithID(id)) {
             throw new IllegalArgumentException("The player is not in this match.");
         }
-        if(team.contains(SENTINEL)) {
+        if (team.contains(SENTINEL)) {
             team.set(team.indexOf(SENTINEL), id.toString());
-        }
-        else if(!team.contains(id.toString())) {
+        } else if (!team.contains(id.toString())) {
             team.add(id.toString());
         }
         //remove it from other team if he was in one
-        for(List<String> t : teams.values()) {
-            if(t != team) {
+        for (List<String> t : teams.values()) {
+            if (t != team) {
                 t.remove(id.toString());
-                if(t.isEmpty()) {
+                if (t.isEmpty()) {
                     t.add(SENTINEL);
                 }
             }
@@ -271,11 +272,12 @@ public class Match {
 
     /**
      * Getter for the team map
+     *
      * @return An immutable map of the team in this match
      */
     public Map<String, List<String>> getTeams() {
         Map<String, List<String>> tmp = new HashMap<>();
-        for(String k : teams.keySet()) {
+        for (String k : teams.keySet()) {
             tmp.put(k, Collections.unmodifiableList(teams.get(k)));
         }
         return Collections.unmodifiableMap(tmp);
@@ -289,6 +291,7 @@ public class Match {
     public MatchStatus getMatchStatus() {
         return matchStatus;
     }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -358,9 +361,9 @@ public class Match {
                 matchStatus = MatchStatus.PENDING;
             }
             //Remove player from team if he was in one
-            for(List<String> t : teams.values()) {
+            for (List<String> t : teams.values()) {
                 t.remove(toRemove.toString());
-                if(t.isEmpty()) {
+                if (t.isEmpty()) {
                     t.add(SENTINEL);
                 }
             }
@@ -379,18 +382,18 @@ public class Match {
         Set<String> assignedPlayer = new HashSet<>();
         //Correct number of team
         //this could only happen if the teams map is modified inside the Match class without caution
-        if(teams.size() != gameVariant.getNumberOfTeam()) {
+        if (teams.size() != gameVariant.getNumberOfTeam()) {
             return false;
         }
 
         //For all team
-        for(List<String> team : teams.values()) {
+        for (List<String> team : teams.values()) {
             //Correct number of player by team
-            if(team.size() != gameVariant.getNumberOfPlayerByTeam()) {
+            if (team.size() != gameVariant.getNumberOfPlayerByTeam()) {
                 return false;
             }
             //The team does not contain the sentinel
-            else if(team.contains(SENTINEL)) {
+            else if (team.contains(SENTINEL)) {
                 return false;
             }
             assignedPlayer.addAll(team);
@@ -398,14 +401,13 @@ public class Match {
 
         //The teams does not contain duplicates
         //this could only happen if the teams map is modified inside the Match class without caution
-        if(assignedPlayer.size() != players.size()) {
+        if (assignedPlayer.size() != players.size()) {
             return false;
-        }
-        else {
+        } else {
             //Every player from the team is in the match
             //this could only happen if the teams map is modified inside the Match class without caution
-            for(String s : assignedPlayer) {
-                if(!hasParticipantWithID(new Player.PlayerID(s))) {
+            for (String s : assignedPlayer) {
+                if (!hasParticipantWithID(new Player.PlayerID(s))) {
                     return false;
                 }
             }
@@ -415,6 +417,7 @@ public class Match {
 
     /**
      * Setter for the match status
+     *
      * @param status The status we want to give to this match
      */
     public void setStatus(MatchStatus status) {
@@ -438,8 +441,8 @@ public class Match {
      * @return true if a player with the id is in the match, false otherwise
      */
     public boolean hasParticipantWithID(Player.PlayerID userID) {
-        for(Player p : players) {
-            if(p.getID().equals(userID)) {
+        for (Player p : players) {
+            if (p.getID().equals(userID)) {
                 return true;
             }
         }
@@ -448,13 +451,14 @@ public class Match {
 
     /**
      * Returns the team number the player is in
+     *
      * @param p The player
      * @return the team number if the player is in the match, -1 otherwise
      */
     public int teamNbForPlayer(Player p) {
-        if(players.contains(p)) {
-            for(int teamNb = 0; teamNb < teams.size(); teamNb++) {
-                if(teams.get("Team" + teamNb).contains(p.getID().toString())) {
+        if (players.contains(p)) {
+            for (int teamNb = 0; teamNb < teams.size(); teamNb++) {
+                if (teams.get("Team" + teamNb).contains(p.getID().toString())) {
                     return teamNb;
                 }
             }
@@ -494,7 +498,6 @@ public class Match {
      */
     public enum Meld {
         SENTINEL("Sentinel"),
-        LAST_TRICK("Cinq de der"),
         MARRIAGE("Stöck"),
         THREE_CARDS("Trois cartes"),
         FIFTY("Cinquante"),
@@ -520,8 +523,6 @@ public class Match {
          */
         public int value() {
             switch (this) {
-                case LAST_TRICK:
-                    return 5;
                 case MARRIAGE:
                 case THREE_CARDS:
                     return 20;
@@ -716,7 +717,7 @@ public class Match {
          * Removes a player from this matchBuilder players list
          *
          * @param player The player to remove
-         * @throws IllegalStateException If the players list is empty
+         * @throws IllegalStateException    If the players list is empty
          * @throws IllegalArgumentException If the player to be removed is not in the list
          */
         public void removePlayer(Player player) throws IllegalStateException, IllegalArgumentException {
@@ -741,6 +742,7 @@ public class Match {
 
         /**
          * Setter for the location of this match
+         *
          * @param location the location to be set
          * @return A builder containing this location
          */
@@ -751,6 +753,7 @@ public class Match {
 
         /**
          * Setter for the description of this match
+         *
          * @param description the description to be set
          * @return A builder containing this description
          */
@@ -761,6 +764,7 @@ public class Match {
 
         /**
          * Setter for the privacy of the match
+         *
          * @param privateMatch the privacy of the match
          * @return A builder containing this privacy
          */
@@ -785,6 +789,7 @@ public class Match {
 
         /**
          * Setter for the expiration time of this match
+         *
          * @param expirationTime the expiration time to be set
          * @return A builder containing this expiration time
          */
@@ -795,6 +800,7 @@ public class Match {
 
         /**
          * Setter for the match ID of this match
+         *
          * @param matchID the match ID to be set
          * @return A builder containing this match id
          */
@@ -805,6 +811,7 @@ public class Match {
 
         /**
          * Setter for the match status
+         *
          * @param status The match status to set
          * @return A builder containing this match status
          */
@@ -815,6 +822,7 @@ public class Match {
 
         /**
          * Getter for the match status
+         *
          * @return The match status
          */
         public MatchStatus getMatchStatus() {

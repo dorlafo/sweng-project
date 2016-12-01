@@ -36,8 +36,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.FIFTY;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.FOUR_JACKS;
+import static ch.epfl.sweng.jassatepfl.model.Match.Meld.FOUR_NINE;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.HUNDRED;
-import static ch.epfl.sweng.jassatepfl.model.Match.Meld.LAST_TRICK;
+import static ch.epfl.sweng.jassatepfl.model.Match.Meld.MARRIAGE;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.THREE_CARDS;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
@@ -176,10 +177,10 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.reset();
         ownedMatchSetUp();
         getActivity();
-        addMeld(0, LAST_TRICK);
-        checkScoreDisplay("5", "0");
+        addMeld(0, MARRIAGE);
+        checkScoreDisplay("20", "0");
         addMeld(1, FOUR_JACKS);
-        checkScoreDisplay("5", "200");
+        checkScoreDisplay("20", "200");
     }
 
     @Test
@@ -200,23 +201,23 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.reset();
         ownedMatchSetUp();
         getActivity();
-        addMeld(0, LAST_TRICK);
+        addMeld(0, FOUR_NINE);
         incrementScore(0, 100);
         addMeld(1, FIFTY);
         incrementScore(1, 50);
         addMeld(0, HUNDRED);
         addMeld(0, THREE_CARDS);
-        checkScoreDisplay("332", "157");
+        checkScoreDisplay("477", "157");
         onView(withId(R.id.score_update_cancel)).perform(click());
-        checkScoreDisplay("312", "157");
+        checkScoreDisplay("457", "157");
         onView(withId(R.id.score_update_cancel)).perform(click());
-        checkScoreDisplay("212", "157");
+        checkScoreDisplay("357", "157");
         onView(withId(R.id.score_update_cancel)).perform(click());
-        checkScoreDisplay("105", "107");
+        checkScoreDisplay("250", "107");
         onView(withId(R.id.score_update_cancel)).perform(click());
-        checkScoreDisplay("105", "57");
+        checkScoreDisplay("250", "57");
         onView(withId(R.id.score_update_cancel)).perform(click());
-        checkScoreDisplay("5", "0");
+        checkScoreDisplay("150", "0");
         onView(withId(R.id.score_update_cancel)).perform(click());
         checkScoreDisplay("0", "0");
     }
