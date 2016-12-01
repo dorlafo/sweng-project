@@ -11,12 +11,22 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
+import javax.inject.Inject;
+
 import ch.epfl.sweng.jassatepfl.server.ServerInterface;
 import ch.epfl.sweng.jassatepfl.stats.DrawableRetriever;
 
 public class StatsFragment extends Fragment {
+    @Inject
+    public FirebaseAuth fAuth;
+
+    public StatsFragment() {
+        super();
+        App.getInstance().graph().inject(this);
+    }
+
     protected void retrieveAndDisplay(ImageView view, String graph) {
-        String sciper = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        String sciper = fAuth.getCurrentUser().getDisplayName();
         String uri = ServerInterface.SERVER_URL + "/plots/" + sciper + "_" + graph + ".png";
         try {
             URL url = new URL(uri);

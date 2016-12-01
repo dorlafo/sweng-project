@@ -135,7 +135,7 @@ public class StatsActivity extends BaseAppCompatActivity {
                 case 0:
                     return new CountersFragment();
                 case 1:
-                   return new EvolutionFragment();
+                   return new TimeSeriesFragment();
                 default:
                     return new ScoreboardFragment().setReference(dbRefWrapped);
             }

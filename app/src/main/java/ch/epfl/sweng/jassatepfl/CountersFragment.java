@@ -1,9 +1,6 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +18,14 @@ import ch.epfl.sweng.jassatepfl.stats.DrawableRetriever;
  * Fragment containing the "counter" statistics.
  */
 public class CountersFragment extends StatsFragment {
-    @Override
+    public CountersFragment() {
+        super();
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.stats_counter_fragment, container, false);
+
         ImageView variants = (ImageView) rootView.findViewById(R.id.variants_graph);
         retrieveAndDisplay(variants, "variants");
 
