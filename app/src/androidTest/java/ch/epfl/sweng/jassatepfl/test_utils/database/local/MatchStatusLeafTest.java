@@ -24,6 +24,10 @@ public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
         }
     }
 
+    public Map<String, LeafFieldTest<Boolean>> getStatus() {
+        return status;
+    }
+
     @Override
     public void setData(Map<String, Boolean> data) {
         this.data = data;
