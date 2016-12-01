@@ -72,7 +72,7 @@ public class LeafFieldTest<T> implements NodeTest {
     @Override
     public void removeSelf() {
         if(data instanceof Boolean) {
-            ((MatchStatusLeafTest) parent).getStatus().remove(id);
+            ((MatchStatusLeafTest) parent).removeOneStatus(id);
         }
     }
 

@@ -28,6 +28,13 @@ public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
         return status;
     }
 
+    public void removeOneStatus(String id) {
+        status.remove(id);
+        if(status.isEmpty()) {
+            removeSelf();
+        }
+    }
+
     @Override
     public void setData(Map<String, Boolean> data) {
         this.data = data;
