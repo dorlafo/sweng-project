@@ -60,7 +60,7 @@ public class DummyDataTest {
         List<Player> matchPlayers = new ArrayList<>();
         matchPlayers.add(bricoloBob);
         matchPlayers.add(jimmy);
-        return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+        return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned", hasCardsEmpty);
     }
 
     public static Match noPlayersMatch() {
