@@ -80,7 +80,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             setContentView(R.layout.activity_game);
 
             //Sentinel matchStats to avoid null pointer exception
-            matchStats = new MatchStats(matchId, Match.GameVariant.CHIBRE);
+            matchStats = new MatchStats(currentMatch);
 
             meldCallers = new Stack<>();
 
