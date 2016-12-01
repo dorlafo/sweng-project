@@ -76,4 +76,8 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
         Intent intent = new Intent(this, MatchListActivity.class);
         startActivity(intent);
     }
+
+    public void viewStats(View view) {
+        startActivity(new Intent(this, StatsActivity.class));
+    }
 }
