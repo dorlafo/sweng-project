@@ -86,7 +86,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.addPlayers(DummyDataTest.players());
         getActivity();
 
-        onView(withId(R.id.score_picker_cancel)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.score_update_cancel)).check(matches(not(isDisplayed())));
         onView(withId(R.id.score_update_1)).check(matches(not(isDisplayed())));
         onView(withId(R.id.score_meld_spinner_2)).check(matches(not(isDisplayed())));
     }

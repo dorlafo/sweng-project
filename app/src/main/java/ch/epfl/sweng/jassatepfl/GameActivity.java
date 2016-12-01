@@ -38,6 +38,7 @@ import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.SECOND_TEAM;
@@ -292,7 +293,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         secondTeamScoreDisplay.setEnabled(false);
 
         final boolean isOwner = currentMatch.createdBy().getID().toString().equals(getUserSciper());
-        final int visibility = isOwner ? VISIBLE : GONE;
+        final int visibility = isOwner ? VISIBLE : INVISIBLE;
 
         ImageButton firstTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_1);
         firstTeamUpdateButton.setOnClickListener(this);
