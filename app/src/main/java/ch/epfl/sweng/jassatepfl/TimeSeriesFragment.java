@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 public class TimeSeriesFragment extends StatsFragment {
     public TimeSeriesFragment() {
+        super();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

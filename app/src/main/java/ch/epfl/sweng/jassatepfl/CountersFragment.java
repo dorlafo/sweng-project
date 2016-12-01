@@ -18,6 +18,10 @@ import ch.epfl.sweng.jassatepfl.stats.DrawableRetriever;
  * Fragment containing the "counter" statistics.
  */
 public class CountersFragment extends StatsFragment {
+    public CountersFragment() {
+        super();
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.stats_counter_fragment, container, false);
