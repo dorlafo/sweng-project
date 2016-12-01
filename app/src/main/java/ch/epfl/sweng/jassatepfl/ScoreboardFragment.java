@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -31,7 +32,7 @@ public class ScoreboardFragment extends Fragment {
     private PlayerListAdapter adapter;
     private ListView playerListView;
     private List<Player> playerList;
-    private ValueEventListener playerListener;
+    private ChildEventListener playerListener;
 
     public ScoreboardFragment() {
     }
@@ -79,9 +80,30 @@ public class ScoreboardFragment extends Fragment {
     }
 
     private void contactFirebase() {
-        playerListener = new ValueEventListener() {
+        playerListener = new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Player player = dataSnapshot.getValue(Player.class);
+                playerList.add(player);
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Player player = dataSnapshot.getValue(Player.class);
+                playerList.add(player);
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Player player = dataSnapshot.getValue(Player.class);
+                playerList.add(player);
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 Player player = dataSnapshot.getValue(Player.class);
                 playerList.add(player);
                 modifyListAdapter();
@@ -89,13 +111,19 @@ public class ScoreboardFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Do nothing
+                //Do nothing
             }
         };
         dbRefWrapped.child("players")
-                .orderByChild("rank")
+                .orderByChild("quote")
                 .limitToFirst(50)
-                .addValueEventListener(playerListener);
+                .addChildEventListener(playerListener);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dbRefWrapped.child("players").removeEventListener(playerListener);
     }
 
     /**
