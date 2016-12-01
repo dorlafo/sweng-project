@@ -16,11 +16,11 @@ import static junit.framework.Assert.fail;
 public final class MatchBuilderTest {
 
     private Match.Builder matchBuilder;
-    private final Player amaury = new Player(new PlayerID(1), "Combes", "Amaury", new Rank(123));
-    private final Player vincenzo = new Player(new PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
-    private final Player dorian = new Player(new PlayerID(3), "Laforest", "Dorian", new Rank(567));
-    private final Player alexis = new Player(new PlayerID(4), "Montavon", "Alexis", new Rank(789));
-    private final Player random = new Player(new PlayerID(5), "Smith", "John", new Rank(7));
+    private final Player amaury = new Player(new PlayerID(1), "Combes", "Amaury", 123);
+    private final Player vincenzo = new Player(new PlayerID(2), "Bazzucchi", "Vincenzo", 345);
+    private final Player dorian = new Player(new PlayerID(3), "Laforest", "Dorian", 567);
+    private final Player alexis = new Player(new PlayerID(4), "Montavon", "Alexis", 789);
+    private final Player random = new Player(new PlayerID(5), "Smith", "John", 7);
 
     public void setUp() {
         matchBuilder = new Match.Builder();

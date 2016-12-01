@@ -39,9 +39,9 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
             if (name_tv != null) {
                 name_tv.setText(p.toString());
             }
-            TextView rank_tv = (TextView) v.findViewById(R.id.player_rank);
-            if(rank_tv != null) {
-                rank_tv.setText(p.getRank().toString());
+            TextView quote_tv = (TextView) v.findViewById(R.id.player_quote);
+            if(quote_tv != null) {
+                quote_tv.setText(Integer.toString(p.getQuote()));
             }
         }
         return v;

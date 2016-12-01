@@ -15,11 +15,11 @@ import static org.junit.Assert.assertNotEquals;
 @SuppressWarnings({"EqualsBetweenInconvertibleTypes", "EqualsWithItself", "ObjectEqualsNull"})
 public final class MatchTest {
 
-    private final Player amaury = new Player(new Player.PlayerID(1), "Combes", "Amaury", new Rank(123));
-    private final Player vincenzo = new Player(new Player.PlayerID(2), "Bazzucchi", "Vincenzo", new Rank(345));
-    private final Player dorian = new Player(new Player.PlayerID(3), "Laforest", "Dorian", new Rank(567));
-    private final Player alexis = new Player(new Player.PlayerID(4), "Montavon", "Alexis", new Rank(789));
-    private final Player random = new Player(new Player.PlayerID(5), "Smith", "John", new Rank(7));
+    private final Player amaury = new Player(new Player.PlayerID(1), "Combes", "Amaury", 123);
+    private final Player vincenzo = new Player(new Player.PlayerID(2), "Bazzucchi", "Vincenzo", 345);
+    private final Player dorian = new Player(new Player.PlayerID(3), "Laforest", "Dorian", 567);
+    private final Player alexis = new Player(new Player.PlayerID(4), "Montavon", "Alexis", 789);
+    private final Player random = new Player(new Player.PlayerID(5), "Smith", "John", 7);
 
     public Match.Builder defaultBuilder() {
         Match.Builder match = null;

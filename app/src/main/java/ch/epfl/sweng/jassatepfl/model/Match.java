@@ -10,12 +10,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.*;
-import static ch.epfl.sweng.jassatepfl.tools.RankOperationsHelper.averageRank;
+import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
+import static ch.epfl.sweng.jassatepfl.tools.QuoteOperationsHelper.averageQuote;
 
 /**
  * Class representing a match between {@link ch.epfl.sweng.jassatepfl.model.Player players}.
- * Its rank is the mean of the ranks of the players in the match.
+ * Its quote is the mean of the quotes of the players in the match.
  * A match has an expiration date (the time before it is no longer available), and can be
  * private.
  */
@@ -24,7 +24,7 @@ public class Match {
     private List<Player> players;
     private GPSPoint location;
     private String description;
-    private Rank rank;
+    private int quote;
     private boolean privateMatch;
     private GameVariant gameVariant;
     private int maxPlayerNumber;
@@ -58,7 +58,7 @@ public class Match {
         this.players = new ArrayList<>(players);
         this.location = location;
         this.description = description;
-        rank = averageRank(players);
+        quote = averageQuote(players);
         this.privateMatch = privateMatch;
         this.gameVariant = gameVariant;
         this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
@@ -113,12 +113,12 @@ public class Match {
     }
 
     /**
-     * Getter for the rank of the match.
+     * Getter for the quote of the match.
      *
-     * @return The rank of the match
+     * @return The quote of the match
      */
-    public Rank getRank() {
-        return rank;
+    public int getQuote() {
+        return quote;
     }
 
     /**
@@ -162,7 +162,7 @@ public class Match {
         players = m.getPlayers();
         location = m.getLocation();
         description = m.getDescription();
-        rank = m.getRank();
+        quote = m.getQuote();
         privateMatch = m.isPrivateMatch();
         gameVariant = m.getGameVariant();
         maxPlayerNumber = m.getMaxPlayerNumber();
@@ -259,14 +259,6 @@ public class Match {
      */
     public boolean hasParticipant(Player player) {
         return players.contains(player);
-    }
-
-    public static class MatchRank extends Rank {
-
-        public MatchRank(int rank) {
-            super(rank);
-        }
-
     }
 
     /**

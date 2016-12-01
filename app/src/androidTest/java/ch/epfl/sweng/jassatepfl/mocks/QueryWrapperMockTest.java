@@ -1,8 +1,6 @@
 package ch.epfl.sweng.jassatepfl.mocks;
 
 
-import android.widget.TextView;
-
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -16,7 +14,6 @@ import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
 import ch.epfl.sweng.jassatepfl.database.local.reference.QueryWrapperMock;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyData;
 
 import static junit.framework.Assert.assertEquals;

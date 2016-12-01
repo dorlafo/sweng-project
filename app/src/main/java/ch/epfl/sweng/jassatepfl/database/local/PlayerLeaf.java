@@ -1,11 +1,6 @@
 package ch.epfl.sweng.jassatepfl.database.local;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
-
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
 
 /**
  * @author Amaury Combes
@@ -14,7 +9,7 @@ public class PlayerLeaf extends Leaf<Player> {
     private LeafField<Player.PlayerID> idLeaf = new LeafField<>("id");
     private LeafField<String> lastNameLeaf = new LeafField<>("lastName");
     private LeafField<String> firstNameLeaf = new LeafField<>("fistName");
-    private LeafField<Rank> rankLeaf = new LeafField<>("rank");
+    private LeafField<Integer> quoteLeaf = new LeafField<>("quote");
 
     /**
      * Constructor of the Leaf class
@@ -34,8 +29,8 @@ public class PlayerLeaf extends Leaf<Player> {
                 return firstNameLeaf;
             case "lastName":
                 return lastNameLeaf;
-            case "rank":
-                return rankLeaf;
+            case "quote":
+                return quoteLeaf;
             default:
                 throw new IllegalArgumentException("Player class does not have a field named : " + id);
         }
@@ -52,6 +47,6 @@ public class PlayerLeaf extends Leaf<Player> {
         idLeaf.setData(data.getID());
         firstNameLeaf.setData(data.getFirstName());
         lastNameLeaf.setData(data.getLastName());
-        rankLeaf.setData(data.getRank());
+        quoteLeaf.setData(data.getQuote());
     }
 }

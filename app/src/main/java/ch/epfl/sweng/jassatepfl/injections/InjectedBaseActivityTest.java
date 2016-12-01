@@ -18,7 +18,7 @@ import ch.epfl.sweng.jassatepfl.database.local.reference.DBRefWrapMock;
  * id : 696969
  * Last name : LeBricoleur
  * First name : Bob
- * Rank : 1000
+ * Quote : 1000
  */
 @SuppressWarnings("deprecation")
 public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {

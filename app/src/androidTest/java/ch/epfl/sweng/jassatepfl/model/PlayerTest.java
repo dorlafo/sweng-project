@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotEquals;
 @SuppressWarnings({"EqualsBetweenInconvertibleTypes", "EqualsWithItself", "ObjectEqualsNull"})
 public final class PlayerTest {
 
-    private final Player amaury = new Player(new Player.PlayerID(1), "Combes", "Amaury", new Rank(123));
+    private final Player amaury = new Player(new Player.PlayerID(1), "Combes", "Amaury", 123);
     private final Player vincenzo = new Player(new Player.PlayerID(2), "Bazzucchi", "Vincenzo");
 
     @Test
@@ -41,7 +41,7 @@ public final class PlayerTest {
 
     @Test
     public void equalsReturnsTrueWhenComparingSamePlayers() {
-        Player clone = new Player(new Player.PlayerID(1), "Combes", "Amaury", new Rank(123));
+        Player clone = new Player(new Player.PlayerID(1), "Combes", "Amaury", 123);
 
         assertNotSame(amaury, clone);
         assertTrue(amaury.equals(clone) && clone.equals(amaury));
@@ -49,7 +49,7 @@ public final class PlayerTest {
 
     @Test
     public void hashCodeIsTheSameForSamePlayers() {
-        Player clone = new Player(new Player.PlayerID(1), "Combes", "Amaury", new Rank(123));
+        Player clone = new Player(new Player.PlayerID(1), "Combes", "Amaury", 123);
 
         assertNotSame(amaury, clone);
         assertEquals(amaury, clone);
@@ -62,10 +62,10 @@ public final class PlayerTest {
     }
 
     @Test
-    public void correctlySetsRank() {
-        assertEquals(123, amaury.getRank().getRank());
-        amaury.setRank(new Rank(1999));
-        assertEquals(1999, amaury.getRank().getRank());
+    public void correctlySetsQuote() {
+        assertEquals(123, amaury.getQuote());
+        amaury.setQuote(1999);
+        assertEquals(1999, amaury.getQuote());
     }
 
     @Test

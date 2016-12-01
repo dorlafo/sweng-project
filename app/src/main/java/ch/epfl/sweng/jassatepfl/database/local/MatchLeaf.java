@@ -1,12 +1,10 @@
 package ch.epfl.sweng.jassatepfl.database.local;
 
 import java.util.List;
-import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
 
 
 /**
@@ -16,7 +14,7 @@ public class MatchLeaf extends Leaf<Match> {
     private LeafField<List<Player>> playersLeaf = new LeafField<>("players");
     private LeafField<GPSPoint> locationLeaf = new LeafField<>("location");
     private LeafField<String> descriptionLeaf = new LeafField<>("description");
-    private LeafField<Rank> rankLeaf = new LeafField<>("rank");
+    private LeafField<Integer> quoteLeaf = new LeafField<>("quote");
     private LeafField<Boolean> privateMatchLeaf = new LeafField<>("privateMatch");
     private LeafField<Match.GameVariant> gameVariantLeaf = new LeafField<>("gameVariant");
     private LeafField<Integer> maxPlayerNumberLeaf = new LeafField<>("maxPlayerNumber");
@@ -41,8 +39,8 @@ public class MatchLeaf extends Leaf<Match> {
                 return locationLeaf;
             case "description":
                 return descriptionLeaf;
-            case "rank":
-                return rankLeaf;
+            case "quote":
+                return quoteLeaf;
             case "privateMatch":
                 return privateMatchLeaf;
             case "gameVariant":
@@ -69,7 +67,7 @@ public class MatchLeaf extends Leaf<Match> {
         playersLeaf.setData(data.getPlayers());
         locationLeaf.setData(data.getLocation());
         descriptionLeaf.setData(data.getDescription());
-        rankLeaf.setData(data.getRank());
+        quoteLeaf.setData(data.getQuote());
         privateMatchLeaf.setData(data.isPrivateMatch());
         gameVariantLeaf.setData(data.getGameVariant());
         maxPlayerNumberLeaf.setData(data.getMaxPlayerNumber());
