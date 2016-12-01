@@ -102,7 +102,6 @@ public class UserStatsTest {
         assertThat(new Rank(1).equals(stats.getRankByDate().get(0).getValue()), is(true));
     }
 
-    @Test
     private UserStats stats() {
         Match match = DummyDataTest.fullMatch();
         match.setTeam(0, random.getID());
