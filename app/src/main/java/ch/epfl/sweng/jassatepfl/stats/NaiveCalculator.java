@@ -1,7 +1,5 @@
 package ch.epfl.sweng.jassatepfl.stats;
 
-import ch.epfl.sweng.jassatepfl.model.Rank;
-
 /**
  * @author vincenzobaz
  *         Naive implementation of a rankcalculator which considers the rank to be equal to the

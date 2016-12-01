@@ -12,19 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.TextView;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import ch.epfl.sweng.jassatepfl.injections.Graph;
-import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.stats.DumbGenerator;
 import ch.epfl.sweng.jassatepfl.stats.StatsUpdate;
 import ch.epfl.sweng.jassatepfl.stats.UserStats;
 

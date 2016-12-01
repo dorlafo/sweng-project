@@ -1,9 +1,14 @@
 package ch.epfl.sweng.jassatepfl.stats;
 
-import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import ch.epfl.sweng.jassatepfl.model.Player;
 
 
 /**
@@ -95,7 +100,8 @@ public class UserStats {
      *
      * @param update The results of a concluded match
      */
-    protected UserStats update(StatsUpdate update) {
+    //TODO: Nicolas fixing it
+   /* protected UserStats update(StatsUpdate update) {
         prepareLastBuckets(update.getTimestamp());
 
         playedMatches += 1;
@@ -118,7 +124,7 @@ public class UserStats {
 
         variants.put(update.getVariant().toString(), getOrDefaultMap(variants, update.getVariant().toString(), 0) + 1);
         return this;
-    }
+    }*/
 
     /**
      * Utility method to compensate the lack of the getOrDefault method in Maps in Java7
