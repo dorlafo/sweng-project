@@ -35,9 +35,13 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
 
         Player p = getItem(position);
         if (p != null) {
-            TextView tv = (TextView) v.findViewById(R.id.player_name);
-            if (tv != null) {
-                tv.setText(p.toString());
+            TextView name_tv = (TextView) v.findViewById(R.id.player_name);
+            if (name_tv != null) {
+                name_tv.setText(p.toString());
+            }
+            TextView rank_tv = (TextView) v.findViewById(R.id.player_rank);
+            if(rank_tv != null) {
+                rank_tv.setText(p.getRank().toString());
             }
         }
         return v;

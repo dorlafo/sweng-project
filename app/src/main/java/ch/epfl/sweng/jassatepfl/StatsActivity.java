@@ -137,7 +137,7 @@ public class StatsActivity extends BaseAppCompatActivity {
                 case 1:
                    return new EvolutionFragment();
                 default:
-                    return new EvolutionFragment();
+                    return new ScoreboardFragment().setReference(dbRefWrapped);
             }
         }
 
@@ -155,7 +155,7 @@ public class StatsActivity extends BaseAppCompatActivity {
                 case 1:
                     return "Evolution";
                 case 2:
-                    return "SECTION 3";
+                    return "Scoreboard";
             }
             return null;
         }
