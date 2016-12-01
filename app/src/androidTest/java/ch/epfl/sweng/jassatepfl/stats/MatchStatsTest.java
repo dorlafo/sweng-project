@@ -6,7 +6,6 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.FOUR_JACKS;
-import static ch.epfl.sweng.jassatepfl.model.Match.Meld.LAST_TRICK;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.THREE_CARDS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,11 +21,11 @@ public class MatchStatsTest {
     @Test
     public void testTotalScoreGetter() {
         MatchStats stats = new MatchStats(match);
-        stats.setMeld(0, LAST_TRICK);
+        stats.setMeld(0, THREE_CARDS);
         setTeamScores(stats, 57, 100);
         stats.setMeld(1, FOUR_JACKS);
         setTeamScores(stats, 33, 122);
-        assertEquals(Integer.valueOf(95), stats.getTotalMatchScore(0));
+        assertEquals(Integer.valueOf(110), stats.getTotalMatchScore(0));
         assertEquals(Integer.valueOf(422), stats.getTotalMatchScore(1));
     }
 
