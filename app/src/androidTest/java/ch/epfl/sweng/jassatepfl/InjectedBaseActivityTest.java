@@ -7,7 +7,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import javax.inject.Inject;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
-import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.*;
+import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.DaggerFakeGraphTest;
+import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.FakeGraphTest;
+import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.FakeModulesTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 
 /**

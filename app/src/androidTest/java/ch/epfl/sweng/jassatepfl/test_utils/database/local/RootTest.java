@@ -66,6 +66,7 @@ public class RootTest implements NodeTest {
         addChild("matches");
         addChild("players");
         addChild("pendingMatches");
+        addChild("matchStats");
     }
 
 }

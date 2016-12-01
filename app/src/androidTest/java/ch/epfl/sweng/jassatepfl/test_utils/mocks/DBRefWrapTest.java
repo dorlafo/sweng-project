@@ -17,19 +17,20 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.database.helpers.QueryWrapper;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafTest;
+import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafFieldTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchLeafTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatsLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.NodeTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.PlayerLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.TreeNodeTest;
-import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.model.Player;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 /**
@@ -77,9 +78,9 @@ public class DBRefWrapTest extends DBReferenceWrapper {
      */
     @Override
     public Task<Void> setValue(Object value) {
-        if(getCurrentNode() instanceof LeafTest) {
+        if (getCurrentNode() instanceof LeafTest) {
             ((LeafTest) getCurrentNode()).setData(value);
-        } else if(getCurrentNode() instanceof LeafFieldTest) {
+        } else if (getCurrentNode() instanceof LeafFieldTest) {
             ((LeafFieldTest) getCurrentNode()).setData(value);
         } else {
             throw new UnsupportedOperationException("Cannot apply setValue on node : " + getCurrentNode().getId());
@@ -98,11 +99,11 @@ public class DBRefWrapTest extends DBReferenceWrapper {
         Match m = null;
         List<Boolean> status = null;
 
-        if(this.getCurrentNode() instanceof PlayerLeafTest) {
+        if (this.getCurrentNode() instanceof PlayerLeafTest) {
             p = ((PlayerLeafTest) this.getCurrentNode()).getData();
-        } else if(this.getCurrentNode() instanceof MatchLeafTest) {
+        } else if (this.getCurrentNode() instanceof MatchLeafTest) {
             m = ((MatchLeafTest) this.getCurrentNode()).getData();
-        } else if(this.getCurrentNode() instanceof MatchStatusLeafTest) {
+        } else if (this.getCurrentNode() instanceof MatchStatusLeafTest) {
             status = new ArrayList<>(((MatchStatusLeafTest) this.getCurrentNode()).getData());
         }
 
@@ -120,7 +121,6 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                 uiHandler.post(toRun);
             }
         }).start();
-
     }
 
     /**
@@ -168,35 +168,42 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                     public void run() {
                         Player p = null;
                         Match m = null;
+                        MatchStats stats = null;
 
-                        while(numValueEventListener > 0) {
+                        while (numValueEventListener > 0) {
                             final DataSnapshot obj = mock(DataSnapshot.class);
 
                             List<Boolean> status = null;
                             boolean callDataChange = false;
 
-                            if(currentNode instanceof PlayerLeafTest) {
-                                if(p == null || !p.equals(((PlayerLeafTest) currentNode).getData())) {
+                            if (currentNode instanceof PlayerLeafTest) {
+                                if (p == null || !p.equals(((PlayerLeafTest) currentNode).getData())) {
                                     callDataChange = true;
                                 }
                                 p = ((PlayerLeafTest) currentNode).getData();
-                            } else if(currentNode instanceof MatchLeafTest) {
-                                if(m == null || !m.equals(((MatchLeafTest) currentNode).getData())) {
+                            } else if (currentNode instanceof MatchLeafTest) {
+                                if (m == null || !m.equals(((MatchLeafTest) currentNode).getData())) {
                                     callDataChange = true;
                                 }
                                 m = ((MatchLeafTest) currentNode).getData();
-                            } else if(currentNode instanceof MatchStatusLeafTest) {
+                            } else if (currentNode instanceof MatchStatusLeafTest) {
                                 status = new ArrayList<>(((MatchStatusLeafTest) currentNode).getData());
+                            } else if (currentNode instanceof MatchStatsLeafTest) {
+                                if (stats == null || !stats.equals(((MatchStatsLeafTest) currentNode).getData())) {
+                                    callDataChange = true;
+                                }
+                                stats = ((MatchStatsLeafTest) currentNode).getData();
                             }
 
                             when(obj.getValue(Player.class)).thenReturn(p);
                             when(obj.getValue(Match.class)).thenReturn(m);
+                            when(obj.getValue(MatchStats.class)).thenReturn(stats);
 
-                            if(callDataChange) {
+                            if (callDataChange) {
                                 listener.onDataChange((DataSnapshot) obj);
                             }
+                        }
                     }
-                }
                 };
                 uiHandler.post(toRun);
             }
@@ -219,23 +226,24 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                 Runnable toRun = new Runnable() {
                     @Override
                     public void run() {
-                                    final DataSnapshot snap = mock(DataSnapshot.class);
+                        final DataSnapshot snap = mock(DataSnapshot.class);
 
-                                    if(currentNode instanceof MatchStatusLeafTest) {
-                                        List<Boolean> statusList = ((MatchStatusLeafTest) currentNode).getData();
-                                        for(int i = 0; i < statusList.size(); ++i) {
-                                            boolean value = statusList.get(i);
-                                            when(snap.getKey()).thenReturn(Integer.toString(i));
-                                            when(snap.getValue()).thenReturn(value);
-                                            listener.onChildAdded(snap, currentNode.getId());
-                                        }
-
-                                    }
+                        if (currentNode instanceof MatchStatusLeafTest) {
+                            List<Boolean> statusList = ((MatchStatusLeafTest) currentNode).getData();
+                            for (int i = 0; i < statusList.size(); ++i) {
+                                boolean value = statusList.get(i);
+                                when(snap.getKey()).thenReturn(Integer.toString(i));
+                                when(snap.getValue()).thenReturn(value);
+                                listener.onChildAdded(snap, currentNode.getId());
                             }
-                        };
-                        uiHandler.post(toRun);
+
+                        }
                     }
-                }).start();
+
+                };
+                uiHandler.post(toRun);
+            }
+        }).start();
         return listener;
     }
 
@@ -256,31 +264,31 @@ public class DBRefWrapTest extends DBReferenceWrapper {
     public QueryWrapper orderByChild(String path) {
         List<LeafTest> leafList = new ArrayList();
         String childOrder = null;
-        for(NodeTest n: currentNode.getChildren()) {
+        for (NodeTest n : currentNode.getChildren()) {
             LeafTest l = ((LeafTest) n);
             leafList.add(l);
         }
 
-        if(path.equals("firstName")) {
+        if (path.equals("firstName")) {
             Collections.sort(leafList, new Comparator<LeafTest>() {
                 @Override
                 public int compare(LeafTest l1, LeafTest l2) {
-                    return ((Player)l1.getData()).getFirstName().compareTo(((Player)l2.getData()).getFirstName());
+                    return ((Player) l1.getData()).getFirstName().compareTo(((Player) l2.getData()).getFirstName());
                 }
             });
             childOrder = "firstName";
             return new QueryWrapperMockTest(leafList, childOrder);
-        } else if(path.equals("privateMatch")) {
+        } else if (path.equals("privateMatch")) {
             Collections.sort(leafList, new Comparator<LeafTest>() {
                 @Override
                 public int compare(LeafTest o1, LeafTest o2) {
-                    if((((Match) o1.getData()).isPrivateMatch() &&
+                    if ((((Match) o1.getData()).isPrivateMatch() &&
                             ((Match) o2.getData()).isPrivateMatch()) ||
                             (!((Match) o1.getData()).isPrivateMatch() &&
                                     !((Match) o2.getData()).isPrivateMatch())) {
                         return 0;
-                    } else if(!((Match) o1.getData()).isPrivateMatch() &&
-                                ((Match) o2.getData()).isPrivateMatch()) {
+                    } else if (!((Match) o1.getData()).isPrivateMatch() &&
+                            ((Match) o2.getData()).isPrivateMatch()) {
                         return -1;
                     } else {
                         return 1;
@@ -341,7 +349,17 @@ public class DBRefWrapTest extends DBReferenceWrapper {
 
     public void addPendingMatch(Match match, List<Boolean> status) {
         TreeNodeTest pendingMatch = ((RootTest) currentNode).getChild("pendingMatches");
-        MatchStatusLeafTest statusLeaf = (MatchStatusLeafTest) pendingMatch.addChild(match.getMatchID().toString());
+        MatchStatusLeafTest statusLeaf = (MatchStatusLeafTest) pendingMatch.addChild(match.getMatchID());
         statusLeaf.setData(status);
     }
+
+    public void addStats(Set<MatchStats> stats) {
+        TreeNodeTest statsNode = ((RootTest) currentNode).getChild("matchStats");
+        for (MatchStats stat : stats) {
+            String statId = stat.getMatchID();
+            statsNode.addChild(statId);
+            statsNode.getChild(statId).setData(stat);
+        }
+    }
+
 }
