@@ -48,13 +48,13 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            Log.d(TAG, "showLogin:getCurrentUser:null");
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         }
         else {
-            Log.d(TAG, "showLogin:getCurrentUser:notNull");
+            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_list, drawer, false);
             drawer.addView(contentView, 0);
@@ -130,7 +130,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 //Add match to the list if we are not in it
                 if(!match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
@@ -141,7 +141,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildChanged:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 int matchIndex = matches.indexOf(match);
                 //If the match is in the list (ie we were not in it)
@@ -166,7 +166,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 matches.remove(match);
                 modifyListAdapter();

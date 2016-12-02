@@ -51,7 +51,7 @@ public class LoginActivity extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.d(TAG, "onCreate");
+        //Log.d(TAG, "onCreate");
     }
 
     /*
@@ -113,18 +113,18 @@ public class LoginActivity extends BaseAppCompatActivity {
      */
     //TODO: REPLACE SCIPER WITH HASH
     private void signIn(final Profile profile) {
-        Log.d(TAG, "signIn");
+        //Log.d(TAG, "signIn");
 
         fAuth.signInWithEmailAndPassword(profile.email, profile.sciper)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signIn:onComplete:" + task.isSuccessful());
+                        //Log.d(TAG, "signIn:onComplete:" + task.isSuccessful());
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "signIn:success");
+                            //Log.d(TAG, "signIn:success");
                             onAuthSuccess();
                         } else {
-                            Log.d(TAG, "signIn:failure,goto:signUp");
+                            //Log.d(TAG, "signIn:failure,goto:signUp");
                             signUp(profile);
                         }
                     }
@@ -138,13 +138,13 @@ public class LoginActivity extends BaseAppCompatActivity {
      */
     //TODO: REPLACE SCIPER WITH HASH
     private void signUp(final Profile profile) {
-        Log.d(TAG, "signUp");
+        //Log.d(TAG, "signUp");
 
         fAuth.createUserWithEmailAndPassword(profile.email, profile.sciper)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
+                        //Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
                         if (task.isSuccessful()) {
                             //Adding the user to the database
                             dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS)
@@ -238,7 +238,7 @@ public class LoginActivity extends BaseAppCompatActivity {
     private void onAuthSuccess() {
         // Go to MainActivity
         hideProgressDialog();
-        Log.d(TAG, "hideProgressDialog:true");
+        //Log.d(TAG, "hideProgressDialog:true");
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }

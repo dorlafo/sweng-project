@@ -52,13 +52,13 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            Log.d(TAG, "showLogin:getCurrentUser:null");
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         }
         else {
-            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
             setContentView(R.layout.activity_invite_player_to_match);
 
             // TODO: maybe have a field in base activity with sciper of current user, with error management
