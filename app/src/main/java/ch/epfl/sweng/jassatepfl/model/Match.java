@@ -248,7 +248,6 @@ public class Match {
                 players.remove(index);
             }
         }
-
     }
 
     /**
