@@ -43,6 +43,8 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.SECOND_TEAM;
+import static ch.epfl.sweng.jassatepfl.GameActivity.Mode.OFFLINE;
+import static ch.epfl.sweng.jassatepfl.GameActivity.Mode.ONLINE;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.SENTINEL;
 
 public class GameActivity extends BaseAppCompatActivity implements OnClickListener {
@@ -65,13 +67,18 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
 
     protected enum Caller {FIRST_TEAM, SECOND_TEAM}
 
+    protected enum Mode {ONLINE, OFFLINE}
+
     private Caller caller;
     private Stack<Caller> meldCallers;
+    private Mode mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (fAuth.getCurrentUser() == null) {
+        Intent startingIntent = getIntent();
+        mode = startingIntent.getStringExtra("mode").equals("online") ? ONLINE : OFFLINE;
+        if (mode == ONLINE && fAuth.getCurrentUser() == null) {
             Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
@@ -94,21 +101,26 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        currentMatch = dataSnapshot.getValue(Match.class);
-                        if (currentMatch != null) {
-                            setUp();
+        if (mode == ONLINE) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            currentMatch = dataSnapshot.getValue(Match.class);
+                            if (currentMatch != null) {
+                                setUp();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.e("ERROR-DATABASE", databaseError.toString());
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e("ERROR-DATABASE", databaseError.toString());
+                        }
+                    });
+        } else {
+            currentMatch = Match.sentinelMatch();
+            setUp();
+        }
     }
 
     @Override
@@ -282,7 +294,9 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     }
 
     private void updateMatchStats() {
-        dbRefWrapped.child("matchStats").child(matchId).setValue(matchStats);
+        if (mode == ONLINE) {
+            dbRefWrapped.child("matchStats").child(matchId).setValue(matchStats);
+        }
     }
 
     private void setUp() {
@@ -293,14 +307,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         secondTeamScoreDisplay.setOnClickListener(this);
         secondTeamScoreDisplay.setEnabled(false);
 
-        final boolean isOwner = currentMatch.createdBy().getID().toString().equals(getUserSciper());
+        final boolean isOwner = mode == OFFLINE || currentMatch.createdBy().getID().toString().equals(getUserSciper());
         final int visibility = isOwner ? VISIBLE : INVISIBLE;
-
-        TextView firstTeamMembers = (TextView) findViewById(R.id.team_members_1);
-        firstTeamMembers.setText(teamToString(0));
-
-        TextView secondTeamMembers = (TextView) findViewById(R.id.team_members_2);
-        secondTeamMembers.setText(teamToString(1));
 
         ImageButton firstTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_1);
         firstTeamUpdateButton.setOnClickListener(this);
@@ -331,30 +339,41 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             firstTeamScoreDisplay.setEnabled(true);
             secondTeamScoreDisplay.setEnabled(true);
         }
-        statsListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                matchStats = dataSnapshot.getValue(MatchStats.class);
-                if (matchStats != null) {
-                    firstTeamScoreDisplay.setEnabled(true);
-                    secondTeamScoreDisplay.setEnabled(true);
-                    displayScore();
-                    if (matchStats.goalHasBeenReached()) {
-                        displayEndOfMatchMessage(matchStats.getWinnerIndex());
-                    }
-                } else {
-                    firstTeamScoreDisplay.setEnabled(false);
-                    secondTeamScoreDisplay.setEnabled(false);
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("ERROR-DATABASE", databaseError.toString());
-            }
-        };
-        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId)
-                .addValueEventListener(statsListener);
+        if (mode == ONLINE) {
+            TextView firstTeamMembers = (TextView) findViewById(R.id.team_members_1);
+            firstTeamMembers.setText(teamToString(0));
+            firstTeamMembers.setVisibility(VISIBLE);
+
+            TextView secondTeamMembers = (TextView) findViewById(R.id.team_members_2);
+            secondTeamMembers.setText(teamToString(1));
+            secondTeamMembers.setVisibility(VISIBLE);
+
+            statsListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    matchStats = dataSnapshot.getValue(MatchStats.class);
+                    if (matchStats != null) {
+                        firstTeamScoreDisplay.setEnabled(true);
+                        secondTeamScoreDisplay.setEnabled(true);
+                        displayScore();
+                        if (matchStats.goalHasBeenReached()) {
+                            displayEndOfMatchMessage(matchStats.getWinnerIndex());
+                        }
+                    } else {
+                        firstTeamScoreDisplay.setEnabled(false);
+                        secondTeamScoreDisplay.setEnabled(false);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("ERROR-DATABASE", databaseError.toString());
+                }
+            };
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId)
+                    .addValueEventListener(statsListener);
+        }
     }
 
     private void displayScoreHistory(int teamIndex) {
@@ -377,6 +396,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             TableRow row = (TableRow) inflater.inflate(R.layout.score_table_row, null);
 
             int black = ContextCompat.getColor(this, android.R.color.black);
+
             TextView roundIndexView = (TextView) row.findViewById(R.id.score_table_row_round_index);
             roundIndexView.setTextColor(black);
             roundIndexView.setText(Integer.toString(roundIndex));

@@ -108,6 +108,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="navigation_drawer_main">Home</string>
+    <string name="navigation_drawer_score">Score Counter</string>
     <string name="navigation_drawer_create">Create Match</string>
     <string name="navigation_drawer_maps">Match Map</string>
     <string name="navigation_drawer_match_list">Match List</string>

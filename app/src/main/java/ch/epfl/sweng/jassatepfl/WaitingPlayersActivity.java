@@ -254,8 +254,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     /**
-     *
-     *
      * @param view General view
      */
     public void userIsReady(View view) {
@@ -275,6 +273,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     public void goToMatch(View view) {
         Intent goToGameActivity = new Intent(this, GameActivity.class);
         goToGameActivity.putExtra("match_Id", matchId);
+        goToGameActivity.putExtra("mode", "online");
         removeListener();
 
         match.setStatus(Match.MatchStatus.ACTIVE);
@@ -352,7 +351,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                 playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
                 String id = dataSnapshot.getKey();
                 if (id.equals(getUserSciper())) {
-                    if(playersReady.get(id)) {
+                    if (playersReady.get(id)) {
                         readyBtn.setEnabled(false);
                     } else {
                         readyBtn.setEnabled(true);
@@ -372,7 +371,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                 playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
                 String id = dataSnapshot.getKey();
                 if (id.equals(getUserSciper())) {
-                    if(playersReady.get(id)) {
+                    if (playersReady.get(id)) {
                         readyBtn.setEnabled(false);
                     } else {
                         readyBtn.setEnabled(true);

@@ -315,6 +315,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     private void ownedMatchSetUp() {
         Intent intent = new Intent();
         intent.putExtra("match_Id", ownedMatch.getMatchID());
+        intent.putExtra("mode", "online");
         setActivityIntent(intent);
         Set<Match> matches = new HashSet<>();
         matches.add(ownedMatch);

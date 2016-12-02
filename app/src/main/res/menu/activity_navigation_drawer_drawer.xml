@@ -18,6 +18,10 @@
             android:id="@+id/nav_list"
             android:icon="@drawable/ic_list_black"
             android:title="@string/navigation_drawer_match_list"/>
+        <item
+            android:id="@+id/nav_score"
+            android:icon="@drawable/ic_content_paste_black"
+            android:title="@string/navigation_drawer_score"/>
     </group>
 
     <group android:checkableBehavior="none">
@@ -28,7 +32,7 @@
         <item
             android:id="@+id/nav_rules"
             android:icon="@drawable/ic_info_outline_black"
-            android:title="@string/rules" />
+            android:title="@string/rules"/>
         <item
             android:id="@+id/nav_user_guide"
             android:icon="@drawable/ic_help_outline_black"
