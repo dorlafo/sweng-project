@@ -108,14 +108,41 @@ public class Match {
      * Checks if the match has changed
      *
      * @param other
-     * @return
+     * @return True if the match has changed, false otherwise
      */
     public boolean matchHasChanged(Match other) {
         if(!other.equals(this)) {
             return false;
         }
         else {
-            if(other.players != this.players
+            if(!other.players.equals(this.players)) {
+                return true;
+            }
+            if(!other.location.equals(this.location)) {
+                return true;
+            }
+            if(!other.description.equals(this.description)) {
+                return true;
+            }
+            if(!other.rank.equals(this.rank)) {
+                return true;
+            }
+            if(other.privateMatch != this.privateMatch) {
+                return true;
+            }
+            if(other.maxPlayerNumber != this.maxPlayerNumber) {
+                return true;
+            }
+            if(other.expirationTime != this.expirationTime) {
+                return true;
+            }
+            if(!other.matchStatus.equals(this.matchStatus)) {
+                return true;
+            }
+            if(!other.teams.equals(this.teams)) {
+                return true;
+            }
+            /*if(other.players != this.players
                     || other.location != this.location
                     || other.description != this.description
                     || other.rank != this.rank
@@ -124,9 +151,9 @@ public class Match {
                     || other.expirationTime != this.expirationTime
                     || other.matchStatus != this.matchStatus
                     || other.teams != this.teams) {
-                return false;
-            }
-            return true;
+                return true;
+            }*/
+            return false;
         }
     }
 
@@ -250,6 +277,14 @@ public class Match {
      */
     public long getExpirationTime() {
         return expirationTime;
+    }
+
+    /**
+     * Setter for the expiration time
+     * @param expTime The expiration time to set
+     */
+    public void setExpirationTime(long expTime) {
+        this.expirationTime = expTime;
     }
 
     /**

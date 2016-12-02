@@ -330,4 +330,32 @@ public final class MatchTest {
         assertEquals(0, m.teamNbForPlayer(vincenzo));
         assertEquals(1, m.teamNbForPlayer(dorian));
     }
+
+    @Test
+    public void matchHasChangedReturnFalseIfNotSameMatch() {
+        Match m1 = DummyDataTest.fullMatch();
+        Match m2 = DummyDataTest.fullMatchWithBob();
+        m2.setExpirationTime(m1.getExpirationTime());
+
+        assertFalse(m1.matchHasChanged(m2) || m2.matchHasChanged(m1));
+    }
+
+    @Test
+    public void matchHasChangedReturnFalseIfMatchHasNotChanged() {
+        Match m1 = DummyDataTest.fullMatch();
+        Match m2 = DummyDataTest.fullMatch();
+        m2.setExpirationTime(m1.getExpirationTime());
+
+        assertFalse(m1.matchHasChanged(m2) || m2.matchHasChanged(m1));
+    }
+
+    @Test
+    public void matchHasChangedReturnTrueIfMatchHasChanged() {
+        Match m1 = DummyDataTest.fullMatch();
+        Match m2 = DummyDataTest.fullMatch();
+        m2.setExpirationTime(m1.getExpirationTime());
+
+        m1.removePlayerById(DummyDataTest.dorian.getID());
+        assertTrue(m1.matchHasChanged(m2) && m2.matchHasChanged(m1));
+    }
 }
