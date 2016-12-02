@@ -68,6 +68,8 @@ public class DummyDataTest {
         List<Player> matchPlayers = new ArrayList<>();
         matchPlayers.add(bricoloBob);
         matchPlayers.add(jimmy);
+        matchPlayers.add(random);
+        matchPlayers.add(marco);
         return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
     }
 

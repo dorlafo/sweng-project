@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -37,7 +39,6 @@ import ch.epfl.sweng.jassatepfl.model.Round;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
-import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
@@ -295,6 +296,12 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         final boolean isOwner = currentMatch.createdBy().getID().toString().equals(getUserSciper());
         final int visibility = isOwner ? VISIBLE : INVISIBLE;
 
+        TextView firstTeamMembers = (TextView) findViewById(R.id.team_members_1);
+        firstTeamMembers.setText(teamToString(0));
+
+        TextView secondTeamMembers = (TextView) findViewById(R.id.team_members_2);
+        secondTeamMembers.setText(teamToString(1));
+
         ImageButton firstTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_1);
         firstTeamUpdateButton.setOnClickListener(this);
         firstTeamUpdateButton.setVisibility(visibility);
@@ -369,20 +376,37 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         for (Round round : matchStats.getRounds()) {
             TableRow row = (TableRow) inflater.inflate(R.layout.score_table_row, null);
 
+            int black = ContextCompat.getColor(this, android.R.color.black);
             TextView roundIndexView = (TextView) row.findViewById(R.id.score_table_row_round_index);
+            roundIndexView.setTextColor(black);
             roundIndexView.setText(Integer.toString(roundIndex));
             ++roundIndex;
 
             TextView score = (TextView) row.findViewById(R.id.score_table_row_points);
+            score.setTextColor(black);
             score.setText(round.getTeamTotalScore(teamIndex).toString());
 
             TextView melds = (TextView) row.findViewById(R.id.score_table_row_melds);
+            melds.setTextColor(black);
             melds.setText(round.meldsToString(teamIndex));
 
             tableLayout.addView(row);
         }
 
         dialog.show();
+    }
+
+    private String teamToString(int teamIndex) {
+        List<String> teamIds = currentMatch.getTeams().get("Team" + teamIndex);
+        StringBuilder builder = new StringBuilder();
+        for (Iterator<String> iterator = teamIds.iterator(); iterator.hasNext(); ) {
+            String id = iterator.next();
+            builder.append(currentMatch.getPlayerById(id).getFirstName());
+            if (iterator.hasNext()) {
+                builder.append(", ");
+            }
+        }
+        return builder.toString();
     }
 
 }

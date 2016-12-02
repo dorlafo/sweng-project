@@ -33,10 +33,17 @@
                 android:text="@string/game_team_name_1"/>
 
             <TextView
+                android:id="@+id/team_members_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/team_name_1"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
                 android:id="@+id/score_display_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/team_name_1"
+                android:layout_below="@+id/team_members_1"
                 android:layout_centerHorizontal="true"
                 android:text="@string/game_default_score"
                 android:textColor="@android:color/black"
@@ -124,10 +131,17 @@
                 android:text="@string/game_team_name_2"/>
 
             <TextView
+                android:id="@+id/team_members_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/team_name_2"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
                 android:id="@+id/score_display_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/team_name_2"
+                android:layout_below="@+id/team_members_2"
                 android:layout_centerHorizontal="true"
                 android:text="@string/game_default_score"
                 android:textColor="@android:color/black"
