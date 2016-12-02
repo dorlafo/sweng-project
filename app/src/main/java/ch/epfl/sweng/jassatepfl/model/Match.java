@@ -105,6 +105,32 @@ public class Match {
     }
 
     /**
+     * Checks if the match has changed
+     *
+     * @param other
+     * @return
+     */
+    public boolean matchHasChanged(Match other) {
+        if(!other.equals(this)) {
+            return false;
+        }
+        else {
+            if(other.players != this.players
+                    || other.location != this.location
+                    || other.description != this.description
+                    || other.rank != this.rank
+                    || other.privateMatch != this.privateMatch
+                    || other.maxPlayerNumber != this.maxPlayerNumber
+                    || other.expirationTime != this.expirationTime
+                    || other.matchStatus != this.matchStatus
+                    || other.teams != this.teams) {
+                return false;
+            }
+            return true;
+        }
+    }
+
+    /**
      * Constructs a Match with default variant (Chibre) and the default status (pending).
      *
      * @param players        The list of players in the match
