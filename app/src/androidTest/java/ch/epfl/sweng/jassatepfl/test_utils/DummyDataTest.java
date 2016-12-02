@@ -70,7 +70,12 @@ public class DummyDataTest {
         matchPlayers.add(jimmy);
         matchPlayers.add(random);
         matchPlayers.add(marco);
-        return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+        Match match = new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+        match.setTeam(0, bricoloBob.getID());
+        match.setTeam(0, jimmy.getID());
+        match.setTeam(1, random.getID());
+        match.setTeam(1, marco.getID());
+        return match;
     }
 
     public static Match noPlayersMatch() {

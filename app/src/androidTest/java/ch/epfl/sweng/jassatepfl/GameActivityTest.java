@@ -39,6 +39,10 @@ import static ch.epfl.sweng.jassatepfl.model.Match.Meld.FOUR_NINE;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.HUNDRED;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.MARRIAGE;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.THREE_CARDS;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.bricoloBob;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.marco;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -100,6 +104,17 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withText(R.string.toast_cannot_cancel)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
         onView(withId(R.id.score_update_cancel)).check(matches(not(isEnabled())));
+    }
+
+    @Test
+    public void testPlayersNamesAreDisplayed() {
+        dbRefWrapTest.reset();
+        ownedMatchSetUp();
+        getActivity();
+        onView(withId(R.id.team_members_1))
+                .check(matches(withText(bricoloBob.getFirstName() + ", " + jimmy.getFirstName())));
+        onView(withId(R.id.team_members_2))
+                .check(matches(withText(random.getFirstName() + ", " + marco.getFirstName())));
     }
 
     @Test
