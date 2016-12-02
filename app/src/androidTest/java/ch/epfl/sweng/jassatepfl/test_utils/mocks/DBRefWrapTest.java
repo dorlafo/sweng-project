@@ -239,7 +239,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                     boolean callChildRemoved = false;
 
                     if(currentNode.getId().equals(DatabaseUtils.DATABASE_MATCHES)) {
-                        if(currentNode.getChildren().size() < matches.size()) {
+                        /*if(currentNode.getChildren().size() < matches.size()) {
                             callChildRemoved = true;
                             Match mToRemove = null;
                             for(Match m : matches) {
@@ -249,7 +249,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                             }
                             when(snap.getValue(Match.class)).thenReturn(mToRemove);
                             matches.remove(mToRemove);
-                        } else {
+                        } else {*/
                             for(NodeTest matchLeaf : currentNode.getChildren()) {
                                 Match m = ((MatchLeafTest) matchLeaf).getData();
                                 if(matches.contains(m)) {
@@ -265,10 +265,10 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                                     matches.add(m);
                                 }
                             }
-                        }
+                        /*}*/
                     } else if (currentNode instanceof MatchStatusLeafTest) {
                         Map<String, Boolean> tmp = ((MatchStatusLeafTest) currentNode).getData();
-                        if(tmp.size() < statusMap.size()) {
+                        /*if(tmp.size() < statusMap.size()) {
                             callChildRemoved = true;
                             String keyToRemove = null;
                             for(String key : statusMap.keySet()) {
@@ -279,7 +279,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                             when(snap.getKey()).thenReturn(keyToRemove);
                             when(snap.getValue()).thenReturn(statusMap.get(keyToRemove));
                             statusMap.remove(keyToRemove);
-                        } else {
+                        } else {*/
                             for(String key : tmp.keySet()) {
                                 if(statusMap.containsKey(key)) {
                                     if(statusMap.get(key) != tmp.get(key)) {
@@ -295,7 +295,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                                     statusMap.put(key, tmp.get(key));
                                 }
                             }
-                        }
+                        /*}*/
                     }
 
                     if(callChildAdded) {
@@ -318,7 +318,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                         };
                         uiHandler.post(toRun);
                     }
-                    if(callChildRemoved) {
+                    /*if(callChildRemoved) {
                         Handler uiHandler = new Handler(Looper.getMainLooper());
                         Runnable toRun = new Runnable() {
                             @Override
@@ -327,7 +327,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                             }
                         };
                         uiHandler.post(toRun);
-                    }
+                    }*/
                 }
             }
         }).start();
