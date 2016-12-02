@@ -242,6 +242,8 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                                             when(snap.getKey()).thenReturn(key);
                                             when(snap.getValue()).thenReturn(value);
                                             listener.onChildAdded(snap, currentNode.getId());
+                                            listener.onChildChanged(snap, currentNode.getId());
+                                            listener.onChildRemoved(snap);
                                         }
                                     } else if(currentNode.getId().equals(DatabaseUtils.DATABASE_MATCHES)) {
                                         Set<NodeTest> matches = currentNode.getChildren();
@@ -353,11 +355,11 @@ public class DBRefWrapTest extends DBReferenceWrapper {
      * @param matches the collection of players that needs to be added
      */
     public void addMatches(Set<Match> matches) {
-        TreeNodeTest playersNode = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_MATCHES);
+        TreeNodeTest matchesNode = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_MATCHES);
         for (Match m : matches) {
             String matchID = m.getMatchID();
-            playersNode.addChild(matchID);
-            playersNode.getChild(matchID).setData(m);
+            matchesNode.addChild(matchID);
+            matchesNode.getChild(matchID).setData(m);
         }
     }
 

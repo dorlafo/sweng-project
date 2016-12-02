@@ -66,6 +66,7 @@ public class DatabaseUtils {
                         try {
                             match.addPlayer(player);
                             ref.child(DatabaseUtils.DATABASE_MATCHES).child(matchID).setValue(match);
+                            ref.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID).child(sciper).setValue(false);
                             Intent moveToMatchActivity = new Intent(context, WaitingPlayersActivity.class);
                             moveToMatchActivity.putExtra("match_Id", matchID);
                             context.startActivity(moveToMatchActivity);

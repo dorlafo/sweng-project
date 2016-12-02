@@ -43,6 +43,12 @@ public class DummyDataTest {
         return new Match(match1Players, rolexCoord, "Rolex", false, CHIBRE, expirationTime(2), "one_player");
     }
 
+    public static Match onePlayerMatchWithBob() {
+        List<Player> match1Players = new ArrayList<>();
+        match1Players.add(bricoloBob);
+        return new Match(match1Players, rolexCoord, "Rolex", false, CHIBRE, expirationTime(2), "one_player_bob");
+    }
+
     public static Match twoPlayersMatch() {
         List<Player> match2Players = new ArrayList<>();
         match2Players.add(vincenzo);
@@ -92,7 +98,7 @@ public class DummyDataTest {
         fullPlayers.add(marco);
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
-        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full");
+        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full_bob");
     }
 
     public static Match matchWithBob() {

@@ -254,7 +254,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     /**
-     * When all user clicks on "start match" button it launches the game.
+     *
      *
      * @param view General view
      */
@@ -352,7 +352,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                 playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
                 String id = dataSnapshot.getKey();
                 if (id.equals(getUserSciper())) {
-                    readyBtn.setEnabled(false);
+                    if(playersReady.get(id)) {
+                        readyBtn.setEnabled(false);
+                    } else {
+                        readyBtn.setEnabled(true);
+                    }
                 }
                 if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
                     gameBtn.setEnabled(true);
@@ -364,23 +368,28 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                //TODO: check if this is indeed not used
                 Log.d(TAG, "pendingMatchListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "pendingMatchListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
-                playersReady.remove(dataSnapshot.getKey());
-                int pos = Integer.parseInt(dataSnapshot.getKey());
-                if (pos == posInList) {
-                    readyBtn.setEnabled(true);
+                playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
+                String id = dataSnapshot.getKey();
+                if (id.equals(getUserSciper())) {
+                    if(playersReady.get(id)) {
+                        readyBtn.setEnabled(false);
+                    } else {
+                        readyBtn.setEnabled(true);
+                    }
                 }
                 if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
                     gameBtn.setEnabled(true);
                 } else {
                     gameBtn.setEnabled(false);
                 }
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "pendingMatchListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
+                playersReady.remove(dataSnapshot.getKey());
                 modifyListAdapter();
             }
 
