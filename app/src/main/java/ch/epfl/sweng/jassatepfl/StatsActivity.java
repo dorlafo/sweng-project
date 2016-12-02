@@ -11,13 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
-import ch.epfl.sweng.jassatepfl.stats.UserStats;
 
 public class StatsActivity extends BaseActivityWithNavDrawer {
 
@@ -80,9 +73,9 @@ public class StatsActivity extends BaseActivityWithNavDrawer {
                 case 0:
                     return new CountersFragment();
                 case 1:
-                   return new TimeSeriesFragment();
+                    return new TimeSeriesFragment();
                 default:
-                    return new ScoreboardFragment().setReference(dbRefWrapped);
+                    return new LeaderboardFragment().setReference(dbRefWrapped);
             }
         }
 
@@ -100,7 +93,7 @@ public class StatsActivity extends BaseActivityWithNavDrawer {
                 case 1:
                     return "Evolution";
                 case 2:
-                    return "Scoreboard";
+                    return "Leaderboard";
             }
             return null;
         }

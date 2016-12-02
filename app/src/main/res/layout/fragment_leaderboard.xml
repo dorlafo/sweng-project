@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ch.epfl.sweng.jassatepfl.ScoreboardFragment">
+    tools:context="ch.epfl.sweng.jassatepfl.LeaderboardFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <ListView
-            android:id="@+id/scoreboard_list"
+            android:id="@+id/leaderboard_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/background_light"

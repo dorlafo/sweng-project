@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +26,14 @@ import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
  * A simple {@link Fragment} subclass.
  * Scoreboard Fragment for StatsActivity
  */
-public class ScoreboardFragment extends Fragment {
+public class LeaderboardFragment extends Fragment {
     private DBReferenceWrapper dbRefWrapped;
     private PlayerListAdapter adapter;
     private ListView playerListView;
     private List<Player> playerList;
     private ChildEventListener playerListener;
 
-    public ScoreboardFragment() {
+    public LeaderboardFragment() {
     }
 
     public Fragment setReference(DBReferenceWrapper dbRefWrapped) {
@@ -42,37 +41,19 @@ public class ScoreboardFragment extends Fragment {
         return this;
     }
 
-   /* @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        TextView emptyList = new TextView(getContext());
-        emptyList.setText(R.string.loading_scoreboard);
-        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-        emptyList.setTextColor(Color.BLACK);
-        emptyList.setTextSize(20);
-
-        playerList = new ArrayList<>();
-
-        playerListView = (ListView) getView().findViewById(R.id.scoreboard_list);
-        ((ViewGroup) playerListView.getParent()).addView(emptyList);
-        playerListView.setEmptyView(emptyList);
-        contactFirebase();
-    }*/
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_scoreboard, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_leaderboard, container, false);
 
         TextView emptyList = new TextView(getContext());
-        emptyList.setText(R.string.loading_scoreboard);
+        emptyList.setText(R.string.loading_leaderboard);
         emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         emptyList.setTextColor(Color.BLACK);
         emptyList.setTextSize(20);
 
         playerList = new ArrayList<>();
 
-        playerListView = (ListView) rootView.findViewById(R.id.scoreboard_list);
+        playerListView = (ListView) rootView.findViewById(R.id.leaderboard_list);
         ((ViewGroup) playerListView.getParent()).addView(emptyList);
         playerListView.setEmptyView(emptyList);
         contactFirebase();
@@ -130,7 +111,7 @@ public class ScoreboardFragment extends Fragment {
      * Updates Match list adapter
      */
     private void modifyListAdapter() {
-        adapter = new PlayerListAdapter(getContext(), R.layout.match_list_row, playerList);
+        adapter = new PlayerListAdapter(getContext(), R.layout.player_list_element, playerList);
         playerListView.setAdapter(adapter);
     }
 }
