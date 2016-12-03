@@ -81,23 +81,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             drawer.addView(contentView, 0);
 
             playerID = new Player.PlayerID(getUserSciper());
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.dialog_cards)
-                    .setMessage(R.string.dialog_have_cards)
-                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            playerHasCards = true;
-                            matchHasCards = true;
-                            match.addPlayerWhoHasCards(playerID);
-                            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
-                        }
-                    })
-                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .show();
 
             matchId = getIntent().getStringExtra("match_Id");
 
@@ -360,12 +343,28 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                             gameBtn.setEnabled(false);
                         }
                     }
-                    if(playerHasCards){
-                        match.addPlayerWhoHasCards(playerID);
+                    if(match.getHasCards().contains(playerID)) {
+                        playerHasCards = true;
+                    } else {
+                        new AlertDialog.Builder(WaitingPlayersActivity.this)
+                                .setTitle(R.string.dialog_cards)
+                                .setMessage(R.string.dialog_have_cards)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        playerHasCards = true;
+                                        matchHasCards = true;
+                                        match.addPlayerWhoHasCards(playerID);
+                                        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+                                .show();
                     }
-                    else{
-                        match.removePlayerWhoHasCards(playerID);
-                    }
+                    
                     matchHasCards = match.hasCards();
                     updateViewWhoHasCards(cardsNo, cardsYes);
                     modifyListAdapter();
