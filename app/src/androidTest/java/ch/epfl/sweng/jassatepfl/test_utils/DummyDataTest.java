@@ -3,7 +3,9 @@ package ch.epfl.sweng.jassatepfl.test_utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -12,6 +14,7 @@ import ch.epfl.sweng.jassatepfl.model.Player.PlayerID;
 import ch.epfl.sweng.jassatepfl.model.Rank;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
+import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.POMME;
 
 public class DummyDataTest {
 
@@ -38,14 +41,20 @@ public class DummyDataTest {
     public static Match onePlayerMatch() {
         List<Player> match1Players = new ArrayList<>();
         match1Players.add(amaury);
-        return new Match(match1Players, rolexCoord, "Rolex", false, CHIBRE, expirationTime(2), "one_player", hasCardsEmpty);
+        return new Match(match1Players, rolexCoord, "Rolex", false, CHIBRE, expirationTime(2), "one_player", hasCardsEmpty, Match.MatchStatus.PENDING);
+    }
+
+    public static Match onePlayerMatchWithBob() {
+        List<Player> match1Players = new ArrayList<>();
+        match1Players.add(bricoloBob);
+        return new Match(match1Players, rolexCoord, "Rolex", false, CHIBRE, expirationTime(2), "one_player_bob");
     }
 
     public static Match twoPlayersMatch() {
         List<Player> match2Players = new ArrayList<>();
         match2Players.add(vincenzo);
         match2Players.add(dorian);
-        return new Match(match2Players, BCCoord, "BC", false, CHIBRE, expirationTime(24), "two_players", hasCardsEmpty);
+        return new Match(match2Players, BCCoord, "BC", false, CHIBRE, expirationTime(24), "two_players", hasCardsEmpty, Match.MatchStatus.PENDING);
     }
 
     public static Match threePlayersMatch() {
@@ -53,26 +62,26 @@ public class DummyDataTest {
         match3Players.add(colin);
         match3Players.add(nicolas);
         match3Players.add(alexis);
-        return new Match(match3Players, CECoord, "CE", false, CHIBRE, expirationTime(3), "three_players", hasCardsEmpty);
+        return new Match(match3Players, CECoord, "CE", false, CHIBRE, expirationTime(3), "three_players", hasCardsEmpty, Match.MatchStatus.PENDING);
     }
 
     public static Match ownedMatch() {
         List<Player> matchPlayers = new ArrayList<>();
         matchPlayers.add(bricoloBob);
         matchPlayers.add(jimmy);
-        return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned", hasCardsEmpty);
+        return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned", hasCardsEmpty, Match.MatchStatus.PENDING);
     }
 
     public static Match noPlayersMatch() {
         return new Match(new ArrayList<Player>(), lemanCoord,
                 "Cette String est beaucoup trop longue, je me demande si l'affichage va foirer???",
-                false, CHIBRE, expirationTime(12), "no_players", hasCardsEmpty);
+                false, CHIBRE, expirationTime(12), "no_players", hasCardsEmpty, Match.MatchStatus.PENDING);
     }
 
     public static Match privateMatch() {
         List<Player> privatePlayers = new ArrayList<>();
         privatePlayers.add(jimmy);
-        return new Match(privatePlayers, swissTechCoord, "SwissTech", true, CHIBRE, expirationTime(1), "private", hasCardsEmpty);
+        return new Match(privatePlayers, swissTechCoord, "SwissTech", true, CHIBRE, expirationTime(1), "private", hasCardsEmpty, Match.MatchStatus.PENDING);
     }
 
     public static Match fullMatch() {
@@ -81,20 +90,36 @@ public class DummyDataTest {
         fullPlayers.add(marco);
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
-        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full", hasCardsEmpty);
+        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full", hasCardsEmpty, Match.MatchStatus.PENDING);
+    }
+
+    public static Match fullMatchWithBob() {
+        List<Player> fullPlayers = new ArrayList<>();
+        fullPlayers.add(bricoloBob);
+        fullPlayers.add(marco);
+        fullPlayers.add(dorian);
+        fullPlayers.add(vincenzo);
+        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full_bob");
     }
 
     public static Match matchWithBob() {
         List<Player> playerList = new ArrayList<>();
         playerList.add(bricoloBob);
-        return new Match(playerList, COCoord, "CO", false, CHIBRE, expirationTime(3), "bob", hasCardsEmpty);
+        return new Match(playerList, COCoord, "CO", false, CHIBRE, expirationTime(3), "bob", hasCardsEmpty, Match.MatchStatus.PENDING);
+    }
+
+    public static Match matchPomme() {
+        List<Player> playerList = new ArrayList<>();
+        playerList.add(bricoloBob);
+        playerList.add(random);
+        return new Match(playerList, COCoord, "CO", false, POMME, expirationTime(3), "pomme");
     }
 
     public static Match match_one_p_california() {
         List<Player> playerList = new ArrayList<>();
         playerList.add(amaury);
         return new Match(playerList, new GPSPoint(37.422, -122.084), "Rolex", false, CHIBRE,
-                expirationTime(3), "one_player_california", hasCardsEmpty);
+                expirationTime(3), "one_player_california", hasCardsEmpty, Match.MatchStatus.PENDING);
     }
 
     public static Match matchFullCalifornia() {
@@ -104,14 +129,29 @@ public class DummyDataTest {
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
         return new Match(fullPlayers, new GPSPoint(37.422, -122.084), "CO", false, CHIBRE,
-                expirationTime(3), "fullCalifornia", hasCardsEmpty);
+                expirationTime(3), "fullCalifornia", hasCardsEmpty, Match.MatchStatus.PENDING);
     }
 
     public static Match matchBobCalifornia() {
         List<Player> playerList = new ArrayList<>();
         playerList.add(bricoloBob);
         return new Match(playerList, new GPSPoint(37.422, -122.084), "CO", false, CHIBRE,
-                expirationTime(3), "bobCalifornia", hasCardsEmpty);
+                expirationTime(3), "bobCalifornia", hasCardsEmpty, Match.MatchStatus.PENDING);
+    }
+
+    public static Set<Player> players() {
+        Set<Player> players = new HashSet<>();
+        players.add(amaury);
+        players.add(vincenzo);
+        players.add(dorian);
+        players.add(alexis);
+        players.add(nicolas);
+        players.add(jimmy);
+        players.add(random);
+        players.add(colin);
+        players.add(marco);
+        players.add(bricoloBob);
+        return players;
     }
 
     private static long expirationTime(int hourOffset) {

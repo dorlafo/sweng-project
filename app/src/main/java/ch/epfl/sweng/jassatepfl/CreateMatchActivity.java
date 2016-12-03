@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -58,6 +59,7 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.GameVariant;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.DatePickerFragment;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
@@ -98,117 +100,126 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_create_match, drawer, false);
-        drawer.addView(contentView, 0);
-
-        matchBuilder = new Match.Builder();
-        locationProvider = new LocationProvider(this, false);
-
-        createMatchButton = (Button) findViewById(R.id.create_create_button);
-        createMatchButton.setOnClickListener(this);
-
-        // Description input
-        final EditText editText = (EditText) findViewById(R.id.description_match_text);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String description = v.getText().toString();
-                    if (description.length() != 0) {
-                        matchBuilder.setDescription(description);
-                    }
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        // Date and time pickers
-        ImageButton timePickerDialog = (ImageButton) findViewById(R.id.time_picker_button);
-        timePickerDialog.setOnClickListener(this);
-
-        ImageButton datePickerDialog = (ImageButton) findViewById(R.id.date_picker_button);
-        datePickerDialog.setOnClickListener(this);
-
-        matchCalendar = Calendar.getInstance();
-        matchCalendar.add(HOUR_OF_DAY, 1);
-        displayCurrentExpirationDate();
-
-        // Add player
-        Button addPlayer = (Button) findViewById(R.id.add_player_button);
-        addPlayer.setOnClickListener(this);
-
-        // Private match
-        Switch privacySwitch = (Switch) findViewById(R.id.switch_private);
-        privacySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                matchBuilder.setPrivacy(isChecked);
-            }
-        });
-
-        // Variant
-        ArrayAdapter<GameVariant> variantAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, GameVariant.values());
-        variantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        Spinner variantSpinner = (Spinner) findViewById(R.id.variant_spinner);
-        variantSpinner.setAdapter(variantAdapter);
-        variantSpinner.setOnItemSelectedListener(this);
-
-        // Player list
-        TextView emptyList = new TextView(this);
-        emptyList.setText(R.string.create_empty_list);
-        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-        emptyList.setTextColor(Color.GRAY);
-
-        //TODO: Doesn't show players... --> fix this + make clicking on player ask to remove him
-        ListView playersLV = (ListView) findViewById(R.id.create_player_list);
-        ((ViewGroup) playersLV.getParent()).addView(emptyList);
-        playersLV.setEmptyView(emptyList);
-        playersLV.setBackgroundColor(0xFAFAFA);
-
-        playerArrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, new ArrayList<Player>());
-        playersLV.setAdapter(playerArrayAdapter);
-
-        playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Player player = playerArrayAdapter.getItem(position);
-                new AlertDialog.Builder(CreateMatchActivity.this)
-                        .setTitle(R.string.dialog_remove_player)
-                        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                playerArrayAdapter.remove(player);
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing, goes back to InvitePlayerToMatchActivity
-                            }
-                        })
-                        .show();
-            }
-        });
-
-        // Place picker
-        placePickerButton = (ImageButton) findViewById(R.id.create_place_picker_button);
-        placePickerButton.setEnabled(false);
-        placePickerButton.setOnClickListener(this);
-
-        if (locationProvider.locationPermissionIsGranted()) {
-            Location currentLocation = locationProvider.getLastLocation();
-            if (currentLocation != null) {
-                matchBuilder.setLocation(new GPSPoint(currentLocation.getLatitude(),
-                        currentLocation.getLongitude()));
-            }
+        if (fAuth.getCurrentUser() == null) {
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
         }
+        else {
+            //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView = inflater.inflate(R.layout.activity_create_match, drawer, false);
+            drawer.addView(contentView, 0);
 
-        addCurrentUserToBuilder();
+            matchBuilder = new Match.Builder();
+            locationProvider = new LocationProvider(this, false);
+
+            createMatchButton = (Button) findViewById(R.id.create_create_button);
+            createMatchButton.setOnClickListener(this);
+
+            // Description input
+            final EditText editText = (EditText) findViewById(R.id.description_match_text);
+            editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        String description = v.getText().toString();
+                        if (description.length() != 0) {
+                            matchBuilder.setDescription(description);
+                        }
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            // Date and time pickers
+            ImageButton timePickerDialog = (ImageButton) findViewById(R.id.time_picker_button);
+            timePickerDialog.setOnClickListener(this);
+
+            ImageButton datePickerDialog = (ImageButton) findViewById(R.id.date_picker_button);
+            datePickerDialog.setOnClickListener(this);
+
+            matchCalendar = Calendar.getInstance();
+            matchCalendar.add(HOUR_OF_DAY, 1);
+            displayCurrentExpirationDate();
+
+            // Add player
+            Button addPlayer = (Button) findViewById(R.id.add_player_button);
+            addPlayer.setOnClickListener(this);
+
+            // Private match
+            Switch privacySwitch = (Switch) findViewById(R.id.switch_private);
+            privacySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    matchBuilder.setPrivacy(isChecked);
+                }
+            });
+
+            // Variant
+            ArrayAdapter<GameVariant> variantAdapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, GameVariant.values());
+            variantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            Spinner variantSpinner = (Spinner) findViewById(R.id.variant_spinner);
+            variantSpinner.setAdapter(variantAdapter);
+            variantSpinner.setOnItemSelectedListener(this);
+
+            // Player list
+            TextView emptyList = new TextView(this);
+            emptyList.setText(R.string.create_empty_list);
+            emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+            emptyList.setTextColor(Color.GRAY);
+
+            //TODO: Doesn't show players... --> fix this + make clicking on player ask to remove him
+            ListView playersLV = (ListView) findViewById(R.id.create_player_list);
+            ((ViewGroup) playersLV.getParent()).addView(emptyList);
+            playersLV.setEmptyView(emptyList);
+            playersLV.setBackgroundColor(0xFAFAFA);
+
+            playerArrayAdapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_1, new ArrayList<Player>());
+            playersLV.setAdapter(playerArrayAdapter);
+
+            playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    final Player player = playerArrayAdapter.getItem(position);
+                    new AlertDialog.Builder(CreateMatchActivity.this)
+                            .setTitle(R.string.dialog_remove_player)
+                            .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    playerArrayAdapter.remove(player);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Do nothing, goes back to InvitePlayerToMatchActivity
+                                }
+                            })
+                            .show();
+                }
+            });
+
+            // Place picker
+            placePickerButton = (ImageButton) findViewById(R.id.create_place_picker_button);
+            placePickerButton.setEnabled(false);
+            placePickerButton.setOnClickListener(this);
+
+            if (locationProvider.locationPermissionIsGranted()) {
+                Location currentLocation = locationProvider.getLastLocation();
+                if (currentLocation != null) {
+                    matchBuilder.setLocation(new GPSPoint(currentLocation.getLatitude(),
+                            currentLocation.getLongitude()));
+                }
+            }
+
+            addCurrentUserToBuilder();
+        }
     }
 
     @Override
@@ -236,11 +247,14 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                             .show();
                     createMatchButton.setEnabled(false);
                 } else {
-                    String matchId = dbRefWrapped.child("matches").push().getKey();
-                    dbRefWrapped.child("matches").child(matchId).setValue(matchBuilder.setMatchID(matchId).build());
-                    Log.d(TAG, "Pushed match " + matchId + " to database");
+                    String matchId = dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).push().getKey();
+                    Match m = matchBuilder.setMatchID(matchId).build();
+                    dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(m);
+                    dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).setValue(false);
+                    //Log.d(TAG, "Pushed match " + matchId + " to database");
                     new InvitePlayer(playerArrayAdapter).execute(matchId);
                     startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("match_Id", matchId));
+                    finish();
                 }
                 break;
             case R.id.time_picker_button:
@@ -281,7 +295,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     int playerNum = data.getIntExtra("players_added", 0);
                     for (int i = 0; i < playerNum; i++) {
                         String sciper = data.getStringExtra("player" + i);
-                        dbRefWrapped.child("players")
+                        dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS)
                                 .child(sciper)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -336,7 +350,8 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         tempCalendar.set(MINUTE, minute);
 
         final Calendar currentTime = Calendar.getInstance();
-
+        System.out.println("currentTime:" + currentTime);
+        System.out.println("matchCalendar:" + matchCalendar);
         if (tempCalendar.compareTo(currentTime) > 0) {
             matchCalendar.setTimeInMillis(tempCalendar.getTimeInMillis());
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
@@ -387,7 +402,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         // TODO: can we fuse this method with addplayer l.258, it is almost the same
         try {
             String currentUserId = fAuth.getCurrentUser().getDisplayName();
-            dbRefWrapped.child("players").child(currentUserId)
+            dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS).child(currentUserId)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

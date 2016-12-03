@@ -3,6 +3,8 @@ package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
+
 /**
  * The root class is a special case of the NodeTest interface. It represents the top of our tree
  * structure.
@@ -35,6 +37,11 @@ public class RootTest implements NodeTest {
     }
 
     @Override
+    public NodeTest getParent() {
+        throw new UnsupportedOperationException("RootTest does not support getParent()");
+    }
+
+    @Override
     public TreeNodeTest getChild(String id) {
         for (NodeTest n : children) {
             if (n.getId().equals(id)) {
@@ -46,7 +53,7 @@ public class RootTest implements NodeTest {
 
     @Override
     public TreeNodeTest addChild(String id) {
-        TreeNodeTest tNode = new TreeNodeTest(id);
+        TreeNodeTest tNode = new TreeNodeTest(id, this);
         children.add(tNode);
         return tNode;
     }
@@ -63,10 +70,20 @@ public class RootTest implements NodeTest {
 
     @Override
     public void initialize() {
-        addChild("matches");
-        addChild("players");
-        addChild("pendingMatches");
-        addChild("matchStats");
+        addChild(DatabaseUtils.DATABASE_MATCHES);
+        addChild(DatabaseUtils.DATABASE_PLAYERS);
+        addChild(DatabaseUtils.DATABASE_PENDING_MATCHES);
+        addChild(DatabaseUtils.DATABASE_MATCH_STATS);
+    }
+
+    @Override
+    public void removeSelf() {
+        throw new UnsupportedOperationException("Root does not support removeValue()");
+    }
+
+    @Override
+    public void removeChild(NodeTest child) {
+        children.remove(child);
     }
 
 }

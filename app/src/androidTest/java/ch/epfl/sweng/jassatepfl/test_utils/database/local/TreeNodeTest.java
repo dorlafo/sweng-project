@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
+
 /**
  * The TreeNodeTest class is a special case of the NodeTest interface. It represents the middle nodes of our
  * tree structure
@@ -14,15 +16,17 @@ public class TreeNodeTest implements NodeTest {
 
     private String id;
     private Set<NodeTest> children;
+    private NodeTest parent;
 
     /**
      * Constructor of the TreeNodeTest class
      *
      * @param id the id of the TreeNodeTest that is created
      */
-    public TreeNodeTest(String id) {
+    public TreeNodeTest(String id, NodeTest parent) {
         this.id = id;
         children = new HashSet<>();
+        this.parent = parent;
     }
 
     @Override
@@ -36,32 +40,37 @@ public class TreeNodeTest implements NodeTest {
     }
 
     @Override
+    public NodeTest getParent() {
+        return parent;
+    }
+
+    @Override
     public LeafTest getChild(String id) {
         for (NodeTest n : children) {
             if (n.getId().equals(id)) {
                 return (LeafTest) n;
             }
         }
-        throw new IllegalArgumentException("The node does not have a children named : " + id);
+        throw new IllegalArgumentException("The node '" + this.id + "' does not have a children named : " + id);
     }
 
     @Override
     public LeafTest addChild(String id) {
         switch (this.id) {
-            case "players":
-                PlayerLeafTest playerLeaf = new PlayerLeafTest(id);
+            case DatabaseUtils.DATABASE_PLAYERS:
+                PlayerLeafTest playerLeaf = new PlayerLeafTest(id, this);
                 children.add(playerLeaf);
                 return playerLeaf;
-            case "matches":
-                MatchLeafTest matchLeaf = new MatchLeafTest(id);
+            case DatabaseUtils.DATABASE_MATCHES:
+                MatchLeafTest matchLeaf = new MatchLeafTest(id, this);
                 children.add(matchLeaf);
                 return matchLeaf;
-            case "pendingMatches":
-                MatchStatusLeafTest statusLeaf = new MatchStatusLeafTest(id);
+            case DatabaseUtils.DATABASE_PENDING_MATCHES:
+                MatchStatusLeafTest statusLeaf = new MatchStatusLeafTest(id, this);
                 children.add(statusLeaf);
                 return statusLeaf;
-            case "matchStats":
-                MatchStatsLeafTest statsLeaf = new MatchStatsLeafTest(id);
+            case DatabaseUtils.DATABASE_MATCH_STATS:
+                MatchStatsLeafTest statsLeaf = new MatchStatsLeafTest(id, this);
                 children.add(statsLeaf);
                 return statsLeaf;
             default:
@@ -86,17 +95,17 @@ public class TreeNodeTest implements NodeTest {
 
         LeafTest newLeaf;
         switch (this.id) {
-            case "players":
-                newLeaf = new PlayerLeafTest(tempId);
+            case DatabaseUtils.DATABASE_PLAYERS:
+                newLeaf = new PlayerLeafTest(tempId, this);
                 break;
-            case "matches":
-                newLeaf = new MatchLeafTest(tempId);
+            case DatabaseUtils.DATABASE_MATCHES:
+                newLeaf = new MatchLeafTest(tempId, this);
                 break;
-            case "pendingMatches":
-                newLeaf = new MatchStatusLeafTest(tempId);
+            case DatabaseUtils.DATABASE_PENDING_MATCHES:
+                newLeaf = new MatchStatusLeafTest(tempId, this);
                 break;
-            case "matchStats":
-                newLeaf = new MatchStatsLeafTest(tempId);
+            case DatabaseUtils.DATABASE_MATCH_STATS:
+                newLeaf = new MatchStatsLeafTest(tempId, this);
                 break;
             default:
                 throw new UnsupportedOperationException("Cannot add an auto generated child to : " + id);
@@ -117,6 +126,16 @@ public class TreeNodeTest implements NodeTest {
     @Override
     public void initialize() {
 
+    }
+
+    @Override
+    public void removeSelf() {
+        parent.removeChild(this);
+    }
+
+    @Override
+    public void removeChild(NodeTest child) {
+        children.remove(child);
     }
 
 }

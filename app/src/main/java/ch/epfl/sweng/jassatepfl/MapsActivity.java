@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -17,7 +18,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,7 +33,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,53 +57,47 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
     private GoogleMap matchMap;
     private LocationProvider locationProvider;
-    private Match match;
     private LatLng userLastLocation;
-    private Player currentUser;
     private ChildEventListener childEventListener;
+    //Will contain all the marker (up to date with firebase) added to the map, with the matchID as key
+    private static HashMap<String, Marker> markers = new HashMap<>();
+    //Will contain all the matches (up to date with firebase) so when a user click on a marker we don't need to fetch the match again
+    private static Map<String, Match> matches = new HashMap<>();
+
+    private static final String TAG = MapsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_maps, drawer, false);
-        drawer.addView(contentView, 0);
+        if (fAuth.getCurrentUser() == null) {
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
+        } else {
+            //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView = inflater.inflate(R.layout.activity_maps, drawer, false);
+            drawer.addView(contentView, 0);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().hide();
-        }
-
-        ImageButton menuButton = (ImageButton) findViewById(R.id.maps_menu_button);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.START);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            if (toolbar != null) {
+                setSupportActionBar(toolbar);
+                getSupportActionBar().hide();
             }
-        });
 
-        createMap();
+            ImageButton menuButton = (ImageButton) findViewById(R.id.maps_menu_button);
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+            });
 
-        locationProvider = new LocationProvider(this, true);
-        locationProvider.setProviderListener(this);
+            createMap();
 
-        try {
-            dbRefWrapped.child("players")
-                    .child(getUserSciper())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            currentUser = dataSnapshot.getValue(Player.class);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-        } catch (NullPointerException e) {
-            Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
-                    .show();
+            locationProvider = new LocationProvider(this, true);
+            locationProvider.setProviderListener(this);
         }
     }
 
@@ -161,42 +154,46 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
         /**
          * When click on one game, opens AlertDialog
-         * Provides oppotunity to join match or cancel.
+         * Provides opportunity to join match or cancel.
          */
         matchMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(final Marker marker) {
-                new AlertDialog.Builder(MapsActivity.this)
-                        .setTitle(R.string.dialog_join_match)
-                        .setMessage(R.string.dialog_join_message)
-                        .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                final String matchID = marker.getTag().toString();
-                                dbRefWrapped.child("matches").child(matchID)
-                                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                match = dataSnapshot.getValue(Match.class);
-                                                DatabaseUtils.addPlayerToMatch(MapsActivity.this,
-                                                        dbRefWrapped,
-                                                        matchID,
-                                                        getUserSciper(),
-                                                        match);
-                                            }
+                //Log.d(TAG, "MARKER:" + marker.toString() + ":TAG:" + marker.getTag());
+                //Log.d(TAG, "matches:size:" + matches.size() + ":" + matches.toString());
+                final Match currMatch = matches.get(marker.getTag());
+                if(currMatch.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                    if(currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
+                        Intent goToGameActivity = new Intent(MapsActivity.this, GameActivity.class);
+                        goToGameActivity.putExtra("match_Id", currMatch.getMatchID());
+                        startActivity(goToGameActivity);
+                    }
+                    else {
+                        Intent moveToWaitingPlayersActivity = new Intent(MapsActivity.this, WaitingPlayersActivity.class);
+                        moveToWaitingPlayersActivity.putExtra("match_Id", currMatch.getMatchID());
+                        startActivity(moveToWaitingPlayersActivity);
+                    }
+                } else {
+                    new AlertDialog.Builder(MapsActivity.this)
+                            .setTitle(R.string.dialog_join_match)
+                            .setMessage(R.string.dialog_join_message)
+                            .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
 
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-                                                Log.e("ERROR-DATABASE", databaseError.toString());
-                                            }
-                                        });
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing, goes back to MapsActivity
-                            }
-                        })
-                        .show();
+                                    DatabaseUtils.addPlayerToMatch(MapsActivity.this,
+                                            dbRefWrapped,
+                                            currMatch.getMatchID(),
+                                            getUserSciper(),
+                                            currMatch);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Do nothing, goes back to MapsActivity
+                                }
+                            })
+                            .show();
+                }
             }
         });
 
@@ -216,7 +213,14 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        dbRefWrapped.removeEventListener(childEventListener);
+        if (childEventListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                    .removeEventListener(childEventListener);
+        }
+    }
+
+    public void setMockLocation(Location location) {
+        locationProvider.setMockLocation(location);
     }
 
     private void createMap() {
@@ -229,30 +233,59 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
     private void displayNearbyMatches() {
         childEventListener = new ChildEventListener() {
-            private final Map<String, Marker> markers = new HashMap<>();
             private final MatchStringifier stringifier = new MatchStringifier(MapsActivity.this);
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                //Log.d(TAG, "childEventListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
-                markers.put(dataSnapshot.getKey(), createMarker(m));
+                if(m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
+                        || (m.getMatchStatus().equals(Match.MatchStatus.PENDING) && !m.isPrivateMatch())) {
+                    Marker marker = createMarker(m);
+                    markers.put(m.getMatchID(), marker);
+                    matches.put(m.getMatchID(), m);
+                }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                markers.get(dataSnapshot.getKey()).remove();
-                markers.put(dataSnapshot.getKey(), createMarker(dataSnapshot.getValue(Match.class)));
+                //Log.d(TAG, "childEventListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
+                Match m = dataSnapshot.getValue(Match.class);
+                String id = dataSnapshot.getKey();
+                if(markers.containsKey(id)) {
+                    markers.get(id).remove();
+                    matches.remove(id);
+                }
+                if(m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
+                        || (m.getMatchStatus().equals(Match.MatchStatus.PENDING) && !m.isPrivateMatch())) {
+                    markers.put(id, createMarker(m));
+                    matches.put(m.getMatchID(), m);
+                }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                markers.get(dataSnapshot.getKey()).remove();
+                //Log.d(TAG, "childEventListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
+                String id = dataSnapshot.getKey();
+                matches.remove(id);
+                markers.get(id).remove();
+                markers.remove(id);
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                markers.get(dataSnapshot.getKey()).remove();
-                markers.put(dataSnapshot.getKey(), createMarker(dataSnapshot.getValue(Match.class)));
+                //Log.d(TAG, "childEventListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
+                Match m = dataSnapshot.getValue(Match.class);
+                String id = dataSnapshot.getKey();
+                if(markers.containsKey(id)) {
+                    markers.get(id).remove();
+                    matches.remove(id);
+                }
+                if(m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
+                        || (m.getMatchStatus().equals(Match.MatchStatus.PENDING) && !m.isPrivateMatch())) {
+                    markers.put(id, createMarker(m));
+                    matches.put(m.getMatchID(), m);
+                }
             }
 
             @Override
@@ -267,13 +300,12 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                         .title(match.getDescription())
                         .snippet(stringifier.markerSnippet())
                         .icon(BitmapDescriptorFactory.defaultMarker(
-                                match.hasParticipant(currentUser) ? HUE_ORANGE : HUE_BLUE)));
+                                match.hasParticipantWithID(new Player.PlayerID(getUserSciper())) ? HUE_ORANGE : HUE_BLUE)));
                 marker.setTag(match.getMatchID());
                 return marker;
             }
         };
-        dbRefWrapped.child("matches")
-                .orderByChild("privateMatch").equalTo(false)
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
                 .addChildEventListener(childEventListener);
     }
 
