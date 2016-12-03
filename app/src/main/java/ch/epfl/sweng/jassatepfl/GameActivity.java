@@ -47,7 +47,7 @@ import static ch.epfl.sweng.jassatepfl.GameActivity.Mode.OFFLINE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Mode.ONLINE;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.SENTINEL;
 
-public class GameActivity extends BaseAppCompatActivity implements OnClickListener {
+public class GameActivity extends BaseActivityWithNavDrawer implements OnClickListener {
 
     private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
 
@@ -86,7 +86,9 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         } else {
             Log.d(TAG, "showLogin:getCurrentUser:notNull");
 
-            setContentView(R.layout.activity_game);
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView = inflater.inflate(R.layout.activity_game, drawer, false);
+            drawer.addView(contentView, 0);
 
             //Sentinel matchStats to avoid null pointer exception
             matchStats = new MatchStats(Match.sentinelMatch());
