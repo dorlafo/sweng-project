@@ -11,6 +11,7 @@ import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Rank;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import dagger.Module;
 import dagger.Provides;
 
@@ -53,7 +54,7 @@ public class FakeModulesTest {
     private void fillDB(DBRefWrapTest dbRef) {
         RootTest root = (RootTest) dbRef.getCurrentNode();
         root.initialize();
-        root.getChild("players")
+        root.getChild(DatabaseUtils.DATABASE_PLAYERS)
                 .addChild("696969")
                 .setData(new Player(new Player.PlayerID("696969"), "LeBricoleur", "Bob", new Rank(1000)));
     }

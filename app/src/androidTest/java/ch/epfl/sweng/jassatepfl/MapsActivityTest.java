@@ -1,5 +1,7 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.location.Location;
+
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -8,13 +10,12 @@ import java.util.Set;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 
 public final class MapsActivityTest extends InjectedBaseActivityTest {
 
@@ -42,7 +43,16 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.reset();
     }
 
-    /*@Test PASSES ONLY LOCALY
+    @Test
+    public void testMockLocation() {
+        MapsActivity activity = (MapsActivity) getActivity();
+        Location location = new Location("flp");
+        location.setLatitude(46.52);
+        location.setLongitude(6.56);
+        activity.setMockLocation(location);
+    }
+
+    /*@Test PASSES ONLY LOCALLY
     public void testMarkerDisplaysDialog() {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.match_one_p_california());

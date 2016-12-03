@@ -66,7 +66,6 @@ public final class DrawerTest extends InjectedBaseActivityTest {
         onView(withId(R.id.create_create_button)).check(matches(isDisplayed()));
     }
 
-    //NEED MOCKITO ORDERBYCHILD
     @Test
     public void testCanNavigateToMapsActivity() {
         onView(withId(R.id.drawer_layout)).perform(open());
@@ -82,15 +81,14 @@ public final class DrawerTest extends InjectedBaseActivityTest {
         onView(withId(R.id.llPlayerID)).check(matches(isDisplayed()));
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_main));
-        onView(withId(R.id.main_layout_activity_buttons)).check(matches(isDisplayed()));
+        onView(withId(R.id.twMyMatches)).check(matches(isDisplayed()));
     }
 
-    // Need mockito orderBychild
     @Test
     public void testCanNavigateToListActivity() {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_list));
-        onView(withId(R.id.list_menu_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.twNearbyMatches)).check(matches(isDisplayed()));
     }
 
 

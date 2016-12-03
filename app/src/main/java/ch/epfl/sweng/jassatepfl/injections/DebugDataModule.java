@@ -6,7 +6,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import javax.inject.Singleton;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
-
 import dagger.Module;
 import dagger.Provides;
 

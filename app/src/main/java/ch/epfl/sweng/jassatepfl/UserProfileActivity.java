@@ -1,6 +1,7 @@
 package ch.epfl.sweng.jassatepfl;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 public class UserProfileActivity extends BaseActivityWithNavDrawer {
 
@@ -25,41 +27,50 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_user_profile);
+        if (fAuth.getCurrentUser() == null) {
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
+        }
+        else {
+            //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            //setContentView(R.layout.activity_user_profile);
 
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_user_profile, drawer, false);
-        drawer.addView(contentView, 0);
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView = inflater.inflate(R.layout.activity_user_profile, drawer, false);
+            drawer.addView(contentView, 0);
 
-        mtwPlayerID = (TextView) findViewById(R.id.twPlayerID);
-        mtwLastName = (TextView) findViewById(R.id.twLastName);
-        mtwFirstName = (TextView) findViewById(R.id.twFirstName);
-        mtwPlayerRank = (TextView) findViewById(R.id.twRank);
+            mtwPlayerID = (TextView) findViewById(R.id.twPlayerID);
+            mtwLastName = (TextView) findViewById(R.id.twLastName);
+            mtwFirstName = (TextView) findViewById(R.id.twFirstName);
+            mtwPlayerRank = (TextView) findViewById(R.id.twRank);
 
-        sciper = getUserSciper();
-        Log.d(TAG, "DisplayName:" + sciper);
+            sciper = getUserSciper();
+            //Log.d(TAG, "DisplayName:" + sciper);
 
-        //New SingleEventListener that will change the value of the textView according to the current
-        //logged in user
-        dbRefWrapped
-                .child("players")
-                .child(sciper)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Player p = dataSnapshot.getValue(Player.class);
-                        mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
-                        System.out.println(p.getID().toString());
-                        mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
-                        mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
-                        mtwPlayerRank.setText(mtwPlayerRank.getText() + " " + p.getRank().toString());
-                    }
+            //New SingleEventListener that will change the value of the textView according to the current
+            //logged in user
+            dbRefWrapped
+                    .child(DatabaseUtils.DATABASE_PLAYERS)
+                    .child(sciper)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Player p = dataSnapshot.getValue(Player.class);
+                            mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
+                            System.out.println(p.getID().toString());
+                            mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
+                            mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
+                            mtwPlayerRank.setText(mtwPlayerRank.getText() + " " + p.getRank().toString());
+                        }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        //Nothing to be done
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            //Nothing to be done
+                        }
+                    });
+        }
     }
 
     public void viewMenu(View view) {

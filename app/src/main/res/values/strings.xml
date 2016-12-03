@@ -64,6 +64,8 @@
     <string name="dialog_add_player">Invite Player</string>
     <string name="dialog_add_confirmation">Add</string>
     <string name="dialog_remove_player">Remove this player?</string>
+    <string name="dialog_select_team">Choose the team for player </string>
+    <string name="dialog_team_selection_confirmation">Select</string>
     <string name="dialog_match">Match!</string>
     <string name="dialog_game_end">%s won the match. Congratulations!</string>
     <string name="dialog_leave">Leave</string>
@@ -87,6 +89,7 @@
     <string name="toast_cannot_create_with_no_player">You cannot create a match with no player in it.</string>
     <string name="toast_invite_yourself">You cannot invite yourself</string>
     <string name="toast_cannot_cancel">There is nothing to cancel</string>
+    <string name="toast_team_assignment_incorrect">Team assignment incorrect</string>
 
     <string name="error">Error!</string>
     <string name="error_cannot_join">Can not join match</string>
