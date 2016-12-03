@@ -101,11 +101,16 @@ public class DummyDataTest {
 
     public static Match fullMatchWithBob() {
         List<Player> fullPlayers = new ArrayList<>();
-        fullPlayers.add(bricoloBob);
         fullPlayers.add(marco);
+        fullPlayers.add(bricoloBob);
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
-        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full_bob");
+        Match match = new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full_bob");
+        match.setTeam(0, marco.getID());
+        match.setTeam(0, bricoloBob.getID());
+        match.setTeam(1, dorian.getID());
+        match.setTeam(1, vincenzo.getID());
+        return match;
     }
 
     public static Match matchWithBob() {

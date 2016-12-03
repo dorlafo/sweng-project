@@ -113,6 +113,12 @@ public final class DrawerTest extends InjectedBaseActivityTest {
         onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testCanNavigateToScoreBoard() {
+        onView(withId(R.id.drawer_layout)).perform(open());
+        onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_score));
+        onView(withId(R.id.game_playing_to)).check(matches(isDisplayed()));
+    }
 
     @Test
     public void testLogout() {

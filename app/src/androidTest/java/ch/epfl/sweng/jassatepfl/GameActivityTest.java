@@ -40,6 +40,7 @@ import static ch.epfl.sweng.jassatepfl.model.Match.Meld.HUNDRED;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.MARRIAGE;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.THREE_CARDS;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.bricoloBob;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.fullMatchWithBob;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.marco;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
@@ -77,15 +78,15 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testElementsAreHiddenForRegularPlayer() {
         dbRefWrapTest.reset();
-        Match threePlayerMatch = DummyDataTest.threePlayersMatch();
         Intent intent = new Intent();
-        intent.putExtra("match_Id", threePlayerMatch.getMatchID());
+        intent.putExtra("match_Id", fullMatchWithBob().getMatchID());
+        intent.putExtra("mode", "online");
         setActivityIntent(intent);
         Set<Match> matches = new HashSet<>();
-        matches.add(threePlayerMatch);
+        matches.add(fullMatchWithBob());
         dbRefWrapTest.addMatches(matches);
         Set<MatchStats> stats = new HashSet<>();
-        stats.add(new MatchStats(threePlayerMatch));
+        stats.add(new MatchStats(fullMatchWithBob()));
         dbRefWrapTest.addStats(stats);
         dbRefWrapTest.addPlayers(DummyDataTest.players());
         getActivity();
@@ -115,6 +116,18 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
                 .check(matches(withText(bricoloBob.getFirstName() + ", " + jimmy.getFirstName())));
         onView(withId(R.id.team_members_2))
                 .check(matches(withText(random.getFirstName() + ", " + marco.getFirstName())));
+    }
+
+    @Test
+    public void testPlayersNamesAreNotDisplayedInOfflineMode() {
+        dbRefWrapTest.reset();
+        Intent intent = new Intent();
+        intent.putExtra("match_Id", ownedMatch.getMatchID());
+        intent.putExtra("mode", "offline");
+        setActivityIntent(intent);
+        getActivity();
+        onView(withId(R.id.team_members_1)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.team_members_2)).check(matches(not(isDisplayed())));
     }
 
     @Test
