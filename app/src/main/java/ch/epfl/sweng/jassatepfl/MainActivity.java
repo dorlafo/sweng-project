@@ -118,6 +118,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
         if(match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
             Intent goToGameActivity = new Intent(this, GameActivity.class);
             goToGameActivity.putExtra("match_Id", match.getMatchID());
+            goToGameActivity.putExtra("mode", "online");
             startActivity(goToGameActivity);
         }
         else {

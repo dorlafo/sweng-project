@@ -166,6 +166,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                     if(currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
                         Intent goToGameActivity = new Intent(MapsActivity.this, GameActivity.class);
                         goToGameActivity.putExtra("match_Id", currMatch.getMatchID());
+                        goToGameActivity.putExtra("mode", "online");
                         startActivity(goToGameActivity);
                     }
                     else {
