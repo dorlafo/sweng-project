@@ -350,8 +350,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         tempCalendar.set(MINUTE, minute);
 
         final Calendar currentTime = Calendar.getInstance();
-        System.out.println("currentTime:" + currentTime);
-        System.out.println("matchCalendar:" + matchCalendar);
         if (tempCalendar.compareTo(currentTime) > 0) {
             matchCalendar.setTimeInMillis(tempCalendar.getTimeInMillis());
             matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
