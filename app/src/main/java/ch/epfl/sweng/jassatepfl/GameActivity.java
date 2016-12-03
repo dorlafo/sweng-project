@@ -423,7 +423,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         StringBuilder builder = new StringBuilder();
         for (Iterator<String> iterator = teamIds.iterator(); iterator.hasNext(); ) {
             String id = iterator.next();
-            builder.append(currentMatch.getPlayerById(id).getFirstName());
+            builder.append(currentMatch.getPlayerById(id).getFirstName().split(" ")[0]);
             if (iterator.hasNext()) {
                 builder.append(", ");
             }
