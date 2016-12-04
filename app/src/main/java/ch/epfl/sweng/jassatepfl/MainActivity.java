@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,6 +25,9 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.EnrolledMatchListAdapter;
+
+import static android.view.Gravity.CENTER_HORIZONTAL;
+import static android.view.Gravity.CENTER_VERTICAL;
 
 public final class MainActivity extends BaseActivityWithNavDrawer implements AdapterView.OnItemClickListener {
 
@@ -50,10 +53,14 @@ public final class MainActivity extends BaseActivityWithNavDrawer implements Ada
             View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
             drawer.addView(contentView, 0);
 
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+
             TextView emptyList = new TextView(this);
+            emptyList.setGravity(CENTER_HORIZONTAL | CENTER_VERTICAL);
             emptyList.setText(R.string.main_empty_list);
-            emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
             emptyList.setTextColor(Color.BLACK);
+            emptyList.setLayoutParams(lp);
 
             listView = (ListView) findViewById(android.R.id.list);
             ((ViewGroup) listView.getParent()).addView(emptyList);

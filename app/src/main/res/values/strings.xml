@@ -79,7 +79,7 @@
     <string name="request_location_rationale">Jass@EPFL needs to access your location to find matches near you.</string>
     <string name="request_unknown_permission">Unknown Permission</string>
 
-    <string name="wait_field_match_variant">Match variant : </string>
+    <string name="wait_field_match_variant">Match variant : %s</string>
     <string name="wait_field_player_list">Match players</string>
     <string name="wait_button_text_play">Play</string>
     <string name="wait_button_text_leave">Leave Match</string>

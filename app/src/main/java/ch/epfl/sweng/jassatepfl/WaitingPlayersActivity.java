@@ -310,7 +310,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                     }
 
                     description.setText(match.getDescription());
-                    variant.setText(match.getGameVariant().toString());
+                    String gameVariant = String.format(getString(R.string.wait_field_match_variant), match.getGameVariant().toString());
+                    variant.setText(gameVariant);
 
                     posInList = match.getPlayerIndex(new Player.PlayerID(getUserSciper()));
                     if (posInList != -1) {
