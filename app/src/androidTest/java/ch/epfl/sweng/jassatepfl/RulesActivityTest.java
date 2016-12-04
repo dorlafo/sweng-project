@@ -28,9 +28,9 @@ import static org.hamcrest.Matchers.is;
  *
  * Test class for RulesActivity
  */
-public class RulesActivitiyTest extends InjectedBaseActivityTest {
+public class RulesActivityTest extends InjectedBaseActivityTest {
 
-    public RulesActivitiyTest() {
+    public RulesActivityTest() {
         super(RulesActivity.class);
     }
 

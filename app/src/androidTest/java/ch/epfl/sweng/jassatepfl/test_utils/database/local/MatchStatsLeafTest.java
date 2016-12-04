@@ -9,18 +9,18 @@ import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 
 public final class MatchStatsLeafTest extends LeafTest<MatchStats> {
 
-    private LeafFieldTest<String> matchIdLeaf = new LeafFieldTest<>("matchID");
-    private LeafFieldTest<Match.GameVariant> variantLeaf = new LeafFieldTest<>("gameVariant");
-    private LeafFieldTest<Integer> nbTeamLeaf = new LeafFieldTest<>("nbTeam");
-    private LeafFieldTest<List<Round>> roundsLeaf = new LeafFieldTest<>("rounds");
-    private LeafFieldTest<Map<String, Integer>> scoresLeaf = new LeafFieldTest<>("totalScores");
-    private LeafFieldTest<Integer> roundIndexLeaf = new LeafFieldTest<>("currentRoundIndex");
-    private LeafFieldTest<Boolean> goalLeaf = new LeafFieldTest<>("goalHasBeenReached");
-    private LeafFieldTest<Integer> winnerIndexLeaf = new LeafFieldTest<>("winnerIndex");
-    private LeafFieldTest<Boolean> meldSetLeaf = new LeafFieldTest<>("meldWasSetThisRound");
+    private LeafFieldTest<String> matchIdLeaf = new LeafFieldTest<>("matchID", this);
+    private LeafFieldTest<Match.GameVariant> variantLeaf = new LeafFieldTest<>("gameVariant", this);
+    private LeafFieldTest<Integer> nbTeamLeaf = new LeafFieldTest<>("nbTeam", this);
+    private LeafFieldTest<List<Round>> roundsLeaf = new LeafFieldTest<>("rounds", this);
+    private LeafFieldTest<Map<String, Integer>> scoresLeaf = new LeafFieldTest<>("totalScores", this);
+    private LeafFieldTest<Integer> roundIndexLeaf = new LeafFieldTest<>("currentRoundIndex", this);
+    private LeafFieldTest<Boolean> goalLeaf = new LeafFieldTest<>("goalHasBeenReached", this);
+    private LeafFieldTest<Integer> winnerIndexLeaf = new LeafFieldTest<>("winnerIndex", this);
+    private LeafFieldTest<Boolean> meldSetLeaf = new LeafFieldTest<>("meldWasSetThisRound", this);
 
-    public MatchStatsLeafTest(String id) {
-        super(id);
+    public MatchStatsLeafTest(String id, NodeTest parent) {
+        super(id, parent);
     }
 
     @Override

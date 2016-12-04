@@ -15,13 +15,21 @@ public abstract class LeafTest<T> implements NodeTest {
     private String id;
     protected T data;
 
+    private NodeTest parent;
+
     /**
      * Constructor of the LeafTest class
      *
      * @param id the id of the LeafTest that is created
      */
-    public LeafTest(String id) {
+    public LeafTest(String id, NodeTest parent) {
         this.id = id;
+        this.parent = parent;
+    }
+
+    @Override
+    public NodeTest getParent() {
+        return parent;
     }
 
     /**
@@ -74,4 +82,13 @@ public abstract class LeafTest<T> implements NodeTest {
 
     }
 
+    @Override
+    public void removeChild(NodeTest child) {
+        throw new UnsupportedOperationException("LeafTest does not support removeChild()");
+    }
+
+    @Override
+    public void removeSelf() {
+        parent.removeChild(this);
+    }
 }

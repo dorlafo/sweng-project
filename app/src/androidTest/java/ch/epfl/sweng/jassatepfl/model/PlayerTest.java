@@ -1,10 +1,13 @@
 package ch.epfl.sweng.jassatepfl.model;
 
-
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;
 
+import ch.epfl.sweng.jassatepfl.model.Player.PlayerID;
+
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.amaury;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotSame;
@@ -13,9 +16,6 @@ import static org.junit.Assert.assertNotEquals;
 
 @SuppressWarnings({"EqualsBetweenInconvertibleTypes", "EqualsWithItself", "ObjectEqualsNull"})
 public final class PlayerTest {
-
-    private final Player amaury = new Player(new Player.PlayerID(1), "Combes", "Amaury", 123);
-    private final Player vincenzo = new Player(new Player.PlayerID(2), "Bazzucchi", "Vincenzo");
 
     @Test
     public void equalsReturnsFalseWhenComparingWithNull() {
@@ -41,7 +41,7 @@ public final class PlayerTest {
 
     @Test
     public void equalsReturnsTrueWhenComparingSamePlayers() {
-        Player clone = new Player(new Player.PlayerID(1), "Combes", "Amaury", 123);
+        Player clone = new Player(new PlayerID(235400), "Combes", "Amaury", 123);
 
         assertNotSame(amaury, clone);
         assertTrue(amaury.equals(clone) && clone.equals(amaury));
@@ -49,7 +49,7 @@ public final class PlayerTest {
 
     @Test
     public void hashCodeIsTheSameForSamePlayers() {
-        Player clone = new Player(new Player.PlayerID(1), "Combes", "Amaury", 123);
+        Player clone = new Player(new PlayerID(235400), "Combes", "Amaury", 123);
 
         assertNotSame(amaury, clone);
         assertEquals(amaury, clone);

@@ -44,4 +44,12 @@ public class QueryWrapper {
     public ChildEventListener addChildEventListener(ChildEventListener listener) {
         return query.addChildEventListener(listener);
     }
+
+    public void removeEventListener(ValueEventListener listener) {
+        query.removeEventListener(listener);
+    }
+
+    public void removeEventListener(ChildEventListener listener) {
+        query.removeEventListener(listener);
+    }
 }

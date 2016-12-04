@@ -5,50 +5,51 @@ import java.util.List;
 import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 /**
  * @author Amaury Combes
  */
 public class MatchLeafTest extends LeafTest<Match> {
-    private LeafFieldTest<List<Player>> playersLeaf = new LeafFieldTest<>("players");
-    private LeafFieldTest<GPSPoint> locationLeaf = new LeafFieldTest<>("location");
-    private LeafFieldTest<String> descriptionLeaf = new LeafFieldTest<>("description");
-    private LeafFieldTest<Integer> quoteLeaf = new LeafFieldTest<>("quote");
-    private LeafFieldTest<Boolean> privateMatchLeaf = new LeafFieldTest<>("privateMatch");
-    private LeafFieldTest<Match.GameVariant> gameVariantLeaf = new LeafFieldTest<>("gameVariant");
-    private LeafFieldTest<Integer> maxPlayerNumberLeaf = new LeafFieldTest<>("maxPlayerNumber");
-    private LeafFieldTest<Long> expirationTimeLeaf = new LeafFieldTest<>("expirationTime");
-    private LeafFieldTest<String> matchIDLeaf = new LeafFieldTest<>("matchID");
+    private LeafFieldTest<List<Player>> playersLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PLAYERS, this);
+    private LeafFieldTest<GPSPoint> locationLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_LOCATION, this);
+    private LeafFieldTest<String> descriptionLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_DESCRIPTION, this);
+    private LeafFieldTest<Integer> quoteLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_QUOTE, this);
+    private LeafFieldTest<Boolean> privateMatchLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PRIVATE, this);
+    private LeafFieldTest<Match.GameVariant> gameVariantLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_GAME_VARIANT, this);
+    private LeafFieldTest<Integer> maxPlayerNumberLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MAX_NB_PLAYER, this);
+    private LeafFieldTest<Long> expirationTimeLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_EXPIRATION_TIME, this);
+    private LeafFieldTest<String> matchIDLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MATCH_ID, this);
 
     /**
      * Constructor of the LeafTest class
      *
      * @param id the id of the LeafTest that is created
      */
-    public MatchLeafTest(String id) {
-        super(id);
+    public MatchLeafTest(String id, NodeTest parent) {
+        super(id, parent);
     }
 
     @Override
     public LeafFieldTest getChild(String id) {
         switch (id) {
-            case "players":
+            case DatabaseUtils.DATABASE_MATCHES_PLAYERS:
                 return playersLeaf;
-            case "location":
+            case DatabaseUtils.DATABASE_MATCHES_LOCATION:
                 return locationLeaf;
-            case "description":
+            case DatabaseUtils.DATABASE_MATCHES_DESCRIPTION:
                 return descriptionLeaf;
-            case "quote":
+            case DatabaseUtils.DATABASE_MATCHES_QUOTE:
                 return quoteLeaf;
-            case "privateMatch":
+            case DatabaseUtils.DATABASE_MATCHES_PRIVATE:
                 return privateMatchLeaf;
-            case "gameVariant":
+            case DatabaseUtils.DATABASE_MATCHES_GAME_VARIANT:
                 return gameVariantLeaf;
-            case "maxPlayerNumber":
+            case DatabaseUtils.DATABASE_MATCHES_MAX_NB_PLAYER:
                 return maxPlayerNumberLeaf;
-            case "expirationTime":
+            case DatabaseUtils.DATABASE_MATCHES_EXPIRATION_TIME:
                 return expirationTimeLeaf;
-            case "matchID":
+            case DatabaseUtils.DATABASE_MATCHES_MATCH_ID:
                 return matchIDLeaf;
             default:
                 throw new IllegalArgumentException("Match class does not have a field named : " + id);

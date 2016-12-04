@@ -14,6 +14,7 @@ import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
@@ -23,8 +24,8 @@ public class QueryWrapperMockTestTest {
     @Test
     public void queryMockTest() {
         RootTest root = new RootTest("jass@Epfl");
-        root.addChild("matches");
-        root.addChild("players");
+        root.addChild(DatabaseUtils.DATABASE_MATCHES);
+        root.addChild(DatabaseUtils.DATABASE_PLAYERS);
         DBRefWrapTest localRef = new DBRefWrapTest(root);
 
         Set<Player> players = new HashSet<>();
@@ -33,7 +34,7 @@ public class QueryWrapperMockTestTest {
         matches.add(DummyDataTest.privateMatch());
         localRef.addPlayers(players);
         localRef.addMatches(matches);
-        ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMockTest query = (ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMockTest) localRef.child("matches").orderByChild("privateMatch").equalTo(true);
+        ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMockTest query = (ch.epfl.sweng.jassatepfl.test_utils.mocks.QueryWrapperMockTest) localRef.child(DatabaseUtils.DATABASE_MATCHES).orderByChild(DatabaseUtils.DATABASE_MATCHES_PRIVATE).equalTo(true);
 
         try {
             Field f = query.getClass().getDeclaredField("elements");

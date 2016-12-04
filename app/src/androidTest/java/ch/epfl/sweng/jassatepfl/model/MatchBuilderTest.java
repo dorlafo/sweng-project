@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import ch.epfl.sweng.jassatepfl.model.Player.PlayerID;
-
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.alexis;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.amaury;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.dorian;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
@@ -16,11 +19,6 @@ import static junit.framework.Assert.fail;
 public final class MatchBuilderTest {
 
     private Match.Builder matchBuilder;
-    private final Player amaury = new Player(new PlayerID(1), "Combes", "Amaury", 123);
-    private final Player vincenzo = new Player(new PlayerID(2), "Bazzucchi", "Vincenzo", 345);
-    private final Player dorian = new Player(new PlayerID(3), "Laforest", "Dorian", 567);
-    private final Player alexis = new Player(new PlayerID(4), "Montavon", "Alexis", 789);
-    private final Player random = new Player(new PlayerID(5), "Smith", "John", 7);
 
     public void setUp() {
         matchBuilder = new Match.Builder();
@@ -174,6 +172,13 @@ public final class MatchBuilderTest {
             fail();
         }
         assertTrue(matchBuilder.getPlayerList().isEmpty());
+    }
+
+    @Test
+    public void setStatusWorksCorrectly() {
+        setUp();
+        matchBuilder.setStatus(Match.MatchStatus.ACTIVE);
+        assertEquals(Match.MatchStatus.ACTIVE, matchBuilder.getMatchStatus());
     }
 
 }

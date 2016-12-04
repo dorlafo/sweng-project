@@ -6,18 +6,18 @@ import ch.epfl.sweng.jassatepfl.model.Player;
  * @author Amaury Combes
  */
 public class PlayerLeafTest extends LeafTest<Player> {
-    private LeafFieldTest<Player.PlayerID> idLeaf = new LeafFieldTest<>("id");
-    private LeafFieldTest<String> lastNameLeaf = new LeafFieldTest<>("lastName");
-    private LeafFieldTest<String> firstNameLeaf = new LeafFieldTest<>("fistName");
-    private LeafFieldTest<Integer> quoteLeaf = new LeafFieldTest<>("quote");
+    private LeafFieldTest<Player.PlayerID> idLeaf = new LeafFieldTest<>("id", this);
+    private LeafFieldTest<String> lastNameLeaf = new LeafFieldTest<>("lastName", this);
+    private LeafFieldTest<String> firstNameLeaf = new LeafFieldTest<>("fistName", this);
+    private LeafFieldTest<Integer> quoteLeaf = new LeafFieldTest<>("quote", this);
 
     /**
      * Constructor of the LeafTest class
      *
      * @param id the id of the LeafTest that is created
      */
-    public PlayerLeafTest(String id) {
-        super(id);
+    public PlayerLeafTest(String id, NodeTest parent) {
+        super(id, parent);
     }
 
     @Override

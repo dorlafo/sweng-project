@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Amaury Combes
  */
-public class QueryWrapperMockTest extends QueryWrapper{
+public class QueryWrapperMockTest extends QueryWrapper {
     private final List<LeafTest> elements;
     private String childOrder;
     private int numOfValueListener = 0;
@@ -77,6 +77,16 @@ public class QueryWrapperMockTest extends QueryWrapper{
             }
         }
         return new QueryWrapperMockTest(newLeafs,  numOfValueListener, numOfChildListener);
+    }
+
+    @Override
+    public void removeEventListener(ValueEventListener listener) {
+        --numOfValueListener;
+    }
+
+    @Override
+    public void removeEventListener(ChildEventListener listener) {
+        --numOfChildListener;
     }
 
     @Override

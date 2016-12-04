@@ -3,7 +3,9 @@ package ch.epfl.sweng.jassatepfl.test_utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -11,6 +13,7 @@ import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Player.PlayerID;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
+import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.POMME;
 
 public class DummyDataTest {
 
@@ -37,6 +40,12 @@ public class DummyDataTest {
         List<Player> match1Players = new ArrayList<>();
         match1Players.add(amaury);
         return new Match(match1Players, rolexCoord, "Rolex", false, CHIBRE, expirationTime(2), "one_player");
+    }
+
+    public static Match onePlayerMatchWithBob() {
+        List<Player> match1Players = new ArrayList<>();
+        match1Players.add(bricoloBob);
+        return new Match(match1Players, rolexCoord, "Rolex", false, CHIBRE, expirationTime(2), "one_player_bob");
     }
 
     public static Match twoPlayersMatch() {
@@ -82,10 +91,26 @@ public class DummyDataTest {
         return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full");
     }
 
+    public static Match fullMatchWithBob() {
+        List<Player> fullPlayers = new ArrayList<>();
+        fullPlayers.add(bricoloBob);
+        fullPlayers.add(marco);
+        fullPlayers.add(dorian);
+        fullPlayers.add(vincenzo);
+        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full_bob");
+    }
+
     public static Match matchWithBob() {
         List<Player> playerList = new ArrayList<>();
         playerList.add(bricoloBob);
         return new Match(playerList, COCoord, "CO", false, CHIBRE, expirationTime(3), "bob");
+    }
+
+    public static Match matchPomme() {
+        List<Player> playerList = new ArrayList<>();
+        playerList.add(bricoloBob);
+        playerList.add(random);
+        return new Match(playerList, COCoord, "CO", false, POMME, expirationTime(3), "pomme");
     }
 
     public static Match match_one_p_california() {
@@ -107,6 +132,21 @@ public class DummyDataTest {
         List<Player> playerList = new ArrayList<>();
         playerList.add(bricoloBob);
         return new Match(playerList, new GPSPoint(37.422, -122.084), "CO", false, CHIBRE, expirationTime(3), "bobCalifornia");
+    }
+
+    public static Set<Player> players() {
+        Set<Player> players = new HashSet<>();
+        players.add(amaury);
+        players.add(vincenzo);
+        players.add(dorian);
+        players.add(alexis);
+        players.add(nicolas);
+        players.add(jimmy);
+        players.add(random);
+        players.add(colin);
+        players.add(marco);
+        players.add(bricoloBob);
+        return players;
     }
 
     private static long expirationTime(int hourOffset) {

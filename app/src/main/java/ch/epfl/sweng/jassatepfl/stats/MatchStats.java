@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.GameVariant;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
 import ch.epfl.sweng.jassatepfl.model.Round;
@@ -18,9 +19,8 @@ import ch.epfl.sweng.jassatepfl.model.Round;
 public class MatchStats {
 
     // The unique identifiers of the match used in the database
-    private String matchID;
+    private Match match;
     // The match' gameVariant. Used to choose how points are counted and so on
-    private GameVariant gameVariant;
     private int nbTeam;
     private List<Round> rounds;
     private Map<String, Integer> totalScores;
@@ -34,13 +34,11 @@ public class MatchStats {
     /**
      * Constructs a MatchStats with the given id and variant.
      *
-     * @param matchID     the id of the match you want to record the stats of
-     * @param gameVariant the variant of the match
+     * @param match the match you want to record the stats of
      */
-    public MatchStats(String matchID, GameVariant gameVariant) {
-        this.matchID = matchID;
-        this.gameVariant = gameVariant;
-        this.nbTeam = gameVariant.getNumberOfTeam();
+    public MatchStats(Match match) {
+        this.match = match;
+        this.nbTeam = match.getGameVariant().getNumberOfTeam();
         this.rounds = new ArrayList<>();
         this.rounds.add(new Round(nbTeam));
         this.totalScores = new HashMap<>();
@@ -51,13 +49,17 @@ public class MatchStats {
         this.winnerIndex = -1;
     }
 
+    public Match getMatch() {
+        return match;
+    }
+
     /**
      * Getter for the matchID
      *
      * @return The matchID
      */
     public String getMatchID() {
-        return matchID;
+        return match.getMatchID();
     }
 
     /**
@@ -66,7 +68,7 @@ public class MatchStats {
      * @return The game variant
      */
     public GameVariant getGameVariant() {
-        return gameVariant;
+        return match.getGameVariant();
     }
 
     public int getNbTeam() {
@@ -100,7 +102,7 @@ public class MatchStats {
     public boolean allTeamsHaveReachedGoal() {
         boolean allTeamSHaveReachedGoal = true;
         for (String key : totalScores.keySet()) {
-            allTeamSHaveReachedGoal &= totalScores.get(key) >= gameVariant.getPointGoal();
+            allTeamSHaveReachedGoal &= totalScores.get(key) >= match.getGameVariant().getPointGoal();
         }
         return allTeamSHaveReachedGoal;
     }
@@ -216,7 +218,7 @@ public class MatchStats {
     private boolean updateGoalAndWinner() {
         boolean goalHasBeenReached = false;
         for (String key : totalScores.keySet()) {
-            if (!goalHasBeenReached && totalScores.get(key) >= gameVariant.getPointGoal()) {
+            if (!goalHasBeenReached && totalScores.get(key) >= match.getGameVariant().getPointGoal()) {
                 goalHasBeenReached = true;
                 winnerIndex = winnerIndex == -1 ? key.charAt(4) - '0' : winnerIndex;
             }

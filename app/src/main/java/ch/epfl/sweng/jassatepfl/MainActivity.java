@@ -5,36 +5,71 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public final class MainActivity extends BaseActivityWithNavDrawer {
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
+import ch.epfl.sweng.jassatepfl.tools.EnrolledMatchListAdapter;
+
+public final class MainActivity extends BaseActivityWithNavDrawer  implements AdapterView.OnItemClickListener {
+
+    private BaseAdapter adapter;
+    private ListView listView;
+    private List<Match> matches;
+    private ChildEventListener childEventListener;
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
-        drawer.addView(contentView, 0);
+        if (fAuth.getCurrentUser() == null) {
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
+        }
+        else {
+            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
+            drawer.addView(contentView, 0);
 
-        TextView emptyList = new TextView(this);
-        emptyList.setText(R.string.main_empty_list);
-        emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-        emptyList.setTextColor(Color.BLACK);
+            TextView emptyList = new TextView(this);
+            emptyList.setText(R.string.main_empty_list);
+            emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+            emptyList.setTextColor(Color.BLACK);
 
-        ListView listView = (ListView) findViewById(android.R.id.list);
-        ((ViewGroup) listView.getParent()).addView(emptyList);
-        listView.setEmptyView(emptyList);
+            listView = (ListView) findViewById(android.R.id.list);
+            ((ViewGroup) listView.getParent()).addView(emptyList);
+            listView.setEmptyView(emptyList);
+
+            matches = new ArrayList<>();
+            listView.setOnItemClickListener(this);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        contactFirebase();
         Intent startIntent = getIntent();
 
         // Notification onClick handler.
@@ -48,33 +83,114 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
         }
     }
 
-    public void createMatch(View view) {
-        Intent intent = new Intent(this, CreateMatchActivity.class);
-        startActivity(intent);
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(childEventListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).removeEventListener(childEventListener);
+        }
+        matches.clear();
     }
-
-    public void showEnrolledMatch(View view){
-        Intent intent = new Intent(this, CreateMatchActivity.class);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(childEventListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).removeEventListener(childEventListener);
+        }
     }
 
     /**
-     * Launch the UserProfileActivity then the Profile button is clicked
+     * Callback method to be invoked when an item in this AdapterView has
+     * been clicked.
+     * <p>
+     * Implementers can call getItemAtPosition(position) if they need
+     * to access the data associated with the selected item.
      *
-     * @param view Required param
+     * @param parent   The AdapterView where the click happened.
+     * @param view     The view within the AdapterView that was clicked (this
+     *                 will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id       The row id of the item that was clicked.
      */
-    public void viewProfile(View view) {
-        Intent intent = new Intent(this, UserProfileActivity.class);
-        startActivity(intent);
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        final Match match = (Match) adapter.getItem(position);
+        if(match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
+            Intent goToGameActivity = new Intent(this, GameActivity.class);
+            goToGameActivity.putExtra("match_Id", match.getMatchID());
+            startActivity(goToGameActivity);
+        }
+        else {
+            Intent moveToWaitingPlayersActivity = new Intent(this, WaitingPlayersActivity.class);
+            moveToWaitingPlayersActivity.putExtra("match_Id", match.getMatchID());
+            startActivity(moveToWaitingPlayersActivity);
+        }
     }
 
-    public void displayMatchesOnMap(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
+    private void contactFirebase() {
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                //Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
+                Match match = dataSnapshot.getValue(Match.class);
+                //Add match to the list if we are in it
+                if(match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                    matches.add(match);
+                }
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                //Log.d(TAG, "onChildChanged:dataSnapshot:" + dataSnapshot.toString());
+                Match match = dataSnapshot.getValue(Match.class);
+                int matchIndex = matches.indexOf(match);
+                //If the match is in the list (ie we were in it)
+                if(matchIndex != -1) {
+                    //If we now are not in it, remove it from the list, otherwise modify it
+                    if(!match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                        matches.remove(match);
+                    }
+                    else {
+                        matches.set(matchIndex, match);
+                    }
+                }
+                //The match was not in the list
+                else {
+                    //Add match if we are in it
+                    if(match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                        matches.add(match);
+                    }
+                }
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                //Log.d(TAG, "onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
+                Match match = dataSnapshot.getValue(Match.class);
+                matches.remove(match);
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                .addChildEventListener(childEventListener);
     }
 
-    public void displayMatchesInList(View view) {
-        Intent intent = new Intent(this, MatchListActivity.class);
-        startActivity(intent);
+    /**
+     * Updates Match list adapter
+     */
+    private void modifyListAdapter() {
+        adapter = new EnrolledMatchListAdapter(MainActivity.this, R.layout.match_enrolled_list_row, matches);
+        listView.setAdapter(adapter);
     }
 
     public void viewStats(View view) {

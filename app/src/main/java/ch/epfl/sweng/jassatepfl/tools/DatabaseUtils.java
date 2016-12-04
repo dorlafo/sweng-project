@@ -21,6 +21,27 @@ import ch.epfl.sweng.jassatepfl.model.Player;
  * @author Alexis Montavon
  */
 public class DatabaseUtils {
+    public static final String DATABASE_PLAYERS = "players";
+    public static final String DATABASE_PLAYERS_FIRST_NAME = "firstName";
+
+    public static final String DATABASE_MATCHES = "matches";
+    public static final String DATABASE_MATCHES_PLAYERS = "players"; //Correspond to the players list in the match object
+    public static final String DATABASE_MATCHES_PRIVATE = "privateMatch";
+    public static final String DATABASE_MATCHES_LOCATION = "location";
+    public static final String DATABASE_MATCHES_DESCRIPTION = "description";
+    public static final String DATABASE_MATCHES_QUOTE = "quote";
+    public static final String DATABASE_MATCHES_GAME_VARIANT = "gameVariant";
+    public static final String DATABASE_MATCHES_MAX_NB_PLAYER = "maxPlayerNumber";
+    public static final String DATABASE_MATCHES_EXPIRATION_TIME = "expirationTime";
+    public static final String DATABASE_MATCHES_MATCH_ID = "matchID";
+
+    public static final String DATABASE_PENDING_MATCHES = "pendingMatches";
+
+    public static final String DATABASE_MATCH_STATS = "matchStats";
+
+    public static final String DATABASE_STATS = "stats";
+    public static final String DATABASE_STATS_BUFFER = "buffer";
+    public static final String DATABASE_STATS_USER = "user";
 
     /**
      * Add player to match on the database.
@@ -36,7 +57,7 @@ public class DatabaseUtils {
                                         final String matchID,
                                         final String sciper,
                                         final Match match) {
-        ref.child("players")
+        ref.child(DatabaseUtils.DATABASE_PLAYERS)
                 .child(sciper)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -44,7 +65,8 @@ public class DatabaseUtils {
                         Player player = dataSnapshot.getValue(Player.class);
                         try {
                             match.addPlayer(player);
-                            ref.child("matches").child(matchID).setValue(match);
+                            ref.child(DatabaseUtils.DATABASE_MATCHES).child(matchID).setValue(match);
+                            ref.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID).child(sciper).setValue(false);
                             Intent moveToMatchActivity = new Intent(context, WaitingPlayersActivity.class);
                             moveToMatchActivity.putExtra("match_Id", matchID);
                             context.startActivity(moveToMatchActivity);
