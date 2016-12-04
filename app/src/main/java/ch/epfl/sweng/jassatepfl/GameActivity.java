@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -173,6 +174,35 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                     updateMatchStats();
                 }
                 break;
+            case R.id.game_playing_to:
+                final Dialog dialog = new Dialog(this);
+                dialog.setContentView(R.layout.points_goal_picker);
+                final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.goal_picker);
+                numberPicker.setMinValue(500);
+                numberPicker.setMaxValue(2500);
+                numberPicker.setWrapSelectorWheel(true);
+
+                Button confirmScore = (Button) dialog.findViewById(R.id.goal_picker_confirm);
+                confirmScore.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int pointsGoal = numberPicker.getValue();
+                        matchStats.setPointsGoal(pointsGoal);
+                        updatePointsGoal(pointsGoal);
+                        dialog.dismiss();
+                    }
+                });
+
+                Button cancel = (Button) dialog.findViewById(R.id.goal_picker_cancel);
+                cancel.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                break;
         }
     }
 
@@ -219,7 +249,9 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             if (matchStats.allTeamsHaveReachedGoal()) {
                 matchStats.setWinnerIndex(caller.ordinal());
             }
-            // dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats); TODO: mock the buffer
+            if (mode == ONLINE) {
+                dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats);
+            }
             displayEndOfMatchMessage(matchStats.getWinnerIndex());
         }
         updateMatchStats();
@@ -332,10 +364,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         cancelButton.setOnClickListener(this);
         cancelButton.setVisibility(visibility);
 
-        TextView goal = (TextView) findViewById(R.id.game_playing_to);
-        int pointsGoal = currentMatch.getGameVariant().getPointGoal();
-        String goalText = String.format(getString(R.string.game_text_point_goal), pointsGoal);
-        goal.setText(goalText);
+        updatePointsGoal(currentMatch.getGameVariant().getPointGoal());
 
         if (isOwner) {
             firstTeamScoreDisplay.setEnabled(true);
@@ -429,6 +458,17 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             }
         }
         return builder.toString();
+    }
+
+    private void updatePointsGoal(int pointsGoal) {
+        TextView goal = (TextView) findViewById(R.id.game_playing_to);
+        String goalText = String.format(getString(R.string.game_text_point_goal),
+                "<b>" + pointsGoal + "</b>");
+        goal.setText(Html.fromHtml(goalText));
+        if (mode == OFFLINE) {
+            goal.setEnabled(true);
+            goal.setOnClickListener(this);
+        }
     }
 
 }

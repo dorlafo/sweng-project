@@ -28,7 +28,8 @@
     <string name="game_team_name_3">Team 3</string>
     <string name="game_button_text_next_round">Next Round</string>
     <string name="game_text_score_picker">Enter your score for this round</string>
-    <string name="game_text_point_goal">Playing to %d points</string>
+    <string name="game_text_goal_picker">Enter the new score goal</string>
+    <string name="game_text_point_goal">Playing to %s points</string>
     <string name="game_select_meld">Select your meld</string>
     <string name="game_score_table_round">Round</string>
     <string name="game_score_table_points">Points</string>
