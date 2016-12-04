@@ -12,16 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="?android:attr/actionBarSize"/>
 
-    <TextView
-        android:id="@+id/twNearbyMatches"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/list_list_title"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="normal|bold"/>
-
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"

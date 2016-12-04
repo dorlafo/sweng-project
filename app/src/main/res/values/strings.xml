@@ -4,6 +4,8 @@
     <string name="title_activity_create">Match Information</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_game">Scores</string>
+    <string name="title_activity_main">My matches</string>
+    <string name="title_activity_list">Nearby matches</string>
 
     <string name="main_button_text_map">Map</string>
     <string name="main_button_text_list">Match list</string>
@@ -11,7 +13,6 @@
     <string name="main_button_text_profile">Profile</string>
     <string name="main_button_text_ranking">Ranking</string>
     <string name="main_button_text_stats">Stats</string>
-    <string name="main_list_title">My matches</string>
     <string name="main_empty_list">You are not enrolled in any match</string>
 
     <string name="create_button_text_add_player">Add Player</string>
@@ -37,7 +38,6 @@
     <string name="game_score_table_melds">Melds</string>
     <string name="game_default_score">-</string>
 
-    <string name="list_list_title">Nearby matches</string>
     <string name="list_empty_list">No matches are available</string>
 
     <string name="profile_label_player_id">Player id :</string>
