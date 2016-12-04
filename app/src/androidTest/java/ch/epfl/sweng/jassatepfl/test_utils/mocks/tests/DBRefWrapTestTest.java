@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
-import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
@@ -83,7 +83,7 @@ public class DBRefWrapTestTest {
         status.put(DummyDataTest.dorian.getID().toString(), true);
         status.put(DummyDataTest.vincenzo.getID().toString(), false);
         localRef.addPendingMatch(DummyDataTest.twoPlayersMatch(), status);
-        DBRefWrapTest refToMatchStatus = (DBRefWrapTest) localRef.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(DummyDataTest.twoPlayersMatch().getMatchID().toString());
+        DBRefWrapTest refToMatchStatus = (DBRefWrapTest) localRef.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(DummyDataTest.twoPlayersMatch().getMatchID());
         refToMatchStatus.child(DummyDataTest.dorian.getID().toString()).setValue(false);
         refToMatchStatus.child(DummyDataTest.vincenzo.getID().toString()).setValue(true);
 
@@ -96,7 +96,7 @@ public class DBRefWrapTestTest {
     private void waitCompletion() {
         try {
             Thread.sleep(4000);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new Error("Something went wrong");
         }
     }

@@ -108,8 +108,8 @@ public class Match {
     /**
      * Checks if the match has changed
      *
-     * @param other
-     * @return True if the match has changed, false otherwise
+     * @param other the match to compare to
+     * @return true if the match has changed, false otherwise
      */
     public boolean matchHasChanged(Match other) {
         if (!other.equals(this)) {

@@ -46,7 +46,7 @@ public class UserStats {
     /**
      * Constructor, only start with user id.
      *
-     * @param id
+     * @param id the user id
      */
     public UserStats(Player.PlayerID id) {
         this.playerId = id;
@@ -157,7 +157,7 @@ public class UserStats {
      * Utility method checking if a counter exists for the received date and creates it if it
      * does not exist in the list.
      *
-     * @param time
+     * @param time the date
      */
     private void prepareLastBuckets(Long time) {
         long updateDate = getDay(time);
@@ -166,7 +166,7 @@ public class UserStats {
             playedByDate.add(new Tuple2<>(updateDate, 0));
             wonByDate.add(new Tuple2<>(updateDate, 0));
             if (rankByDate.isEmpty()) {
-                rankByDate.add(new Tuple2<Long, Rank>(updateDate, new Rank(0)));
+                rankByDate.add(new Tuple2<>(updateDate, new Rank(0)));
             } else {
                 rankByDate.add(new Tuple2<>(updateDate, rankByDate.get(lastIndex).getValue()));
             }

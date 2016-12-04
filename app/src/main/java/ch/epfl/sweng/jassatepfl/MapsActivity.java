@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,14 +161,13 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 //Log.d(TAG, "MARKER:" + marker.toString() + ":TAG:" + marker.getTag());
                 //Log.d(TAG, "matches:size:" + matches.size() + ":" + matches.toString());
                 final Match currMatch = matches.get(marker.getTag());
-                if(currMatch.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
-                    if(currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
+                if (currMatch.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                    if (currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
                         Intent goToGameActivity = new Intent(MapsActivity.this, GameActivity.class);
                         goToGameActivity.putExtra("match_Id", currMatch.getMatchID());
                         goToGameActivity.putExtra("mode", "online");
                         startActivity(goToGameActivity);
-                    }
-                    else {
+                    } else {
                         Intent moveToWaitingPlayersActivity = new Intent(MapsActivity.this, WaitingPlayersActivity.class);
                         moveToWaitingPlayersActivity.putExtra("match_Id", currMatch.getMatchID());
                         startActivity(moveToWaitingPlayersActivity);
@@ -240,7 +238,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 //Log.d(TAG, "childEventListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
-                if(m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
+                if (m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
                         || (m.getMatchStatus().equals(Match.MatchStatus.PENDING) && !m.isPrivateMatch())) {
                     Marker marker = createMarker(m);
                     markers.put(m.getMatchID(), marker);
@@ -253,11 +251,11 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 //Log.d(TAG, "childEventListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
                 String id = dataSnapshot.getKey();
-                if(markers.containsKey(id)) {
+                if (markers.containsKey(id)) {
                     markers.get(id).remove();
                     matches.remove(id);
                 }
-                if(m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
+                if (m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
                         || (m.getMatchStatus().equals(Match.MatchStatus.PENDING) && !m.isPrivateMatch())) {
                     markers.put(id, createMarker(m));
                     matches.put(m.getMatchID(), m);
@@ -278,11 +276,11 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
                 //Log.d(TAG, "childEventListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
                 String id = dataSnapshot.getKey();
-                if(markers.containsKey(id)) {
+                if (markers.containsKey(id)) {
                     markers.get(id).remove();
                     matches.remove(id);
                 }
-                if(m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
+                if (m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
                         || (m.getMatchStatus().equals(Match.MatchStatus.PENDING) && !m.isPrivateMatch())) {
                     markers.put(id, createMarker(m));
                     matches.put(m.getMatchID(), m);

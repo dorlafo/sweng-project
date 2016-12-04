@@ -7,7 +7,6 @@ import android.support.test.espresso.contrib.PickerActions;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 

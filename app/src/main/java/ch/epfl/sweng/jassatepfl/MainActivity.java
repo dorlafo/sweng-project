@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +26,7 @@ import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.EnrolledMatchListAdapter;
 
-public final class MainActivity extends BaseActivityWithNavDrawer  implements AdapterView.OnItemClickListener {
+public final class MainActivity extends BaseActivityWithNavDrawer implements AdapterView.OnItemClickListener {
 
     private BaseAdapter adapter;
     private ListView listView;
@@ -45,8 +44,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
@@ -86,15 +84,16 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
     @Override
     public void onPause() {
         super.onPause();
-        if(childEventListener != null) {
+        if (childEventListener != null) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).removeEventListener(childEventListener);
         }
         matches.clear();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(childEventListener != null) {
+        if (childEventListener != null) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).removeEventListener(childEventListener);
         }
     }
@@ -115,13 +114,12 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Match match = (Match) adapter.getItem(position);
-        if(match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
+        if (match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
             Intent goToGameActivity = new Intent(this, GameActivity.class);
             goToGameActivity.putExtra("match_Id", match.getMatchID());
             goToGameActivity.putExtra("mode", "online");
             startActivity(goToGameActivity);
-        }
-        else {
+        } else {
             Intent moveToWaitingPlayersActivity = new Intent(this, WaitingPlayersActivity.class);
             moveToWaitingPlayersActivity.putExtra("match_Id", match.getMatchID());
             startActivity(moveToWaitingPlayersActivity);
@@ -135,7 +133,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
                 //Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 //Add match to the list if we are in it
-                if(match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                if (match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                     matches.add(match);
                 }
                 modifyListAdapter();
@@ -147,19 +145,18 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
                 Match match = dataSnapshot.getValue(Match.class);
                 int matchIndex = matches.indexOf(match);
                 //If the match is in the list (ie we were in it)
-                if(matchIndex != -1) {
+                if (matchIndex != -1) {
                     //If we now are not in it, remove it from the list, otherwise modify it
-                    if(!match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                    if (!match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                         matches.remove(match);
-                    }
-                    else {
+                    } else {
                         matches.set(matchIndex, match);
                     }
                 }
                 //The match was not in the list
                 else {
                     //Add match if we are in it
-                    if(match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                    if (match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                         matches.add(match);
                     }
                 }

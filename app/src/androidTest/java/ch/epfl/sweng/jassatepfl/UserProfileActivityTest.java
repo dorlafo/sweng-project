@@ -33,7 +33,7 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testUserProfileActivity() {
         //Fill the database as you want with addPlayers and addMatches
-        Set<Player> playerSet = new HashSet<Player>();
+        Set<Player> playerSet = new HashSet<>();
         playerSet.add(new Player(new Player.PlayerID("123456"), "Not Pass", "You Shall", new Rank(123)));
         dbRefWrapTest.addPlayers(playerSet);
 

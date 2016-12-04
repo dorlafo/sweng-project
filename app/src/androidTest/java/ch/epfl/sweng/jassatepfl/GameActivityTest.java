@@ -394,12 +394,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
                 }
                 TableRow row = (TableRow) viewParent;
                 TableLayout table = (TableLayout) row.getParent();
-                if (table.indexOfChild(row) != y)
-                    return false;
-                if (row.indexOfChild(view) == x)
-                    return true;
-                else
-                    return false;
+                return table.indexOfChild(row) == y && row.indexOfChild(view) == x;
             }
         };
     }

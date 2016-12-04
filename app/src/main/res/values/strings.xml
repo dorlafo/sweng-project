@@ -11,6 +11,7 @@
     <string name="main_button_text_profile">Profile</string>
     <string name="main_button_text_ranking">Ranking</string>
     <string name="main_button_text_stats">Stats</string>
+    <string name="main_list_title">My matches</string>
     <string name="main_empty_list">You are not enrolled in any match</string>
 
     <string name="create_button_text_add_player">Add Player</string>
@@ -36,6 +37,7 @@
     <string name="game_score_table_melds">Melds</string>
     <string name="game_default_score">-</string>
 
+    <string name="list_list_title">Nearby matches</string>
     <string name="list_empty_list">No matches are available</string>
 
     <string name="profile_label_player_id">Player id :</string>
@@ -83,6 +85,8 @@
     <string name="wait_button_text_leave">Leave Match</string>
     <string name="wait_button_text_ready">Ready</string>
     <string name="wait_empty_list">Sorry but you are currently enrolled in no match…</string>
+    <string name="wait_not_assigned">%s : no team assigned yet</string>
+    <string name="wait_assigned">%1$s : Team %2$d</string>
 
     <string name="toast_invalid_hour">Invalid hour: you cannot go back in time!</string>
     <string name="toast_invalid_date">Invalid date: you cannot go back in time!</string>
@@ -105,6 +109,9 @@
     <string name="icon_description_date_picker">Displays a date picker</string>
     <string name="icon_description_place_picker">Displays a place picker</string>
     <string name="icon_description_app_icon">The application icon</string>
+    <string name="icon_description_meld_spinner">Opens the meld selection menu</string>
+    <string name="icon_description_score_update">Opens the score update menu</string>
+    <string name="icon_description_score_cancel">Cancels the last score update</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

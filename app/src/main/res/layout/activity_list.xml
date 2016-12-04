@@ -10,17 +10,17 @@
     <Space
         android:id="@+id/create_top_space"
         android:layout_width="wrap_content"
-        android:layout_height="?android:attr/actionBarSize" />
+        android:layout_height="?android:attr/actionBarSize"/>
 
     <TextView
-        android:text="Nearby matches"
+        android:id="@+id/twNearbyMatches"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/twNearbyMatches"
-        android:textStyle="normal|bold"
-        android:textAlignment="center"
         android:gravity="center"
-        android:textSize="24sp"/>
+        android:text="@string/list_list_title"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="normal|bold"/>
 
     <ListView
         android:id="@android:id/list"
@@ -29,6 +29,6 @@
         android:background="@android:color/background_light"
         android:divider="@color/listview_divider_color"
         android:dividerHeight="@dimen/listview_divider_height"
-        android:drawSelectorOnTop="true" />
+        android:drawSelectorOnTop="true"/>
 
 </LinearLayout>
