@@ -1,6 +1,7 @@
 package ch.epfl.sweng.jassatepfl.tools;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,14 @@ import ch.epfl.sweng.jassatepfl.model.Player;
  */
 public class PlayerListAdapter extends ArrayAdapter<Player> {
 
-    private List<Player> players;
+    private final Context context;
+    private final List<Player> players;
     private Match match;
-    private Map<String, Boolean> playersReady;
+    private final Map<String, Boolean> playersReady;
 
     public PlayerListAdapter(Context context, int resource, List<Player> players, Match match, Map<String, Boolean> playersReady) {
         super(context, resource, players);
+        this.context = context;
         this.players = players;
         this.match = match;
         this.playersReady = playersReady;
@@ -58,37 +61,24 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
 
         Player p = getItem(position);
         TextView playerName = (TextView) convertView.findViewById(R.id.player_name);
-        if(match == null) {
+        if (match == null) {
             playerName.setText(p.toString());
-        }
-        else {
-            if (match.teamNbForPlayer(p) == -1){
-                playerName.setText(getFirstFirstName(p.getFirstName()) + " : no team assigned yet");
-            }
-            else {
-                playerName.setText(getFirstFirstName(p.getFirstName()) + " : team " + (match.teamNbForPlayer(p)+1));
-            }
+        } else {
+            Resources res = context.getResources();
+            String firstFirstName = p.getFirstName().split(" ")[0];
+            String teamAssignment = match.teamNbForPlayer(p) == -1 ?
+                    String.format(res.getString(R.string.wait_not_assigned), firstFirstName) :
+                    String.format(res.getString(R.string.wait_assigned), firstFirstName, (match.teamNbForPlayer(p) + 1));
+            playerName.setText(teamAssignment);
 
-            if(playersReady.containsKey(p.getID().toString()) && playersReady.get(p.getID().toString())) {
+            if (playersReady.containsKey(p.getID().toString()) && playersReady.get(p.getID().toString())) {
                 playerName.setBackgroundColor(0xFF00FF00);
-            }
-            else {
+            } else {
                 playerName.setBackgroundColor(0xFFFFFFFF);
             }
         }
 
-
         return convertView;
-    }
-
-    private String getFirstFirstName(String name) {
-        int indexSpace = name.indexOf(' ');
-        if(indexSpace == -1) {
-            return name;
-        }
-        else {
-            return name.substring(0, indexSpace);
-        }
     }
 
     public void refreshData(List<Player> p, Match m, Map<String, Boolean> pr) {
