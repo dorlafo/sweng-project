@@ -28,13 +28,13 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            Log.d(TAG, "showLogin:getCurrentUser:null");
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         }
         else {
-            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
             //setContentView(R.layout.activity_user_profile);
 
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -47,7 +47,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             mtwPlayerRank = (TextView) findViewById(R.id.twRank);
 
             sciper = getUserSciper();
-            Log.d(TAG, "DisplayName:" + sciper);
+            //Log.d(TAG, "DisplayName:" + sciper);
 
             //New SingleEventListener that will change the value of the textView according to the current
             //logged in user

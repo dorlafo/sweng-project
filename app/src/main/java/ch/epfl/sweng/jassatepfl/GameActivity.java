@@ -80,12 +80,12 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         Intent startingIntent = getIntent();
         mode = startingIntent.getStringExtra("mode").equals("online") ? ONLINE : OFFLINE;
         if (mode == ONLINE && fAuth.getCurrentUser() == null) {
-            Log.d(TAG, "showLogin:getCurrentUser:null");
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         } else {
-            Log.d(TAG, "showLogin:getCurrentUser:notNull");
+            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
 
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_game, drawer, false);

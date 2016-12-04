@@ -101,13 +101,13 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            Log.d(TAG, "showLogin:getCurrentUser:null");
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         }
         else {
-            Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_create_match, drawer, false);
             drawer.addView(contentView, 0);
@@ -251,7 +251,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     Match m = matchBuilder.setMatchID(matchId).build();
                     dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(m);
                     dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).setValue(false);
-                    Log.d(TAG, "Pushed match " + matchId + " to database");
+                    //Log.d(TAG, "Pushed match " + matchId + " to database");
                     new InvitePlayer(playerArrayAdapter).execute(matchId);
                     startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("match_Id", matchId));
                     finish();

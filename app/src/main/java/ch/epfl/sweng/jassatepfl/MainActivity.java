@@ -41,13 +41,13 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            Log.d(TAG, "showLogin:getCurrentUser:null");
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         }
         else {
-            Log.d(TAG, "showLogin:getCurrentUser:notNull");
+            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
             drawer.addView(contentView, 0);
@@ -132,7 +132,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 //Add match to the list if we are in it
                 if(match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
@@ -143,7 +143,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildChanged:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 int matchIndex = matches.indexOf(match);
                 //If the match is in the list (ie we were in it)
@@ -168,7 +168,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer  implements Ad
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 matches.remove(match);
                 modifyListAdapter();
