@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="listactivity_background_color">#E4E4E4</color>
     <color name="listview_divider_color">#E4E4E4</color>
+
+    <color name="greenCardBoard">#2B6C3E</color>
+    <color name="greenCardBoardDark">#21432B</color>
+    <color name="greenCardBoardAccent">#D493C1</color>
 </resources>
