@@ -42,7 +42,7 @@
         <Space
             android:id="@+id/goal_picker_space"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_centerHorizontal="true"/>
 
         <Button
