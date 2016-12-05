@@ -5,7 +5,6 @@ import java.util.List;
 import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 /**
@@ -15,7 +14,7 @@ public class MatchLeafTest extends LeafTest<Match> {
     private LeafFieldTest<List<Player>> playersLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PLAYERS, this);
     private LeafFieldTest<GPSPoint> locationLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_LOCATION, this);
     private LeafFieldTest<String> descriptionLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_DESCRIPTION, this);
-    private LeafFieldTest<Rank> rankLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_RANK, this);
+    private LeafFieldTest<Integer> quoteLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_QUOTE, this);
     private LeafFieldTest<Boolean> privateMatchLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PRIVATE, this);
     private LeafFieldTest<Match.GameVariant> gameVariantLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_GAME_VARIANT, this);
     private LeafFieldTest<Integer> maxPlayerNumberLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MAX_NB_PLAYER, this);
@@ -40,8 +39,8 @@ public class MatchLeafTest extends LeafTest<Match> {
                 return locationLeaf;
             case DatabaseUtils.DATABASE_MATCHES_DESCRIPTION:
                 return descriptionLeaf;
-            case DatabaseUtils.DATABASE_MATCHES_RANK:
-                return rankLeaf;
+            case DatabaseUtils.DATABASE_MATCHES_QUOTE:
+                return quoteLeaf;
             case DatabaseUtils.DATABASE_MATCHES_PRIVATE:
                 return privateMatchLeaf;
             case DatabaseUtils.DATABASE_MATCHES_GAME_VARIANT:
@@ -68,7 +67,7 @@ public class MatchLeafTest extends LeafTest<Match> {
         playersLeaf.setData(data.getPlayers());
         locationLeaf.setData(data.getLocation());
         descriptionLeaf.setData(data.getDescription());
-        rankLeaf.setData(data.getRank());
+        quoteLeaf.setData(data.getQuote());
         privateMatchLeaf.setData(data.isPrivateMatch());
         gameVariantLeaf.setData(data.getGameVariant());
         maxPlayerNumberLeaf.setData(data.getMaxPlayerNumber());

@@ -30,6 +30,10 @@
             android:icon="@drawable/ic_account_circle_black"
             android:title="@string/navigation_drawer_user_profile"/>
         <item
+            android:id="@+id/nav_stats"
+            android:icon="@drawable/ic_equalizer_black"
+            android:title="@string/stats"/>
+        <item
             android:id="@+id/nav_rules"
             android:icon="@drawable/ic_info_outline_black"
             android:title="@string/rules"/>

@@ -54,8 +54,8 @@ public final class MatchStringifier {
         String newLine = System.getProperty("line.separator");
 
         StringBuilder builder = new StringBuilder(
-                res.getString(R.string.snippet_match_rank))
-                .append(match.getRank().toString())
+                res.getString(R.string.snippet_match_quote))
+                .append(Integer.toString(match.getQuote()))
                 .append(newLine)
                 .append(res.getString(R.string.snippet_player_list))
                 .append(playersToString())
@@ -100,8 +100,8 @@ public final class MatchStringifier {
         return builder.toString();
     }
 
-    public String rankToString() {
-        return match.getRank().toString();
+    public String quoteToString() {
+        return Integer.toString(match.getQuote());
     }
 
     public String variantToString() {

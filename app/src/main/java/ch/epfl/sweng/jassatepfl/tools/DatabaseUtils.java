@@ -29,7 +29,7 @@ public class DatabaseUtils {
     public static final String DATABASE_MATCHES_PRIVATE = "privateMatch";
     public static final String DATABASE_MATCHES_LOCATION = "location";
     public static final String DATABASE_MATCHES_DESCRIPTION = "description";
-    public static final String DATABASE_MATCHES_RANK = "rank";
+    public static final String DATABASE_MATCHES_QUOTE = "quote";
     public static final String DATABASE_MATCHES_GAME_VARIANT = "gameVariant";
     public static final String DATABASE_MATCHES_MAX_NB_PLAYER = "maxPlayerNumber";
     public static final String DATABASE_MATCHES_EXPIRATION_TIME = "expirationTime";

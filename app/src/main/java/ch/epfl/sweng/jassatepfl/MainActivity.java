@@ -197,4 +197,8 @@ public final class MainActivity extends BaseActivityWithNavDrawer implements Ada
         adapter = new EnrolledMatchListAdapter(MainActivity.this, R.layout.match_enrolled_list_row, matches);
         listView.setAdapter(adapter);
     }
+
+    public void viewStats(View view) {
+        startActivity(new Intent(this, StatsActivity.class));
+    }
 }

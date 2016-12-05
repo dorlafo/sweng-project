@@ -19,7 +19,7 @@ import java.net.URL;
  */
 public class ServerInterface {
 
-    private static final String SERVER_URL = "http://vps333923.ovh.net";
+    public static final String SERVER_URL = "http://vps333923.ovh.net";
     private static final ServerInterface instance = new ServerInterface();
     private static Gson gson = new Gson();
 

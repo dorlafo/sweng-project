@@ -507,6 +507,15 @@ public class DBRefWrapTest extends DBReferenceWrapper {
             });
             childOrder = DatabaseUtils.DATABASE_MATCHES_PRIVATE;
             return new QueryWrapperMockTest(leafList, childOrder);
+        } else if (path.equals("quote")) {
+            Collections.sort(leafList, new Comparator<LeafTest>() {
+                @Override
+                public int compare(LeafTest o1, LeafTest o2) {
+                    return -(((Player) o1.getData()).getQuote() - ((Player) o2.getData()).getQuote());
+                }
+            });
+            childOrder = "quote";
+            return new QueryWrapperMockTest(leafList, childOrder);
         }
 
         throw new IllegalArgumentException("Path : " + path + " is not supported");

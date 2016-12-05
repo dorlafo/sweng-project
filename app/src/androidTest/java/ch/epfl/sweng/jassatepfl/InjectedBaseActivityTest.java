@@ -5,9 +5,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.google.firebase.auth.FirebaseAuth;
 
 import javax.inject.Inject;
-
-import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.DaggerFakeGraphTest;
+import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.FakeGraphTest;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.FakeModulesTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
@@ -20,8 +19,8 @@ import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
  * id : 696969
  * Last name : LeBricoleur
  * First name : Bob
- * Rank : 1000
- **/
+ * Quote : 1000
+ */
 @SuppressWarnings("deprecation")
 public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
 

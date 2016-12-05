@@ -7,7 +7,6 @@ import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.dorian;
@@ -57,10 +56,10 @@ public class UserStatsTest {
     @Test
     public void getRankByDate() throws Exception {
         UserStats stats = stats();
-        List<Tuple2<Long, Rank>> ls = stats.getRankByDate();
+        List<Tuple2<Long, Integer>> ls = stats.getQuoteByDate();
         assertThat(ls.size(), is(1));
-        Rank correctRank = new Rank(0);
-        assertThat(correctRank.equals(ls.get(0).getValue()), is(true));
+        int correctQuote = 0;
+        assertThat(correctQuote == ls.get(0).getValue(), is(true));
     }
 
     @Test
@@ -98,8 +97,8 @@ public class UserStatsTest {
     public void updateRank() throws Exception {
         UserStats stats = stats();
         stats.updateRank(new NaiveCalculator(stats));
-        assertThat(stats.getRankByDate().size(), is(1));
-        assertThat(new Rank(1).equals(stats.getRankByDate().get(0).getValue()), is(true));
+        assertThat(stats.getQuoteByDate().size(), is(1));
+        assertThat(1 == stats.getQuoteByDate().get(0).getValue(), is(true));
     }
 
     private UserStats stats() {
