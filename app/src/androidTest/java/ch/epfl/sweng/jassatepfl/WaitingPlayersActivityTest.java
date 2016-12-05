@@ -21,6 +21,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
 
@@ -40,7 +41,7 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         fullMatchSetUp();
         getActivity();
         onView(withId(R.id.leave_match_button)).perform(click());
-        onView(withId(R.id.twMyMatches)).check(matches(isDisplayed()));
+        onView(withText(R.string.main_empty_list)).check(matches(isDisplayed()));
         String matchID = DummyDataTest.fullMatchWithBob().getMatchID();
         Match m = ((MatchLeafTest) ((DBRefWrapTest) dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES).child(matchID)).getCurrentNode()).getData();
         assertEquals(3, m.getPlayers().size());

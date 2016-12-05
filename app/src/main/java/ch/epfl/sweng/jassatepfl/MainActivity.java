@@ -62,7 +62,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer implements Ada
             emptyList.setTextColor(Color.BLACK);
             emptyList.setLayoutParams(lp);
 
-            listView = (ListView) findViewById(android.R.id.list);
+            listView = (ListView) findViewById(R.id.list_my_matches);
             ((ViewGroup) listView.getParent()).addView(emptyList);
             listView.setEmptyView(emptyList);
 

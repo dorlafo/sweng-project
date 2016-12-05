@@ -58,7 +58,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         getActivity();
 
         try {
-            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.list_nearby_matches)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_match)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_message)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
@@ -80,7 +80,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         getActivity();
 
         try {
-            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.list_nearby_matches)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             assertMatchContainsNPlayers(dbRefWrapTest, "one_player", 2);
@@ -104,7 +104,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         getActivity();
 
         try {
-            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.list_nearby_matches)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             onView(withText(R.string.error_cannot_join)).check(matches(isDisplayed()));
