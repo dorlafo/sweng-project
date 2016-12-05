@@ -469,9 +469,22 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
         if (key.equals(getUserSciper())) {
             readyBtn.setEnabled(!value);
         }
-        gameBtn.setEnabled(playersReady.size() == match.getMaxPlayerNumber() &&
+        gameBtn.setEnabled(allPlayersReady(playersReady) &&
                 match.teamAssignmentIsCorrect());
         modifyListAdapter();
+    }
+
+    private boolean allPlayersReady(Map<String, Boolean> playersR) {
+        if(playersR.size() == match.getMaxPlayerNumber()) {
+            for(String k : playersR.keySet()) {
+                if(!playersR.get(k)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void goToGameActivity() {
