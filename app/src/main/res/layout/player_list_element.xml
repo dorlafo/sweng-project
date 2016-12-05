@@ -12,4 +12,24 @@
         android:textColor="@android:color/black"
         android:textStyle="bold"/>
 
+    <LinearLayout
+        android:id="@+id/player_list_row1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/player_name"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_label_quote"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/player_quote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 </RelativeLayout>

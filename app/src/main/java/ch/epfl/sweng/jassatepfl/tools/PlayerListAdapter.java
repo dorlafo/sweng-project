@@ -57,11 +57,15 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         }
 
         Player p = getItem(position);
+
+        TextView quoteTv = (TextView) convertView.findViewById(R.id.player_quote);
         TextView playerName = (TextView) convertView.findViewById(R.id.player_name);
         if(match == null) {
             playerName.setText(p.toString());
+            quoteTv.setText(Integer.toString(p.getQuote()));
         }
         else {
+            quoteTv.setText(Integer.toString(p.getQuote()));
             if (match.teamNbForPlayer(p) == -1){
                 playerName.setText(getFirstFirstName(p.getFirstName()) + " : no team assigned yet");
             }

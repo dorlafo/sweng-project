@@ -1,7 +1,6 @@
-package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
+package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
 
 /**
  * @author Amaury Combes
@@ -10,7 +9,7 @@ public class PlayerLeafTest extends LeafTest<Player> {
     private LeafFieldTest<Player.PlayerID> idLeaf = new LeafFieldTest<>("id", this);
     private LeafFieldTest<String> lastNameLeaf = new LeafFieldTest<>("lastName", this);
     private LeafFieldTest<String> firstNameLeaf = new LeafFieldTest<>("fistName", this);
-    private LeafFieldTest<Rank> rankLeaf = new LeafFieldTest<>("rank", this);
+    private LeafFieldTest<Integer> quoteLeaf = new LeafFieldTest<>("quote", this);
 
     /**
      * Constructor of the LeafTest class
@@ -30,8 +29,8 @@ public class PlayerLeafTest extends LeafTest<Player> {
                 return firstNameLeaf;
             case "lastName":
                 return lastNameLeaf;
-            case "rank":
-                return rankLeaf;
+            case "quote":
+                return quoteLeaf;
             default:
                 throw new IllegalArgumentException("Player class does not have a field named : " + id);
         }
@@ -48,6 +47,6 @@ public class PlayerLeafTest extends LeafTest<Player> {
         idLeaf.setData(data.getID());
         firstNameLeaf.setData(data.getFirstName());
         lastNameLeaf.setData(data.getLastName());
-        rankLeaf.setData(data.getRank());
+        quoteLeaf.setData(data.getQuote());
     }
 }

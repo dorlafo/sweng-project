@@ -14,11 +14,11 @@ import java.util.Objects;
 import java.util.Set;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
-import static ch.epfl.sweng.jassatepfl.tools.RankOperationsHelper.averageRank;
+import static ch.epfl.sweng.jassatepfl.tools.QuoteOperationsHelper.averageQuote;
 
 /**
  * Class representing a match between {@link ch.epfl.sweng.jassatepfl.model.Player players}.
- * Its rank is the mean of the ranks of the players in the match.
+ * Its quote is the mean of the quotes of the players in the match.
  * A match has an expiration date (the time before it is no longer available), and can be
  * private.
  */
@@ -27,7 +27,7 @@ public class Match {
     private List<Player> players;
     private GPSPoint location;
     private String description;
-    private Rank rank;
+    private int quote;
     private boolean privateMatch;
     private GameVariant gameVariant;
     private int maxPlayerNumber;
@@ -66,7 +66,7 @@ public class Match {
         this.players = new ArrayList<>(players);
         this.location = location;
         this.description = description;
-        rank = averageRank(players);
+        quote = averageQuote(players);
         this.privateMatch = privateMatch;
         this.gameVariant = gameVariant;
         this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
@@ -124,7 +124,7 @@ public class Match {
             if(!other.description.equals(this.description)) {
                 return true;
             }
-            if(!other.rank.equals(this.rank)) {
+            if(other.quote != this.quote) {
                 return true;
             }
             if(other.privateMatch != this.privateMatch) {
@@ -206,7 +206,7 @@ public class Match {
      * @return a sentinel match
      */
     public static Match sentinelMatch() {
-        Player bricoloBob = new Player(new Player.PlayerID(696969), "LeBricoleur", "Bob", new Rank(1000));
+        Player bricoloBob = new Player(new Player.PlayerID(696969), "LeBricoleur", "Bob", 1000);
         List<Player> players = new ArrayList<>();
         players.add(bricoloBob);
         GPSPoint BCCoord = new GPSPoint(46.518470, 6.561907);
@@ -234,12 +234,12 @@ public class Match {
     }
 
     /**
-     * Getter for the rank of the match.
+     * Getter for the quote of the match.
      *
-     * @return The rank of the match
+     * @return The quote of the match
      */
-    public Rank getRank() {
-        return rank;
+    public int getQuote() {
+        return quote;
     }
 
     /**
@@ -277,6 +277,18 @@ public class Match {
      */
     public long getExpirationTime() {
         return expirationTime;
+    }
+
+    public void copy(Match m) {
+        players = m.getPlayers();
+        location = m.getLocation();
+        description = m.getDescription();
+        quote = m.getQuote();
+        privateMatch = m.isPrivateMatch();
+        gameVariant = m.getGameVariant();
+        maxPlayerNumber = m.getMaxPlayerNumber();
+        expirationTime = m.getExpirationTime();
+        matchID = m.getMatchID();
     }
 
     /**
@@ -495,6 +507,7 @@ public class Match {
         return players.contains(player);
     }
 
+
     /**
      * Checks if the match has a participant with the given ID
      *
@@ -525,14 +538,6 @@ public class Match {
             }
         }
         return -1;
-    }
-
-    public static class MatchRank extends Rank {
-
-        public MatchRank(int rank) {
-            super(rank);
-        }
-
     }
 
     /**

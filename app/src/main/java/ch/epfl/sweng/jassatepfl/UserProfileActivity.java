@@ -21,7 +21,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
     private TextView mtwPlayerID;
     private TextView mtwLastName;
     private TextView mtwFirstName;
-    private TextView mtwPlayerRank;
+    private TextView mtwPlayerQuote;
     String sciper;
 
     @Override
@@ -44,7 +44,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             mtwPlayerID = (TextView) findViewById(R.id.twPlayerID);
             mtwLastName = (TextView) findViewById(R.id.twLastName);
             mtwFirstName = (TextView) findViewById(R.id.twFirstName);
-            mtwPlayerRank = (TextView) findViewById(R.id.twRank);
+            mtwPlayerQuote = (TextView) findViewById(R.id.twQuote);
 
             sciper = getUserSciper();
             //Log.d(TAG, "DisplayName:" + sciper);
@@ -62,7 +62,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                             System.out.println(p.getID().toString());
                             mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
                             mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
-                            mtwPlayerRank.setText(mtwPlayerRank.getText() + " " + p.getRank().toString());
+                            mtwPlayerQuote.setText(mtwPlayerQuote.getText() + " " + Integer.toString(p.getQuote()));
                         }
 
                         @Override

@@ -47,8 +47,8 @@ public final class MatchListAdapter extends ArrayAdapter<Match> {
         TextView description = (TextView) convertView.findViewById(R.id.description);
         description.setText(match.getDescription());
 
-        TextView rankData = (TextView) convertView.findViewById(R.id.rank_data);
-        rankData.setText(stringifier.rankToString());
+        TextView quoteData = (TextView) convertView.findViewById(R.id.quote_data);
+        quoteData.setText(stringifier.quoteToString());
 
         TextView players = (TextView) convertView.findViewById(R.id.players_data);
         players.setText(stringifier.playersToString());

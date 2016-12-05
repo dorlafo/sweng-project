@@ -58,7 +58,13 @@ public class QueryWrapperMockTest extends QueryWrapper {
 
     @Override
     public QueryWrapper limitToFirst(int num) {
-        return new QueryWrapperMockTest(elements.subList(0, num - 1),  numOfValueListener, numOfChildListener);
+        if(elements.isEmpty()) {
+            return new QueryWrapperMockTest(elements,  numOfValueListener, numOfChildListener);
+        } else if(num >= elements.size()) {
+            return new QueryWrapperMockTest(elements.subList(0, elements.size()),  numOfValueListener, numOfChildListener);
+        } else {
+            return new QueryWrapperMockTest(elements.subList(0, num),  numOfValueListener, numOfChildListener);
+        }
     }
 
     @Override
