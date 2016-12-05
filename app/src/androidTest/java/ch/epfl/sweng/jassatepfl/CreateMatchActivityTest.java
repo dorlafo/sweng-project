@@ -115,6 +115,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     public void testTimePickerDisplaysToastForInvalidTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(MINUTE, -5);
+        setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         onView(withText(R.string.toast_invalid_hour)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));

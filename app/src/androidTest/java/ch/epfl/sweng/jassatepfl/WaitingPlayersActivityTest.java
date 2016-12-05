@@ -5,6 +5,7 @@ import android.view.View;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
+import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,9 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsNPlayers;
+import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchesDBContainsNMatches;
+import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertPendingMatchContainsNPlayers;
 import static org.hamcrest.Matchers.not;
 
 public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
@@ -50,16 +54,12 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.leave_match_button)).perform(click());
         onView(withId(R.id.twMyMatches)).check(matches(isDisplayed()));
         String matchID = DummyDataTest.fullMatchWithBob().getMatchID();
-        Match m = ((MatchLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES).child(matchID)).getCurrentNode()).getData();
-        assertEquals(3, m.getPlayers().size());
 
+        assertMatchContainsNPlayers(dbRefWrapTest, matchID, 3);
 
-        Map<String, Boolean> status = ((MatchStatusLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID)).getCurrentNode()).getData();
-        assertEquals(3, status.size());
+        assertPendingMatchContainsNPlayers(dbRefWrapTest, matchID, 3);
     }
 
-    //TODO: re-enabled when removeListener will work on deleted references
-    /*
     @Test
     public void testLeaveButtonWhenLastPlayerDeletesMatch() {
         dbRefWrapTest.reset();
@@ -69,20 +69,10 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.twMyMatches)).check(matches(isDisplayed()));
         String matchID = DummyDataTest.onePlayerMatchWithBob().getMatchID();
 
-        List<Match> matches = new ArrayList<>();
-        Set<NodeTest> nodeMatches = ((NodeTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES)).getChildren();
-        for(NodeTest matchLeaf: nodeMatches) {
-            Match m = ((MatchLeafTest) matchLeaf).getData();
-            matches.add(m);
-        }
+        assertMatchesDBContainsNMatches(dbRefWrapTest, 0);
 
-        assertEquals(0, matches.size());
-
-
-        Map<String, Boolean> status = ((MatchStatusLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID)).getCurrentNode()).getData();
-        assertEquals(0, status.size());
+        assertPendingMatchContainsNPlayers(dbRefWrapTest, matchID, 0);
     }
-    */
 
     //TODO: re-enabled when childEventListener will work...
     /*
@@ -94,8 +84,8 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.ready_button)).perform(click());
         String matchID = DummyDataTest.onePlayerMatchWithBob().getMatchID();
 
-        Map<String, Boolean> status = ((MatchStatusLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID)).getCurrentNode()).getData();
-        assertEquals(1, status.size());
+        assertPendingMatchContainsNPlayers(dbRefWrapTest, matchID, 1);
+
         assertTrue(status.get(DummyDataTest.bricoloBob.getID().toString()));
 
         onView(withId(R.id.ready_button)).check(matches(not(isEnabled())));

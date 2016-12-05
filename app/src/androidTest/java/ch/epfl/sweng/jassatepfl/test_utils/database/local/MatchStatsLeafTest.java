@@ -25,6 +25,9 @@ public final class MatchStatsLeafTest extends LeafTest<MatchStats> {
 
     @Override
     public void setData(MatchStats data) {
+        if(deleted) {
+            throw new UnsupportedOperationException("Cannot setData on a deleted MatchStatsLeafTest");
+        }
         this.data = data;
         matchIdLeaf.setData(data.getMatchID());
         variantLeaf.setData(data.getGameVariant());

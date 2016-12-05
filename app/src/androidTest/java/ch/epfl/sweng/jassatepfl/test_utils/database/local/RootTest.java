@@ -53,6 +53,15 @@ public class RootTest implements NodeTest {
 
     @Override
     public TreeNodeTest addChild(String id) {
+        TreeNodeTest deletedNode = null;
+        for(NodeTest n : children) {
+            if(n.getId().equals(id) && ((TreeNodeTest)n).deleted) {
+                deletedNode = (TreeNodeTest) n;
+            }
+        }
+        if(deletedNode != null) {
+            children.remove(deletedNode);
+        }
         TreeNodeTest tNode = new TreeNodeTest(id, this);
         children.add(tNode);
         return tNode;
@@ -83,7 +92,12 @@ public class RootTest implements NodeTest {
 
     @Override
     public void removeChild(NodeTest child) {
-        children.remove(child);
+        for(NodeTest n : children) {
+            if(n.getId().equals(child.getId())) {
+                ((TreeNodeTest)n).deleted = true;
+            }
+        }
+        //children.remove(child);
     }
 
 }

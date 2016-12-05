@@ -37,6 +37,9 @@ public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
 
     @Override
     public void setData(Map<String, Boolean> data) {
+        if(deleted) {
+            throw new UnsupportedOperationException("Cannot setData on a deleted MatchStatusLeafTest");
+        }
         this.data = data;
         for(String key : data.keySet()) {
             LeafFieldTest<Boolean> s = new LeafFieldTest<>(key, this);

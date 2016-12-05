@@ -63,6 +63,9 @@ public class MatchLeafTest extends LeafTest<Match> {
      */
     @Override
     public void setData(Match data) {
+        if(deleted) {
+            throw new UnsupportedOperationException("Cannot set data on a deleted MatchLeafTest");
+        }
         this.data = data;
         playersLeaf.setData(data.getPlayers());
         locationLeaf.setData(data.getLocation());
