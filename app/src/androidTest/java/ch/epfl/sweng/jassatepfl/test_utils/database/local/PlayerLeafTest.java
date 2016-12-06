@@ -51,5 +51,7 @@ public class PlayerLeafTest extends LeafTest<Player> {
         firstNameLeaf.setData(data.getFirstName());
         lastNameLeaf.setData(data.getLastName());
         quoteLeaf.setData(data.getQuote());
+        setChanged();
+        notifyObservers(this);
     }
 }

@@ -76,6 +76,8 @@ public class MatchLeafTest extends LeafTest<Match> {
         maxPlayerNumberLeaf.setData(data.getMaxPlayerNumber());
         expirationTimeLeaf.setData(data.getExpirationTime());
         matchIDLeaf.setData(data.getMatchID());
+        setChanged();
+        notifyObservers(this);
     }
 
     @Override

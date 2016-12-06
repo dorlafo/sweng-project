@@ -38,6 +38,8 @@ public final class MatchStatsLeafTest extends LeafTest<MatchStats> {
         goalLeaf.setData(data.goalHasBeenReached());
         winnerIndexLeaf.setData(data.getWinnerIndex());
         meldSetLeaf.setData(data.meldWasSetThisRound());
+        setChanged();
+        notifyObservers(this);
     }
 
     @Override

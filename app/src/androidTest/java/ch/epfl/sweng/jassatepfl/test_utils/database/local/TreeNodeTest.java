@@ -1,6 +1,7 @@
 package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
  *
  * @author Amaury Combes
  */
-public class TreeNodeTest implements NodeTest {
+public class TreeNodeTest extends Observable implements NodeTest {
 
     private String id;
     private Set<NodeTest> children;

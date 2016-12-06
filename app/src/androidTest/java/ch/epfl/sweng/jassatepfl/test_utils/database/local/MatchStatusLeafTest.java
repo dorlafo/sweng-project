@@ -33,6 +33,8 @@ public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
         if(status.isEmpty()) {
             removeSelf();
         }
+        setChanged();
+        notifyObservers(this);
     }
 
     @Override
@@ -46,6 +48,8 @@ public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
             s.setData(data.get(key));
             status.put(key, s);
         }
+        setChanged();
+        notifyObservers(this);
     }
 
     @Override
