@@ -36,7 +36,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
             mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
                 private final Fragment[] mFragments = new Fragment[] {
                         new PendingMatchListFragment(),
-                        new ActiveMatchListFragmentFragment(),
+                        new ActiveMatchListFragment(),
                         new FinishedMatchListFragment(),
                 };
                 private final String[] mFragmentNames = new String[] {

@@ -59,7 +59,7 @@ public abstract class BaseMatchListFragment extends Fragment implements AdapterV
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_base_match_list, container, false);
+        View rootView = inflater.inflate(getLayout(), container, false);
 
         TextView emptyList = new TextView(rootView.getContext());
         emptyList.setText(getEmptyListMessage());
@@ -68,7 +68,7 @@ public abstract class BaseMatchListFragment extends Fragment implements AdapterV
 
         matches = new ArrayList<>();
 
-        listView = (ListView) rootView.findViewById(R.id.my_matches_list);
+        listView = (ListView) rootView.findViewById(getListID());
         ((ViewGroup) listView.getParent()).addView(emptyList);
         listView.setEmptyView(emptyList);
 
@@ -78,6 +78,10 @@ public abstract class BaseMatchListFragment extends Fragment implements AdapterV
 
         return rootView;
     }
+
+    abstract public int getListID();
+
+    abstract public int getLayout();
 
     @Override
     public void onDestroy() {
@@ -154,10 +158,12 @@ public abstract class BaseMatchListFragment extends Fragment implements AdapterV
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                //Nothing to do
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Log.e("ERROR-DATABASE", databaseError.toString());
             }
         };
         getQuery(dbRefWrapped)

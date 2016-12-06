@@ -23,6 +23,16 @@ public class FinishedMatchListFragment extends BaseMatchListFragment {
     }
 
     @Override
+    public int getListID() {
+        return R.id.my_finished_matches_list;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.fragment_finished_match_list;
+    }
+
+    @Override
     public QueryWrapper getQuery(DBReferenceWrapper dbRefWrapped) {
         return dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
                 .orderByChild(DatabaseUtils.DATABASE_MATCHES_MATCH_STATUS)

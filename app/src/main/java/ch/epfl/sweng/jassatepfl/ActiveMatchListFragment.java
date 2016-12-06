@@ -14,12 +14,22 @@ import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ActiveMatchListFragmentFragment extends BaseMatchListFragment {
+public class ActiveMatchListFragment extends BaseMatchListFragment {
 
-    private static final String TAG = ActiveMatchListFragmentFragment.class.getSimpleName();
+    private static final String TAG = ActiveMatchListFragment.class.getSimpleName();
 
-    public ActiveMatchListFragmentFragment() {
+    public ActiveMatchListFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public int getListID() {
+        return R.id.my_active_matches_list;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.fragment_active_match_list;
     }
 
     @Override

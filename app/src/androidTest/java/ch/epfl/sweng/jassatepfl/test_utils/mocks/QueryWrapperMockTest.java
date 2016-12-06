@@ -80,6 +80,18 @@ public class QueryWrapperMockTest extends QueryWrapper {
     }
 
     @Override
+    public QueryWrapper equalTo(String s) {
+        List<LeafTest> newLeafs = new ArrayList<>();
+        for(LeafTest l : elements) {
+            Match m = (Match) l.getData();
+            if(m.getMatchStatus().toString().equals(s)) {
+                newLeafs.add(l);
+            }
+        }
+        return new QueryWrapperMockTest(newLeafs, numOfValueListener, numOfChildListener);
+    }
+
+    @Override
     public void removeEventListener(ValueEventListener listener) {
         --numOfValueListener;
     }

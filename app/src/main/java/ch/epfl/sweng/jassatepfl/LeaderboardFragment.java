@@ -17,6 +17,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -79,7 +81,7 @@ public class LeaderboardFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Player player = dataSnapshot.getValue(Player.class);
-                playerList.add(player);
+                playerList.add(0, player);
                 modifyListAdapter();
             }
 
@@ -90,6 +92,12 @@ public class LeaderboardFragment extends Fragment {
                     playerList.remove(player);
                 }
                 playerList.add(player);
+                Collections.sort(playerList, new Comparator<Player>() {
+                    @Override
+                    public int compare(Player o1, Player o2) {
+                        return Integer.compare(o2.getQuote(), o1.getQuote());
+                    }
+                });
                 modifyListAdapter();
             }
 

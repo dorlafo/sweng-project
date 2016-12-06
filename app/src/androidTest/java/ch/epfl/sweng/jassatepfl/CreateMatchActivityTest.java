@@ -7,6 +7,7 @@ import android.support.test.espresso.contrib.PickerActions;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -56,7 +57,6 @@ import static org.hamcrest.Matchers.is;
 /**
  * Test class for CreateMatchActivity
  *
- * @author Alexis Montavon
  */
 public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
@@ -115,6 +115,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     public void testTimePickerDisplaysToastForInvalidTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(MINUTE, -5);
+        setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         onView(withText(R.string.toast_invalid_hour)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
@@ -188,7 +189,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         release();
     }
 
-    /* TODO: fix this test (fails with java.lang.IllegalArgumentException: The node does not have a children named : matches2)
+    /* TODO: fix this test (fails with: java.lang.IllegalArgumentException: The node 'pendingMatches' does not have a children named : f1bf8130-81b0-42ed-80e6-96495d0e3e7d)
     @Test
     public void testCreateMatchSendsIntent() {
         init();

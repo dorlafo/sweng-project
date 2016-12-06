@@ -15,6 +15,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -50,7 +51,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
 
 
         try {
-            onData(anything()).inAdapterView(withId(R.id.my_matches_list)).atPosition(0).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.my_pending_matches_list)).atPosition(0).perform(click());
             onView(withText(R.string.wait_button_text_ready)).check(matches(isDisplayed()));
         } catch (Exception e){
             e.printStackTrace();
