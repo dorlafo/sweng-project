@@ -279,18 +279,6 @@ public class Match {
         return expirationTime;
     }
 
-    public void copy(Match m) {
-        players = m.getPlayers();
-        location = m.getLocation();
-        description = m.getDescription();
-        quote = m.getQuote();
-        privateMatch = m.isPrivateMatch();
-        gameVariant = m.getGameVariant();
-        maxPlayerNumber = m.getMaxPlayerNumber();
-        expirationTime = m.getExpirationTime();
-        matchID = m.getMatchID();
-    }
-
     /**
      * Setter for the expiration time
      * @param expTime The expiration time to set
@@ -544,8 +532,9 @@ public class Match {
      * The different status a match can have
      */
     public enum MatchStatus {
-        PENDING("pending"),
-        ACTIVE("active");
+        PENDING("PENDING"),
+        ACTIVE("ACTIVE"),
+        FINISHED("FINISHED");
 
         private final String statusName;
 

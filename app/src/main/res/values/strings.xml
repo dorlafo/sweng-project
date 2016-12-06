@@ -11,7 +11,9 @@
     <string name="main_button_text_profile">Profile</string>
     <string name="main_button_text_ranking">Ranking</string>
     <string name="main_button_text_stats">Stats</string>
-    <string name="main_empty_list">You are not enrolled in any match</string>
+    <string name="main_empty_pending_list">You are not enrolled in any match</string>
+    <string name="main_empty_active_list">You are not in an active game</string>
+    <string name="main_empty_finished_list">You have not finished any game yet</string>
 
     <string name="create_button_text_add_player">Add Player</string>
     <string name="create_field_private_match">Private Match</string>
@@ -124,6 +126,10 @@
 
     <string name="loading_leaderboard">Loading Leaderboard...</string>
 
+    <string name="heading_pending_matches">Pending</string>
+    <string name="heading_active_matches">Active</string>
+    <string name="heading_finished_matches">Finished</string>
+
     <color name="greenCardBoard">#2B6C3E</color>
     <color name="greenCardBoardDark">#21432B</color>
     <color name="greenCardBoardAccent">#D493C1</color>
@@ -132,4 +138,7 @@
     <string name="select_game_variant">Select Game Variant:</string>
     <string name="rules">Rules</string>
     <string name="stats">Stats</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

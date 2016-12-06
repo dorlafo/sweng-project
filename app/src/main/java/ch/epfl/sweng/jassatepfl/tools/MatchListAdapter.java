@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.R;
@@ -19,7 +20,7 @@ public final class MatchListAdapter extends ArrayAdapter<Match> {
 
     public MatchListAdapter(Context context, int resource, List<Match> matches) {
         super(context, resource, matches);
-        this.matches = matches;
+        this.matches = new ArrayList<>(matches);
     }
 
     @Override
@@ -51,7 +52,8 @@ public final class MatchListAdapter extends ArrayAdapter<Match> {
         quoteData.setText(stringifier.quoteToString());
 
         TextView players = (TextView) convertView.findViewById(R.id.players_data);
-        players.setText(stringifier.playersToString());
+        //players.setText(stringifier.playersToString());
+        players.setText(match.getPlayers().size() + "/" + match.getMaxPlayerNumber());
 
         TextView variant = (TextView) convertView.findViewById(R.id.variant_data);
         variant.setText(stringifier.variantToString());
@@ -62,4 +64,9 @@ public final class MatchListAdapter extends ArrayAdapter<Match> {
         return convertView;
     }
 
+    public void refreshData(List<Match> m) {
+        this.matches.clear();
+        this.matches.addAll(m);
+        notifyDataSetChanged();
+    }
 }
