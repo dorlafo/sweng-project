@@ -65,28 +65,28 @@ public class LeaderboardFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Player player = dataSnapshot.getValue(Player.class);
-                playerList.add(player);
+                playerList.add(0, player);
                 modifyListAdapter();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Player player = dataSnapshot.getValue(Player.class);
-                playerList.add(player);
+                playerList.add(0, player);
                 modifyListAdapter();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Player player = dataSnapshot.getValue(Player.class);
-                playerList.add(player);
+                playerList.add(0, player);
                 modifyListAdapter();
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 Player player = dataSnapshot.getValue(Player.class);
-                playerList.add(player);
+                playerList.add(0, player);
                 modifyListAdapter();
             }
 
