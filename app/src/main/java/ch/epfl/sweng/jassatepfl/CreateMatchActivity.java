@@ -62,6 +62,7 @@ import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.DatePickerFragment;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
+import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
 
 import static java.util.Calendar.DAY_OF_MONTH;
@@ -94,7 +95,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     private ImageButton placePickerButton;
     private Match.Builder matchBuilder;
     private LocationProvider locationProvider;
-    private ArrayAdapter<Player> playerArrayAdapter;
+    private PlayerListAdapter playerArrayAdapter;
     private Calendar matchCalendar;
 
     @Override
@@ -175,14 +176,13 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
             emptyList.setTextColor(Color.GRAY);
 
-            //TODO: Doesn't show players... --> fix this + make clicking on player ask to remove him
             ListView playersLV = (ListView) findViewById(R.id.create_player_list);
             ((ViewGroup) playersLV.getParent()).addView(emptyList);
             playersLV.setEmptyView(emptyList);
             playersLV.setBackgroundColor(0xFAFAFA);
 
-            playerArrayAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, new ArrayList<Player>());
+            playerArrayAdapter = new PlayerListAdapter(this,
+                    R.layout.player_list_element, new ArrayList<Player>());
             playersLV.setAdapter(playerArrayAdapter);
 
             playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -397,10 +397,8 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     }
 
     private void addCurrentUserToBuilder() {
-        // TODO: can we fuse this method with addplayer l.258, it is almost the same
         try {
-            String currentUserId = fAuth.getCurrentUser().getDisplayName();
-            dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS).child(currentUserId)
+            dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS).child(getUserSciper())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

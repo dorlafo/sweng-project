@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
@@ -753,7 +754,7 @@ public class Match {
             privateMatch = false;
             gameVariant = CHIBRE;
             maxPlayerNumber = CHIBRE.getMaxPlayerNumber();
-            expirationTime = Calendar.getInstance().getTimeInMillis() + 1 * 3600 * 1000; // 1 hour after current time
+            expirationTime = Calendar.getInstance().getTimeInMillis() + (3600 * 1000); // 1 hour after current time
             matchID = DEFAULT_ID;
             matchStatus = MatchStatus.PENDING;
         }
@@ -905,7 +906,29 @@ public class Match {
          * @throws IllegalStateException If building with no players or too many players
          */
         public Match build() throws IllegalStateException {
-            // TODO: check validity of arguments
+            // If an error occured puts parameters back to basic state
+            if(location == null) {
+                location = new GPSPoint(46.520450, 6.567737);
+            }
+
+            if(description == null || description.equals("")) {
+                description = DEFAULT_DESCRIPTION;
+            }
+
+            if(maxPlayerNumber != gameVariant.getMaxPlayerNumber()) {
+                maxPlayerNumber = gameVariant.getMaxPlayerNumber();
+            }
+
+            if(expirationTime < Calendar.getInstance().getTimeInMillis()) {
+                expirationTime = Calendar.getInstance().getTimeInMillis() + (3600 * 1000);
+            }
+
+            // Need to generate random matchId when error.
+            if(matchID == null || matchID.equals("")) {
+                Random generator = new Random();
+                matchID = DEFAULT_ID + generator.nextInt(100000);
+            }
+
             if (players.isEmpty()) {
                 throw new IllegalStateException("Cannot create match without any player.");
             } else if (players.size() > maxPlayerNumber) {
