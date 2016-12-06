@@ -1,4 +1,4 @@
-package ch.epfl.sweng.jassatepfl.model;
+package ch.epfl.sweng.jassatepfl.stats.trueskill;
 
 
 import android.os.Build;
