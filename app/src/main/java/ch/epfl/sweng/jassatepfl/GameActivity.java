@@ -48,7 +48,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
 
     private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
 
-    // TODO: max points depending on variant?
+    // TODO: max points depending on variant? -> NON, seulement que POMME et ROI ne se compte pas
+    // TODO: avec les points max et qu'il n'y a que 2 et 3 joueurs...est-ce qu'on enlève ces variantes?
     private final static int TOTAL_POINTS_IN_ROUND = 157;
     private final static int MATCH_POINTS = 257;
 

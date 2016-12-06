@@ -61,7 +61,6 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
             //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
             setContentView(R.layout.activity_invite_player_to_match);
 
-            // TODO: maybe have a field in base activity with sciper of current user, with error management
             currentUserSciper = getUserSciper();
             inviteScipers = new HashSet<>();
 
