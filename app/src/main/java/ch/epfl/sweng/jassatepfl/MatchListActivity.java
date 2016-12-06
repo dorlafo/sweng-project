@@ -64,7 +64,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
             emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
             emptyList.setTextColor(Color.BLACK);
 
-            listView = (ListView) findViewById(R.id.list_activity_list);
+            listView = (ListView) findViewById(R.id.list_nearby_matches);
             ((ViewGroup) listView.getParent()).addView(emptyList);
             listView.setEmptyView(emptyList);
 

@@ -71,7 +71,7 @@ public abstract class BaseMatchListFragment extends Fragment implements AdapterV
         listView = (ListView) rootView.findViewById(R.id.my_matches_list);
         ((ViewGroup) listView.getParent()).addView(emptyList);
         listView.setEmptyView(emptyList);
-        
+
         listView.setOnItemClickListener(this);
         adapter = new MatchListAdapter(rootView.getContext(), R.layout.match_list_row, new ArrayList<Match>());
         listView.setAdapter(adapter);

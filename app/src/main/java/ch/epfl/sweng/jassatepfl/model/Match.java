@@ -532,9 +532,9 @@ public class Match {
      * The different status a match can have
      */
     public enum MatchStatus {
-        PENDING("PENDING"),
         ACTIVE("ACTIVE"),
-        FINISHED("FINISHED");
+        FINISHED("FINISHED"),
+        PENDING("PENDING");
 
         private final String statusName;
 

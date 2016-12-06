@@ -23,7 +23,7 @@
         android:textSize="24sp"/>
 
     <ListView
-        android:id="@+id/list_activity_list"
+        android:id="@+id/list_nearby_matches"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/background_light"

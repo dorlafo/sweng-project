@@ -509,14 +509,23 @@ public class DBRefWrapTest extends DBReferenceWrapper {
             });
             childOrder = DatabaseUtils.DATABASE_MATCHES_PRIVATE;
             return new QueryWrapperMockTest(leafList, childOrder);
-        } else if (path.equals("quote")) {
+        } else if (path.equals(DatabaseUtils.DATABASE_PLAYERS_QUOTE)) {
             Collections.sort(leafList, new Comparator<LeafTest>() {
                 @Override
                 public int compare(LeafTest o1, LeafTest o2) {
-                    return -(((Player) o1.getData()).getQuote() - ((Player) o2.getData()).getQuote());
+                    return Integer.compare(((Player) o1.getData()).getQuote(), ((Player) o2.getData()).getQuote());
                 }
             });
-            childOrder = "quote";
+            childOrder = DatabaseUtils.DATABASE_PLAYERS_QUOTE;
+            return new QueryWrapperMockTest(leafList, childOrder);
+        } else if (path.equals(DatabaseUtils.DATABASE_MATCHES_MATCH_STATUS)) {
+            Collections.sort(leafList, new Comparator<LeafTest>() {
+                @Override
+                public int compare(LeafTest o1, LeafTest o2) {
+                    return ((Match) o1.getData()).getMatchStatus().compareTo(((Match) o2.getData()).getMatchStatus());
+                }
+            });
+            childOrder = DatabaseUtils.DATABASE_MATCHES_MATCH_STATUS;
             return new QueryWrapperMockTest(leafList, childOrder);
         }
 
