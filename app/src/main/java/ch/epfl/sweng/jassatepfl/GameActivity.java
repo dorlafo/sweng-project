@@ -15,13 +15,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -72,17 +71,19 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
     private TextView secondTeamScoreDisplay;
     private ImageButton cancelButton;
 
-    protected enum Caller {FIRST_TEAM, SECOND_TEAM}
-
-    protected enum Mode {ONLINE, OFFLINE}
-
-    protected enum PickerMode {SCORE, GOAL}
-
     private Caller caller;
     private Stack<Caller> meldCallers;
     private Mode mode;
 
     private int scoreMultiplier;
+
+    private Toast toast;
+
+    protected enum Caller {FIRST_TEAM, SECOND_TEAM}
+
+    protected enum Mode {ONLINE, OFFLINE}
+
+    protected enum PickerMode {SCORE, GOAL}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,12 +159,10 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                 break;
             case R.id.score_update_1:
                 caller = FIRST_TEAM;
-                //showScorePicker();
                 showNumPadScorePicker(SCORE);
                 break;
             case R.id.score_update_2:
                 caller = SECOND_TEAM;
-                //showScorePicker();
                 showNumPadScorePicker(SCORE);
                 break;
             case R.id.score_meld_spinner_1:
@@ -188,35 +187,6 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                 break;
             case R.id.game_playing_to:
                 showNumPadScorePicker(GOAL);
-                /*
-                final Dialog dialog = new Dialog(this);
-                dialog.setContentView(R.layout.points_goal_picker);
-                final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.goal_picker);
-                numberPicker.setMinValue(500);
-                numberPicker.setMaxValue(2500);
-                numberPicker.setWrapSelectorWheel(true);
-
-                Button confirmScore = (Button) dialog.findViewById(R.id.goal_picker_confirm);
-                confirmScore.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pointsGoal = numberPicker.getValue();
-                        matchStats.setPointsGoal(pointsGoal);
-                        updatePointsGoal(pointsGoal);
-                        dialog.dismiss();
-                    }
-                });
-
-                Button cancel = (Button) dialog.findViewById(R.id.goal_picker_cancel);
-                cancel.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
-                */
                 break;
         }
     }
@@ -280,17 +250,21 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         secondTeamScoreDisplay.setText(secondTeamScore.toString());
     }
 
-    private void showNumPadScorePicker(final PickerMode mode) {
+    private void showNumPadScorePicker(final PickerMode pickerMode) {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.score_picker_numpad);
 
-        final TextView pointsDisplay = (TextView) findViewById(R.id.score_picker_score_display);
+        TextView title = (TextView) dialog.findViewById(R.id.score_picker_title);
+        title.setText(pickerMode == SCORE ? R.string.game_text_score_picker : R.string.game_text_goal_picker);
 
-        LinearLayout checkboxLayout = (LinearLayout) findViewById(R.id.score_picker_checkbox_layout);
-        checkboxLayout.setVisibility(mode == SCORE ? VISIBLE : INVISIBLE);
+        final TextView pointsDisplay = (TextView) dialog.findViewById(R.id.score_picker_score_display);
+        pointsDisplay.setText("0");
+
+        ViewGroup checkboxLayout = (ViewGroup) dialog.findViewById(R.id.score_picker_checkbox_layout);
+        checkboxLayout.setVisibility(pickerMode == SCORE ? VISIBLE : INVISIBLE);
 
         scoreMultiplier = 1;
-        CheckBox doubleScore = (CheckBox) findViewById(R.id.numpad_double_score);
+        CheckBox doubleScore = (CheckBox) dialog.findViewById(R.id.numpad_double_score);
         doubleScore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -298,96 +272,96 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             }
         });
 
-        Button numpad0 = (Button) findViewById(R.id.numpad_0);
+        Button numpad0 = (Button) dialog.findViewById(R.id.numpad_0);
         numpad0.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, 0, mode);
+                updateScorePickerDisplay(pointsDisplay, 0, pickerMode);
             }
         });
 
-        Button numpad1 = (Button) findViewById(R.id.numpad_1);
+        Button numpad1 = (Button) dialog.findViewById(R.id.numpad_1);
         numpad1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, 1, mode);
+                updateScorePickerDisplay(pointsDisplay, 1, pickerMode);
             }
         });
 
-        Button numpad2 = (Button) findViewById(R.id.numpad_2);
+        Button numpad2 = (Button) dialog.findViewById(R.id.numpad_2);
         numpad2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, 2, mode);
+                updateScorePickerDisplay(pointsDisplay, 2, pickerMode);
             }
         });
 
-        Button numpad3 = (Button) findViewById(R.id.numpad_3);
+        Button numpad3 = (Button) dialog.findViewById(R.id.numpad_3);
         numpad3.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, 3, mode);
+                updateScorePickerDisplay(pointsDisplay, 3, pickerMode);
             }
         });
 
-        Button numpad4 = (Button) findViewById(R.id.numpad_4);
+        Button numpad4 = (Button) dialog.findViewById(R.id.numpad_4);
         numpad4.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, 4, mode);
+                updateScorePickerDisplay(pointsDisplay, 4, pickerMode);
             }
         });
 
-        Button numpad5 = (Button) findViewById(R.id.numpad_5);
+        Button numpad5 = (Button) dialog.findViewById(R.id.numpad_5);
         numpad5.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, 5, mode);
+                updateScorePickerDisplay(pointsDisplay, 5, pickerMode);
             }
         });
 
-        Button numpad6 = (Button) findViewById(R.id.numpad_6);
+        Button numpad6 = (Button) dialog.findViewById(R.id.numpad_6);
         numpad6.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, 6, mode);
+                updateScorePickerDisplay(pointsDisplay, 6, pickerMode);
             }
         });
 
-        Button numpad7 = (Button) findViewById(R.id.numpad_7);
+        Button numpad7 = (Button) dialog.findViewById(R.id.numpad_7);
         numpad7.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, 7, mode);
+                updateScorePickerDisplay(pointsDisplay, 7, pickerMode);
             }
         });
 
-        Button numpad8 = (Button) findViewById(R.id.numpad_8);
+        Button numpad8 = (Button) dialog.findViewById(R.id.numpad_8);
         numpad8.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, 8, mode);
+                updateScorePickerDisplay(pointsDisplay, 8, pickerMode);
             }
         });
 
-        Button numpad9 = (Button) findViewById(R.id.numpad_9);
+        Button numpad9 = (Button) dialog.findViewById(R.id.numpad_9);
         numpad9.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, 9, mode);
+                updateScorePickerDisplay(pointsDisplay, 9, pickerMode);
             }
         });
 
-        ImageButton numpadCorrect = (ImageButton) findViewById(R.id.numpad_correct);
+        ImageButton numpadCorrect = (ImageButton) dialog.findViewById(R.id.numpad_correct);
         numpadCorrect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(pointsDisplay, -1, mode);
+                updateScorePickerDisplay(pointsDisplay, -1, pickerMode);
             }
         });
 
         Button match = (Button) dialog.findViewById(R.id.score_picker_match);
-        match.setVisibility(mode == SCORE ? VISIBLE : GONE);
+        match.setVisibility(pickerMode == SCORE ? VISIBLE : GONE);
         match.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -409,7 +383,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             @Override
             public void onClick(View v) {
                 int points = Integer.parseInt(pointsDisplay.getText().toString());
-                if (mode == SCORE) {
+                if (pickerMode == SCORE) {
                     computeScores(points * scoreMultiplier, scoreMultiplier);
                 } else {
                     matchStats.setPointsGoal(points);
@@ -430,13 +404,13 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         dialog.show();
     }
 
-    private void updateScorePickerDisplay(TextView scoreDisplay, int value, PickerMode mode) {
+    private void updateScorePickerDisplay(TextView scoreDisplay, int value, PickerMode pickerMode) {
         String currentDisplay = scoreDisplay.getText().toString();
         if (value == -1) {
-            if (currentDisplay.length() == 1) {
+            if (currentDisplay.length() <= 1) {
                 currentDisplay = "0";
             } else {
-                currentDisplay = currentDisplay.substring(0, currentDisplay.length() - 2);
+                currentDisplay = currentDisplay.substring(0, currentDisplay.length() - 1);
             }
         } else if (currentDisplay.equals("0") && value != 0) {
             currentDisplay = Integer.toString(value);
@@ -445,69 +419,19 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         }
 
         int displayedPoints = Integer.parseInt(currentDisplay);
-        if (mode == SCORE) {
+        if (pickerMode == SCORE) {
             if (displayedPoints <= TOTAL_POINTS_IN_ROUND) {
                 scoreDisplay.setText(currentDisplay);
             } else {
-                Toast.makeText(this, String.format(getString(R.string.toast_invalid_score),
-                        TOTAL_POINTS_IN_ROUND), Toast.LENGTH_SHORT)
-                        .show();
+                displayToast(R.string.toast_invalid_score, TOTAL_POINTS_IN_ROUND);
             }
         } else {
-            int maxGoal = currentMatch.getGameVariant().getPointGoal();
-            if (displayedPoints <= maxGoal) {
+            if (displayedPoints >= 500) {
                 scoreDisplay.setText(currentDisplay);
             } else {
-                Toast.makeText(this, String.format(getString(R.string.toast_invalid_score),
-                        maxGoal), Toast.LENGTH_SHORT)
-                        .show();
+                displayToast(R.string.toast_invalid_goal, 500);
             }
         }
-    }
-
-    private void showScorePicker() {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.score_picker);
-        final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.score_picker);
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(TOTAL_POINTS_IN_ROUND);
-        numberPicker.setWrapSelectorWheel(true);
-
-        Button match = (Button) dialog.findViewById(R.id.score_picker_match);
-        match.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (caller) {
-                    case FIRST_TEAM:
-                        updateScore(MATCH_POINTS, 0);
-                        break;
-                    case SECOND_TEAM:
-                        updateScore(0, MATCH_POINTS);
-                        break;
-                }
-                dialog.dismiss();
-                displayScore();
-            }
-        });
-
-        Button confirmScore = (Button) dialog.findViewById(R.id.score_picker_confirm);
-        confirmScore.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                computeScores(numberPicker.getValue(), 1);
-                dialog.dismiss();
-            }
-        });
-
-        Button cancel = (Button) dialog.findViewById(R.id.score_picker_cancel);
-        cancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
     }
 
     private void displayEndOfMatchMessage(int winningTeamIndex) {
@@ -669,6 +593,15 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             goal.setEnabled(true);
             goal.setOnClickListener(this);
         }
+    }
+
+    private void displayToast(int stringId, int points) {
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(this, String.format(getString(stringId),
+                points), Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 }
