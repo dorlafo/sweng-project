@@ -242,8 +242,8 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                 .create().show();
     }
 
-    private void computeScores(int callerScore) {
-        int otherTeamScore = TOTAL_POINTS_IN_ROUND - callerScore;
+    private void computeScores(int callerScore, int scoreMultiplier) {
+        int otherTeamScore = TOTAL_POINTS_IN_ROUND * scoreMultiplier - callerScore;
         switch (caller) {
             case FIRST_TEAM:
                 updateScore(callerScore, otherTeamScore);
@@ -410,7 +410,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             public void onClick(View v) {
                 int points = Integer.parseInt(pointsDisplay.getText().toString());
                 if (mode == SCORE) {
-                    computeScores(points * scoreMultiplier);
+                    computeScores(points * scoreMultiplier, scoreMultiplier);
                 } else {
                     matchStats.setPointsGoal(points);
                     updatePointsGoal(points);
@@ -494,7 +494,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         confirmScore.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                computeScores(numberPicker.getValue());
+                computeScores(numberPicker.getValue(), 1);
                 dialog.dismiss();
             }
         });
