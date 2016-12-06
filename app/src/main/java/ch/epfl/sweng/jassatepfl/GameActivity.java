@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -42,12 +43,15 @@ import ch.epfl.sweng.jassatepfl.model.Round;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
+import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.SECOND_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Mode.OFFLINE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Mode.ONLINE;
+import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.GOAL;
+import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.SCORE;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.SENTINEL;
 
 public class GameActivity extends BaseActivityWithNavDrawer implements OnClickListener {
@@ -71,6 +75,8 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
     protected enum Caller {FIRST_TEAM, SECOND_TEAM}
 
     protected enum Mode {ONLINE, OFFLINE}
+
+    protected enum PickerMode {SCORE, GOAL}
 
     private Caller caller;
     private Stack<Caller> meldCallers;
@@ -153,12 +159,12 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             case R.id.score_update_1:
                 caller = FIRST_TEAM;
                 //showScorePicker();
-                showNumPadScorePicker();
+                showNumPadScorePicker(SCORE);
                 break;
             case R.id.score_update_2:
                 caller = SECOND_TEAM;
                 //showScorePicker();
-                showNumPadScorePicker();
+                showNumPadScorePicker(SCORE);
                 break;
             case R.id.score_meld_spinner_1:
                 meldCallers.push(FIRST_TEAM);
@@ -181,6 +187,8 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                 }
                 break;
             case R.id.game_playing_to:
+                showNumPadScorePicker(GOAL);
+                /*
                 final Dialog dialog = new Dialog(this);
                 dialog.setContentView(R.layout.points_goal_picker);
                 final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.goal_picker);
@@ -208,6 +216,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                 });
 
                 dialog.show();
+                */
                 break;
         }
     }
@@ -271,11 +280,14 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         secondTeamScoreDisplay.setText(secondTeamScore.toString());
     }
 
-    private void showNumPadScorePicker() {
+    private void showNumPadScorePicker(final PickerMode mode) {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.score_picker_numpad);
 
-        final TextView scoreDisplay = (TextView) findViewById(R.id.score_picker_score_display);
+        final TextView pointsDisplay = (TextView) findViewById(R.id.score_picker_score_display);
+
+        LinearLayout checkboxLayout = (LinearLayout) findViewById(R.id.score_picker_checkbox_layout);
+        checkboxLayout.setVisibility(mode == SCORE ? VISIBLE : INVISIBLE);
 
         scoreMultiplier = 1;
         CheckBox doubleScore = (CheckBox) findViewById(R.id.numpad_double_score);
@@ -290,7 +302,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpad0.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, 0);
+                updateScorePickerDisplay(pointsDisplay, 0, mode);
             }
         });
 
@@ -298,7 +310,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpad1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, 1);
+                updateScorePickerDisplay(pointsDisplay, 1, mode);
             }
         });
 
@@ -306,7 +318,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpad2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, 2);
+                updateScorePickerDisplay(pointsDisplay, 2, mode);
             }
         });
 
@@ -314,7 +326,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpad3.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, 3);
+                updateScorePickerDisplay(pointsDisplay, 3, mode);
             }
         });
 
@@ -322,7 +334,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpad4.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, 4);
+                updateScorePickerDisplay(pointsDisplay, 4, mode);
             }
         });
 
@@ -330,7 +342,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpad5.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, 5);
+                updateScorePickerDisplay(pointsDisplay, 5, mode);
             }
         });
 
@@ -338,7 +350,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpad6.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, 6);
+                updateScorePickerDisplay(pointsDisplay, 6, mode);
             }
         });
 
@@ -346,7 +358,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpad7.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, 7);
+                updateScorePickerDisplay(pointsDisplay, 7, mode);
             }
         });
 
@@ -354,7 +366,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpad8.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, 8);
+                updateScorePickerDisplay(pointsDisplay, 8, mode);
             }
         });
 
@@ -362,7 +374,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpad9.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, 9);
+                updateScorePickerDisplay(pointsDisplay, 9, mode);
             }
         });
 
@@ -370,11 +382,12 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         numpadCorrect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScorePickerDisplay(scoreDisplay, -1);
+                updateScorePickerDisplay(pointsDisplay, -1, mode);
             }
         });
 
         Button match = (Button) dialog.findViewById(R.id.score_picker_match);
+        match.setVisibility(mode == SCORE ? VISIBLE : GONE);
         match.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -395,8 +408,13 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         confirmScore.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                int score = Integer.parseInt(scoreDisplay.getText().toString());
-                computeScores(score * scoreMultiplier);
+                int points = Integer.parseInt(pointsDisplay.getText().toString());
+                if (mode == SCORE) {
+                    computeScores(points * scoreMultiplier);
+                } else {
+                    matchStats.setPointsGoal(points);
+                    updatePointsGoal(points);
+                }
                 dialog.dismiss();
             }
         });
@@ -412,7 +430,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         dialog.show();
     }
 
-    private void updateScorePickerDisplay(TextView scoreDisplay, int value) {
+    private void updateScorePickerDisplay(TextView scoreDisplay, int value, PickerMode mode) {
         String currentDisplay = scoreDisplay.getText().toString();
         if (value == -1) {
             if (currentDisplay.length() == 1) {
@@ -426,12 +444,24 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             currentDisplay += value;
         }
 
-        if (Integer.parseInt(currentDisplay) < TOTAL_POINTS_IN_ROUND) {
-            scoreDisplay.setText(currentDisplay);
+        int displayedPoints = Integer.parseInt(currentDisplay);
+        if (mode == SCORE) {
+            if (displayedPoints <= TOTAL_POINTS_IN_ROUND) {
+                scoreDisplay.setText(currentDisplay);
+            } else {
+                Toast.makeText(this, String.format(getString(R.string.toast_invalid_score),
+                        TOTAL_POINTS_IN_ROUND), Toast.LENGTH_SHORT)
+                        .show();
+            }
         } else {
-            Toast.makeText(this, String.format(getString(R.string.toast_invalid_score),
-                    TOTAL_POINTS_IN_ROUND), Toast.LENGTH_SHORT)
-                    .show();
+            int maxGoal = currentMatch.getGameVariant().getPointGoal();
+            if (displayedPoints <= maxGoal) {
+                scoreDisplay.setText(currentDisplay);
+            } else {
+                Toast.makeText(this, String.format(getString(R.string.toast_invalid_score),
+                        maxGoal), Toast.LENGTH_SHORT)
+                        .show();
+            }
         }
     }
 

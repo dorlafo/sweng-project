@@ -82,10 +82,12 @@
             android:text="@string/numpad_text_9"/>
 
         <LinearLayout
+            android:id="@+id/score_picker_checkbox_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="invisible">
 
             <CheckBox
                 android:id="@+id/numpad_double_score"
@@ -135,7 +137,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FAFAFA"
-            android:text="@string/dialog_match"/>
+            android:text="@string/dialog_match"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/score_picker_confirm"

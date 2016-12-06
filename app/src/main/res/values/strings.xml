@@ -108,6 +108,7 @@
     <string name="toast_cannot_cancel">There is nothing to cancel</string>
     <string name="toast_team_assignment_incorrect">Team assignment incorrect</string>
     <string name="toast_invalid_score">Invalid score: the max number of points in a round is %d</string>
+    <string name="toast_invalid_goal">Invalid score goal: the max number of points is %d</string>
 
     <string name="error">Error!</string>
     <string name="error_cannot_join">Can not join match</string>
