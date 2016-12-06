@@ -128,9 +128,9 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     public void testUpdateScore() {
         ownedMatchSetUp();
         getActivity();
-        incrementScore(0, 2);
+        incrementScore(0, "2");
         checkScoreDisplay("2", "155");
-        incrementScore(1, 5);
+        incrementScore(1, "5");
         checkScoreDisplay("154", "160");
     }
 
@@ -150,7 +150,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     public void testCancelUpdateDoesNotUpdateScore() {
         ownedMatchSetUp();
         getActivity();
-        incrementScore(0, 50);
+        incrementScore(0, "50");
         checkScoreDisplay("50", "107");
         onView(withId(R.id.score_update_1)).perform(click());
         onView(withId(R.id.score_picker_cancel)).perform(click());
@@ -164,9 +164,9 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     public void testCancelLastRoundResetsScore() {
         ownedMatchSetUp();
         getActivity();
-        incrementScore(0, 60);
+        incrementScore(0, "60");
         checkScoreDisplay("60", "97");
-        incrementScore(1, 33);
+        incrementScore(1, "33");
         checkScoreDisplay("184", "130");
         onView(withId(R.id.score_update_cancel)).perform(click());
         checkScoreDisplay("60", "97");
@@ -202,7 +202,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     public void testCancelLastMeld() {
         ownedMatchSetUp();
         getActivity();
-        incrementScore(1, 100);
+        incrementScore(1, "100");
         checkScoreDisplay("57", "100");
         addMeld(0, FOUR_JACKS);
         checkScoreDisplay("257", "100");
@@ -215,9 +215,9 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         ownedMatchSetUp();
         getActivity();
         addMeld(0, FOUR_NINE);
-        incrementScore(0, 100);
+        incrementScore(0, "100");
         addMeld(1, FIFTY);
-        incrementScore(1, 50);
+        incrementScore(1, "50");
         addMeld(0, HUNDRED);
         addMeld(0, THREE_CARDS);
         checkScoreDisplay("477", "157");
@@ -247,7 +247,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         }
         addMeld(0, FOUR_JACKS);
         addMeld(1, FOUR_JACKS);
-        incrementScore(1, 50);
+        incrementScore(1, "50");
         String message = String.format(getInstrumentation().getTargetContext()
                 .getResources().getString(R.string.dialog_game_end), "Team 2");
         onView(withText(message)).check(matches(isDisplayed()));
@@ -265,8 +265,8 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     public void testHistoryIsCorrect() {
         ownedMatchSetUp();
         getActivity();
-        incrementScore(1, 50);
-        incrementScore(0, 7);
+        incrementScore(1, "50");
+        incrementScore(0, "7");
         addMeld(1, THREE_CARDS);
         onView(withId(R.id.score_display_2)).perform(click());
         onView(atPositionInTable(1, 1)).check(matches(withText("50")));
@@ -327,6 +327,44 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.score_display_2)).check(matches(withText(secondDisplay)));
     }
 
+    private void incrementScore(int teamIndex, final String value) {
+        int button = teamIndex == 0 ? R.id.score_update_1 : R.id.score_update_2;
+        onView(withId(button)).perform(click());
+        for (int i = 0; i < value.length(); ++i) {
+            int buttonId = buttonId(value.charAt(i));
+            onView(withId(buttonId)).perform(click());
+        }
+        onView(withId(R.id.score_picker_confirm)).perform(click());
+    }
+
+    private int buttonId(char value) {
+        switch (value) {
+            case '0':
+                return R.id.numpad_0;
+            case '1':
+                return R.id.numpad_1;
+            case '2':
+                return R.id.numpad_2;
+            case '3':
+                return R.id.numpad_3;
+            case '4':
+                return R.id.numpad_4;
+            case '5':
+                return R.id.numpad_5;
+            case '6':
+                return R.id.numpad_6;
+            case '7':
+                return R.id.numpad_7;
+            case '8':
+                return R.id.numpad_8;
+            case '9':
+                return R.id.numpad_9;
+            default:
+                return -1;
+        }
+    }
+
+    /*
     private void incrementScore(int teamIndex, final int value) {
         int button = teamIndex == 0 ? R.id.score_update_1 : R.id.score_update_2;
         onView(withId(button)).perform(click());
@@ -349,6 +387,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         });
         onView(withId(R.id.score_picker_confirm)).perform(click());
     }
+    */
 
     private void addMeld(int teamIndex, Meld meld) {
         int meldSpinner = teamIndex == 0 ? R.id.score_meld_spinner_1 : R.id.score_meld_spinner_2;
