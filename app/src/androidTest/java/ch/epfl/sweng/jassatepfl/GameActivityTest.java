@@ -1,11 +1,8 @@
 package ch.epfl.sweng.jassatepfl;
 
 import android.content.Intent;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
 import android.view.View;
 import android.view.ViewParent;
-import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
@@ -27,11 +24,9 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.FIFTY;
@@ -46,7 +41,6 @@ import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.marco;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -286,6 +280,8 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         offlineMatchSetup();
         getActivity();
         onView(withId(R.id.game_playing_to)).check(matches(isClickable()));
+        incrementScore(-1, "700");
+        /*
         onView(withId(R.id.game_playing_to)).perform(click());
         onView(withClassName(equalTo(NumberPicker.class.getName()))).perform(new ViewAction() {
             @Override
@@ -305,6 +301,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
             }
         });
         onView(withId(R.id.goal_picker_confirm)).perform(click());
+        */
         String playingTo = String.format(getInstrumentation().getTargetContext().getResources()
                 .getString(R.string.game_text_point_goal), Integer.toString(700));
         onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
@@ -328,7 +325,18 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     }
 
     private void incrementScore(int teamIndex, final String value) {
-        int button = teamIndex == 0 ? R.id.score_update_1 : R.id.score_update_2;
+        int button = 0;
+        switch (teamIndex) {
+            case 0:
+                button = R.id.score_update_1;
+                break;
+            case 1:
+                button = R.id.score_update_2;
+                break;
+            case -1:
+                button = R.id.game_playing_to;
+                break;
+        }
         onView(withId(button)).perform(click());
         for (int i = 0; i < value.length(); ++i) {
             int buttonId = buttonId(value.charAt(i));
