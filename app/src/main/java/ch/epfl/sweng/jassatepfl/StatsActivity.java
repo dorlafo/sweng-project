@@ -74,8 +74,9 @@ public class StatsActivity extends BaseActivityWithNavDrawer {
                     return new CountersFragment();
                 case 1:
                     return new TimeSeriesFragment();
+                case 2:
                 default:
-                    return new LeaderboardFragment().setReference(dbRefWrapped);
+                    return new LeaderboardFragment();
             }
         }
 

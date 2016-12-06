@@ -191,7 +191,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                     break;
             }
         }
-        Log.d(TAG, "onResume:finished");
     }
 
     @Override

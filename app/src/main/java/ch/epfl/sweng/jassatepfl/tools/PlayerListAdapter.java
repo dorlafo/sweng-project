@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +17,6 @@ import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
-/**
- * Adapter for Player List
- *
- * @author Alexis Montavon
- */
 public class PlayerListAdapter extends ArrayAdapter<Player> {
 
     private List<Player> players;
@@ -29,9 +25,9 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
 
     public PlayerListAdapter(Context context, int resource, List<Player> players, Match match, Map<String, Boolean> playersReady) {
         super(context, resource, players);
-        this.players = players;
+        this.players = new ArrayList<>(players);
         this.match = match;
-        this.playersReady = playersReady;
+        this.playersReady = new HashMap<>(playersReady);
     }
 
     public PlayerListAdapter(Context context, int resource, List<Player> players) {
@@ -101,6 +97,12 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         this.match = m;
         this.playersReady.clear();
         this.playersReady.putAll(pr);
+        notifyDataSetChanged();
+    }
+
+    public void refreshData(List<Player> p) {
+        this.players.clear();
+        this.players.addAll(p);
         notifyDataSetChanged();
     }
 
