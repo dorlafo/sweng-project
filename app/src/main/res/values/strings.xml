@@ -38,6 +38,18 @@
     <string name="game_score_table_melds">Melds</string>
     <string name="game_default_score">-</string>
 
+    <string name="numpad_text_0">0</string>
+    <string name="numpad_text_1">1</string>
+    <string name="numpad_text_2">2</string>
+    <string name="numpad_text_3">3</string>
+    <string name="numpad_text_4">4</string>
+    <string name="numpad_text_5">5</string>
+    <string name="numpad_text_6">6</string>
+    <string name="numpad_text_7">7</string>
+    <string name="numpad_text_8">8</string>
+    <string name="numpad_text_9">9</string>
+    <string name="numpad_text_double_score">x2</string>
+
     <string name="list_empty_list">No matches are available</string>
 
     <string name="profile_label_player_id">Player id :</string>
@@ -95,6 +107,7 @@
     <string name="toast_invite_yourself">You cannot invite yourself</string>
     <string name="toast_cannot_cancel">There is nothing to cancel</string>
     <string name="toast_team_assignment_incorrect">Team assignment incorrect</string>
+    <string name="toast_invalid_score">Invalid score: the max number of points in a round is %d</string>
 
     <string name="error">Error!</string>
     <string name="error_cannot_join">Can not join match</string>
@@ -112,6 +125,7 @@
     <string name="icon_description_meld_spinner">Opens the meld selection menu</string>
     <string name="icon_description_score_update">Opens the score update menu</string>
     <string name="icon_description_score_cancel">Cancels the last score update</string>
+    <string name="icon_description_score_picker_cancel">Cancels the last number input</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

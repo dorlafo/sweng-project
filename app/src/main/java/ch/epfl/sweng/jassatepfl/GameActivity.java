@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TableLayout;
@@ -73,6 +75,8 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
     private Caller caller;
     private Stack<Caller> meldCallers;
     private Mode mode;
+
+    private int scoreMultiplier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,11 +152,13 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                 break;
             case R.id.score_update_1:
                 caller = FIRST_TEAM;
-                showScorePicker();
+                //showScorePicker();
+                showNumPadScorePicker();
                 break;
             case R.id.score_update_2:
                 caller = SECOND_TEAM;
-                showScorePicker();
+                //showScorePicker();
+                showNumPadScorePicker();
                 break;
             case R.id.score_meld_spinner_1:
                 meldCallers.push(FIRST_TEAM);
@@ -263,6 +269,170 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         Integer secondTeamScore = matchStats.getTotalMatchScore(1);
         firstTeamScoreDisplay.setText(firstTeamScore.toString());
         secondTeamScoreDisplay.setText(secondTeamScore.toString());
+    }
+
+    private void showNumPadScorePicker() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.score_picker_numpad);
+
+        final TextView scoreDisplay = (TextView) findViewById(R.id.score_picker_score_display);
+
+        scoreMultiplier = 1;
+        CheckBox doubleScore = (CheckBox) findViewById(R.id.numpad_double_score);
+        doubleScore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                scoreMultiplier = isChecked ? 2 : 1;
+            }
+        });
+
+        Button numpad0 = (Button) findViewById(R.id.numpad_0);
+        numpad0.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, 0);
+            }
+        });
+
+        Button numpad1 = (Button) findViewById(R.id.numpad_1);
+        numpad1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, 1);
+            }
+        });
+
+        Button numpad2 = (Button) findViewById(R.id.numpad_2);
+        numpad2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, 2);
+            }
+        });
+
+        Button numpad3 = (Button) findViewById(R.id.numpad_3);
+        numpad3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, 3);
+            }
+        });
+
+        Button numpad4 = (Button) findViewById(R.id.numpad_4);
+        numpad4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, 4);
+            }
+        });
+
+        Button numpad5 = (Button) findViewById(R.id.numpad_5);
+        numpad5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, 5);
+            }
+        });
+
+        Button numpad6 = (Button) findViewById(R.id.numpad_6);
+        numpad6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, 6);
+            }
+        });
+
+        Button numpad7 = (Button) findViewById(R.id.numpad_7);
+        numpad7.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, 7);
+            }
+        });
+
+        Button numpad8 = (Button) findViewById(R.id.numpad_8);
+        numpad8.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, 8);
+            }
+        });
+
+        Button numpad9 = (Button) findViewById(R.id.numpad_9);
+        numpad9.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, 9);
+            }
+        });
+
+        ImageButton numpadCorrect = (ImageButton) findViewById(R.id.numpad_correct);
+        numpadCorrect.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(scoreDisplay, -1);
+            }
+        });
+
+        Button match = (Button) dialog.findViewById(R.id.numpad_match);
+        match.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (caller) {
+                    case FIRST_TEAM:
+                        updateScore(MATCH_POINTS * scoreMultiplier, 0);
+                        break;
+                    case SECOND_TEAM:
+                        updateScore(0, MATCH_POINTS * scoreMultiplier);
+                        break;
+                }
+                dialog.dismiss();
+                displayScore();
+            }
+        });
+
+        Button confirmScore = (Button) dialog.findViewById(R.id.numpad_confirm);
+        confirmScore.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int score = Integer.parseInt(scoreDisplay.getText().toString());
+                computeScores(score * scoreMultiplier);
+                dialog.dismiss();
+            }
+        });
+
+        Button cancel = (Button) dialog.findViewById(R.id.numpad_cancel);
+        cancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void updateScorePickerDisplay(TextView scoreDisplay, int value) {
+        String currentDisplay = scoreDisplay.getText().toString();
+        if (value == -1) {
+            if (currentDisplay.length() == 1) {
+                currentDisplay = "0";
+            } else {
+                currentDisplay = currentDisplay.substring(0, currentDisplay.length() - 2);
+            }
+        } else if (currentDisplay.equals("0") && value != 0) {
+            currentDisplay = Integer.toString(value);
+        } else if (!currentDisplay.equals("0")) {
+            currentDisplay += value;
+        }
+
+        if (Integer.parseInt(currentDisplay) < TOTAL_POINTS_IN_ROUND) {
+            scoreDisplay.setText(currentDisplay);
+        } else {
+            Toast.makeText(this, String.format(getString(R.string.toast_invalid_score),
+                    TOTAL_POINTS_IN_ROUND), Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     private void showScorePicker() {
