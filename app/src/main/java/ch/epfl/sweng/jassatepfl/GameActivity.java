@@ -281,7 +281,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     }
 
     private void updateMatchStats() {
-        dbRefWrapped.child("matchStats").child(matchId).setValue(matchStats);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId).setValue(matchStats);
     }
 
     private void setUp() {
@@ -293,7 +293,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         secondTeamScoreDisplay.setEnabled(false);
 
         final boolean isOwner = currentMatch.createdBy().getID().toString().equals(getUserSciper());
-        final int visibility = isOwner ? VISIBLE : INVISIBLE;
+        final boolean isFinished = currentMatch.getMatchStatus().equals(Match.MatchStatus.FINISHED);
+        final int visibility = (isOwner || isFinished) ? VISIBLE : INVISIBLE;
 
         ImageButton firstTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_1);
         firstTeamUpdateButton.setOnClickListener(this);
@@ -320,10 +321,10 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         String goalText = String.format(getString(R.string.game_text_point_goal), pointsGoal);
         goal.setText(goalText);
 
-        if (isOwner) {
+        /*if (isOwner) {
             firstTeamScoreDisplay.setEnabled(true);
             secondTeamScoreDisplay.setEnabled(true);
-        }
+        }*/
         statsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -334,6 +335,11 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                     displayScore();
                     if (matchStats.goalHasBeenReached()) {
                         displayEndOfMatchMessage(matchStats.getWinnerIndex());
+                        Match m = matchStats.getMatch();
+                        m.setStatus(Match.MatchStatus.FINISHED);
+                        matchStats.setMatch(m);
+                        updateMatchStats();
+                        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(m);
                     }
                 } else {
                     firstTeamScoreDisplay.setEnabled(false);

@@ -199,6 +199,14 @@ public class MatchStats {
         updateTotalScore(teamIndex, meld.value());
     }
 
+    /**
+     * Set the match to the given one
+     * @param m The match
+     */
+    public void setMatch(Match m) {
+        this.match = m;
+    }
+
     public void setWinnerIndex(int winnerIndex) {
         this.winnerIndex = winnerIndex;
     }
