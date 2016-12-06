@@ -374,7 +374,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             }
         });
 
-        Button match = (Button) dialog.findViewById(R.id.numpad_match);
+        Button match = (Button) dialog.findViewById(R.id.score_picker_match);
         match.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -391,7 +391,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             }
         });
 
-        Button confirmScore = (Button) dialog.findViewById(R.id.numpad_confirm);
+        Button confirmScore = (Button) dialog.findViewById(R.id.score_picker_confirm);
         confirmScore.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -401,7 +401,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             }
         });
 
-        Button cancel = (Button) dialog.findViewById(R.id.numpad_cancel);
+        Button cancel = (Button) dialog.findViewById(R.id.score_picker_cancel);
         cancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
