@@ -426,11 +426,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                 displayToast(R.string.toast_invalid_score, TOTAL_POINTS_IN_ROUND);
             }
         } else {
-            if (displayedPoints >= 500) {
-                scoreDisplay.setText(currentDisplay);
-            } else {
-                displayToast(R.string.toast_invalid_goal, 500);
-            }
+            scoreDisplay.setText(currentDisplay);
         }
     }
 

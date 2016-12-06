@@ -281,27 +281,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         getActivity();
         onView(withId(R.id.game_playing_to)).check(matches(isClickable()));
         incrementScore(-1, "700", false);
-        /*
-        onView(withId(R.id.game_playing_to)).perform(click());
-        onView(withClassName(equalTo(NumberPicker.class.getName()))).perform(new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isAssignableFrom(NumberPicker.class);
-            }
-
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                NumberPicker numberPicker = (NumberPicker) view;
-                numberPicker.setValue(700);
-            }
-        });
-        onView(withId(R.id.goal_picker_confirm)).perform(click());
-        */
         String playingTo = String.format(getInstrumentation().getTargetContext().getResources()
                 .getString(R.string.game_text_point_goal), Integer.toString(700));
         onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
@@ -315,7 +294,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
                 .getString(R.string.game_text_point_goal), Integer.toString(1000));
         onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
         onView(withId(R.id.game_playing_to)).perform(click());
-        onView(withId(R.id.goal_picker_cancel)).perform(click());
+        onView(withId(R.id.score_picker_cancel)).perform(click());
         onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
     }
 
@@ -331,7 +310,16 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testNumpadCorrect() {
-
+        ownedMatchSetUp();
+        getActivity();
+        onView(withId(R.id.score_update_1)).perform(click());
+        onView(withId(R.id.numpad_1)).perform(click());
+        onView(withId(R.id.numpad_3)).perform(click());
+        onView(withId(R.id.numpad_4)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.numpad_9)).perform(click());
+        onView(withId(R.id.score_picker_confirm)).perform(click());
+        checkScoreDisplay("139", "18");
     }
 
     @Test
@@ -339,16 +327,10 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         ownedMatchSetUp();
         getActivity();
         incrementScore(0, "500", false);
-        onView(withText(R.string.toast_invalid_score)).inRoot(new ToastMatcherTest())
-                .check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testToastIsDisplayedForInvalidGoal() {
-        offlineMatchSetup();
-        getActivity();
-        incrementScore(-1, "3000", false);
-        onView(withText(R.string.toast_invalid_goal)).inRoot(new ToastMatcherTest())
+        String pointToast = getInstrumentation().getTargetContext().getResources()
+                .getString(R.string.toast_invalid_score);
+        pointToast = String.format(pointToast, 157);
+        onView(withText(pointToast)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
     }
 
@@ -407,31 +389,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
                 return -1;
         }
     }
-
-    /*
-    private void incrementScore(int teamIndex, final int value) {
-        int button = teamIndex == 0 ? R.id.score_update_1 : R.id.score_update_2;
-        onView(withId(button)).perform(click());
-        onView(withClassName(equalTo(NumberPicker.class.getName()))).perform(new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isAssignableFrom(NumberPicker.class);
-            }
-
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                NumberPicker numberPicker = (NumberPicker) view;
-                numberPicker.setValue(value);
-            }
-        });
-        onView(withId(R.id.score_picker_confirm)).perform(click());
-    }
-    */
 
     private void addMeld(int teamIndex, Meld meld) {
         int meldSpinner = teamIndex == 0 ? R.id.score_meld_spinner_1 : R.id.score_meld_spinner_2;
