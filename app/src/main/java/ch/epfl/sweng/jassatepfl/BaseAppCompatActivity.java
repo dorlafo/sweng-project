@@ -35,6 +35,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
                     .show();
+            return "";
         }
         return sciper;
     }
