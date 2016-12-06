@@ -90,6 +90,8 @@
     <string name="toast_invite_yourself">You cannot invite yourself</string>
     <string name="toast_cannot_cancel">There is nothing to cancel</string>
     <string name="toast_team_assignment_incorrect">Team assignment incorrect</string>
+    <string name="toast_could_not_connect_to_tequila">Could not reach Tequila server. Please try again.</string>
+    <string name="toast_could_not_perform_login">Could not perform login. Please try again</string>
 
     <string name="error">Error!</string>
     <string name="error_cannot_join">Can not join match</string>

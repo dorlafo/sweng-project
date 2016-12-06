@@ -395,7 +395,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                //TODO: check if this is indeed not used
                 Log.d(TAG, "pendingMatchListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
             }
 
