@@ -127,6 +127,7 @@
     <string name="icon_description_score_update">Opens the score update menu</string>
     <string name="icon_description_score_cancel">Cancels the last score update</string>
     <string name="icon_description_score_picker_cancel">Cancels the last number input</string>
+    <string name="icon_description_split_goal">Enable different goals for both teams</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

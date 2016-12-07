@@ -49,8 +49,12 @@ import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.SECOND_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Mode.OFFLINE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Mode.ONLINE;
-import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.GOAL;
+import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.COMMON_GOAL;
+import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.FIRST_TEAM_GOAL;
 import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.SCORE;
+import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.SECOND_TEAM_GOAL;
+import static ch.epfl.sweng.jassatepfl.GameActivity.SplitMode.NORMAL;
+import static ch.epfl.sweng.jassatepfl.GameActivity.SplitMode.SPLIT;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.SENTINEL;
 
 public class GameActivity extends BaseActivityWithNavDrawer implements OnClickListener {
@@ -74,6 +78,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
     private Caller caller;
     private Stack<Caller> meldCallers;
     private Mode mode;
+    private SplitMode splitMode;
 
     private int scoreMultiplier;
 
@@ -83,13 +88,16 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
 
     protected enum Mode {ONLINE, OFFLINE}
 
-    protected enum PickerMode {SCORE, GOAL}
+    protected enum PickerMode {SCORE, COMMON_GOAL, FIRST_TEAM_GOAL, SECOND_TEAM_GOAL}
+
+    protected enum SplitMode {NORMAL, SPLIT}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent startingIntent = getIntent();
         mode = startingIntent.getStringExtra("mode").equals("online") ? ONLINE : OFFLINE;
+        splitMode = NORMAL;
         if (mode == ONLINE && fAuth.getCurrentUser() == null) {
             //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
@@ -186,9 +194,48 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                 }
                 break;
             case R.id.game_playing_to:
-                showNumPadScorePicker(GOAL);
+                showNumPadScorePicker(COMMON_GOAL);
+                break;
+            case R.id.split_team_goals:
+                changeSplitMode();
+                break;
+            case R.id.team_goal_1:
+                showNumPadScorePicker(FIRST_TEAM_GOAL);
+                break;
+            case R.id.team_goal_2:
+                showNumPadScorePicker(SECOND_TEAM_GOAL);
                 break;
         }
+    }
+
+    private void changeSplitMode() {
+        TextView commonGoal = (TextView) findViewById(R.id.game_playing_to);
+        TextView firstTeamGoal = (TextView) findViewById(R.id.team_goal_1);
+        TextView secondTeamGoal = (TextView) findViewById(R.id.team_goal_2);
+        if (splitMode == NORMAL) {
+            splitMode = SPLIT;
+            commonGoal.setVisibility(INVISIBLE);
+            String defaultGoal = Integer.toString(currentMatch.getGameVariant().getPointGoal());
+
+            firstTeamGoal.setVisibility(VISIBLE);
+            firstTeamGoal.setText(defaultGoal);
+            firstTeamGoal.setOnClickListener(this);
+
+            secondTeamGoal.setVisibility(VISIBLE);
+            secondTeamGoal.setText(defaultGoal);
+            secondTeamGoal.setOnClickListener(this);
+        } else {
+            splitMode = NORMAL;
+            commonGoal.setVisibility(VISIBLE);
+            firstTeamGoal.setVisibility(GONE);
+            secondTeamGoal.setVisibility(GONE);
+        }
+    }
+
+    private void updateSplitGoal(int index, int points) {
+        int goalIndex = index == 0 ? R.id.team_goal_1 : R.id.team_goal_2;
+        TextView goal = (TextView) findViewById(goalIndex);
+        goal.setText(Integer.toString(points));
     }
 
     private void displayMeldSpinner(final int teamIndex) {
@@ -382,11 +429,22 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             @Override
             public void onClick(View v) {
                 int points = Integer.parseInt(pointsDisplay.getText().toString());
-                if (pickerMode == SCORE) {
-                    computeScores(points * scoreMultiplier, scoreMultiplier);
-                } else {
-                    matchStats.setPointsGoal(points);
-                    updatePointsGoal(points);
+                switch (pickerMode) {
+                    case SCORE:
+                        computeScores(points * scoreMultiplier, scoreMultiplier);
+                        break;
+                    case COMMON_GOAL:
+                        matchStats.setPointsGoal(points);
+                        updatePointsGoal(points);
+                        break;
+                    case FIRST_TEAM_GOAL:
+                        matchStats.setPointsGoal(0, points);
+                        updateSplitGoal(0, points);
+                        break;
+                    case SECOND_TEAM_GOAL:
+                        matchStats.setPointsGoal(1, points);
+                        updateSplitGoal(1, points);
+                        break;
                 }
                 dialog.dismiss();
             }
@@ -456,6 +514,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         firstTeamScoreDisplay = (TextView) findViewById(R.id.score_display_1);
         firstTeamScoreDisplay.setOnClickListener(this);
         firstTeamScoreDisplay.setEnabled(false);
+
         secondTeamScoreDisplay = (TextView) findViewById(R.id.score_display_2);
         secondTeamScoreDisplay.setOnClickListener(this);
         secondTeamScoreDisplay.setEnabled(false);
@@ -478,6 +537,10 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         ImageButton secondMeldSpinner = (ImageButton) findViewById(R.id.score_meld_spinner_2);
         secondMeldSpinner.setOnClickListener(this);
         secondMeldSpinner.setVisibility(visibility);
+
+        ImageButton splitGoals = (ImageButton) findViewById(R.id.split_team_goals);
+        splitGoals.setVisibility(mode == OFFLINE ? VISIBLE : INVISIBLE);
+        splitGoals.setOnClickListener(this);
 
         cancelButton = (ImageButton) findViewById(R.id.score_update_cancel);
         cancelButton.setOnClickListener(this);

@@ -74,6 +74,16 @@
                     android:visibility="invisible"/>
 
                 <TextView
+                    android:id="@+id/team_goal_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/score_display_1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@android:color/black"
+                    android:visibility="gone"/>
+
+                <TextView
                     android:id="@+id/team_name_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -129,6 +139,17 @@
                 android:layout_centerVertical="true"
                 android:textColor="@android:color/black"/>
 
+            <ImageButton
+                android:id="@+id/split_team_goals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="#FAFAFA"
+                android:contentDescription="@string/icon_description_split_goal"
+                android:src="@drawable/ic_call_split_black"
+                android:visibility="invisible"/>
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -173,6 +194,16 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/score_text_size"
                     android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/team_goal_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/score_display_2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@android:color/black"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/team_members_2"

@@ -24,7 +24,7 @@ public class MatchStats {
     private int nbTeam;
     private List<Round> rounds;
     private Map<String, Integer> totalScores;
-    private int pointsGoal;
+    private Map<String, Integer> pointsGoal;
     // Index to the current round
     private int currentRoundIndex;
     private int winnerIndex;
@@ -43,10 +43,11 @@ public class MatchStats {
         this.rounds = new ArrayList<>();
         this.rounds.add(new Round(nbTeam));
         this.totalScores = new HashMap<>();
+        this.pointsGoal = new HashMap<>();
         for (int i = 0; i < nbTeam; ++i) {
             totalScores.put(concatKey(i), 0);
+            pointsGoal.put(concatKey(i), match.getGameVariant().getPointGoal());
         }
-        this.pointsGoal = match.getGameVariant().getPointGoal();
         this.currentRoundIndex = 0;
         this.winnerIndex = -1;
     }
@@ -85,8 +86,8 @@ public class MatchStats {
         return Collections.unmodifiableMap(totalScores);
     }
 
-    public int getPointsGoal() {
-        return pointsGoal;
+    public Map<String, Integer> getPointsGoal() {
+        return Collections.unmodifiableMap(pointsGoal);
     }
 
     public int getCurrentRoundIndex() {
@@ -108,7 +109,7 @@ public class MatchStats {
     public boolean allTeamsHaveReachedGoal() {
         boolean allTeamSHaveReachedGoal = true;
         for (String key : totalScores.keySet()) {
-            allTeamSHaveReachedGoal &= totalScores.get(key) >= pointsGoal;
+            allTeamSHaveReachedGoal &= totalScores.get(key) >= pointsGoal.get(key);
         }
         return allTeamSHaveReachedGoal;
     }
@@ -205,8 +206,14 @@ public class MatchStats {
         updateTotalScore(teamIndex, meld.value());
     }
 
-    public void setPointsGoal(int pointsGoal) {
-        this.pointsGoal = pointsGoal;
+    public void setPointsGoal(int goal) {
+        for (String key : pointsGoal.keySet()) {
+            pointsGoal.put(key, goal);
+        }
+    }
+
+    public void setPointsGoal(int teamIndex, int goal) {
+        pointsGoal.put(concatKey(teamIndex), goal);
     }
 
     public void setWinnerIndex(int winnerIndex) {
@@ -228,7 +235,7 @@ public class MatchStats {
     private boolean updateGoalAndWinner() {
         boolean goalHasBeenReached = false;
         for (String key : totalScores.keySet()) {
-            if (!goalHasBeenReached && totalScores.get(key) >= pointsGoal) {
+            if (!goalHasBeenReached && totalScores.get(key) >= pointsGoal.get(key)) {
                 goalHasBeenReached = true;
                 winnerIndex = winnerIndex == -1 ? key.charAt(4) - '0' : winnerIndex;
             }
