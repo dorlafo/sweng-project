@@ -59,6 +59,7 @@ public class GameInfo {
         return drawProbability;
     }
 
+    /*
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,5 +101,5 @@ public class GameInfo {
                 ", dynamicsFactor=" + dynamicsFactor +
                 ", drawProbability=" + drawProbability +
                 '}';
-    }
+    }*/
 }
