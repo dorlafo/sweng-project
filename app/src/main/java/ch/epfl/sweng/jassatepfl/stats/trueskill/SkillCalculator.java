@@ -6,7 +6,6 @@ import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.tools.maths.MathUtils;
 
-import static ch.epfl.sweng.jassatepfl.stats.trueskill.SkillCalculator.OutCome.DRAW;
 import static ch.epfl.sweng.jassatepfl.stats.trueskill.SkillCalculator.OutCome.OTHERTEAM;
 import static ch.epfl.sweng.jassatepfl.stats.trueskill.SkillCalculator.OutCome.USERTEAM;
 
@@ -16,23 +15,30 @@ import static ch.epfl.sweng.jassatepfl.stats.trueskill.SkillCalculator.OutCome.U
 public class SkillCalculator {
 
     public enum OutCome {
-        DRAW, USERTEAM, OTHERTEAM
+        USERTEAM, OTHERTEAM
     }
 
     public SkillCalculator() {
 
     }
 
-    public static Rank calculateNewRatings(GameInfo gameInfo, List<Rank> players, OutCome winner) {
+    public static Rank calculateNewRatings(GameInfo gameInfo, List<Rank> players, int winner) {
         List<Rank> team1 = new ArrayList<>();
         team1.add(players.get(0));
         team1.add(players.get(1));
 
         List<Rank> team2 = new ArrayList<>();
-        team2.add(players.get(0));
-        team2.add(players.get(1));
+        team2.add(players.get(2));
+        team2.add(players.get(3));
 
-        return updateRating(gameInfo, team1, team2, winner);
+        OutCome whoWon;
+        if(winner == 0) {
+            whoWon = USERTEAM;
+        } else {
+            whoWon = OTHERTEAM;
+        }
+
+        return updateRating(gameInfo, team1, team2, whoWon);
     }
 
     private static Rank updateRating(GameInfo gameInfo, List<Rank> userTeam, List<Rank> otherTeam, OutCome winner) {
@@ -70,20 +76,10 @@ public class SkillCalculator {
         double w;
         double rankMultiplier;
 
-        if(winner != DRAW) {
-            v = TruncatedGaussianCorrectionFunctions.vExceedsMargin(meanDelta, drawMargin, c);
-            w = TruncatedGaussianCorrectionFunctions.wExceedsMargin(meanDelta, drawMargin, c);
+        v = TruncatedGaussianCorrectionFunctions.vExceedsMargin(meanDelta, drawMargin, c);
+        w = TruncatedGaussianCorrectionFunctions.wExceedsMargin(meanDelta, drawMargin, c);
 
-            if(winner == USERTEAM) {
-               rankMultiplier = 1;
-            } else {
-                rankMultiplier = -1;
-            }
-        } else {
-            v = TruncatedGaussianCorrectionFunctions.vWithinMargin(meanDelta, drawMargin, c);
-            w = TruncatedGaussianCorrectionFunctions.wWithinMargin(meanDelta, drawMargin, c);
-            rankMultiplier = 1;
-        }
+        rankMultiplier = (winner == USERTEAM) ?  1 : -1;
 
         Rank userRank = userTeam.get(0);
 
