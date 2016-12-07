@@ -334,6 +334,46 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
                 .check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testSplitGoalsAreHiddenInOnlineMode() {
+        ownedMatchSetUp();
+        getActivity();
+        onView(withId(R.id.split_team_goals)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.team_goal_1)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.team_goal_2)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testSplitGoalsDisplaysBothGoals() {
+        offlineMatchSetup();
+        getActivity();
+        onView(withId(R.id.split_team_goals)).perform(click());
+        onView(withId(R.id.team_goal_1)).check(matches(isDisplayed()));
+        onView(withId(R.id.team_goal_2)).check(matches(isDisplayed()));
+        onView(withId(R.id.game_playing_to)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testCanReturnToNormalModeFromSplitMode() {
+        offlineMatchSetup();
+        getActivity();
+        onView(withId(R.id.split_team_goals)).perform(click());
+        onView(withId(R.id.game_playing_to)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.split_team_goals)).perform(click());
+        onView(withId(R.id.game_playing_to)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSplitGoalsCanUpdateBothTeamsGoals() {
+        offlineMatchSetup();
+        getActivity();
+        onView(withId(R.id.split_team_goals)).perform(click());
+        incrementScore(2, "456", false);
+        onView(withId(R.id.team_goal_1)).check(matches(withText("456")));
+        incrementScore(3, "789", false);
+        onView(withId(R.id.team_goal_2)).check(matches(withText("789")));
+    }
+
     private void checkScoreDisplay(String firstDisplay, String secondDisplay) {
         onView(withId(R.id.score_display_1)).check(matches(withText(firstDisplay)));
         onView(withId(R.id.score_display_2)).check(matches(withText(secondDisplay)));
@@ -347,6 +387,12 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
                 break;
             case 1:
                 button = R.id.score_update_2;
+                break;
+            case 2:
+                button = R.id.team_goal_1;
+                break;
+            case 3:
+                button = R.id.team_goal_2;
                 break;
             case -1:
                 button = R.id.game_playing_to;
