@@ -205,9 +205,14 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                 matchStats.setWinnerIndex(caller.ordinal());
             }
             // dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats); TODO: mock the buffer
+            sendNewRankToServer(currentMatch, caller.ordinal());
             displayEndOfMatchMessage(matchStats.getWinnerIndex());
         }
         updateMatchStats();
+    }
+
+    public void sendNewRankToServer(Match currentMatch, int winner) {
+
     }
 
     @SuppressLint("SetTextI18n")
