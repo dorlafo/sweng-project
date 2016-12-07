@@ -189,16 +189,6 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         release();
     }
 
-    /* TODO: fix this test (fails with: java.lang.IllegalArgumentException: The node 'pendingMatches' does not have a children named : f1bf8130-81b0-42ed-80e6-96495d0e3e7d)
-    @Test
-    public void testCreateMatchSendsIntent() {
-        init();
-        Matcher<Intent> expectedIntent = hasComponent(WaitingPlayersActivity.class.getName());
-        onView(withId(R.id.create_create_button)).perform(click());
-        intended(expectedIntent);
-    }
-    */
-
     private void removePlayer(Player player) {
         onData(allOf(is(instanceOf(Player.class)), hasToString(player.toString())))
                 .inAdapterView(withId(R.id.create_player_list))
