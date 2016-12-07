@@ -266,6 +266,7 @@ public class GaussianDistribution {
         return precisionMean;
     }
 
+    /*
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -301,5 +302,5 @@ public class GaussianDistribution {
     @Override
     public String toString() { // Debug help
         return String.format("Mean(μ)=%f, Std-Dev(σ)=%f", mean, standardDeviation);
-    }
+    }*/
 }
