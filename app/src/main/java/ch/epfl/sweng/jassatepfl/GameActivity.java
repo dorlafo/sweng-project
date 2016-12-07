@@ -194,10 +194,9 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
     private void displayMeldSpinner(final int teamIndex) {
         List<Meld> melds = new ArrayList<>(Arrays.asList(Meld.values()));
         melds.remove(SENTINEL);
-        final ArrayAdapter<Meld> meldAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, melds);
+        final ArrayAdapter<Meld> meldAdapter = new ArrayAdapter<>(this, R.layout.meld_spinner, melds);
         new AlertDialog.Builder(this)
-                .setTitle(R.string.game_select_meld)
+                //.setTitle(R.string.game_select_meld)
                 .setAdapter(meldAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
