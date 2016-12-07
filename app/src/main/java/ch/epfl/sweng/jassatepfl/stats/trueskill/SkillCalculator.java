@@ -31,12 +31,8 @@ public class SkillCalculator {
         team2.add(players.get(2));
         team2.add(players.get(3));
 
-        OutCome whoWon;
-        if(winner == 0) {
-            whoWon = USERTEAM;
-        } else {
-            whoWon = OTHERTEAM;
-        }
+
+        OutCome whoWon = (winner == 0) ? USERTEAM : OTHERTEAM;
 
         return updateRating(gameInfo, team1, team2, whoWon);
     }
