@@ -10,6 +10,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.stats.trueskill.GameInfo;
 import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
 
 
@@ -60,6 +61,10 @@ public class UserStats {
      */
     public UserStats() {
 
+    }
+
+    public Rank getRank() {
+        return rank;
     }
 
     /* Getters */
