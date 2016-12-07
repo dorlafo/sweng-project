@@ -24,7 +24,7 @@ public class SkillCalculatorTest {
 
         List<Rank> players = Arrays.asList(userRank, player2, player3, player4);
 
-        Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, SkillCalculator.OutCome.USERTEAM);
+        Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, 0);
         assertEquals(userRank.getRank()  < newUserRank.getRank(), true);
     }
 
@@ -37,7 +37,7 @@ public class SkillCalculatorTest {
 
         List<Rank> players = Arrays.asList(userRank, player2, player3, player4);
 
-        Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, SkillCalculator.OutCome.USERTEAM);
+        Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, 0);
         assertEquals(userRank.getRank() < newUserRank.getRank(), true);
     }
 
@@ -50,7 +50,7 @@ public class SkillCalculatorTest {
 
         List<Rank> players = Arrays.asList(userRank, player2, player3, player4);
 
-        Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, SkillCalculator.OutCome.OTHERTEAM);
+        Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, 1);
 
         assertEquals(userRank.getRank() < newUserRank.getRank(), false);
     }
@@ -64,20 +64,7 @@ public class SkillCalculatorTest {
 
         List<Rank> players = Arrays.asList(userRank, player2, player3, player4);
 
-        Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, SkillCalculator.OutCome.OTHERTEAM);
+        Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, 1);
         assertEquals(userRank.getRank() < newUserRank.getRank(), false);
-    }
-
-    @Test
-    public void userShouldGetAHigherRankWhenDrawTest() {
-        Rank userRank = new Rank(20, 2);
-        Rank player2 = new Rank(20, 2);
-        Rank player3 = new Rank(10, 3);
-        Rank player4 = new Rank(10, 3);
-
-        List<Rank> players = Arrays.asList(userRank, player2, player3, player4);
-
-        Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, SkillCalculator.OutCome.DRAW);
-        assertEquals(userRank.getRank() < newUserRank.getRank(), true);
     }
 }
