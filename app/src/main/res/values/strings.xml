@@ -37,11 +37,7 @@
 
     <string name="list_empty_list">No matches are available</string>
 
-    <string name="profile_label_player_id">Player id :</string>
-    <string name="profile_label_first_name">First name :</string>
-    <string name="profile_label_last_name">Last name :</string>
     <string name="profile_label_quote">Quote :</string>
-    <string name="profile_button_text_menu">Menu</string>
 
     <string name="login_welcoming_text">Welcome to Jass@EPFL !\nTo use this app you need to\nlogin with your EPFL account</string>
     <string name="login_button_text">Login</string>
