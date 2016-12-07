@@ -29,12 +29,18 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
+import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Round;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
+import ch.epfl.sweng.jassatepfl.stats.UserStats;
+import ch.epfl.sweng.jassatepfl.stats.trueskill.GameInfo;
+import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
+import ch.epfl.sweng.jassatepfl.stats.trueskill.SkillCalculator;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static android.view.View.GONE;
@@ -211,8 +217,56 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         updateMatchStats();
     }
 
-    public void sendNewRankToServer(Match currentMatch, int winner) {
+    private void sendNewRankToServer(Match currentMatch, int winner) {
+        Map<String, List<String>> teams = currentMatch.getTeams();
+        final List<Rank> playersRank = new ArrayList<>();
+        String currentUserId = fAuth.getCurrentUser().getDisplayName();
 
+        playersRank.add(getRankFromServer(currentUserId));
+
+        for(String id: teams.get(currentUserId)) {
+            if(!id.equals(currentUserId)) {
+                Rank playerRank = getRankFromServer(id);
+                playersRank.add(playerRank);
+            }
+        }
+
+        for(List<String> team: teams.values()) {
+            if(!team.contains(currentUserId)) {
+                for(String id: team) {
+                    playersRank.add(getRankFromServer(id));
+                }
+            }
+        }
+
+        Rank newUserRank = SkillCalculator.calculateNewRatings(GameInfo.getDefaultGameInfo(), playersRank, winner);
+        dbRefWrapped.child("userStats").child(currentUserId).child("rank").setValue(newUserRank);
+        dbRefWrapped.child("players").child(currentUserId).child("quote").setValue(newUserRank.getRank());
+    }
+
+    private Rank getRankFromServer(String playerId) {
+        final Rank playerRank = new Rank();
+        dbRefWrapped.child("userStats").child(playerId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserStats userStats = dataSnapshot.getValue(UserStats.class);
+                if(userStats == null) {
+                    playerRank.copy(Rank.getDefaultRank());
+                } else {
+                    playerRank.copy(userStats.getRank());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //Wait for firebase to answer
+        while(playerRank.getMean() == null || playerRank.getStandardDeviation() == null);
+
+        return playerRank;
     }
 
     @SuppressLint("SetTextI18n")
