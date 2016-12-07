@@ -42,23 +42,14 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
         //Write your assertions
         try {
             Thread.sleep(3000);
-            Field playerIDField = act.getClass().getDeclaredField("mtwPlayerID");
-            Field playerLastNameField = act.getClass().getDeclaredField("mtwLastName");
-            Field playerFirstNameField = act.getClass().getDeclaredField("mtwFirstName");
+            Field playerField = act.getClass().getDeclaredField("mtwPlayer");
             Field playerQuoteField = act.getClass().getDeclaredField("mtwPlayerQuote");
-            playerIDField.setAccessible(true);
-            playerLastNameField.setAccessible(true);
-            playerFirstNameField.setAccessible(true);
+            playerField.setAccessible(true);
             playerQuoteField.setAccessible(true);
-            TextView idView = (TextView) playerIDField.get(act);
-            TextView lnView = (TextView) playerLastNameField.get(act);
-            TextView fnView = (TextView) playerFirstNameField.get(act);
+            TextView playerView = (TextView) playerField.get(act);
             TextView quoteView = (TextView) playerQuoteField.get(act);
 
-
-            assertEquals("Player id : 696969", idView.getText().toString());
-            assertEquals("Last name : LeBricoleur", lnView.getText().toString());
-            assertEquals("First name : Bob", fnView.getText().toString());
+            assertEquals("Bob LeBricoleur", playerView.getText().toString());
             assertEquals("Quote : 1000", quoteView.getText().toString());
         } catch (Exception e) {
             fail();

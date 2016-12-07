@@ -78,7 +78,7 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public void testCanNavigateToMainActivity() {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_profile));
-        onView(withId(R.id.llPlayerID)).check(matches(isDisplayed()));
+        onView(withId(R.id.profil_player)).check(matches(isDisplayed()));
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_main));
         onView(withId(R.id.twMyMatches)).check(matches(isDisplayed()));
@@ -96,7 +96,7 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public void testCanNavigateToProfileActivity() {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_profile));
-        onView(withId(R.id.llPlayerID)).check(matches(isDisplayed()));
+        onView(withId(R.id.profil_player)).check(matches(isDisplayed()));
     }
 
     @Test
