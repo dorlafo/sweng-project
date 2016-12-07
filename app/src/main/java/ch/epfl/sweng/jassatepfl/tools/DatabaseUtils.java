@@ -37,6 +37,8 @@ public class DatabaseUtils {
     public static final String DATABASE_MATCHES_MATCH_STATUS = "matchStatus";
     public static final String DATABASE_MATCHES_MATCH_ID = "matchID";
 
+    public static final String DATABASE_FINISHED_MATCHES = "finishedMatches";
+
     public static final String DATABASE_PENDING_MATCHES = "pendingMatches";
 
     public static final String DATABASE_MATCH_STATS = "matchStats";

@@ -292,8 +292,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         secondTeamScoreDisplay.setEnabled(false);
 
         final boolean isOwner = currentMatch.createdBy().getID().toString().equals(getUserSciper());
-        final boolean isFinished = currentMatch.getMatchStatus().equals(Match.MatchStatus.FINISHED);
-        final int visibility = (isOwner || isFinished) ? VISIBLE : INVISIBLE;
+        final int visibility = isOwner ? VISIBLE : INVISIBLE;
 
         ImageButton firstTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_1);
         firstTeamUpdateButton.setOnClickListener(this);
@@ -335,11 +334,6 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                     displayScore();
                     if (matchStats.goalHasBeenReached()) {
                         displayEndOfMatchMessage(matchStats.getWinnerIndex());
-                        Match m = matchStats.getMatch();
-                        m.setStatus(Match.MatchStatus.FINISHED);
-                        matchStats.setMatch(m);
-                        updateMatchStats();
-                        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(m);
                     }
                 } else {
                     firstTeamScoreDisplay.setEnabled(false);
