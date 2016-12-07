@@ -2,7 +2,6 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -58,7 +57,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
             startActivity(intent);
         }
         else {
-            //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             setContentView(R.layout.activity_invite_player_to_match);
 
             // TODO: maybe have a field in base activity with sciper of current user, with error management

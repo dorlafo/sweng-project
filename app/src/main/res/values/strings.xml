@@ -130,6 +130,8 @@
     <string name="heading_active_matches">Active</string>
     <string name="heading_finished_matches">Finished</string>
 
+    <string name="nearby_matches">Nearby matches</string>
+
     <color name="greenCardBoard">#2B6C3E</color>
     <color name="greenCardBoardDark">#21432B</color>
     <color name="greenCardBoardAccent">#D493C1</color>
@@ -138,7 +140,15 @@
     <string name="select_game_variant">Select Game Variant:</string>
     <string name="rules">Rules</string>
     <string name="stats">Stats</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="played_graph">played_graph</string>
+    <string name="variants_graph">variants_graph</string>
+    <string name="partners_graph">partners_graph</string>
+    <string name="won_with_graph">won_with_graph</string>
+    <string name="won_graph">won_graph</string>
+    <string name="rank_graph">rank_graph</string>
+    <string name="score_meld_spinner_1">score_meld_spinner_1</string>
+    <string name="score_update_1">score_update_1</string>
+    <string name="score_update_cancel">score_update_cancel</string>
+    <string name="score_meld_spinner_2">score_meld_spinner_2</string>
+    <string name="score_update_2">score_update_2</string>
 </resources>

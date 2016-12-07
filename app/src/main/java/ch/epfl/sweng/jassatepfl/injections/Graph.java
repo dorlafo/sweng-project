@@ -6,7 +6,6 @@ import ch.epfl.sweng.jassatepfl.BaseActivityWithNavDrawer;
 import ch.epfl.sweng.jassatepfl.BaseAppCompatActivity;
 import ch.epfl.sweng.jassatepfl.BaseMatchListFragment;
 import ch.epfl.sweng.jassatepfl.LeaderboardFragment;
-import ch.epfl.sweng.jassatepfl.PendingMatchListFragment;
 import ch.epfl.sweng.jassatepfl.StatsFragment;
 import dagger.Component;
 

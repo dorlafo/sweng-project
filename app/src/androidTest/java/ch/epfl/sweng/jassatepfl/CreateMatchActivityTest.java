@@ -7,7 +7,6 @@ import android.support.test.espresso.contrib.PickerActions;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -44,7 +43,6 @@ import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.amaury;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
 import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.HOUR;
 import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.MONTH;

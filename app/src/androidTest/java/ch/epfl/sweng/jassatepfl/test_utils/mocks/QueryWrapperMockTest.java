@@ -148,7 +148,7 @@ public class QueryWrapperMockTest extends QueryWrapper {
                                 id = p.getID().toString();
                             } else if (obj instanceof Match) {
                                 m = (Match) obj;
-                                id = m.getMatchID().toString();
+                                id = m.getMatchID();
                             }
 
                             when(dSnap.getValue(Player.class)).thenReturn(p);

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -122,7 +121,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                 Runnable toRun = new Runnable() {
                     @Override
                     public void run() {
-                        v.onDataChange((DataSnapshot) obj);
+                        v.onDataChange(obj);
                     }
                 };
                 uiHandler.post(toRun);
@@ -208,7 +207,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                                 Runnable toRun = new Runnable() {
                                     @Override
                                     public void run() {
-                                        listener.onDataChange((DataSnapshot) obj);
+                                        listener.onDataChange(obj);
                                     }
                                 };
                                 uiHandler.post(toRun);
@@ -483,55 +482,56 @@ public class DBRefWrapTest extends DBReferenceWrapper {
             leafList.add(l);
         }
 
-        if(path.equals(DatabaseUtils.DATABASE_PLAYERS_FIRST_NAME)) {
-            Collections.sort(leafList, new Comparator<LeafTest>() {
-                @Override
-                public int compare(LeafTest l1, LeafTest l2) {
-                    return ((Player) l1.getData()).getFirstName().compareTo(((Player) l2.getData()).getFirstName());
-                }
-            });
-            childOrder = DatabaseUtils.DATABASE_PLAYERS_FIRST_NAME;
-            return new QueryWrapperMockTest(leafList, childOrder);
-        } else if(path.equals(DatabaseUtils.DATABASE_MATCHES_PRIVATE)) {
-            Collections.sort(leafList, new Comparator<LeafTest>() {
-                @Override
-                public int compare(LeafTest o1, LeafTest o2) {
-                    if ((((Match) o1.getData()).isPrivateMatch() &&
-                            ((Match) o2.getData()).isPrivateMatch()) ||
-                            (!((Match) o1.getData()).isPrivateMatch() &&
-                                    !((Match) o2.getData()).isPrivateMatch())) {
-                        return 0;
-                    } else if (!((Match) o1.getData()).isPrivateMatch() &&
-                            ((Match) o2.getData()).isPrivateMatch()) {
-                        return -1;
-                    } else {
-                        return 1;
+        switch (path) {
+            case DatabaseUtils.DATABASE_PLAYERS_FIRST_NAME:
+                Collections.sort(leafList, new Comparator<LeafTest>() {
+                    @Override
+                    public int compare(LeafTest l1, LeafTest l2) {
+                        return ((Player) l1.getData()).getFirstName().compareTo(((Player) l2.getData()).getFirstName());
                     }
-                }
-            });
-            childOrder = DatabaseUtils.DATABASE_MATCHES_PRIVATE;
-            return new QueryWrapperMockTest(leafList, childOrder);
-        } else if (path.equals(DatabaseUtils.DATABASE_PLAYERS_QUOTE)) {
-            Collections.sort(leafList, new Comparator<LeafTest>() {
-                @Override
-                public int compare(LeafTest o1, LeafTest o2) {
-                    return Integer.compare(((Player) o1.getData()).getQuote(), ((Player) o2.getData()).getQuote());
-                }
-            });
-            childOrder = DatabaseUtils.DATABASE_PLAYERS_QUOTE;
-            return new QueryWrapperMockTest(leafList, childOrder);
-        } else if (path.equals(DatabaseUtils.DATABASE_MATCHES_MATCH_STATUS)) {
-            Collections.sort(leafList, new Comparator<LeafTest>() {
-                @Override
-                public int compare(LeafTest o1, LeafTest o2) {
-                    return ((Match) o1.getData()).getMatchStatus().compareTo(((Match) o2.getData()).getMatchStatus());
-                }
-            });
-            childOrder = DatabaseUtils.DATABASE_MATCHES_MATCH_STATUS;
-            return new QueryWrapperMockTest(leafList, childOrder);
+                });
+                childOrder = DatabaseUtils.DATABASE_PLAYERS_FIRST_NAME;
+                return new QueryWrapperMockTest(leafList, childOrder);
+            case DatabaseUtils.DATABASE_MATCHES_PRIVATE:
+                Collections.sort(leafList, new Comparator<LeafTest>() {
+                    @Override
+                    public int compare(LeafTest o1, LeafTest o2) {
+                        if ((((Match) o1.getData()).isPrivateMatch() &&
+                                ((Match) o2.getData()).isPrivateMatch()) ||
+                                (!((Match) o1.getData()).isPrivateMatch() &&
+                                        !((Match) o2.getData()).isPrivateMatch())) {
+                            return 0;
+                        } else if (!((Match) o1.getData()).isPrivateMatch() &&
+                                ((Match) o2.getData()).isPrivateMatch()) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }
+                });
+                childOrder = DatabaseUtils.DATABASE_MATCHES_PRIVATE;
+                return new QueryWrapperMockTest(leafList, childOrder);
+            case DatabaseUtils.DATABASE_PLAYERS_QUOTE:
+                Collections.sort(leafList, new Comparator<LeafTest>() {
+                    @Override
+                    public int compare(LeafTest o1, LeafTest o2) {
+                        return Integer.compare(((Player) o1.getData()).getQuote(), ((Player) o2.getData()).getQuote());
+                    }
+                });
+                childOrder = DatabaseUtils.DATABASE_PLAYERS_QUOTE;
+                return new QueryWrapperMockTest(leafList, childOrder);
+            case DatabaseUtils.DATABASE_MATCHES_MATCH_STATUS:
+                Collections.sort(leafList, new Comparator<LeafTest>() {
+                    @Override
+                    public int compare(LeafTest o1, LeafTest o2) {
+                        return ((Match) o1.getData()).getMatchStatus().compareTo(((Match) o2.getData()).getMatchStatus());
+                    }
+                });
+                childOrder = DatabaseUtils.DATABASE_MATCHES_MATCH_STATUS;
+                return new QueryWrapperMockTest(leafList, childOrder);
+            default :
+                throw new IllegalArgumentException("Path : " + path + " is not supported");
         }
-
-        throw new IllegalArgumentException("Path : " + path + " is not supported");
     }
 
     @Override
@@ -582,7 +582,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
 
     public void addPendingMatch(Match match, Map<String, Boolean> status) {
         TreeNodeTest pendingMatch = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_PENDING_MATCHES);
-        MatchStatusLeafTest statusLeaf = (MatchStatusLeafTest) pendingMatch.addChild(match.getMatchID().toString());
+        MatchStatusLeafTest statusLeaf = (MatchStatusLeafTest) pendingMatch.addChild(match.getMatchID());
         statusLeaf.setData(status);
     }
 

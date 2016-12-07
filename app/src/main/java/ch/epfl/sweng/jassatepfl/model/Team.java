@@ -64,7 +64,7 @@ public class Team {
             return false;
         } else if (o == this) {
             return true;
-        } else if (o.getClass().getName() != this.getClass().getName()) {
+        } else if (!o.getClass().getName().equals(this.getClass().getName())) {
             return false;
         } else {
             if (((Team) o).members.containsAll(this.members) && this.members.containsAll(((Team) o).members)) {

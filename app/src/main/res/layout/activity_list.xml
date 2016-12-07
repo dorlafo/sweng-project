@@ -13,14 +13,14 @@
         android:layout_height="?android:attr/actionBarSize" />
 
     <TextView
-        android:text="Nearby matches"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/twNearbyMatches"
         android:textStyle="normal|bold"
         android:textAlignment="center"
         android:gravity="center"
-        android:textSize="24sp"/>
+        android:textSize="24sp"
+        android:text="@string/nearby_matches" />
 
     <ListView
         android:id="@+id/list_nearby_matches"

@@ -35,7 +35,8 @@ public class Match {
     private String matchID;
     private MatchStatus matchStatus;
     private Map<String, List<String>> teams;
-    private static String SENTINEL = "SENTINEL";
+    private final static String SENTINEL = "SENTINEL";
+    private final static int ONE_HOUR = 3600000;
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase.
@@ -107,7 +108,7 @@ public class Match {
     /**
      * Checks if the match has changed
      *
-     * @param other
+     * @param other The match to test with
      * @return True if the match has changed, false otherwise
      */
     public boolean matchHasChanged(Match other) {
@@ -742,7 +743,7 @@ public class Match {
             privateMatch = false;
             gameVariant = CHIBRE;
             maxPlayerNumber = CHIBRE.getMaxPlayerNumber();
-            expirationTime = Calendar.getInstance().getTimeInMillis() + 1 * 3600 * 1000; // 1 hour after current time
+            expirationTime = Calendar.getInstance().getTimeInMillis() + ONE_HOUR; // 1 hour after current time
             matchID = DEFAULT_ID;
             matchStatus = MatchStatus.PENDING;
         }

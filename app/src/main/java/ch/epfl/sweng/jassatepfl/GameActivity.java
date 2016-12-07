@@ -37,7 +37,6 @@ import ch.epfl.sweng.jassatepfl.model.Round;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
-import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;

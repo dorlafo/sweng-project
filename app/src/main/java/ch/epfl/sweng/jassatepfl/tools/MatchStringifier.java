@@ -53,20 +53,19 @@ public final class MatchStringifier {
         Resources res = context.getResources();
         String newLine = System.getProperty("line.separator");
 
-        StringBuilder builder = new StringBuilder(
-                res.getString(R.string.snippet_match_quote))
-                .append(Integer.toString(match.getQuote()))
-                .append(newLine)
-                .append(res.getString(R.string.snippet_player_list))
-                .append(playersToString())
-                .append(newLine)
-                .append(res.getString(R.string.snippet_game_variant))
-                .append(match.getGameVariant().toString())
-                .append(newLine)
-                .append(res.getString(R.string.snippet_expiration_date))
-                .append(dateToStringCustom());
+        String builder = res.getString(R.string.snippet_match_quote) +
+                Integer.toString(match.getQuote()) +
+                newLine +
+                res.getString(R.string.snippet_player_list) +
+                playersToString() +
+                newLine +
+                res.getString(R.string.snippet_game_variant) +
+                match.getGameVariant().toString() +
+                newLine +
+                res.getString(R.string.snippet_expiration_date) +
+                dateToStringCustom();
 
-        return builder.toString();
+        return builder;
     }
 
     /**

@@ -16,7 +16,7 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
 /**
- * Utils fonctions to retrieve/add from/to Database
+ * Utils functions to retrieve/add from/to Database
  *
  * @author Alexis Montavon
  */

@@ -7,14 +7,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -102,7 +100,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
                 .setMessage(R.string.dialog_join_message)
                 .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        final Match match = (Match) adapter.getItem(position);
+                        final Match match = adapter.getItem(position);
                         DatabaseUtils.addPlayerToMatch(MatchListActivity.this,
                                 dbRefWrapped,
                                 match.getMatchID(),

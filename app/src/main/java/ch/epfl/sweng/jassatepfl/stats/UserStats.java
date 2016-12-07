@@ -45,7 +45,7 @@ public class UserStats {
     /**
      * Constructor, only start with user id.
      *
-     * @param id
+     * @param id The user ID
      */
     public UserStats(Player.PlayerID id) {
         this.playerId = id;
@@ -156,7 +156,7 @@ public class UserStats {
      * Utility method checking if a counter exists for the received date and creates it if it
      * does not exist in the list.
      *
-     * @param time
+     * @param time The time
      */
     private void prepareLastBuckets(Long time) {
         long updateDate = getDay(time);
@@ -165,7 +165,7 @@ public class UserStats {
             playedByDate.add(new Tuple2<>(updateDate, 0));
             wonByDate.add(new Tuple2<>(updateDate, 0));
             if (quoteByDate.isEmpty()) {
-                quoteByDate.add(new Tuple2<Long, Integer>(updateDate, 0));
+                quoteByDate.add(new Tuple2<>(updateDate, 0));
             } else {
                 quoteByDate.add(new Tuple2<>(updateDate, quoteByDate.get(lastIndex).getValue()));
             }
@@ -173,7 +173,7 @@ public class UserStats {
     }
 
     /**
-     * Normalizes the date: We interestad in tracking data day by day. Therefore we have to
+     * Normalizes the date: We interested in tracking data day by day. Therefore we have to
      * make all hours and seconds the same in the same day. We settled for 23:59:59
      *
      * @param timestamp The time at the end of the match in milliseconds

@@ -60,7 +60,7 @@ public interface NodeTest {
     void removeChild(NodeTest child);
 
     /**
-     * Remove all chidren of the current node
+     * Remove all children of the current node
      */
     void dropChildren();
 

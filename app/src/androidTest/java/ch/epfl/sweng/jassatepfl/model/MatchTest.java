@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -234,7 +235,7 @@ public final class MatchTest {
     public void getTeamsReturnsImmutableMap() {
         Match m = DummyDataTest.fullMatch();
         Map<String, List<String>> hm = m.getTeams();
-        hm.put("Team42", new ArrayList<>(Arrays.asList("TEST")));
+        hm.put("Team42", new ArrayList<>(Collections.singletonList("TEST")));
     }
 
     @Test(expected = UnsupportedOperationException.class)

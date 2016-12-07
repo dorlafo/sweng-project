@@ -104,7 +104,7 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.reset();
     }*/
 
-   /* @Test PASSES LOCALY
+   /* @Test PASSES LOCALLY
     public void testDoNoAddWhenMatchFull() {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.matchFullCalifornia());
