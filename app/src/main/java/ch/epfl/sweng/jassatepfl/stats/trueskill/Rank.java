@@ -12,13 +12,14 @@ import java.util.Objects;
  * It implements the Comparable interface.
  */
 public class Rank {
-    private double mean;
-    private double standardDeviation;
+    private Double mean;
+    private Double standardDeviation;
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase
      */
     public Rank() {
+
     }
 
     /**
@@ -39,21 +40,30 @@ public class Rank {
         this.mean = mean;
         this.standardDeviation = standardDeviation;
     }
+
+    public void copy(Rank rank) {
+        mean = rank.getMean();
+        standardDeviation = rank.getStandardDeviation();
+    }
     /**
      * Getter for the rank.
      *
      * @return The rank value
      */
-    public double getMean() {
+    public Double getMean() {
         return mean;
     }
 
-    public double getStandardDeviation() {
+    public Double getStandardDeviation() {
         return standardDeviation;
     }
 
     public int getRank() {
         return (int) Math.ceil((mean - 3 * standardDeviation) * 10 + 1000);
+    }
+
+    public static Rank getDefaultRank() {
+        return new Rank(GameInfo.defaultInitialMean, GameInfo.defaultInitialStandardDeviation);
     }
 
     /*
