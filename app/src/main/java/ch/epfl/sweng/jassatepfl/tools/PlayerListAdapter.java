@@ -74,10 +74,11 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
                     String.format(res.getString(R.string.wait_assigned), firstFirstName, (match.teamNbForPlayer(p) + 1));
             playerName.setText(teamAssignment);
 
+            View layout = convertView.findViewById(R.id.player_list_layout);
             if (playersReady.containsKey(p.getID().toString()) && playersReady.get(p.getID().toString())) {
-                playerName.setBackgroundColor(0xFF00FF00);
+                layout.setBackgroundColor(0xFF00FF00);
             } else {
-                playerName.setBackgroundColor(0xFFFFFFFF);
+                layout.setBackgroundColor(0xFFFFFFFF);
             }
         }
 
