@@ -5,11 +5,11 @@ package ch.epfl.sweng.jassatepfl.stats.trueskill;
  * Source code : https://github.com/nsp/JSkills/blob/master/src/main/java/jskills/GameInfo.java
  */
 public class GameInfo {
-    private static final double defaultInitialMean = 25.0;
+    public static final double defaultInitialMean = 25.0;
     private static final double defaultBeta = defaultInitialMean/6.0;
     private static final double defaultDrawProbability = 0.10;
     private static final double defaultDynamicsFactor = defaultInitialMean/300.0;
-    private static final double defaultInitialStandardDeviation = defaultInitialMean/3.0;
+    public static final double defaultInitialStandardDeviation = defaultInitialMean/3.0;
 
     private double initialMean;
     private double initialStandardDeviation;
