@@ -619,9 +619,7 @@ public class Match {
         UNDEN_UFE("Unden Ufe"),
         SLALOM("Slalom"),
         CHICANE("Chicane"),
-        JASS_MARANT("Jass Marant"),
-        ROI("Roi"),
-        POMME("Pomme");
+        JASS_MARANT("Jass Marant");
 
         private final String variantName;
 
@@ -641,10 +639,6 @@ public class Match {
          */
         public int getMaxPlayerNumber() {
             switch (this) {
-                case POMME:
-                    return 2;
-                case ROI:
-                    return 3;
                 case CHIBRE:
                 case PIQUE_DOUBLE:
                 case OBEN_ABE:
@@ -664,8 +658,6 @@ public class Match {
          */
         public int getNumberOfTeam() {
             switch (this) {
-                case ROI:
-                    return 3;
                 case CHIBRE:
                 case PIQUE_DOUBLE:
                 case OBEN_ABE:
@@ -673,7 +665,6 @@ public class Match {
                 case SLALOM:
                 case CHICANE:
                 case JASS_MARANT:
-                case POMME:
                 default:
                     return 2;
             }
@@ -686,9 +677,6 @@ public class Match {
          */
         public int getNumberOfPlayerByTeam() {
             switch (this) {
-                case ROI:
-                case POMME:
-                    return 1;
                 case CHIBRE:
                 case PIQUE_DOUBLE:
                 case OBEN_ABE:
@@ -708,9 +696,6 @@ public class Match {
          */
         public int getPointGoal() {
             switch (this) {
-                case ROI:
-                case POMME:
-                    return 20;
                 case CHIBRE:
                     return 1000;
                 case PIQUE_DOUBLE:

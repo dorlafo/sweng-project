@@ -15,8 +15,6 @@ import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHICANE;
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.JASS_MARANT;
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.OBEN_ABE;
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.PIQUE_DOUBLE;
-import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.POMME;
-import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.ROI;
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.SLALOM;
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.UNDEN_UFE;
 import static org.hamcrest.Matchers.allOf;
@@ -84,20 +82,6 @@ public class RulesActivityTest extends InjectedBaseActivityTest {
     public void testSpinnerSelection6() {
         onView(withId(R.id.rules_spinner)).perform(click());
         onData(allOf(is(instanceOf(Match.GameVariant.class)), is(CHIBRE))).perform(click());
-        onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testSpinnerSelection7() {
-        onView(withId(R.id.rules_spinner)).perform(click());
-        onData(allOf(is(instanceOf(Match.GameVariant.class)), is(ROI))).perform(click());
-        onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testSpinnerSelection8() {
-        onView(withId(R.id.rules_spinner)).perform(click());
-        onData(allOf(is(instanceOf(Match.GameVariant.class)), is(POMME))).perform(click());
         onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
     }
 
