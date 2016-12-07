@@ -178,8 +178,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             playersLV.setEmptyView(emptyList);
             playersLV.setBackgroundColor(0xFAFAFA);
 
-            playerArrayAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, new ArrayList<Player>());
+            playerArrayAdapter = new ArrayAdapter<>(this, R.layout.invited_player_list, new ArrayList<Player>());
             playersLV.setAdapter(playerArrayAdapter);
 
             playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
