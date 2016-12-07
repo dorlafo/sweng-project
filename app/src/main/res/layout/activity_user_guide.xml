@@ -11,13 +11,19 @@
     tools:context="ch.epfl.sweng.jassatepfl.UserGuideActivity">
 
     <Space
+        android:id="@+id/space_user_guide"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"/>
 
-    <com.mukesh.MarkdownView
-        android:id="@+id/user_guide_text"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="490dp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space_user_guide">
+
+        <com.mukesh.MarkdownView
+            android:id="@+id/user_guide_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
 
 </RelativeLayout>
