@@ -38,7 +38,7 @@ public final class MatchListAdapter extends ArrayAdapter<Match> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.match_list_row, null);
+            convertView = inflater.inflate(R.layout.match_list_row, parent, false);
         }
 
         Match match = matches.get(position);
@@ -53,7 +53,7 @@ public final class MatchListAdapter extends ArrayAdapter<Match> {
 
         TextView players = (TextView) convertView.findViewById(R.id.players_data);
         //players.setText(stringifier.playersToString());
-        players.setText(match.getPlayers().size() + "/" + match.getMaxPlayerNumber());
+        players.setText(String.format(getContext().getString(R.string.match_list_adapter_players_nb), match.getPlayers().size(), match.getMaxPlayerNumber()));
 
         TextView variant = (TextView) convertView.findViewById(R.id.variant_data);
         variant.setText(stringifier.variantToString());

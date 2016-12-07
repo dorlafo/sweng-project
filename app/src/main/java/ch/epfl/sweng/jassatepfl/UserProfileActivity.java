@@ -57,11 +57,14 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Player p = dataSnapshot.getValue(Player.class);
-                            mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
-                            System.out.println(p.getID().toString());
-                            mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
-                            mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
-                            mtwPlayerQuote.setText(mtwPlayerQuote.getText() + " " + Integer.toString(p.getQuote()));
+                            //mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
+                            mtwPlayerID.setText(String.format(getString(R.string.user_profile_player_id), p.getID().toString()));
+                            //mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
+                            mtwLastName.setText(String.format(getString(R.string.user_profile_player_last_name), p.getLastName()));
+                            //mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
+                            mtwFirstName.setText(String.format(getString(R.string.user_profile_player_first_name), p.getFirstName()));
+                            //mtwPlayerQuote.setText(mtwPlayerQuote.getText() + " " + Integer.toString(p.getQuote()));
+                            mtwPlayerQuote.setText(String.format(getString(R.string.user_profile_player_quote), p.getQuote()));
                         }
 
                         @Override

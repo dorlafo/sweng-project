@@ -320,10 +320,11 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         String goalText = String.format(getString(R.string.game_text_point_goal), pointsGoal);
         goal.setText(goalText);
 
-        /*if (isOwner) {
+        //TODO: check if this code do what was intended
+        if (isOwner) {
             firstTeamScoreDisplay.setEnabled(true);
             secondTeamScoreDisplay.setEnabled(true);
-        }*/
+        }
         statsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -355,6 +356,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                 .addValueEventListener(statsListener);
     }
 
+    @SuppressLint("SetTextI18n")
     private void displayScoreHistory(int teamIndex) {
         final Dialog dialog = new Dialog(this) {
             @Override
@@ -372,7 +374,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         int roundIndex = 1;
 
         for (Round round : matchStats.getRounds()) {
-            TableRow row = (TableRow) inflater.inflate(R.layout.score_table_row, null);
+            TableRow row = (TableRow) inflater.inflate(R.layout.score_table_row, tableLayout, false);
 
             TextView roundIndexView = (TextView) row.findViewById(R.id.score_table_row_round_index);
             roundIndexView.setText(Integer.toString(roundIndex));

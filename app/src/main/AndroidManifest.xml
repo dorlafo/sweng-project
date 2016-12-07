@@ -98,12 +98,14 @@
             android:resource="@drawable/ic_stat_notify"/>
 
         <!-- App required serviced -->
-        <service android:name=".notification.FirebaseMessagingHandler">
+        <service android:name=".notification.FirebaseMessagingHandler"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name=".notification.JassTokenService">
+        <service android:name=".notification.JassTokenService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.jassatepfl.tools;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -44,12 +45,13 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         return players.get(position);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.player_list_element, null);
+            convertView = inflater.inflate(R.layout.player_list_element, parent, false);
         }
 
         Player p = getItem(position);
@@ -63,10 +65,10 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         else {
             quoteTv.setText(Integer.toString(p.getQuote()));
             if (match.teamNbForPlayer(p) == -1){
-                playerName.setText(getFirstFirstName(p.getFirstName()) + " : no team assigned yet");
+                playerName.setText(String.format(getContext().getString(R.string.player_list_adapter_no_team), getFirstFirstName(p.getFirstName())));
             }
             else {
-                playerName.setText(getFirstFirstName(p.getFirstName()) + " : team " + (match.teamNbForPlayer(p)+1));
+                playerName.setText(String.format(getContext().getString(R.string.player_list_adapter_in_team), getFirstFirstName(p.getFirstName()), (match.teamNbForPlayer(p)+1)));
             }
 
             if(playersReady.containsKey(p.getID().toString()) && playersReady.get(p.getID().toString())) {

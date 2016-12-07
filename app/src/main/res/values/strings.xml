@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Jass@EPFL</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_create">Match Information</string>
@@ -30,7 +30,7 @@
     <string name="game_team_name_3">Team 3</string>
     <string name="game_button_text_next_round">Next Round</string>
     <string name="game_text_score_picker">Enter your score for this round</string>
-    <string name="game_text_point_goal">Playing to %d points</string>
+    <string name="game_text_point_goal" tools:ignore="PluralsCandidate">Playing to %d points</string>
     <string name="game_select_meld">Select your meld</string>
     <string name="game_score_table_round">Round</string>
     <string name="game_score_table_points">Points</string>
@@ -38,6 +38,16 @@
     <string name="game_default_score">-</string>
 
     <string name="list_empty_list">No matches are available</string>
+
+    <string name="player_list_adapter_no_team">%s : no team assigned yet</string>
+    <string name="player_list_adapter_in_team">%1$s : team %2$d</string>
+
+    <string name="match_list_adapter_players_nb">%1$d/%2$d</string>
+
+    <string name="user_profile_player_id">Player id : %s</string>
+    <string name="user_profile_player_last_name">Last name : %s</string>
+    <string name="user_profile_player_first_name">First name : %s</string>
+    <string name="user_profile_player_quote">Quote : %d</string>
 
     <string name="profile_label_player_id">Player id :</string>
     <string name="profile_label_first_name">First name :</string>
@@ -124,7 +134,7 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <string name="loading_leaderboard">Loading Leaderboard...</string>
+    <string name="loading_leaderboard">Loading Leaderboard…</string>
 
     <string name="heading_pending_matches">Pending</string>
     <string name="heading_active_matches">Active</string>
