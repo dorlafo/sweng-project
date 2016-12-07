@@ -11,9 +11,9 @@ import java.util.Objects;
  * Class that represents a rank in a competition system.
  * It implements the Comparable interface.
  */
-public class Rank implements Comparable<Rank> {
-
-    private int rank;
+public class Rank {
+    private double mean;
+    private double standardDeviation;
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue when using Firebase
@@ -24,31 +24,39 @@ public class Rank implements Comparable<Rank> {
     /**
      * Constructs a new Rank with the given value.
      *
-     * @param rank The value of the rank
+     * @param mean The value of the rank
      */
-    public Rank(int rank) {
-        this.rank = rank;
+    public Rank(double mean) {
+        this.mean = mean;
     }
 
+    /**
+     * Construct a new rank with the mean and standardDeviation given
+     * @param mean
+     * @param standardDeviation
+     */
+    public Rank(double mean, double standardDeviation) {
+        this.mean = mean;
+        this.standardDeviation = standardDeviation;
+    }
     /**
      * Getter for the rank.
      *
      * @return The rank value
      */
+    public double getMean() {
+        return mean;
+    }
+
+    public double getStandardDeviation() {
+        return standardDeviation;
+    }
+
     public int getRank() {
-        return rank;
+        return (int) Math.ceil((mean - 3 * standardDeviation) * 10 + 1000);
     }
 
-    /**
-     * Provides a string representation for the Rank class.
-     *
-     * @return A string representation of the Rank class
-     */
-    @Override
-    public String toString() {
-        return Integer.toString(rank);
-    }
-
+    /*
     @Override
     public int compareTo(@NonNull Rank o) {
         return ((Integer) rank).compareTo(o.rank);
@@ -76,8 +84,11 @@ public class Rank implements Comparable<Rank> {
      * @param other The Rank to add to the current Rank
      * @return A new Rank with value equal to the sum of the other two
      */
+
+    /*
     public Rank add(Rank other) {
         return new Rank(this.rank + other.rank);
     }
+    */
 
 }
