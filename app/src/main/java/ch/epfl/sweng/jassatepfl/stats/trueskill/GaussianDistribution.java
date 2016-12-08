@@ -40,18 +40,6 @@ public class GaussianDistribution {
     private final double precisionMean;
 
     /**
-     * The normalization constant multiplies the exponential and causes the
-     * integral over (-Inf,Inf) to equal 1
-     *
-     * @return 1/sqrt(2*pi*σ)
-     */
-    public double getNormalizationConstant() {
-        // Great derivation of this is at
-        // http://www.astro.psu.edu/~mce/A451_2/A451/downloads/notes0.pdf
-        return 1.0/(sqrt(2*PI)*standardDeviation);
-    }
-
-    /**
      * Private constructor that sets everything at once.
      * <p>
      * Only allow other constructors to use this because if the public were to
@@ -67,24 +55,6 @@ public class GaussianDistribution {
         this.precisionMean = precisionMean;
     }
 
-    public GaussianDistribution(double mean, double standardDeviation) {
-        this(mean,
-                standardDeviation,
-                square(standardDeviation),
-                1. / square(standardDeviation),
-                mean / square(standardDeviation));
-    }
-
-    public GaussianDistribution(Rank rating) {
-        this(rating.getMean(), rating.getStandardDeviation());
-    }
-
-    public GaussianDistribution(GaussianDistribution distribution) {
-        this(distribution.mean, distribution.standardDeviation,
-                distribution.variance, distribution.precision,
-                distribution.precisionMean);
-    }
-
     public static GaussianDistribution fromPrecisionMean(double precisionMean,
                                                          double precision) {
         return new GaussianDistribution(precisionMean / precision,
@@ -92,57 +62,6 @@ public class GaussianDistribution {
                 1. / precision,
                 precision,
                 precisionMean);
-    }
-
-    public GaussianDistribution mult(GaussianDistribution other) {
-        return mult(this, other);
-    }
-
-    public static GaussianDistribution mult(GaussianDistribution left, GaussianDistribution right) {
-        // Although we could use equations from
-        // http://www.tina-vision.net/tina-knoppix/tina-memo/2003-003.pdf
-        // for multiplication, the precision mean ones are easier to write :)
-        return fromPrecisionMean(left.precisionMean + right.precisionMean, left.precision + right.precision);
-    }
-
-    /** Computes the absolute difference between two Gaussians **/
-    public static double absoluteDifference(GaussianDistribution left, GaussianDistribution right) {
-        return max(
-                abs(left.precisionMean - right.precisionMean),
-                sqrt(abs(left.precision - right.precision)));
-    }
-
-    /** Computes the absolute difference between two Gaussians **/
-    public static double sub(GaussianDistribution left, GaussianDistribution right) {
-        return absoluteDifference(left, right);
-    }
-
-    public static double logProductNormalization(GaussianDistribution left, GaussianDistribution right) {
-        if ((left.precision == 0) || (right.precision == 0)) return 0;
-
-        double varianceSum = left.variance + right.variance;
-        double meanDifference = left.mean - right.mean;
-
-        double logSqrt2Pi = log(sqrt(2*PI));
-        return -logSqrt2Pi - (log(varianceSum)/2.0) - (square(meanDifference)/(2.0*varianceSum));
-    }
-
-
-    public static GaussianDistribution divide(GaussianDistribution numerator, GaussianDistribution denominator) {
-        return fromPrecisionMean(numerator.precisionMean - denominator.precisionMean,
-                numerator.precision - denominator.precision);
-    }
-
-    public static double logRatioNormalization(GaussianDistribution numerator, GaussianDistribution denominator) {
-        if ((numerator.precision == 0) || (denominator.precision == 0)) return 0;
-
-        double varianceDifference = denominator.variance - numerator.variance;
-        double meanDifference = numerator.mean - denominator.mean;
-
-        double logSqrt2Pi = log(sqrt(2*PI));
-
-        return log(denominator.variance) + logSqrt2Pi - log(varianceDifference)/2.0 +
-                square(meanDifference)/(2*varianceDifference);
     }
 
     /**
@@ -265,42 +184,4 @@ public class GaussianDistribution {
     public double getPrecisionMean() {
         return precisionMean;
     }
-
-    /*
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GaussianDistribution that = (GaussianDistribution) o;
-
-        if (Double.compare(that.mean, mean) != 0) return false;
-        if (Double.compare(that.standardDeviation, standardDeviation) != 0) return false;
-        if (Double.compare(that.variance, variance) != 0) return false;
-        if (Double.compare(that.precision, precision) != 0) return false;
-        return Double.compare(that.precisionMean, precisionMean) == 0;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(mean);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(standardDeviation);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(variance);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(precision);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(precisionMean);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
-
-    @Override
-    public String toString() { // Debug help
-        return String.format("Mean(μ)=%f, Std-Dev(σ)=%f", mean, standardDeviation);
-    }*/
 }
