@@ -211,49 +211,63 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                 matchStats.setWinnerIndex(caller.ordinal());
             }
             // dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats); TODO: mock the buffer
-            sendNewRankToServer(currentMatch, caller.ordinal());
             displayEndOfMatchMessage(matchStats.getWinnerIndex());
+            sendNewRankToServer(currentMatch, caller.ordinal());
         }
         updateMatchStats();
     }
 
     private void sendNewRankToServer(Match currentMatch, int winner) {
         Map<String, List<String>> teams = currentMatch.getTeams();
-        final List<Rank> playersRank = new ArrayList<>();
+        final Rank[] playersRank = new Rank[4];
+        final List<Boolean> status = Arrays.asList(false, false, false, false);
         String currentUserId = fAuth.getCurrentUser().getDisplayName();
+        int index = 0;
 
-        playersRank.add(getRankFromServer(currentUserId));
+        getRankFromServer(currentUserId, playersRank, winner, currentUserId, index, status);
 
-        for(String id: teams.get(currentUserId)) {
-            if(!id.equals(currentUserId)) {
-                Rank playerRank = getRankFromServer(id);
-                playersRank.add(playerRank);
+        for(List<String> team: teams.values()) {
+            if(team.contains(currentUserId)) {
+                for(String id: team) {
+                    if(!id.equals(currentUserId)) {
+                        ++index;
+                        getRankFromServer(id, playersRank, winner, currentUserId, index, status);
+                    }
+                }
             }
         }
 
         for(List<String> team: teams.values()) {
             if(!team.contains(currentUserId)) {
                 for(String id: team) {
-                    playersRank.add(getRankFromServer(id));
+                    ++index;
+                    getRankFromServer(id, playersRank, winner, currentUserId, index, status);
                 }
+
             }
         }
-
-        Rank newUserRank = SkillCalculator.calculateNewRatings(GameInfo.getDefaultGameInfo(), playersRank, winner);
-        dbRefWrapped.child("userStats").child(currentUserId).child("rank").setValue(newUserRank);
-        dbRefWrapped.child("players").child(currentUserId).child("quote").setValue(newUserRank.getRank());
     }
 
-    private Rank getRankFromServer(String playerId) {
-        final Rank playerRank = new Rank();
+    private void getRankFromServer(String playerId, final Rank[] playersRank, final int winner, final String currentUserId, final int index, final List<Boolean> status) {
         dbRefWrapped.child("userStats").child(playerId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserStats userStats = dataSnapshot.getValue(UserStats.class);
                 if(userStats == null) {
-                    playerRank.copy(Rank.getDefaultRank());
+                    if(index == 0) {
+                        dbRefWrapped.child("userStats").child(currentUserId).setValue(new UserStats(currentUserId, Rank.getDefaultRank()));
+                    }
+                    playersRank[index] = Rank.getDefaultRank();
+                    status.set(index, true);
                 } else {
-                    playerRank.copy(userStats.getRank());
+                    playersRank[index] = userStats.getRank();
+                    status.set(index, true);
+                }
+
+                if(!status.contains(false)) {
+                    Rank newUserRank = SkillCalculator.calculateNewRatings(GameInfo.getDefaultGameInfo(), Arrays.asList(playersRank), winner);
+                    dbRefWrapped.child("userStats").child(currentUserId).child("rank").setValue(newUserRank);
+                    dbRefWrapped.child("players").child(currentUserId).child("quote").setValue(newUserRank.getRank());
                 }
             }
 
@@ -262,11 +276,6 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
 
             }
         });
-
-        //Wait for firebase to answer
-        while(playerRank.getMean() == null || playerRank.getStandardDeviation() == null);
-
-        return playerRank;
     }
 
     @SuppressLint("SetTextI18n")
