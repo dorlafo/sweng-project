@@ -56,11 +56,20 @@ public class UserStats {
         this.playerId = id;
     }
 
+    public UserStats(String id, Rank rank) {
+        this.playerId = new Player.PlayerID(id);
+        this.rank = rank;
+    }
+
     /**
      * Empty constructor, needed for Firebase serialization.
      */
     public UserStats() {
 
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
     }
 
     public Rank getRank() {
