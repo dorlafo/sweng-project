@@ -8,8 +8,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import ch.epfl.sweng.jassatepfl.WaitingPlayersActivity;
 import ch.epfl.sweng.jassatepfl.R;
+import ch.epfl.sweng.jassatepfl.WaitingPlayersActivity;
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -37,6 +37,8 @@ public class DatabaseUtils {
 
     public static final String DATABASE_PENDING_MATCHES = "pendingMatches";
 
+    public static final String DATABASE_STATS = "stats";
+    public static final String DATABASE_STATS_BUFFER = "buffer";
     public static final String DATABASE_MATCH_STATS = "matchStats";
     public static final String DATABASE_USERSTATS = "userStats";
 

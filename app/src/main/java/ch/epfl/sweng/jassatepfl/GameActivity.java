@@ -252,6 +252,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                         matchStats.setMeld(teamIndex, meld);
                         dialog.dismiss();
                         displayScore();
+                        testEndOfMatch();
                         updateMatchStats();
                         cancelButton.setEnabled(true);
                     }
@@ -277,6 +278,11 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         matchStats.finishRound();
         cancelButton.setEnabled(true);
         displayScore();
+        testEndOfMatch();
+        updateMatchStats();
+    }
+
+    private void testEndOfMatch() {
         if (matchStats.goalHasBeenReached()) {
             if (matchStats.allTeamsHaveReachedGoal()) {
                 matchStats.setWinnerIndex(caller.ordinal());
@@ -286,7 +292,6 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             }
             displayEndOfMatchMessage(matchStats.getWinnerIndex());
         }
-        updateMatchStats();
     }
 
     @SuppressLint("SetTextI18n")
