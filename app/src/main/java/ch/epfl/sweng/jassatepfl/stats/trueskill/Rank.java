@@ -65,40 +65,4 @@ public class Rank {
     public static Rank getDefaultRank() {
         return new Rank(GameInfo.defaultInitialMean, GameInfo.defaultInitialStandardDeviation);
     }
-
-    /*
-    @Override
-    public int compareTo(@NonNull Rank o) {
-        return ((Integer) rank).compareTo(o.rank);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        } else if (other == null || other.getClass() != this.getClass()) {
-            return false;
-        }
-        return this.getRank() == ((Rank) other).getRank();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.getRank());
-    }
-
-    /**
-     * Computes and returns the sum of the current Rank and another.
-     *
-     * @param other The Rank to add to the current Rank
-     * @return A new Rank with value equal to the sum of the other two
-     */
-
-    /*
-    public Rank add(Rank other) {
-        return new Rank(this.rank + other.rank);
-    }
-    */
-
 }
