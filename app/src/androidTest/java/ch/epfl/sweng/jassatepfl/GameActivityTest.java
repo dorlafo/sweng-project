@@ -323,6 +323,21 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     }
 
     @Test
+    public void testNumpadCorrectReturns() {
+        ownedMatchSetUp();
+        getActivity();
+        onView(withId(R.id.score_update_2)).perform(click());
+        onView(withId(R.id.numpad_0)).perform(click());
+        onView(withId(R.id.numpad_2)).perform(click());
+        onView(withId(R.id.numpad_6)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.score_picker_confirm)).perform(click());
+        checkScoreDisplay("157", "0");
+    }
+
+    @Test
     public void testToastIsDisplayedForInvalidPoints() {
         ownedMatchSetUp();
         getActivity();

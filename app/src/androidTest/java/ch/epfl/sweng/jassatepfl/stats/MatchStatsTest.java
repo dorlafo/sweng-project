@@ -2,6 +2,8 @@ package ch.epfl.sweng.jassatepfl.stats;
 
 import org.junit.Test;
 
+import java.util.Map;
+
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
@@ -37,6 +39,16 @@ public class MatchStatsTest {
         stats.setScore(1, 68);
         assertEquals(Integer.valueOf(109), stats.getCurrentRoundTeamScore(0));
         assertEquals(Integer.valueOf(68), stats.getCurrentRoundTeamScore(1));
+    }
+
+    @Test
+    public void testPointsGoalGetter() {
+        MatchStats stats = new MatchStats(match);
+        stats.setPointsGoal(0, 300);
+        stats.setPointsGoal(1, 500);
+        Map<String, Integer> pointsGoal = stats.getPointsGoal();
+        assertEquals(Integer.valueOf(300), pointsGoal.get("TEAM0"));
+        assertEquals(Integer.valueOf(500), pointsGoal.get("TEAM1"));
     }
 
     @Test
