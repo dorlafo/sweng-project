@@ -58,48 +58,4 @@ public class GameInfo {
     public double getDrawProbability() {
         return drawProbability;
     }
-
-    /*
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GameInfo gameInfo = (GameInfo) o;
-
-        if (Double.compare(gameInfo.getInitialMean(), getInitialMean()) != 0) return false;
-        if (Double.compare(gameInfo.getInitialStandardDeviation(), getInitialStandardDeviation()) != 0) return false;
-        if (Double.compare(gameInfo.getBeta(), getBeta()) != 0) return false;
-        if (Double.compare(gameInfo.getDynamicsFactor(), getDynamicsFactor()) != 0) return false;
-        return Double.compare(gameInfo.getDrawProbability(), getDrawProbability()) == 0;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(getInitialMean());
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(getInitialStandardDeviation());
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(getBeta());
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(getDynamicsFactor());
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(getDrawProbability());
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "GameInfo{" +
-                "initialMean=" + initialMean +
-                ", initialStandardDeviation=" + initialStandardDeviation +
-                ", beta=" + beta +
-                ", dynamicsFactor=" + dynamicsFactor +
-                ", drawProbability=" + drawProbability +
-                '}';
-    }*/
 }
