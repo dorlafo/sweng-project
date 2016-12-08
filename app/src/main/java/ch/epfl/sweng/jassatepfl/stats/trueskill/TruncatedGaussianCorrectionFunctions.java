@@ -64,11 +64,6 @@ public class TruncatedGaussianCorrectionFunctions {
         return vWin*(vWin + teamPerformanceDifference - drawMargin);
     }
 
-    // the additive correction of a double-sided truncated Gaussian with unit variance
-    public static double vWithinMargin(double teamPerformanceDifference, double drawMargin, double c) {
-        return vWithinMargin(teamPerformanceDifference / c, drawMargin / c);
-    }
-
     // from F#:
     public static double vWithinMargin(double teamPerformanceDifference, double drawMargin) {
         double teamPerformanceDifferenceAbsoluteValue = Math.abs(teamPerformanceDifference);
@@ -91,11 +86,6 @@ public class TruncatedGaussianCorrectionFunctions {
         }
 
         return numerator/denominator;
-    }
-
-    // the multiplicative correction of a double-sided truncated Gaussian with unit variance
-    public static double wWithinMargin(double teamPerformanceDifference, double drawMargin, double c) {
-        return wWithinMargin(teamPerformanceDifference / c, drawMargin / c);
     }
 
     // From F#:
