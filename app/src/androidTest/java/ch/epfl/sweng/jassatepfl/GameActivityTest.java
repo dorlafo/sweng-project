@@ -19,9 +19,12 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
+import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.PlayerLeafTest;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -333,6 +336,23 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
                     return false;
             }
         };
+    }
+
+    @Test
+    public void testNewRankIsWrittenToDatabase() {
+        dbRefWrapTest.reset();
+        ownedMatchSetUp();
+        getActivity();
+        for (int i = 0; i < 4; ++i) {
+            onView(withId(R.id.score_update_1)).perform(click());
+            onView(withId(R.id.score_picker_match)).perform(click());
+        }
+
+        onView(withId(android.R.id.button1)).perform(click());
+
+        Player bob = ((PlayerLeafTest) ((DBRefWrapTest) dbRefWrapTest.child("players").child("696969")).getCurrentNode()).getData();
+
+        assertEquals(true, bob.getQuote() > 1000);
     }
 
 }
