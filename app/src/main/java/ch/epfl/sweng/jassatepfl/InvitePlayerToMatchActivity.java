@@ -2,7 +2,6 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -56,8 +55,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
             setContentView(R.layout.activity_invite_player_to_match);
 

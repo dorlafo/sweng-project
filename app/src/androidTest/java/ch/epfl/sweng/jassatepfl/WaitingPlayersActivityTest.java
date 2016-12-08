@@ -1,15 +1,11 @@
 package ch.epfl.sweng.jassatepfl;
 
 import android.content.Intent;
-import android.view.View;
 
-import org.hamcrest.Matcher;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,8 +13,6 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeafTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.NodeTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.TreeNodeTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
@@ -26,9 +20,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.not;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
 
@@ -48,13 +41,13 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         fullMatchSetUp();
         getActivity();
         onView(withId(R.id.leave_match_button)).perform(click());
-        onView(withId(R.id.twMyMatches)).check(matches(isDisplayed()));
+        onView(withText(R.string.main_empty_list)).check(matches(isDisplayed()));
         String matchID = DummyDataTest.fullMatchWithBob().getMatchID();
-        Match m = ((MatchLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES).child(matchID)).getCurrentNode()).getData();
+        Match m = ((MatchLeafTest) ((DBRefWrapTest) dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES).child(matchID)).getCurrentNode()).getData();
         assertEquals(3, m.getPlayers().size());
 
 
-        Map<String, Boolean> status = ((MatchStatusLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID)).getCurrentNode()).getData();
+        Map<String, Boolean> status = ((MatchStatusLeafTest) ((DBRefWrapTest) dbRefWrapTest.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID)).getCurrentNode()).getData();
         assertEquals(3, status.size());
     }
 

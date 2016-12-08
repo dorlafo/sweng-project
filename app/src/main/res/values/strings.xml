@@ -4,6 +4,8 @@
     <string name="title_activity_create">Match Information</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_game">Scores</string>
+    <string name="title_activity_main">My matches</string>
+    <string name="title_activity_list">Nearby matches</string>
 
     <string name="main_button_text_map">Map</string>
     <string name="main_button_text_list">Match list</string>
@@ -28,19 +30,32 @@
     <string name="game_team_name_3">Team 3</string>
     <string name="game_button_text_next_round">Next Round</string>
     <string name="game_text_score_picker">Enter your score for this round</string>
-    <string name="game_text_point_goal">Playing to %d points</string>
+    <string name="game_text_goal_picker">Enter the new score goal</string>
+    <string name="game_text_point_goal">Playing to %s points</string>
     <string name="game_select_meld">Select your meld</string>
     <string name="game_score_table_round">Round</string>
     <string name="game_score_table_points">Points</string>
     <string name="game_score_table_melds">Melds</string>
     <string name="game_default_score">-</string>
 
+    <string name="numpad_text_0">0</string>
+    <string name="numpad_text_1">1</string>
+    <string name="numpad_text_2">2</string>
+    <string name="numpad_text_3">3</string>
+    <string name="numpad_text_4">4</string>
+    <string name="numpad_text_5">5</string>
+    <string name="numpad_text_6">6</string>
+    <string name="numpad_text_7">7</string>
+    <string name="numpad_text_8">8</string>
+    <string name="numpad_text_9">9</string>
+    <string name="numpad_text_double_score">x2</string>
+
     <string name="list_empty_list">No matches are available</string>
 
     <string name="profile_label_player_id">Player id :</string>
     <string name="profile_label_first_name">First name :</string>
     <string name="profile_label_last_name">Last name :</string>
-    <string name="profile_label_quote">Quote :</string>
+    <string name="profile_label_quote">Quote :&#160;</string>
     <string name="profile_button_text_menu">Menu</string>
 
     <string name="login_welcoming_text">Welcome to Jass@EPFL !\nTo use this app you need to\nlogin with your EPFL account</string>
@@ -76,12 +91,14 @@
     <string name="request_location_rationale">Jass@EPFL needs to access your location to find matches near you.</string>
     <string name="request_unknown_permission">Unknown Permission</string>
 
-    <string name="wait_field_match_variant">Match variant : </string>
+    <string name="wait_field_match_variant">Match variant : %s</string>
     <string name="wait_field_player_list">Match players</string>
     <string name="wait_button_text_play">Play</string>
     <string name="wait_button_text_leave">Leave Match</string>
     <string name="wait_button_text_ready">Ready</string>
     <string name="wait_empty_list">Sorry but you are currently enrolled in no match…</string>
+    <string name="wait_not_assigned">%s : no team assigned yet</string>
+    <string name="wait_assigned">%1$s : Team %2$d</string>
 
     <string name="toast_invalid_hour">Invalid hour: you cannot go back in time!</string>
     <string name="toast_invalid_date">Invalid date: you cannot go back in time!</string>
@@ -90,6 +107,8 @@
     <string name="toast_invite_yourself">You cannot invite yourself</string>
     <string name="toast_cannot_cancel">There is nothing to cancel</string>
     <string name="toast_team_assignment_incorrect">Team assignment incorrect</string>
+    <string name="toast_invalid_score">Invalid score: the max number of points in a round is %d</string>
+    <string name="toast_invalid_goal">Invalid score goal: the minimum goal is %d</string>
 
     <string name="error">Error!</string>
     <string name="error_cannot_join">Can not join match</string>
@@ -104,10 +123,16 @@
     <string name="icon_description_date_picker">Displays a date picker</string>
     <string name="icon_description_place_picker">Displays a place picker</string>
     <string name="icon_description_app_icon">The application icon</string>
+    <string name="icon_description_meld_spinner">Opens the meld selection menu</string>
+    <string name="icon_description_score_update">Opens the score update menu</string>
+    <string name="icon_description_score_cancel">Cancels the last score update</string>
+    <string name="icon_description_score_picker_cancel">Cancels the last number input</string>
+    <string name="icon_description_split_goal">Enable different goals for both teams</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="navigation_drawer_main">Home</string>
+    <string name="navigation_drawer_score">Scoreboard</string>
     <string name="navigation_drawer_create">Create Match</string>
     <string name="navigation_drawer_maps">Match Map</string>
     <string name="navigation_drawer_match_list">Match List</string>
@@ -123,10 +148,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="loading_leaderboard">Loading Leaderboard...</string>
-
-    <color name="greenCardBoard">#2B6C3E</color>
-    <color name="greenCardBoardDark">#21432B</color>
-    <color name="greenCardBoardAccent">#D493C1</color>
 
     <string name="user_guide">User Guide</string>
     <string name="select_game_variant">Select Game Variant:</string>

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 
@@ -107,39 +108,38 @@ public class Match {
     /**
      * Checks if the match has changed
      *
-     * @param other
-     * @return True if the match has changed, false otherwise
+     * @param other the match to compare to
+     * @return true if the match has changed, false otherwise
      */
     public boolean matchHasChanged(Match other) {
-        if(!other.equals(this)) {
+        if (!other.equals(this)) {
             return false;
-        }
-        else {
-            if(!other.players.equals(this.players)) {
+        } else {
+            if (!other.players.equals(this.players)) {
                 return true;
             }
-            if(!other.location.equals(this.location)) {
+            if (!other.location.equals(this.location)) {
                 return true;
             }
-            if(!other.description.equals(this.description)) {
+            if (!other.description.equals(this.description)) {
                 return true;
             }
             if(other.quote != this.quote) {
                 return true;
             }
-            if(other.privateMatch != this.privateMatch) {
+            if (other.privateMatch != this.privateMatch) {
                 return true;
             }
-            if(other.maxPlayerNumber != this.maxPlayerNumber) {
+            if (other.maxPlayerNumber != this.maxPlayerNumber) {
                 return true;
             }
-            if(other.expirationTime != this.expirationTime) {
+            if (other.expirationTime != this.expirationTime) {
                 return true;
             }
-            if(!other.matchStatus.equals(this.matchStatus)) {
+            if (!other.matchStatus.equals(this.matchStatus)) {
                 return true;
             }
-            if(!other.teams.equals(this.teams)) {
+            if (!other.teams.equals(this.teams)) {
                 return true;
             }
             /*if(other.players != this.players
@@ -293,6 +293,7 @@ public class Match {
 
     /**
      * Setter for the expiration time
+     *
      * @param expTime The expiration time to set
      */
     public void setExpirationTime(long expTime) {
@@ -412,6 +413,16 @@ public class Match {
         } else {
             throw new IllegalAccessException("Player already in that Match.");
         }
+    }
+
+    public Player getPlayerById(String id) {
+        Player.PlayerID playerId = new Player.PlayerID(id);
+        for (Player player : players) {
+            if (player.getID().equals(playerId)) {
+                return player;
+            }
+        }
+        throw new NoSuchElementException("No player with this id in this match");
     }
 
     /**

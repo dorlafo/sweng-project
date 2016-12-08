@@ -3,7 +3,6 @@ package ch.epfl.sweng.jassatepfl;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -32,8 +31,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
             //setContentView(R.layout.activity_user_profile);
 
