@@ -34,9 +34,9 @@ public class FinishedMatchListFragment extends BaseMatchListFragment {
 
     @Override
     public QueryWrapper getQuery(DBReferenceWrapper dbRefWrapped) {
-        return dbRefWrapped.child(DatabaseUtils.DATABASE_FINISHED_MATCHES)
-                .orderByChild(DatabaseUtils.DATABASE_MATCHES_MATCH_STATUS)
-                .equalTo(Match.MatchStatus.FINISHED.toString());
+        return dbRefWrapped.child(DatabaseUtils.DATABASE_STATS)
+                .child(DatabaseUtils.DATABASE_STATS_MATCH_ARCHIVE)
+                .orderByChild(DatabaseUtils.DATABASE_MATCHES_EXPIRATION_TIME);
     }
 
     @Override

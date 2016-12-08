@@ -1,177 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_game"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ch.epfl.sweng.jassatepfl.GameActivity">
 
-    <RelativeLayout
-        android:id="@+id/game_top_row"
+    <Space
+        android:id="@+id/game_top_space"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/game_vertical_delimiter">
+        android:layout_height="?android:attr/actionBarSize"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <RelativeLayout
-            android:id="@+id/game_first_team"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:id="@+id/game_top_row"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/game_vertical_delimiter">
 
-            <TextView
-                android:id="@+id/team_name_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:text="@string/game_team_name_1"/>
-
-            <TextView
-                android:id="@+id/score_display_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/team_name_1"
-                android:layout_centerHorizontal="true"
-                android:text="@string/game_default_score"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/score_text_size"
-                android:textStyle="bold"/>
-
-            <LinearLayout
-                android:id="@+id/team_score_button_row_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/score_display_1"
-                android:layout_centerHorizontal="true"
-                android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/score_meld_spinner_layout_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toStartOf="@+id/game_first_team">
 
                 <ImageButton
                     android:id="@+id/score_meld_spinner_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:background="#FAFAFA"
+                    android:contentDescription="@string/icon_description_meld_spinner"
                     android:src="@drawable/ic_chat_bubble_outline_black"
-                    android:visibility="invisible"
-                    android:contentDescription="@string/score_meld_spinner_1"/>
+                    android:visibility="invisible"/>
 
-                <Space
-                    android:layout_width="@dimen/game_button_padding"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/game_first_team"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/score_display_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/game_default_score"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/score_text_size"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/team_members_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/score_display_1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:visibility="invisible"/>
+
+                <TextView
+                    android:id="@+id/team_goal_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/score_display_1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@android:color/black"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/team_name_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/team_members_1"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/game_team_name_1"
+                    android:textColor="@android:color/black"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/score_update_layout_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/game_first_team">
 
                 <ImageButton
                     android:id="@+id/score_update_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:background="#FAFAFA"
-                    android:src="@drawable/ic_autorenew_black"
-                    android:visibility="invisible"
-                    android:contentDescription="@string/score_update_1"/>
+                    android:contentDescription="@string/icon_description_score_update"
+                    android:src="@drawable/ic_add_black"
+                    android:visibility="invisible"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </RelativeLayout>
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/game_vertical_delimiter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
 
-    <Space
-        android:id="@+id/game_vertical_delimiter"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_centerVertical="true"/>
+            <ImageButton
+                android:id="@+id/score_update_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="#FAFAFA"
+                android:contentDescription="@string/icon_description_score_cancel"
+                android:src="@drawable/ic_undo_black"
+                android:visibility="invisible"/>
 
-    <ImageButton
-        android:id="@+id/score_update_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:background="#FAFAFA"
-        android:src="@drawable/ic_undo_black"
-        android:visibility="invisible"
-        android:contentDescription="@string/score_update_cancel"/>
+            <TextView
+                android:id="@+id/game_playing_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@android:color/black"/>
 
-    <TextView
-        android:id="@+id/game_playing_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textColor="@android:color/black"/>
+            <ImageButton
+                android:id="@+id/split_team_goals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="#FAFAFA"
+                android:contentDescription="@string/icon_description_split_goal"
+                android:src="@drawable/ic_call_split_black"
+                android:visibility="invisible"/>
 
-    <RelativeLayout
-        android:id="@+id/game_bottom_row"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/game_vertical_delimiter">
+        </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/game_second_team"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:id="@+id/game_bottom_row"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/game_vertical_delimiter">
 
-            <TextView
-                android:id="@+id/team_name_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:text="@string/game_team_name_2"/>
-
-            <TextView
-                android:id="@+id/score_display_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/team_name_2"
-                android:layout_centerHorizontal="true"
-                android:text="@string/game_default_score"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/score_text_size"
-                android:textStyle="bold"/>
-
-            <LinearLayout
-                android:id="@+id/team_score_button_row_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/score_display_2"
-                android:layout_centerHorizontal="true"
-                android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/score_meld_spinner_layout_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toStartOf="@+id/game_second_team">
 
                 <ImageButton
                     android:id="@+id/score_meld_spinner_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:background="#FAFAFA"
+                    android:contentDescription="@string/icon_description_meld_spinner"
                     android:src="@drawable/ic_chat_bubble_outline_black"
-                    android:visibility="invisible"
-                    android:contentDescription="@string/score_meld_spinner_2"/>
+                    android:visibility="invisible"/>
 
-                <Space
-                    android:layout_width="@dimen/game_button_padding"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/game_second_team"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/score_display_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/game_default_score"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/score_text_size"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/team_goal_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/score_display_2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@android:color/black"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/team_members_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/score_display_2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:visibility="invisible"/>
+
+                <TextView
+                    android:id="@+id/team_name_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/team_members_2"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/game_team_name_2"
+                    android:textColor="@android:color/black"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/score_update_layout_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/game_second_team">
 
                 <ImageButton
                     android:id="@+id/score_update_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:background="#FAFAFA"
-                    android:src="@drawable/ic_autorenew_black"
-                    android:visibility="invisible"
-                    android:contentDescription="@string/score_update_2"/>
+                    android:contentDescription="@string/icon_description_score_update"
+                    android:src="@drawable/ic_add_black"
+                    android:visibility="invisible"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </RelativeLayout>
 
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

@@ -31,8 +31,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             //setContentView(R.layout.activity_user_profile);
 
@@ -57,13 +56,9 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Player p = dataSnapshot.getValue(Player.class);
-                            //mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
                             mtwPlayerID.setText(String.format(getString(R.string.user_profile_player_id), p.getID().toString()));
-                            //mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
                             mtwLastName.setText(String.format(getString(R.string.user_profile_player_last_name), p.getLastName()));
-                            //mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
                             mtwFirstName.setText(String.format(getString(R.string.user_profile_player_first_name), p.getFirstName()));
-                            //mtwPlayerQuote.setText(mtwPlayerQuote.getText() + " " + Integer.toString(p.getQuote()));
                             mtwPlayerQuote.setText(String.format(getString(R.string.user_profile_player_quote), p.getQuote()));
                         }
 

@@ -15,8 +15,8 @@ class Tuple2<T, V> {
     /**
      * Constructor
      *
-     * @param key The key
-     * @param value The value
+     * @param key   the key
+     * @param value the value
      */
     public Tuple2(T key, V value) {
         this.k = key;

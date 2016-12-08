@@ -7,12 +7,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,6 +27,9 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.MatchListAdapter;
+
+import static android.view.Gravity.CENTER_HORIZONTAL;
+import static android.view.Gravity.CENTER_VERTICAL;
 
 /**
  * Activity displaying matches as a scrolling list.
@@ -50,17 +53,20 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_list, drawer, false);
             drawer.addView(contentView, 0);
 
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+
             TextView emptyList = new TextView(this);
+            emptyList.setGravity(CENTER_HORIZONTAL | CENTER_VERTICAL);
             emptyList.setText(R.string.list_empty_list);
-            emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
             emptyList.setTextColor(Color.BLACK);
+            emptyList.setLayoutParams(lp);
 
             listView = (ListView) findViewById(R.id.list_nearby_matches);
             ((ViewGroup) listView.getParent()).addView(emptyList);
@@ -83,7 +89,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     @Override
     public void onPause() {
         super.onResume();
-        if(childEventListener != null) {
+        if (childEventListener != null) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
                     .orderByChild("privateMatch")
                     .equalTo(false)
@@ -91,6 +97,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
         }
         matches.clear();
     }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
         // Opens dialog box to ask user if he wants to join match
@@ -119,7 +126,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(childEventListener != null) {
+        if (childEventListener != null) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
                     .orderByChild("privateMatch")
                     .equalTo(false)
@@ -134,7 +141,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
                 //Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 //Add match to the list if we are not in it
-                if(!match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                if (!match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                     matches.add(match);
                 }
                 modifyListAdapter();
@@ -146,19 +153,18 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
                 Match match = dataSnapshot.getValue(Match.class);
                 int matchIndex = matches.indexOf(match);
                 //If the match is in the list (ie we were not in it)
-                if(matchIndex != -1) {
+                if (matchIndex != -1) {
                     //if we now are in it, remove it from the list, otherwise modify it
-                    if(match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                    if (match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                         matches.remove(match);
-                    }
-                    else {
+                    } else {
                         matches.set(matchIndex, match);
                     }
                 }
                 //The match was not in the list
                 else {
                     //Add match if we are not in it
-                    if(!match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
+                    if (!match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                         matches.add(match);
                     }
                 }

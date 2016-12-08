@@ -37,16 +37,14 @@ public class DatabaseUtils {
     public static final String DATABASE_MATCHES_MATCH_STATUS = "matchStatus";
     public static final String DATABASE_MATCHES_MATCH_ID = "matchID";
 
-    public static final String DATABASE_FINISHED_MATCHES = "finishedMatches";
-
     public static final String DATABASE_PENDING_MATCHES = "pendingMatches";
 
     public static final String DATABASE_MATCH_STATS = "matchStats";
 
     public static final String DATABASE_STATS = "stats";
     public static final String DATABASE_STATS_BUFFER = "buffer";
-    public static final String DATABASE_STATS_USER = "user";
-
+    public static final String DATABASE_STATS_MATCH_STATS_ARCHIVE = "matchStatsArchive";
+    public static final String DATABASE_STATS_MATCH_ARCHIVE = "matchArchive";
     /**
      * Add player to match on the database.
      *

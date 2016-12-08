@@ -45,7 +45,7 @@ public class UserStats {
     /**
      * Constructor, only start with user id.
      *
-     * @param id The user ID
+     * @param id the user id
      */
     public UserStats(Player.PlayerID id) {
         this.playerId = id;
@@ -156,7 +156,7 @@ public class UserStats {
      * Utility method checking if a counter exists for the received date and creates it if it
      * does not exist in the list.
      *
-     * @param time The time
+     * @param time the date
      */
     private void prepareLastBuckets(Long time) {
         long updateDate = getDay(time);

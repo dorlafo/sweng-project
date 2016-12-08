@@ -14,8 +14,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.MainActivity;
-import ch.epfl.sweng.jassatepfl.WaitingPlayersActivity;
 import ch.epfl.sweng.jassatepfl.R;
+import ch.epfl.sweng.jassatepfl.WaitingPlayersActivity;
 
 import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.DEFAULT_MSG;
 import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.MATCH_EXPIRED;

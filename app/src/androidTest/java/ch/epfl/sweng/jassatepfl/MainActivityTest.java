@@ -81,7 +81,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         dbRefWrapMock.addMatches(matches);
 
         try {
-            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.list_my_matches)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_match)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_message)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
@@ -101,7 +101,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
 
         try {
-            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.list_my_matches)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
@@ -120,7 +120,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapMock, "full", 4);
 
         try {
-            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.list_my_matches)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             onView(withId(R.string.error_cannot_join)).check(matches(isDisplayed()));
@@ -139,13 +139,13 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 1);
 
         try {
-            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.list_my_matches)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             assertMatchContainsNPlayers(dbRefWrapMock, "one_player", 2);
             assertMatchContainsPlayer(dbRefWrapMock, "one_player", new Player.PlayerID("696969"));
 
-            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.list_my_matches)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
             onView(withText(R.string.dialog_join_confirmation)).perform(click());
             onView(withId(R.string.error_cannot_join)).check(matches(isDisplayed()));

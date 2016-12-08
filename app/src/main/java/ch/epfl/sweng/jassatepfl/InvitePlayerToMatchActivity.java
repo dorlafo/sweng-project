@@ -55,8 +55,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             setContentView(R.layout.activity_invite_player_to_match);
 

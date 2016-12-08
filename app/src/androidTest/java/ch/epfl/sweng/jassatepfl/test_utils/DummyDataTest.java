@@ -67,7 +67,14 @@ public class DummyDataTest {
         List<Player> matchPlayers = new ArrayList<>();
         matchPlayers.add(bricoloBob);
         matchPlayers.add(jimmy);
-        return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+        matchPlayers.add(random);
+        matchPlayers.add(marco);
+        Match match = new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+        match.setTeam(0, bricoloBob.getID());
+        match.setTeam(0, jimmy.getID());
+        match.setTeam(1, random.getID());
+        match.setTeam(1, marco.getID());
+        return match;
     }
 
     public static Match noPlayersMatch() {
@@ -93,11 +100,16 @@ public class DummyDataTest {
 
     public static Match fullMatchWithBob() {
         List<Player> fullPlayers = new ArrayList<>();
-        fullPlayers.add(bricoloBob);
         fullPlayers.add(marco);
+        fullPlayers.add(bricoloBob);
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
-        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full_bob");
+        Match match = new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full_bob");
+        match.setTeam(0, marco.getID());
+        match.setTeam(0, bricoloBob.getID());
+        match.setTeam(1, dorian.getID());
+        match.setTeam(1, vincenzo.getID());
+        return match;
     }
 
     public static Match matchWithBob() {

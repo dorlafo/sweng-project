@@ -8,9 +8,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
- * @author Alexis Montavon
- *
  * Test Class for LoginActivity
+ *
+ * @author Alexis Montavon
  */
 public final class LoginActivityTest extends InjectedBaseActivityTest {
 
@@ -30,7 +30,7 @@ public final class LoginActivityTest extends InjectedBaseActivityTest {
             onView(withId(R.id.login_button)).check(matches(isDisplayed()));
             onView(withId(R.id.login_text_view)).check(matches(isDisplayed()));
             assertTrue(true);
-        }catch(Exception e) {
+        } catch (Exception e) {
             fail();
         }
 

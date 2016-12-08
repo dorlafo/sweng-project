@@ -187,6 +187,16 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         release();
     }
 
+    /*
+    @Test
+    public void testCreateMatchSendsIntent() {
+        init();
+        Matcher<Intent> expectedIntent = hasComponent(WaitingPlayersActivity.class.getName());
+        onView(withId(R.id.create_create_button)).perform(click());
+        intended(expectedIntent);
+    }
+    */
+
     private void removePlayer(Player player) {
         onData(allOf(is(instanceOf(Player.class)), hasToString(player.toString())))
                 .inAdapterView(withId(R.id.create_player_list))

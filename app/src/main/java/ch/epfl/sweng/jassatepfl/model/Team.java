@@ -64,14 +64,10 @@ public class Team {
             return false;
         } else if (o == this) {
             return true;
-        } else if (!o.getClass().getName().equals(this.getClass().getName())) {
-            return false;
-        } else {
-            if (((Team) o).members.containsAll(this.members) && this.members.containsAll(((Team) o).members)) {
-                return true;
-            }
+        } else if (o.getClass() != this.getClass()) {
             return false;
         }
+        return ((Team) o).members.containsAll(this.members) && this.members.containsAll(((Team) o).members);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

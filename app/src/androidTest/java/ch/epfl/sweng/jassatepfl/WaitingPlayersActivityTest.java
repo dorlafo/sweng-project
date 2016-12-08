@@ -43,11 +43,11 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.leave_match_button)).perform(click());
         onView(withText(R.string.main_empty_pending_list)).check(matches(isDisplayed()));
         String matchID = DummyDataTest.fullMatchWithBob().getMatchID();
-        Match m = ((MatchLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES).child(matchID)).getCurrentNode()).getData();
+        Match m = ((MatchLeafTest) ((DBRefWrapTest) dbRefWrapTest.child(DatabaseUtils.DATABASE_MATCHES).child(matchID)).getCurrentNode()).getData();
         assertEquals(3, m.getPlayers().size());
 
 
-        Map<String, Boolean> status = ((MatchStatusLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID)).getCurrentNode()).getData();
+        Map<String, Boolean> status = ((MatchStatusLeafTest) ((DBRefWrapTest) dbRefWrapTest.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID)).getCurrentNode()).getData();
         assertEquals(3, status.size());
     }
 

@@ -33,7 +33,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -104,8 +103,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_create_match, drawer, false);
@@ -174,14 +172,12 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
             emptyList.setTextColor(Color.GRAY);
 
-            //TODO: Doesn't show players... --> fix this + make clicking on player ask to remove him
             ListView playersLV = (ListView) findViewById(R.id.create_player_list);
             ((ViewGroup) playersLV.getParent()).addView(emptyList);
             playersLV.setEmptyView(emptyList);
             playersLV.setBackgroundColor(0xFAFAFA);
 
-            playerArrayAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, new ArrayList<Player>());
+            playerArrayAdapter = new ArrayAdapter<>(this, R.layout.invited_player_list, new ArrayList<Player>());
             playersLV.setAdapter(playerArrayAdapter);
 
             playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
