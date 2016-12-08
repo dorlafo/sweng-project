@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -24,7 +25,9 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
     private TextView mtwRecurentPartner;
     private TextView mtwBestPartner;
     private TextView mtwVariant;
-    String sciper;
+    private String sciper;
+    private String mostPlayedWith;
+    private String mostWonWith;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +88,52 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                         UserStats us = dataSnapshot.getValue(UserStats.class);
                         mtwMatchPlayed.setText(String.format(getString(R.string.profile_label_matches_played), us.getPlayedMatches()));
                         mtwMatchWon.setText(String.format(getString(R.string.profile_label_matches_won), us.getWonMatches()));
+                        getPartnersNames(us);
+                        mtwVariant.setText(String.format(getString(R.string.profile_label_most_variants),
+                                us.sortedVariants().get(0).getKey(), us.sortedVariants().get(0).getValue()));
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+                        // Do nothing
+                    }
+                });
+    }
 
+    private void getPartnersNames(final UserStats us) {
+        dbRefWrapped
+                .child(DatabaseUtils.DATABASE_PLAYERS)
+                .child(us.sortedPartners().get(0).getKey())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Player p = dataSnapshot.getValue(Player.class);
+                        mostPlayedWith = p.getFirstName() + " " + p.getLastName();
+                        mtwRecurentPartner.setText(String.format(getString(R.string.profile_label_most_played_with),
+                                mostPlayedWith, us.sortedPartners().get(0).getValue()));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Do nothing
+                    }
+                });
+
+        dbRefWrapped
+                .child(DatabaseUtils.DATABASE_PLAYERS)
+                .child(us.sortedWonWith().get(0).getKey())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Player p = dataSnapshot.getValue(Player.class);
+                        mostWonWith = p.getFirstName() + " " + p.getLastName();
+                        mtwBestPartner.setText(String.format(getString(R.string.profile_label_most_won_with),
+                        mostWonWith, us.sortedWonWith().get(0).getValue()));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Do nothing
                     }
                 });
     }
