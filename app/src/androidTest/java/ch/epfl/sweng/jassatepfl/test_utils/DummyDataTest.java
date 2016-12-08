@@ -67,7 +67,14 @@ public class DummyDataTest {
         List<Player> matchPlayers = new ArrayList<>();
         matchPlayers.add(bricoloBob);
         matchPlayers.add(jimmy);
-        return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+        matchPlayers.add(vincenzo);
+        matchPlayers.add(nicolas);
+        Match ownedMatch = new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+        ownedMatch.setTeam(0, bricoloBob.getID());
+        ownedMatch.setTeam(0, jimmy.getID());
+        ownedMatch.setTeam(1, vincenzo.getID());
+        ownedMatch.setTeam(1, nicolas.getID());
+        return ownedMatch;
     }
 
     public static Match noPlayersMatch() {
