@@ -212,7 +212,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             }
             // dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats); TODO: mock the buffer
             displayEndOfMatchMessage(matchStats.getWinnerIndex());
-            sendNewRankToServer(currentMatch, caller.ordinal());
+            sendNewRankToServer(currentMatch, matchStats.getWinnerIndex());
         }
         updateMatchStats();
     }
