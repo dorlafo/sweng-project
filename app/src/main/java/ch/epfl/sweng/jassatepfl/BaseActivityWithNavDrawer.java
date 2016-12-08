@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
 import android.widget.Toast;
@@ -79,6 +78,10 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
             case R.id.nav_list:
                 intent = new Intent(this, MatchListActivity.class);
                 break;
+            case R.id.nav_score:
+                intent = new Intent(this, GameActivity.class);
+                intent.putExtra("mode", "offline");
+                break;
             case R.id.nav_profile:
                 intent = new Intent(this, UserProfileActivity.class);
                 break;
@@ -123,6 +126,7 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
 
     /**
      * Getter for the user sciper
+     *
      * @return The user' sciper
      */
     public String getUserSciper() {

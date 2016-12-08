@@ -33,8 +33,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_user_profile, drawer, false);
             drawer.addView(contentView, 0);

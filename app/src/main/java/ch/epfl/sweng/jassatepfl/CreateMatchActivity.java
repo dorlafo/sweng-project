@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -34,7 +33,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -106,8 +104,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_create_match, drawer, false);
@@ -181,8 +178,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             playersLV.setEmptyView(emptyList);
             playersLV.setBackgroundColor(0xFAFAFA);
 
-            playerArrayAdapter = new PlayerListAdapter(this,
-                    R.layout.player_list_element, new ArrayList<Player>());
+            playerArrayAdapter = new PlayerListAdapter(this, R.layout.player_list_element, new ArrayList<Player>());
             playersLV.setAdapter(playerArrayAdapter);
 
             playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -72,6 +72,7 @@ public class LoginActivity extends BaseAppCompatActivity {
 
     /**
      * Launch the login process when a user click on the login button
+     *
      * @param view the current view (This is a required parameters for method related to a button)
      */
     public void login(View view) {
@@ -108,6 +109,7 @@ public class LoginActivity extends BaseAppCompatActivity {
     /**
      * Sign in the user with the information from the Profile object. If the sign in does not work,
      * it means that the user does not have an account so it creates one by calling signUp
+     *
      * @param profile The user Profile retrieved from Tequila authentication
      */
     private void signIn(final Profile profile) {
@@ -132,6 +134,7 @@ public class LoginActivity extends BaseAppCompatActivity {
     /**
      * Sign up the user by creating an account on Firebase and adding it's user profile to the
      * database
+     *
      * @param profile The user Profile retrieved from Tequila authentication
      */
     private void signUp(final Profile profile) {
@@ -265,6 +268,7 @@ public class LoginActivity extends BaseAppCompatActivity {
 
     /**
      * Get the OAuth2Config from the JSON file
+     *
      * @return the OAuth2Config
      */
     private OAuth2Config getOAuth2Config() {

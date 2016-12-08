@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -15,8 +14,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.MainActivity;
-import ch.epfl.sweng.jassatepfl.WaitingPlayersActivity;
 import ch.epfl.sweng.jassatepfl.R;
+import ch.epfl.sweng.jassatepfl.WaitingPlayersActivity;
 
 import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.DEFAULT_MSG;
 import static ch.epfl.sweng.jassatepfl.notification.NotificationMessages.MATCH_EXPIRED;
@@ -102,7 +101,7 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_notify)
-                .setContentTitle("Jass@EPFL - " + msgData.get("title"))
+                .setContentTitle(msgData.get("title"))
                 .setContentText(msgData.get("body"))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

@@ -7,16 +7,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -28,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -42,9 +47,17 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.SECOND_TEAM;
+import static ch.epfl.sweng.jassatepfl.GameActivity.Mode.OFFLINE;
+import static ch.epfl.sweng.jassatepfl.GameActivity.Mode.ONLINE;
+import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.COMMON_GOAL;
+import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.FIRST_TEAM_GOAL;
+import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.SCORE;
+import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.SECOND_TEAM_GOAL;
+import static ch.epfl.sweng.jassatepfl.GameActivity.SplitMode.NORMAL;
+import static ch.epfl.sweng.jassatepfl.GameActivity.SplitMode.SPLIT;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.SENTINEL;
 
-public class GameActivity extends BaseAppCompatActivity implements OnClickListener {
+public class GameActivity extends BaseActivityWithNavDrawer implements OnClickListener {
 
     private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
 
@@ -63,15 +76,30 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     private TextView secondTeamScoreDisplay;
     private ImageButton cancelButton;
 
-    protected enum Caller {FIRST_TEAM, SECOND_TEAM}
-
     private Caller caller;
     private Stack<Caller> meldCallers;
+    private Mode mode;
+    private SplitMode splitMode;
+
+    private int scoreMultiplier;
+
+    private Toast toast;
+
+    protected enum Caller {FIRST_TEAM, SECOND_TEAM}
+
+    protected enum Mode {ONLINE, OFFLINE}
+
+    protected enum PickerMode {SCORE, COMMON_GOAL, FIRST_TEAM_GOAL, SECOND_TEAM_GOAL}
+
+    protected enum SplitMode {NORMAL, SPLIT}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (fAuth.getCurrentUser() == null) {
+        Intent startingIntent = getIntent();
+        mode = startingIntent.getStringExtra("mode").equals("online") ? ONLINE : OFFLINE;
+        splitMode = NORMAL;
+        if (mode == ONLINE && fAuth.getCurrentUser() == null) {
             //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
@@ -79,7 +107,9 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         } else {
             //Log.d(TAG, "showLogin:getCurrentUser:notNull");
 
-            setContentView(R.layout.activity_game);
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView = inflater.inflate(R.layout.activity_game, drawer, false);
+            drawer.addView(contentView, 0);
 
             //Sentinel matchStats to avoid null pointer exception
             matchStats = new MatchStats(Match.sentinelMatch());
@@ -94,21 +124,26 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        currentMatch = dataSnapshot.getValue(Match.class);
-                        if (currentMatch != null) {
-                            setUp();
+        if (mode == ONLINE) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            currentMatch = dataSnapshot.getValue(Match.class);
+                            if (currentMatch != null) {
+                                setUp();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.e("ERROR-DATABASE", databaseError.toString());
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e("ERROR-DATABASE", databaseError.toString());
+                        }
+                    });
+        } else {
+            currentMatch = Match.sentinelMatch();
+            setUp();
+        }
     }
 
     @Override
@@ -133,11 +168,11 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                 break;
             case R.id.score_update_1:
                 caller = FIRST_TEAM;
-                showScorePicker();
+                showNumPadScorePicker(SCORE);
                 break;
             case R.id.score_update_2:
                 caller = SECOND_TEAM;
-                showScorePicker();
+                showNumPadScorePicker(SCORE);
                 break;
             case R.id.score_meld_spinner_1:
                 meldCallers.push(FIRST_TEAM);
@@ -159,16 +194,57 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                     updateMatchStats();
                 }
                 break;
+            case R.id.game_playing_to:
+                showNumPadScorePicker(COMMON_GOAL);
+                break;
+            case R.id.split_team_goals:
+                changeSplitMode();
+                break;
+            case R.id.team_goal_1:
+                showNumPadScorePicker(FIRST_TEAM_GOAL);
+                break;
+            case R.id.team_goal_2:
+                showNumPadScorePicker(SECOND_TEAM_GOAL);
+                break;
         }
+    }
+
+    private void changeSplitMode() {
+        TextView commonGoal = (TextView) findViewById(R.id.game_playing_to);
+        TextView firstTeamGoal = (TextView) findViewById(R.id.team_goal_1);
+        TextView secondTeamGoal = (TextView) findViewById(R.id.team_goal_2);
+        if (splitMode == NORMAL) {
+            splitMode = SPLIT;
+            commonGoal.setVisibility(INVISIBLE);
+            String defaultGoal = Integer.toString(currentMatch.getGameVariant().getPointGoal());
+
+            firstTeamGoal.setVisibility(VISIBLE);
+            firstTeamGoal.setText(defaultGoal);
+            firstTeamGoal.setOnClickListener(this);
+
+            secondTeamGoal.setVisibility(VISIBLE);
+            secondTeamGoal.setText(defaultGoal);
+            secondTeamGoal.setOnClickListener(this);
+        } else {
+            splitMode = NORMAL;
+            commonGoal.setVisibility(VISIBLE);
+            firstTeamGoal.setVisibility(GONE);
+            secondTeamGoal.setVisibility(GONE);
+        }
+    }
+
+    private void updateSplitGoal(int index, int points) {
+        int goalIndex = index == 0 ? R.id.team_goal_1 : R.id.team_goal_2;
+        TextView goal = (TextView) findViewById(goalIndex);
+        goal.setText(Integer.toString(points));
     }
 
     private void displayMeldSpinner(final int teamIndex) {
         List<Meld> melds = new ArrayList<>(Arrays.asList(Meld.values()));
         melds.remove(SENTINEL);
-        final ArrayAdapter<Meld> meldAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, melds);
+        final ArrayAdapter<Meld> meldAdapter = new ArrayAdapter<>(this, R.layout.meld_spinner, melds);
         new AlertDialog.Builder(this)
-                .setTitle(R.string.game_select_meld)
+                //.setTitle(R.string.game_select_meld)
                 .setAdapter(meldAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -183,8 +259,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                 .create().show();
     }
 
-    private void computeScores(int callerScore) {
-        int otherTeamScore = TOTAL_POINTS_IN_ROUND - callerScore;
+    private void computeScores(int callerScore, int scoreMultiplier) {
+        int otherTeamScore = TOTAL_POINTS_IN_ROUND * scoreMultiplier - callerScore;
         switch (caller) {
             case FIRST_TEAM:
                 updateScore(callerScore, otherTeamScore);
@@ -205,7 +281,9 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             if (matchStats.allTeamsHaveReachedGoal()) {
                 matchStats.setWinnerIndex(caller.ordinal());
             }
-            // dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats); TODO: mock the buffer
+            if (mode == ONLINE) {
+                dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats);
+            }
             displayEndOfMatchMessage(matchStats.getWinnerIndex());
         }
         updateMatchStats();
@@ -219,24 +297,127 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         secondTeamScoreDisplay.setText(secondTeamScore.toString());
     }
 
-    private void showScorePicker() {
+    private void showNumPadScorePicker(final PickerMode pickerMode) {
         final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.score_picker);
-        final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.score_picker);
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(TOTAL_POINTS_IN_ROUND);
-        numberPicker.setWrapSelectorWheel(true);
+        dialog.setContentView(R.layout.score_picker_numpad);
+
+        TextView title = (TextView) dialog.findViewById(R.id.score_picker_title);
+        title.setText(pickerMode == SCORE ? R.string.game_text_score_picker : R.string.game_text_goal_picker);
+
+        final TextView pointsDisplay = (TextView) dialog.findViewById(R.id.score_picker_score_display);
+        pointsDisplay.setText("0");
+
+        ViewGroup checkboxLayout = (ViewGroup) dialog.findViewById(R.id.score_picker_checkbox_layout);
+        checkboxLayout.setVisibility(pickerMode == SCORE ? VISIBLE : INVISIBLE);
+
+        scoreMultiplier = 1;
+        CheckBox doubleScore = (CheckBox) dialog.findViewById(R.id.numpad_double_score);
+        doubleScore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                scoreMultiplier = isChecked ? 2 : 1;
+            }
+        });
+
+        Button numpad0 = (Button) dialog.findViewById(R.id.numpad_0);
+        numpad0.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, 0, pickerMode);
+            }
+        });
+
+        Button numpad1 = (Button) dialog.findViewById(R.id.numpad_1);
+        numpad1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, 1, pickerMode);
+            }
+        });
+
+        Button numpad2 = (Button) dialog.findViewById(R.id.numpad_2);
+        numpad2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, 2, pickerMode);
+            }
+        });
+
+        Button numpad3 = (Button) dialog.findViewById(R.id.numpad_3);
+        numpad3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, 3, pickerMode);
+            }
+        });
+
+        Button numpad4 = (Button) dialog.findViewById(R.id.numpad_4);
+        numpad4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, 4, pickerMode);
+            }
+        });
+
+        Button numpad5 = (Button) dialog.findViewById(R.id.numpad_5);
+        numpad5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, 5, pickerMode);
+            }
+        });
+
+        Button numpad6 = (Button) dialog.findViewById(R.id.numpad_6);
+        numpad6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, 6, pickerMode);
+            }
+        });
+
+        Button numpad7 = (Button) dialog.findViewById(R.id.numpad_7);
+        numpad7.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, 7, pickerMode);
+            }
+        });
+
+        Button numpad8 = (Button) dialog.findViewById(R.id.numpad_8);
+        numpad8.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, 8, pickerMode);
+            }
+        });
+
+        Button numpad9 = (Button) dialog.findViewById(R.id.numpad_9);
+        numpad9.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, 9, pickerMode);
+            }
+        });
+
+        ImageButton numpadCorrect = (ImageButton) dialog.findViewById(R.id.numpad_correct);
+        numpadCorrect.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScorePickerDisplay(pointsDisplay, -1, pickerMode);
+            }
+        });
 
         Button match = (Button) dialog.findViewById(R.id.score_picker_match);
+        match.setVisibility(pickerMode == SCORE ? VISIBLE : GONE);
         match.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (caller) {
                     case FIRST_TEAM:
-                        updateScore(MATCH_POINTS, 0);
+                        updateScore(MATCH_POINTS * scoreMultiplier, 0);
                         break;
                     case SECOND_TEAM:
-                        updateScore(0, MATCH_POINTS);
+                        updateScore(0, MATCH_POINTS * scoreMultiplier);
                         break;
                 }
                 dialog.dismiss();
@@ -248,7 +429,24 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         confirmScore.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                computeScores(numberPicker.getValue());
+                int points = Integer.parseInt(pointsDisplay.getText().toString());
+                switch (pickerMode) {
+                    case SCORE:
+                        computeScores(points * scoreMultiplier, scoreMultiplier);
+                        break;
+                    case COMMON_GOAL:
+                        matchStats.setPointsGoal(points);
+                        updatePointsGoal(points);
+                        break;
+                    case FIRST_TEAM_GOAL:
+                        matchStats.setPointsGoal(0, points);
+                        updateSplitGoal(0, points);
+                        break;
+                    case SECOND_TEAM_GOAL:
+                        matchStats.setPointsGoal(1, points);
+                        updateSplitGoal(1, points);
+                        break;
+                }
                 dialog.dismiss();
             }
         });
@@ -262,6 +460,32 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         });
 
         dialog.show();
+    }
+
+    private void updateScorePickerDisplay(TextView scoreDisplay, int value, PickerMode pickerMode) {
+        String currentDisplay = scoreDisplay.getText().toString();
+        if (value == -1) {
+            if (currentDisplay.length() <= 1) {
+                currentDisplay = "0";
+            } else {
+                currentDisplay = currentDisplay.substring(0, currentDisplay.length() - 1);
+            }
+        } else if (currentDisplay.equals("0") && value != 0) {
+            currentDisplay = Integer.toString(value);
+        } else if (!currentDisplay.equals("0")) {
+            currentDisplay += value;
+        }
+
+        int displayedPoints = Integer.parseInt(currentDisplay);
+        if (pickerMode == SCORE) {
+            if (displayedPoints <= TOTAL_POINTS_IN_ROUND) {
+                scoreDisplay.setText(currentDisplay);
+            } else {
+                displayToast(R.string.toast_invalid_score, TOTAL_POINTS_IN_ROUND);
+            }
+        } else {
+            scoreDisplay.setText(currentDisplay);
+        }
     }
 
     private void displayEndOfMatchMessage(int winningTeamIndex) {
@@ -282,18 +506,21 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
     }
 
     private void updateMatchStats() {
-        dbRefWrapped.child("matchStats").child(matchId).setValue(matchStats);
+        if (mode == ONLINE) {
+            dbRefWrapped.child("matchStats").child(matchId).setValue(matchStats);
+        }
     }
 
     private void setUp() {
         firstTeamScoreDisplay = (TextView) findViewById(R.id.score_display_1);
         firstTeamScoreDisplay.setOnClickListener(this);
         firstTeamScoreDisplay.setEnabled(false);
+
         secondTeamScoreDisplay = (TextView) findViewById(R.id.score_display_2);
         secondTeamScoreDisplay.setOnClickListener(this);
         secondTeamScoreDisplay.setEnabled(false);
 
-        final boolean isOwner = currentMatch.createdBy().getID().toString().equals(getUserSciper());
+        final boolean isOwner = mode == OFFLINE || currentMatch.createdBy().getID().toString().equals(getUserSciper());
         final int visibility = isOwner ? VISIBLE : INVISIBLE;
 
         ImageButton firstTeamUpdateButton = (ImageButton) findViewById(R.id.score_update_1);
@@ -312,43 +539,55 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         secondMeldSpinner.setOnClickListener(this);
         secondMeldSpinner.setVisibility(visibility);
 
+        ImageButton splitGoals = (ImageButton) findViewById(R.id.split_team_goals);
+        splitGoals.setVisibility(mode == OFFLINE ? VISIBLE : INVISIBLE);
+        splitGoals.setOnClickListener(this);
+
         cancelButton = (ImageButton) findViewById(R.id.score_update_cancel);
         cancelButton.setOnClickListener(this);
         cancelButton.setVisibility(visibility);
 
-        TextView goal = (TextView) findViewById(R.id.game_playing_to);
-        int pointsGoal = currentMatch.getGameVariant().getPointGoal();
-        String goalText = String.format(getString(R.string.game_text_point_goal), pointsGoal);
-        goal.setText(goalText);
+        updatePointsGoal(currentMatch.getGameVariant().getPointGoal());
 
         if (isOwner) {
             firstTeamScoreDisplay.setEnabled(true);
             secondTeamScoreDisplay.setEnabled(true);
         }
-        statsListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                matchStats = dataSnapshot.getValue(MatchStats.class);
-                if (matchStats != null) {
-                    firstTeamScoreDisplay.setEnabled(true);
-                    secondTeamScoreDisplay.setEnabled(true);
-                    displayScore();
-                    if (matchStats.goalHasBeenReached()) {
-                        displayEndOfMatchMessage(matchStats.getWinnerIndex());
-                    }
-                } else {
-                    firstTeamScoreDisplay.setEnabled(false);
-                    secondTeamScoreDisplay.setEnabled(false);
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("ERROR-DATABASE", databaseError.toString());
-            }
-        };
-        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId)
-                .addValueEventListener(statsListener);
+        if (mode == ONLINE) {
+            TextView firstTeamMembers = (TextView) findViewById(R.id.team_members_1);
+            firstTeamMembers.setText(teamToString(0));
+            firstTeamMembers.setVisibility(VISIBLE);
+
+            TextView secondTeamMembers = (TextView) findViewById(R.id.team_members_2);
+            secondTeamMembers.setText(teamToString(1));
+            secondTeamMembers.setVisibility(VISIBLE);
+
+            statsListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    matchStats = dataSnapshot.getValue(MatchStats.class);
+                    if (matchStats != null) {
+                        firstTeamScoreDisplay.setEnabled(true);
+                        secondTeamScoreDisplay.setEnabled(true);
+                        displayScore();
+                        if (matchStats.goalHasBeenReached()) {
+                            displayEndOfMatchMessage(matchStats.getWinnerIndex());
+                        }
+                    } else {
+                        firstTeamScoreDisplay.setEnabled(false);
+                        secondTeamScoreDisplay.setEnabled(false);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("ERROR-DATABASE", databaseError.toString());
+                }
+            };
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId)
+                    .addValueEventListener(statsListener);
+        }
     }
 
     private void displayScoreHistory(int teamIndex) {
@@ -370,20 +609,58 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
         for (Round round : matchStats.getRounds()) {
             TableRow row = (TableRow) inflater.inflate(R.layout.score_table_row, null);
 
+            int black = ContextCompat.getColor(this, android.R.color.black);
+
             TextView roundIndexView = (TextView) row.findViewById(R.id.score_table_row_round_index);
+            roundIndexView.setTextColor(black);
             roundIndexView.setText(Integer.toString(roundIndex));
             ++roundIndex;
 
             TextView score = (TextView) row.findViewById(R.id.score_table_row_points);
+            score.setTextColor(black);
             score.setText(round.getTeamTotalScore(teamIndex).toString());
 
             TextView melds = (TextView) row.findViewById(R.id.score_table_row_melds);
+            melds.setTextColor(black);
             melds.setText(round.meldsToString(teamIndex));
 
             tableLayout.addView(row);
         }
 
         dialog.show();
+    }
+
+    private String teamToString(int teamIndex) {
+        List<String> teamIds = currentMatch.getTeams().get("Team" + teamIndex);
+        StringBuilder builder = new StringBuilder();
+        for (Iterator<String> iterator = teamIds.iterator(); iterator.hasNext(); ) {
+            String id = iterator.next();
+            builder.append(currentMatch.getPlayerById(id).getFirstName().split(" ")[0]);
+            if (iterator.hasNext()) {
+                builder.append(", ");
+            }
+        }
+        return builder.toString();
+    }
+
+    private void updatePointsGoal(int pointsGoal) {
+        TextView goal = (TextView) findViewById(R.id.game_playing_to);
+        String goalText = String.format(getString(R.string.game_text_point_goal),
+                "<b>" + pointsGoal + "</b>");
+        goal.setText(Html.fromHtml(goalText));
+        if (mode == OFFLINE) {
+            goal.setEnabled(true);
+            goal.setOnClickListener(this);
+        }
+    }
+
+    private void displayToast(int stringId, int points) {
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(this, String.format(getString(stringId),
+                points), Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,7 +31,7 @@ import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
-public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements AdapterView.OnItemClickListener {
+public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements OnItemClickListener {
 
     private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
 
@@ -41,10 +42,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
     private ValueEventListener matchListener;
     private ChildEventListener pendingMatchListener;
-
-    private TextView variant;
-    private TextView description;
-    private ListView listView;
 
     private int posInList;
     private int teamSelected;
@@ -69,14 +66,13 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             startActivity(intent);
         } else {
             Log.d(TAG, "showLogin:getCurrentUser:notNull");
+
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_waiting_players, drawer, false);
             drawer.addView(contentView, 0);
 
             matchId = getIntent().getStringExtra("match_Id");
-
             match = Match.sentinelMatch();
-
             playersReady = new HashMap<>();
 
             gameBtn = (Button) findViewById(R.id.play);
@@ -85,15 +81,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             readyBtn = (Button) findViewById(R.id.ready_button);
             inviteBtn = (Button) findViewById(R.id.invite_button);
 
-            listView = (ListView) findViewById(android.R.id.list);
-            listView.setEmptyView(findViewById(android.R.id.empty));
+            adapter = new PlayerListAdapter(WaitingPlayersActivity.this,
+                    R.layout.player_list_element, new ArrayList<Player>());
 
-            description = (TextView) findViewById(R.id.match_description);
-            variant = (TextView) findViewById(R.id.match_variant);
-
+            ListView listView = (ListView) findViewById(android.R.id.list);
             listView.setOnItemClickListener(this);
-
-            adapter = new PlayerListAdapter(WaitingPlayersActivity.this, R.layout.player_list_element, new ArrayList<Player>());
             listView.setAdapter(adapter);
         }
     }
@@ -233,6 +225,82 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     /**
+     * Callback method to be invoked when an item in this AdapterView has
+     * been clicked.
+     * <p>
+     * Implementers can call getItemAtPosition(position) if they need
+     * to access the data associated with the selected item.
+     *
+     * @param parent   The AdapterView where the click happened.
+     * @param view     The view within the AdapterView that was clicked (this
+     *                 will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id       The row id of the item that was clicked.
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (creator) {
+            final Player p = adapter.getItem(position);
+            if (p != null) {
+                teamSelected = match.teamNbForPlayer(p);
+                int nbTeam = match.getGameVariant().getNumberOfTeam();
+                CharSequence[] teams = new CharSequence[nbTeam];
+                for (int i = 0; i < nbTeam; ++i) {
+                    teams[i] = "Team " + Integer.toString(i + 1);
+                }
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.dialog_select_team) + p.toString() + " :")
+                        .setSingleChoiceItems(teams, teamSelected, new DialogInterface.OnClickListener() {
+
+                            /**
+                             * This method will be invoked when a button in the dialog is clicked.
+                             *
+                             * @param dialog The dialog that received the click.
+                             * @param which  The button that was clicked (e.g.
+                             *               {@link DialogInterface#BUTTON1}) or the position
+                             */
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                teamSelected = which;
+                            }
+                        })
+                        .setPositiveButton(R.string.dialog_team_selection_confirmation,
+                                new DialogInterface.OnClickListener() {
+                                    /**
+                                     * This method will be invoked when a button in the dialog is clicked.
+                                     *
+                                     * @param dialog The dialog that received the click.
+                                     * @param which  The button that was clicked (e.g.
+                                     *               {@link DialogInterface#BUTTON1}) or the position
+                                     */
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (teamSelected != (match.teamNbForPlayer(p))) {
+                                            match.setTeam(teamSelected, p.getID());
+                                            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                                                    .child(matchId).setValue(match);
+                                        }
+                                    }
+                                })
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                            /**
+                             * This method will be invoked when a button in the dialog is clicked.
+                             *
+                             * @param dialog The dialog that received the click.
+                             * @param which  The button that was clicked (e.g.
+                             *               {@link DialogInterface#BUTTON1}) or the position
+                             */
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+        }
+    }
+
+    /**
      * When button "LEAVE MATCH" is pressed, the current user is removed from the match player list
      * send him back to main menu.
      *
@@ -241,7 +309,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     public void leaveMatch(View view) {
         match.removePlayerById(new Player.PlayerID(getUserSciper()));
 
-        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).removeValue();
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
+                .child(matchId).child(getUserSciper()).removeValue();
 
         if (match.getPlayers().size() == 0) {
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).removeValue();
@@ -254,12 +323,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     /**
-     *
-     *
      * @param view General view
      */
     public void userIsReady(View view) {
-        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).setValue(true);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
+                .child(matchId).child(getUserSciper()).setValue(true);
     }
 
     /**
@@ -273,20 +341,15 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     public void goToMatch(View view) {
-        Intent goToGameActivity = new Intent(this, GameActivity.class);
-        goToGameActivity.putExtra("match_Id", matchId);
         removeListener();
 
         match.setStatus(Match.MatchStatus.ACTIVE);
         dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).removeValue();
 
         MatchStats matchStats = new MatchStats(match);
         dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId).setValue(matchStats);
-
-        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).removeValue();
-
-        startActivity(goToGameActivity);
-        finish();
+        goToGameActivity();
     }
 
     private void contactFirebase() {
@@ -297,10 +360,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                 Log.d(TAG, "matchListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
                 if (match != null) {
                     if (match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
-                        Intent goToGameActivity = new Intent(WaitingPlayersActivity.this, GameActivity.class);
-                        goToGameActivity.putExtra("match_Id", matchId);
-                        startActivity(goToGameActivity);
-                        finish();
+                        goToGameActivity();
                     }
                     if (match.createdBy().getID().toString().equals(getUserSciper())) {
                         creator = true;
@@ -310,8 +370,13 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                         gameBtn.setVisibility(View.GONE);
                     }
 
+                    TextView description = (TextView) findViewById(R.id.match_description);
                     description.setText(match.getDescription());
-                    variant.setText(match.getGameVariant().toString());
+
+                    TextView variant = (TextView) findViewById(R.id.match_variant);
+                    String gameVariant = String.format(getString(R.string.wait_field_match_variant),
+                            match.getGameVariant().toString());
+                    variant.setText(gameVariant);
 
                     posInList = match.getPlayerIndex(new Player.PlayerID(getUserSciper()));
                     if (posInList != -1) {
@@ -349,41 +414,13 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAG, "pendingMatchListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
-                playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
-                String id = dataSnapshot.getKey();
-                if (id.equals(getUserSciper())) {
-                    if(playersReady.get(id)) {
-                        readyBtn.setEnabled(false);
-                    } else {
-                        readyBtn.setEnabled(true);
-                    }
-                }
-                if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
-                    gameBtn.setEnabled(true);
-                } else {
-                    gameBtn.setEnabled(false);
-                }
-                modifyListAdapter();
+                updateButtonStatus(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAG, "pendingMatchListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
-                playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
-                String id = dataSnapshot.getKey();
-                if (id.equals(getUserSciper())) {
-                    if(playersReady.get(id)) {
-                        readyBtn.setEnabled(false);
-                    } else {
-                        readyBtn.setEnabled(true);
-                    }
-                }
-                if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
-                    gameBtn.setEnabled(true);
-                } else {
-                    gameBtn.setEnabled(false);
-                }
-                modifyListAdapter();
+                updateButtonStatus(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
             }
 
             @Override
@@ -425,79 +462,35 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
         adapter.refreshData(match.getPlayers(), match, playersReady);
     }
 
-    /**
-     * Callback method to be invoked when an item in this AdapterView has
-     * been clicked.
-     * <p>
-     * Implementers can call getItemAtPosition(position) if they need
-     * to access the data associated with the selected item.
-     *
-     * @param parent   The AdapterView where the click happened.
-     * @param view     The view within the AdapterView that was clicked (this
-     *                 will be a view provided by the adapter)
-     * @param position The position of the view in the adapter.
-     * @param id       The row id of the item that was clicked.
-     */
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (creator) {
-            final Player p = adapter.getItem(position);
-            if (p != null) {
-                teamSelected = match.teamNbForPlayer(p);
-                int nbTeam = match.getGameVariant().getNumberOfTeam();
-                CharSequence[] teams = new CharSequence[nbTeam];
-                for (int i = 0; i < nbTeam; ++i) {
-                    teams[i] = "Team " + Integer.toString(i + 1);
+    private void updateButtonStatus(String key, boolean value) {
+        playersReady.put(key, value);
+        if (key.equals(getUserSciper())) {
+            readyBtn.setEnabled(!value);
+        }
+        gameBtn.setEnabled(allPlayersReady(playersReady) &&
+                match.teamAssignmentIsCorrect());
+        modifyListAdapter();
+    }
+
+    private boolean allPlayersReady(Map<String, Boolean> playersR) {
+        if(playersR.size() == match.getMaxPlayerNumber()) {
+            for(String k : playersR.keySet()) {
+                if(!playersR.get(k)) {
+                    return false;
                 }
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.dialog_select_team) + p.toString() + " :")
-                        .setSingleChoiceItems(teams, teamSelected, new DialogInterface.OnClickListener() {
-
-                            /**
-                             * This method will be invoked when a button in the dialog is clicked.
-                             *
-                             * @param dialog The dialog that received the click.
-                             * @param which  The button that was clicked (e.g.
-                             *               {@link DialogInterface#BUTTON1}) or the position
-                             */
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                teamSelected = which;
-                            }
-                        })
-                        .setPositiveButton(R.string.dialog_team_selection_confirmation, new DialogInterface.OnClickListener() {
-
-                            /**
-                             * This method will be invoked when a button in the dialog is clicked.
-                             *
-                             * @param dialog The dialog that received the click.
-                             * @param which  The button that was clicked (e.g.
-                             *               {@link DialogInterface#BUTTON1}) or the position
-                             */
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (teamSelected != (match.teamNbForPlayer(p))) {
-                                    match.setTeam(teamSelected, p.getID());
-                                    dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
-                                }
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-
-                            /**
-                             * This method will be invoked when a button in the dialog is clicked.
-                             *
-                             * @param dialog The dialog that received the click.
-                             * @param which  The button that was clicked (e.g.
-                             *               {@link DialogInterface#BUTTON1}) or the position
-                             */
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //Nothing to be done, goes back to WaitingPlayersActivity
-                            }
-                        })
-                        .show();
             }
+            return true;
+        } else {
+            return false;
         }
     }
+
+    private void goToGameActivity() {
+        Intent goToGameActivity = new Intent(this, GameActivity.class);
+        goToGameActivity.putExtra("match_Id", matchId);
+        goToGameActivity.putExtra("mode", "online");
+        startActivity(goToGameActivity);
+        finish();
+    }
+
 }
