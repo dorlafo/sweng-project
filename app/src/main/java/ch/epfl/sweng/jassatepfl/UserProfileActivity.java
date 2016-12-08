@@ -76,12 +76,6 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
         contactFirebase();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        //TODO: kill listeners
-    }
-
     private void contactFirebase() {
         dbRefWrapped
                 .child(DatabaseUtils.DATABASE_USERSTATS)
@@ -100,6 +94,4 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                     }
                 });
     }
-
-
 }
