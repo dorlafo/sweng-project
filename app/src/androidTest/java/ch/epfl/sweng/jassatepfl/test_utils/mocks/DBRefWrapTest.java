@@ -2,6 +2,7 @@ package ch.epfl.sweng.jassatepfl.test_utils.mocks;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
@@ -41,7 +44,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Amaury Combes
  */
-public class DBRefWrapTest extends DBReferenceWrapper {
+public class DBRefWrapTest extends DBReferenceWrapper implements Observer {
 
     private NodeTest currentNode;
     private int numValueEventListener = 0;
@@ -120,7 +123,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                 Runnable toRun = new Runnable() {
                     @Override
                     public void run() {
-                        v.onDataChange((DataSnapshot) obj);
+                        v.onDataChange(obj);
                     }
                 };
                 uiHandler.post(toRun);
@@ -222,7 +225,16 @@ public class DBRefWrapTest extends DBReferenceWrapper {
      */
     @Override
     public ChildEventListener addChildEventListener(final ChildEventListener listener) {
-        ++numChildEventListener;
+        if(currentNode instanceof TreeNodeTest) {
+            ((TreeNodeTest) currentNode).addObserver(this);
+            Log.d("DBRefWrapTest", "currentNode:" + currentNode + ".addObserver:" + this);
+        } else if (currentNode instanceof LeafTest) {
+            ((LeafTest) currentNode).addObserver(this);
+            Log.d("DBRefWrapTest", "currentNode:" + currentNode + ".addObserver:" + this);
+        }
+        return listener;
+
+        /*++numChildEventListener;
 
         new Thread(new Runnable() {
 
@@ -260,7 +272,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
                 uiHandler.post(toRun);
             }
         }).start();
-        return listener;
+        return listener;*/
     }
     /*
     public ChildEventListener addChildEventListener(final ChildEventListener listener) {
@@ -584,4 +596,25 @@ public class DBRefWrapTest extends DBReferenceWrapper {
         }
     }
 
+    /**
+     * This method is called whenever the observed object is changed. An
+     * application calls an <tt>Observable</tt> object's
+     * <code>notifyObservers</code> method to have all the object's
+     * observers notified of the change.
+     *
+     * @param o   the observable object.
+     * @param arg an argument passed to the <code>notifyObservers</code>
+     */
+    @Override
+    public void update(Observable o, Object arg) {
+        if(arg instanceof MatchLeafTest) {
+
+        } else if (arg instanceof PlayerLeafTest) {
+
+        } else if (arg instanceof MatchStatsLeafTest) {
+
+        } else if (arg instanceof MatchStatusLeafTest) {
+
+        }
+    }
 }

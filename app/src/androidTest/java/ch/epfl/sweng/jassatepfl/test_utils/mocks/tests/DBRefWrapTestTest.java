@@ -1,5 +1,8 @@
 package ch.epfl.sweng.jassatepfl.test_utils.mocks.tests;
 
+import android.util.Log;
+
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -91,6 +94,47 @@ public class DBRefWrapTestTest {
 
         assertEquals(false, ((MatchStatusLeafTest) refToMatchStatus.getCurrentNode()).getData().get(DummyDataTest.dorian.getID().toString()));
         assertEquals(true, ((MatchStatusLeafTest) refToMatchStatus.getCurrentNode()).getData().get(DummyDataTest.vincenzo.getID().toString()));
+    }
+
+    @Test
+    public void childEventListenerTest() {
+        RootTest root = new RootTest("jass@EPFL");
+        root.initialize();
+
+        DBRefWrapTest localRef = new DBRefWrapTest(root);
+
+        localRef.addPlayers(DummyDataTest.players());
+
+        ChildEventListener cel = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Player p = dataSnapshot.getValue(Player.class);
+                Log.d("cel", "onChildAdded:player:" + p.getFirstName());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Player p = dataSnapshot.getValue(Player.class);
+                Log.d("cel", "onChildChanged:player:" + p.getFirstName());
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Player p = dataSnapshot.getValue(Player.class);
+                Log.d("cel", "onChildRemoved:player:" + p.getFirstName());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Player p = dataSnapshot.getValue(Player.class);
+                Log.d("cel", "onChildMoved:player:" + p.getFirstName());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        localRef.child("players").addChildEventListener(cel);
     }
 
     private void waitCompletion() {
