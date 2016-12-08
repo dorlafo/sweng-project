@@ -21,10 +21,10 @@ import ch.epfl.sweng.jassatepfl.model.Player;
  * @author Alexis Montavon
  */
 public class DatabaseUtils {
-    public static final String DATABASE_PLAYERS = "players";
+    public static final String DATABASE_PLAYERS = "players2";
     public static final String DATABASE_PLAYERS_FIRST_NAME = "firstName";
 
-    public static final String DATABASE_MATCHES = "matches";
+    public static final String DATABASE_MATCHES = "matches2";
     public static final String DATABASE_MATCHES_PLAYERS = "players"; //Correspond to the players list in the match object
     public static final String DATABASE_MATCHES_PRIVATE = "privateMatch";
     public static final String DATABASE_MATCHES_LOCATION = "location";
@@ -35,7 +35,7 @@ public class DatabaseUtils {
     public static final String DATABASE_MATCHES_EXPIRATION_TIME = "expirationTime";
     public static final String DATABASE_MATCHES_MATCH_ID = "matchID";
 
-    public static final String DATABASE_PENDING_MATCHES = "pendingMatches";
+    public static final String DATABASE_PENDING_MATCHES = "pendingMatches2";
 
     public static final String DATABASE_MATCH_STATS = "matchStats";
 

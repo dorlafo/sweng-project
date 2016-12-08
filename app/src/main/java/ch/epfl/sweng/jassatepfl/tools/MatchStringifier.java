@@ -48,10 +48,10 @@ public final class MatchStringifier {
      * @param match The Match
      */
     public String getStringHasCard(Match match) {
-        if(match.getHasCards().isEmpty()) {
-            return "No";
-        } else {
+        if(match.hasCards()) {
             return "Yes";
+        } else {
+            return "No";
         }
     }
 

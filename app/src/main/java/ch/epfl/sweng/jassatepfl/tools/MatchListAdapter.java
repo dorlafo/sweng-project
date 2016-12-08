@@ -60,10 +60,10 @@ public final class MatchListAdapter extends ArrayAdapter<Match> {
         expirationDate.setText(stringifier.dateToStringCustom());
 
         TextView hasCard = (TextView) convertView.findViewById(R.id.has_card);
-        if(match.getHasCards().isEmpty()) {
-            hasCard.setText(R.string.no);
-        } else {
+        if(match.hasCards()) {
             hasCard.setText(R.string.yes);
+        } else {
+            hasCard.setText(R.string.no);
         }
         return convertView;
     }

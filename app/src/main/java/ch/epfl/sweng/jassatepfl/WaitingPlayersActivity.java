@@ -343,9 +343,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                             gameBtn.setEnabled(false);
                         }
                     }
-                    if(match.getHasCards().contains(playerID)) {
-                        playerHasCards = true;
-                    } else {
+                    playerHasCards = match.getPlayerCards(playerID.toString());
+                    if(!match.playerInCardList(playerID.toString())){
                         new AlertDialog.Builder(WaitingPlayersActivity.this)
                                 .setTitle(R.string.dialog_cards)
                                 .setMessage(R.string.dialog_have_cards)
@@ -353,13 +352,15 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                                     public void onClick(DialogInterface dialog, int which) {
                                         playerHasCards = true;
                                         matchHasCards = true;
-                                        match.addPlayerWhoHasCards(playerID);
+                                        match.setPlayerCards(playerID.toString(), true);
                                         dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
                                     }
                                 })
                                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-
+                                        playerHasCards = false;
+                                        match.setPlayerCards(playerID.toString(), false);
+                                        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
                                     }
                                 })
                                 .show();
@@ -477,13 +478,13 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
         final Player.PlayerID playerID = new Player.PlayerID(fAuth.getCurrentUser().getDisplayName());
         if (playerHasCards){
             playerHasCards = false;
-            match.removePlayerWhoHasCards(playerID);
-            dbRefWrapped.child("matches").child(matchId).setValue(match);
+            match.setPlayerCards(playerID.toString(), false);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
         }
         else {
             playerHasCards = true;
-            match.addPlayerWhoHasCards(playerID);
-            dbRefWrapped.child("matches").child(matchId).setValue(match);
+            match.setPlayerCards(playerID.toString(), true);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
         }
     }
 

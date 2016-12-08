@@ -33,8 +33,7 @@ public class Match {
     private int maxPlayerNumber;
     private long expirationTime;
     private String matchID;
-    private List<Player.PlayerID> hasCards;
-    private Player.PlayerID sentinel = new Player.PlayerID(1);
+    private Map<String, Boolean> hasCards;
     private MatchStatus matchStatus;
     private Map<String, List<String>> teams;
     private static String SENTINEL = "SENTINEL";
@@ -65,7 +64,7 @@ public class Match {
                  GameVariant gameVariant,
                  long expirationTime,
                  String matchID,
-                 List<Player.PlayerID> hasCards,
+                 Map<String, Boolean> hasCards,
                  MatchStatus status) {
         this.players = new ArrayList<>(players);
         this.location = location;
@@ -77,9 +76,7 @@ public class Match {
         this.expirationTime = expirationTime;
         this.matchID = matchID;
         this.hasCards = hasCards;
-        if (hasCards.isEmpty()){
-            this.hasCards.add(sentinel);
-        }
+        this.hasCards.put(SENTINEL, false);
         this.matchStatus = status;
         this.teams = new HashMap<>();
         for (int teamNb = 0; teamNb < gameVariant.getNumberOfTeam(); ++teamNb) {
@@ -89,6 +86,10 @@ public class Match {
 
             this.teams.get("Team" + Integer.toString(teamNb)).add(SENTINEL);
         }
+    }
+
+    public Map<String, Boolean> getHasCards() {
+        return hasCards;
     }
 
     /**
@@ -109,7 +110,7 @@ public class Match {
                  GameVariant gameVariant,
                  long expirationTime,
                  String matchID) {
-        this(players, location, description, privateMatch, gameVariant, expirationTime, matchID, new ArrayList<Player.PlayerID>(), MatchStatus.PENDING);
+        this(players, location, description, privateMatch, gameVariant, expirationTime, matchID, new HashMap<String, Boolean>(), MatchStatus.PENDING);
     }
 
     /**
@@ -129,7 +130,7 @@ public class Match {
                  boolean privateMatch,
                  long expirationTime,
                  String matchID,
-                 List<Player.PlayerID> hasCards) {
+                 Map<String, Boolean> hasCards) {
         this(players, location, description, privateMatch, CHIBRE, expirationTime, matchID, hasCards, MatchStatus.PENDING);
     }
 
@@ -222,7 +223,7 @@ public class Match {
         GPSPoint BCCoord = new GPSPoint(46.518470, 6.561907);
         return new Match(players, BCCoord, "Sentinel match", true,
                 GameVariant.CHIBRE, Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000,
-                "sentiMatch", new ArrayList<Player.PlayerID>(), MatchStatus.PENDING);
+                "sentiMatch", new HashMap<String, Boolean>(), MatchStatus.PENDING);
     }
 
     /**
@@ -290,35 +291,30 @@ public class Match {
     }
 
     /**
-     * Getter for the card parameter, wich is the list of who has cards.
+     * Getter for the card parameter, return true if player has cards, false othewise.
      *
-     * @return list of player id of the players who have cards available.
+     * @return return boolean if have cards available.
      */
-    public List<Player.PlayerID> getHasCards() {return hasCards;}
-
-    /**
-     * Setter for the card parameter, which is the list of who has cards.
-     *
-     * @param hasCards  list of the Players who have cards.
-     */
-    public void setHasCards(List<Player.PlayerID> hasCards) {
-        this.hasCards = hasCards;
-        if (hasCards.isEmpty()){
-            this.hasCards.add(sentinel);
+    public boolean getPlayerCards(String playerID) {
+        if (playerID != null && hasCards.containsKey(playerID)){
+            return hasCards.get(playerID);
+        }
+        else{
+            return false;
         }
     }
 
     /**
-     * Add one player who has cards to the list hasCards
+     * Getter for the player if he is already in the list
      *
-     * @param playerID  the Id of the player who has cards
+     * @return boolean if player in list
      */
-    public void addPlayerWhoHasCards(Player.PlayerID playerID) {
-        if (playerID != null && !hasCards.contains(playerID)) {
-            hasCards.add(playerID);
-            if (hasCards.contains(sentinel)){
-                hasCards.remove(sentinel);
-            }
+    public boolean playerInCardList(String playerID) {
+        if (playerID != null && hasCards.containsKey(playerID)){
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
@@ -328,22 +324,26 @@ public class Match {
      * @return boolean true if someone have cards, false otherwise.
      */
     public boolean hasCards() {
-        if(hasCards.isEmpty() || hasCards.contains(sentinel)){
-            return false;
+        if(hasCards.containsValue(true)){
+            return true;
         }
         else {
-            return true;
+            return false;
         }
      }
 
-    public void removePlayerWhoHasCards(Player.PlayerID playerID){
-        if (playerID != null && hasCards.contains(playerID)) {
-            hasCards.remove(playerID);
-            if (hasCards.isEmpty()) {
-                hasCards.add(sentinel);
-            }
+
+    /**
+     * Setter for player cards
+     * @param playerID  the id of the player to set cards
+     * @param cards boolean if player has cards
+     */
+    public void setPlayerCards(String playerID, Boolean cards){
+        if (playerID != null) {
+            hasCards.put(playerID, cards);
         }
     }
+
 
     /**
      * Setter for the expiration time
@@ -494,7 +494,7 @@ public class Match {
                     t.add(SENTINEL);
                 }
             }
-            if (hasCards.contains(toRemove)) {
+            if (hasCards.containsKey(toRemove)) {
                 hasCards.remove(toRemove);
             }
             return true;
@@ -805,7 +805,7 @@ public class Match {
         private int maxPlayerNumber;
         private long expirationTime;
         private String matchID;
-        private List<Player.PlayerID> hasCards;
+        private Map<String, Boolean> hasCards;
         private MatchStatus matchStatus;
 
         /**
@@ -820,7 +820,7 @@ public class Match {
             maxPlayerNumber = CHIBRE.getMaxPlayerNumber();
             expirationTime = Calendar.getInstance().getTimeInMillis() + 1 * 3600 * 1000; // 1 hour after current time
             matchID = DEFAULT_ID;
-            hasCards = new ArrayList<>();
+            hasCards = new HashMap<>();
             matchStatus = MatchStatus.PENDING;
         }
 
@@ -905,8 +905,18 @@ public class Match {
             return this;
         }
 
-        public List<Player.PlayerID> getHasCards() {
-            return new ArrayList<>(hasCards);
+        public Map<String, Boolean> getHasCards() {
+            return new HashMap<>(hasCards);
+        }
+
+        public void setHasCards(Map<String, Boolean> hasCards) {
+            this.hasCards = hasCards;
+            if(this.hasCards == null) {
+                this.hasCards = new HashMap<>();
+            }
+            if(this.hasCards.isEmpty()) {
+                this.hasCards.put(SENTINEL, false);
+            }
         }
 
         /**
