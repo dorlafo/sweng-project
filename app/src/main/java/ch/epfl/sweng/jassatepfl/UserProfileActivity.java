@@ -12,12 +12,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.stats.UserStats;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 public class UserProfileActivity extends BaseActivityWithNavDrawer {
 
     private TextView mtwPlayer;
     private TextView mtwPlayerQuote;
+    private TextView mtwMatchPlayed;
+    private TextView mtwMatchWon;
+    private TextView mtwRecurentPartner;
+    private TextView mtwBestPartner;
+    private TextView mtwVariant;
     String sciper;
 
     @Override
@@ -35,6 +41,11 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
 
             mtwPlayer = (TextView) findViewById(R.id.profil_player);
             mtwPlayerQuote = (TextView) findViewById(R.id.twQuote);
+            mtwMatchPlayed = (TextView) findViewById(R.id.twMatchPlayed);
+            mtwMatchWon = (TextView) findViewById(R.id.twMatchWon);
+            mtwRecurentPartner = (TextView) findViewById(R.id.twMostPlayedWith);
+            mtwBestPartner = (TextView) findViewById(R.id.twMostWonWith);
+            mtwVariant = (TextView) findViewById(R.id.twMostVariant);
 
             sciper = getUserSciper();
 
@@ -47,8 +58,8 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Player p = dataSnapshot.getValue(Player.class);
-                            mtwPlayer.setText(p.getFirstName() + " " + p.getLastName());
-                            mtwPlayerQuote.setText(mtwPlayerQuote.getText() + " " + Integer.toString(p.getQuote()));
+                            mtwPlayer.setText(String.format(getString(R.string.profile_label_name), p.getFirstName(), p.getLastName()));
+                            mtwPlayerQuote.setText(String.format(getString(R.string.profile_label_quote), p.getQuote()));
                         }
 
                         @Override
@@ -59,8 +70,36 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
         }
     }
 
-    //public void viewMenu(View view) {
-    //    finish();
-    //}
+    @Override
+    public void onResume() {
+        super.onResume();
+        contactFirebase();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //TODO: kill listeners
+    }
+
+    private void contactFirebase() {
+        dbRefWrapped
+                .child(DatabaseUtils.DATABASE_USERSTATS)
+                .child(sciper)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        UserStats us = dataSnapshot.getValue(UserStats.class);
+                        mtwMatchPlayed.setText(String.format(getString(R.string.profile_label_matches_played), us.getPlayedMatches()));
+                        mtwMatchWon.setText(String.format(getString(R.string.profile_label_matches_won), us.getWonMatches()));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
 
 }

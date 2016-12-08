@@ -62,7 +62,7 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         TextView playerName = (TextView) convertView.findViewById(R.id.player_name);
         if(match == null) {
             playerName.setText(p.toString());
-            quoteTv.setText(Integer.toString(p.getQuote()));
+            quoteTv.setText(String.format(getContext().getString(R.string.profile_label_quote), p.getQuote()));
         }
         else {
             quoteTv.setText(Integer.toString(p.getQuote()));
