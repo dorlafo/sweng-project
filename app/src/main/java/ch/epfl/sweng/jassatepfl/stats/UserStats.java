@@ -3,8 +3,10 @@ package ch.epfl.sweng.jassatepfl.stats;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -189,4 +191,33 @@ public class UserStats {
         thisDate.set(Calendar.SECOND, 59);
         return thisDate.getTimeInMillis();
     }
+
+    private List<Tuple2<String, Integer>> sortedStringIntMap(Map<String, Integer> map) {
+        LinkedList<Tuple2<String, Integer>> result = new LinkedList<>();
+        for (String k : map.keySet()) {
+            result.add(new Tuple2<>(k, map.get(k)));
+        }
+        Collections.sort(result, new Comparator<Tuple2<String, Integer>>() {
+            @Override
+            public int compare(Tuple2<String, Integer> o1, Tuple2<String, Integer> o2) {
+                if (o1.getValue() > o2.getValue()) return -1;
+                else if (o1.getValue() < o2.getValue()) return 1;
+                else return 0;
+            }
+        });
+        return result;
+    }
+
+    public List<Tuple2<String, Integer>> sortedPartners() {
+        return sortedStringIntMap(partners);
+    }
+
+    public List<Tuple2<String, Integer>> sortedVariants() {
+        return sortedStringIntMap(variants);
+    }
+
+    public List<Tuple2<String, Integer>> sortedWonWith() {
+        return sortedStringIntMap(wonWith);
+    }
+
 }
