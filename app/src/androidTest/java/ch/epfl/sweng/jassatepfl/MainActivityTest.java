@@ -50,7 +50,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
 
 
         try {
-            onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(0).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.list_my_matches)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_have_cards)).perform(click());
             onView(withId(android.R.id.button1)).perform(click());
             onView(withText(R.string.wait_button_text_ready)).check(matches(isDisplayed()));
