@@ -40,6 +40,15 @@ public class DatabaseUtils {
     public static final String DATABASE_MATCH_STATS = "matchStats";
     public static final String DATABASE_USERSTATS = "userStats";
     public static final String DATABASE_USERSTATS_RANK = "rank";
+    public static final String DATABASE_USERSTATS_PARTNERS = "partners";
+    public static final String DATABASE_USERSTATS_PLAYED_BY_DATE = "playedByDate";
+    public static final String DATABASE_USERSTATS_PLAYED_MATCHES = "playedMatches";
+    public static final String DATABASE_USERSTATS_PLAYERID = "playerId";
+    public static final String DATABASE_USERSTATS_QUOTE_BY_DATE = "quoteByDate";
+    public static final String DATABASE_USERSTATS_VARIANTS = "variants";
+    public static final String DATABASE_USERSTATS_WON_BY_DATE = "wonByDate";
+    public static final String DATABASE_USERSTATS_WON_MATCHES = "wonMatches";
+    public static final String DATABASE_USERSTATS_WON_WITH = "wonWith";
 
     /**
      * Add player to match on the database.

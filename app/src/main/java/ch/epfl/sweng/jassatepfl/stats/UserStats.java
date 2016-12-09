@@ -121,7 +121,7 @@ public class UserStats {
      *
      * @param stats The results of a concluded match
      */
-    protected UserStats update(MatchStats stats) {
+    public UserStats update(MatchStats stats) {
         prepareLastBuckets(Calendar.getInstance().getTimeInMillis());
 
         Match match = stats.getMatch();

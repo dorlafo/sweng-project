@@ -22,6 +22,10 @@ import ch.epfl.sweng.jassatepfl.database.helpers.QueryWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
+import ch.epfl.sweng.jassatepfl.stats.Tuple2;
+import ch.epfl.sweng.jassatepfl.stats.UserStats;
+import ch.epfl.sweng.jassatepfl.stats.UserStatsTest;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafFieldTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchLeafTest;
@@ -31,6 +35,7 @@ import ch.epfl.sweng.jassatepfl.test_utils.database.local.NodeTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.PlayerLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.TreeNodeTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.UserStatsLeafTest;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static org.mockito.Mockito.mock;
@@ -101,6 +106,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
         Player p = null;
         Match m = null;
         Map<String, Boolean> status = null;
+        UserStats us = null;
 
         if (this.getCurrentNode() instanceof PlayerLeafTest) {
             p = ((PlayerLeafTest) this.getCurrentNode()).getData();
@@ -108,10 +114,13 @@ public class DBRefWrapTest extends DBReferenceWrapper {
             m = ((MatchLeafTest) this.getCurrentNode()).getData();
         } else if (this.getCurrentNode() instanceof MatchStatusLeafTest) {
             status = new HashMap<>(((MatchStatusLeafTest) this.getCurrentNode()).getData());
+        } else if (this.getCurrentNode() instanceof UserStatsLeafTest) {
+            us = ((UserStatsLeafTest) this.getCurrentNode()).getData();
         }
 
         when(obj.getValue(Player.class)).thenReturn(p);
         when(obj.getValue(Match.class)).thenReturn(m);
+        when(obj.getValue(UserStats.class)).thenReturn(us);
         new Thread(new Runnable() {
             public void run() {
                 Handler uiHandler = new Handler(Looper.getMainLooper());
@@ -580,6 +589,16 @@ public class DBRefWrapTest extends DBReferenceWrapper {
             statsNode.addChild(statId);
             statsNode.getChild(statId).setData(stat);
         }
+    }
+
+    public void addBobyFakeStats() {
+        TreeNodeTest userStatsNode = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_USERSTATS);
+        UserStats bobUs = new UserStats(DummyDataTest.bricoloBob.getID());
+        Match match = DummyDataTest.fullMatchWithBob();
+        MatchStats mS = new MatchStats(match);
+        mS.setWinnerIndex(0);
+        bobUs.update(mS);
+        userStatsNode.addChild(DummyDataTest.bricoloBob.getID().toString()).setData(bobUs);
     }
 
 }
