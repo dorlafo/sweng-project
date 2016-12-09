@@ -62,6 +62,9 @@ import static ch.epfl.sweng.jassatepfl.GameActivity.PickerMode.SECOND_TEAM_GOAL;
 import static ch.epfl.sweng.jassatepfl.GameActivity.SplitMode.NORMAL;
 import static ch.epfl.sweng.jassatepfl.GameActivity.SplitMode.SPLIT;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.SENTINEL;
+import static ch.epfl.sweng.jassatepfl.tools.DatabaseUtils.DATABASE_MATCH_STATS;
+import static ch.epfl.sweng.jassatepfl.tools.DatabaseUtils.DATABASE_STATS;
+import static ch.epfl.sweng.jassatepfl.tools.DatabaseUtils.DATABASE_STATS_BUFFER;
 
 public class GameActivity extends BaseActivityWithNavDrawer implements OnClickListener {
 
@@ -255,6 +258,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                         matchStats.setMeld(teamIndex, meld);
                         dialog.dismiss();
                         displayScore();
+                        testEndOfMatch();
                         updateMatchStats();
                         cancelButton.setEnabled(true);
                     }
@@ -280,16 +284,20 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         matchStats.finishRound();
         cancelButton.setEnabled(true);
         displayScore();
+        testEndOfMatch();
+        updateMatchStats();
+    }
+
+    private void testEndOfMatch() {
         if (matchStats.goalHasBeenReached()) {
             if (matchStats.allTeamsHaveReachedGoal()) {
                 matchStats.setWinnerIndex(caller.ordinal());
             }
             if (mode == ONLINE) {
-                dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats);
+                dbRefWrapped.child(DATABASE_STATS).child(DATABASE_STATS_BUFFER).child(matchId).setValue(matchStats);
             }
             displayEndOfMatchMessage(matchStats.getWinnerIndex());
         }
-        updateMatchStats();
     }
 
     @SuppressLint("SetTextI18n")
@@ -510,7 +518,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
 
     private void updateMatchStats() {
         if (mode == ONLINE) {
-            dbRefWrapped.child("matchStats").child(matchId).setValue(matchStats);
+            dbRefWrapped.child(DATABASE_MATCH_STATS).child(matchId).setValue(matchStats);
         }
     }
 
