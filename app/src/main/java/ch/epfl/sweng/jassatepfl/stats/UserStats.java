@@ -136,6 +136,8 @@ public class UserStats {
     protected UserStats update(MatchStats stats) {
         prepareLastBuckets(Calendar.getInstance().getTimeInMillis());
 
+        updateQuote(stats);
+
         Match match = stats.getMatch();
         playedMatches += 1;
         int lastIndex = playedByDate.size() - 1;
