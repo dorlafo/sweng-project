@@ -71,7 +71,7 @@ public final class MatchBuilderTest {
         assertEquals(newDescription, setMatch.getDescription());
         assertTrue(setMatch.isPrivateMatch());
         assertEquals(4, setMatch.getMaxPlayerNumber());
-        assertEquals(newExpirationTime, setMatch.getExpirationTime(), 10);
+        assertEquals(newExpirationTime, setMatch.getTime(), 10);
         assertEquals("new match id", setMatch.getMatchID());
         assertTrue(!matchBuilder.getHasCards().isEmpty());
     }

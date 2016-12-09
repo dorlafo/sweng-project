@@ -335,7 +335,7 @@ public final class MatchTest {
     public void matchHasChangedReturnFalseIfNotSameMatch() {
         Match m1 = DummyDataTest.fullMatch();
         Match m2 = DummyDataTest.fullMatchWithBob();
-        m2.setExpirationTime(m1.getExpirationTime());
+        m2.setTime(m1.getTime());
 
         assertFalse(m1.matchHasChanged(m2) || m2.matchHasChanged(m1));
     }
@@ -344,7 +344,7 @@ public final class MatchTest {
     public void matchHasChangedReturnFalseIfMatchHasNotChanged() {
         Match m1 = DummyDataTest.fullMatch();
         Match m2 = DummyDataTest.fullMatch();
-        m2.setExpirationTime(m1.getExpirationTime());
+        m2.setTime(m1.getTime());
 
         assertFalse(m1.matchHasChanged(m2) || m2.matchHasChanged(m1));
     }
@@ -353,7 +353,7 @@ public final class MatchTest {
     public void matchHasChangedReturnTrueIfMatchHasChanged() {
         Match m1 = DummyDataTest.fullMatch();
         Match m2 = DummyDataTest.fullMatch();
-        m2.setExpirationTime(m1.getExpirationTime());
+        m2.setTime(m1.getTime());
 
         m1.removePlayerById(DummyDataTest.dorian.getID());
         assertTrue(m1.matchHasChanged(m2) && m2.matchHasChanged(m1));
