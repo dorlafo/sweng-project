@@ -172,6 +172,9 @@ public class Match {
             if (!other.teams.equals(this.teams)) {
                 return true;
             }
+            if (!other.hasCards.equals(this.hasCards)) {
+                return true;
+            }
             /*if(other.players != this.players
                     || other.location != this.location
                     || other.description != this.description

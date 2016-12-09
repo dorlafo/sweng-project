@@ -320,6 +320,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
      */
     public void leaveMatch(View view) {
         match.removePlayerById(new Player.PlayerID(getUserSciper()));
+        match.setPlayerCards(new Player.PlayerID(getUserSciper()).toString(), false);
 
         dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
                 .child(matchId).child(getUserSciper()).removeValue();
@@ -403,7 +404,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                             inviteBtn.setEnabled(true);
                         }
 
-                        if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
+                        if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect() && match.hasCards()) {
                             gameBtn.setEnabled(true);
                         } else {
                             gameBtn.setEnabled(false);
@@ -532,7 +533,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             readyBtn.setEnabled(!value);
         }
         gameBtn.setEnabled(allPlayersReady(playersReady) &&
-                match.teamAssignmentIsCorrect());
+                match.teamAssignmentIsCorrect() && match.hasCards());
         modifyListAdapter();
     }
 
