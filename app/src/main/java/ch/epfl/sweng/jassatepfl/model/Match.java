@@ -577,11 +577,11 @@ public class Match {
     public enum Meld {
         SENTINEL("Sentinel"),
         MARRIAGE("Stöck"),
-        THREE_CARDS("Trois cartes"),
-        FIFTY("Cinquante"),
-        HUNDRED("Cent"),
-        FOUR_NINE("Cent cinquante"),
-        FOUR_JACKS("Deux cent");
+        THREE_CARDS("Twenty"),
+        FIFTY("Fifty"),
+        HUNDRED("Hundred"),
+        FOUR_NINE("Hundred fifty"),
+        FOUR_JACKS("Two hundred");
 
         private final String meldName;
 
