@@ -51,7 +51,7 @@ public class TreeNodeTest implements NodeTest {
                 return (LeafTest) n;
             }
         }
-        throw new IllegalArgumentException("The node '" + this.id + "' does not have a children named : " + id);
+        return this.addChild(id);
     }
 
     @Override
@@ -73,6 +73,10 @@ public class TreeNodeTest implements NodeTest {
                 MatchStatsLeafTest statsLeaf = new MatchStatsLeafTest(id, this);
                 children.add(statsLeaf);
                 return statsLeaf;
+            case DatabaseUtils.DATABASE_USERSTATS:
+                UserStatsLeafTest userStatsLeaf = new UserStatsLeafTest(id, this);
+                children.add(userStatsLeaf);
+                return userStatsLeaf;
             default:
                 throw new UnsupportedOperationException();
         }

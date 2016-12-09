@@ -16,9 +16,12 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
+import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.PlayerLeafTest;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -39,7 +42,9 @@ import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.bricoloBob;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.fullMatchWithBob;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.marco;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.nicolas;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -107,7 +112,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.team_members_1))
                 .check(matches(withText(bricoloBob.getFirstName() + ", " + jimmy.getFirstName())));
         onView(withId(R.id.team_members_2))
-                .check(matches(withText(random.getFirstName() + ", " + marco.getFirstName())));
+                .check(matches(withText(nicolas.getFirstName() + ", " + vincenzo.getFirstName())));
     }
 
     @Test
@@ -323,6 +328,21 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     }
 
     @Test
+    public void testNumpadCorrectReturns() {
+        ownedMatchSetUp();
+        getActivity();
+        onView(withId(R.id.score_update_2)).perform(click());
+        onView(withId(R.id.numpad_0)).perform(click());
+        onView(withId(R.id.numpad_2)).perform(click());
+        onView(withId(R.id.numpad_6)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.score_picker_confirm)).perform(click());
+        checkScoreDisplay("157", "0");
+    }
+
+    @Test
     public void testToastIsDisplayedForInvalidPoints() {
         ownedMatchSetUp();
         getActivity();
@@ -484,5 +504,4 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
             }
         };
     }
-
 }

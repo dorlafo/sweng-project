@@ -289,7 +289,7 @@ public final class MatchTest {
 
     @Test
     public void teamAssignmentIsCorrectReturnsFalseWhenATeamContainsASentinel() {
-        Match m = DummyDataTest.matchPomme();
+        Match m = DummyDataTest.matchForTest();
         assertFalse(m.teamAssignmentIsCorrect());
     }
 

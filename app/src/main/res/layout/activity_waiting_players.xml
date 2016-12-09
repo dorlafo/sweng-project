@@ -18,31 +18,33 @@
 
     <TextView
         android:id="@+id/match_description"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/waiting_top_space"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
-        android:textSize="23sp"/>
+        android:layout_below="@id/waiting_top_space"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/match_variant"
+        android:layout_below="@id/match_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/match_description"
+        android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:textSize="18sp"/>
+        android:text="@string/wait_field_match_variant"
+        android:textSize="18sp" />
+
 
     <TextView
         android:id="@+id/match_players"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/match_variant"
+        android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/wait_field_player_list"
         android:textSize="18sp"/>
 
@@ -96,8 +98,8 @@
 
     <Button
         android:id="@+id/play"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:layout_above="@id/bottom_buttons"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"

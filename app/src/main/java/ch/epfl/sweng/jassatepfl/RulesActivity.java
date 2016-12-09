@@ -63,12 +63,6 @@ public class RulesActivity extends BaseActivityWithNavDrawer {
                         case JASS_MARANT:
                             userGuideView.loadMarkdownFromAssets("JassMarantRules.md");
                             break;
-                        case ROI:
-                            userGuideView.loadMarkdownFromAssets("RoiRules.md");
-                            break;
-                        case POMME:
-                            userGuideView.loadMarkdownFromAssets("PommeRules.md");
-                            break;
                     }
                 }
             }

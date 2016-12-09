@@ -348,7 +348,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
         MatchStats matchStats = new MatchStats(match);
         dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId).setValue(matchStats);
-
         goToGameActivity();
     }
 
@@ -432,7 +431,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                //TODO: check if this is indeed not used
                 Log.d(TAG, "pendingMatchListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
             }
 

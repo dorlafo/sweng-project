@@ -52,8 +52,7 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
     }
 
     //TODO: re-enabled when removeListener will work on deleted references
-    /*
-    @Test
+    /*@Test
     public void testLeaveButtonWhenLastPlayerDeletesMatch() {
         dbRefWrapTest.reset();
         onePlayerMatchSetUp();
@@ -74,8 +73,8 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
 
         Map<String, Boolean> status = ((MatchStatusLeafTest)((DBRefWrapTest)dbRefWrapTest.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchID)).getCurrentNode()).getData();
         assertEquals(0, status.size());
-    }
-    */
+    }*/
+
 
     //TODO: re-enabled when childEventListener will work...
     /*

@@ -28,6 +28,7 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
             startActivity(intent);
         } else {
             //Log.d(TAG, "showLogin:getCurrentUser:notNull");
+            this.getSupportActionBar().setTitle("My Matches");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_main, drawer, false);
             drawer.addView(contentView, 0);

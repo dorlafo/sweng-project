@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
@@ -546,11 +547,11 @@ public class Match {
     public enum Meld {
         SENTINEL("Sentinel"),
         MARRIAGE("Stöck"),
-        THREE_CARDS("Trois cartes"),
-        FIFTY("Cinquante"),
-        HUNDRED("Cent"),
-        FOUR_NINE("Cent cinquante"),
-        FOUR_JACKS("Deux cent");
+        THREE_CARDS("Twenty"),
+        FIFTY("Fifty"),
+        HUNDRED("Hundred"),
+        FOUR_NINE("Hundred fifty"),
+        FOUR_JACKS("Two hundred");
 
         private final String meldName;
 
@@ -599,9 +600,7 @@ public class Match {
         UNDEN_UFE("Unden Ufe"),
         SLALOM("Slalom"),
         CHICANE("Chicane"),
-        JASS_MARANT("Jass Marant"),
-        ROI("Roi"),
-        POMME("Pomme");
+        JASS_MARANT("Jass Marant");
 
         private final String variantName;
 
@@ -621,10 +620,6 @@ public class Match {
          */
         public int getMaxPlayerNumber() {
             switch (this) {
-                case POMME:
-                    return 2;
-                case ROI:
-                    return 3;
                 case CHIBRE:
                 case PIQUE_DOUBLE:
                 case OBEN_ABE:
@@ -644,8 +639,6 @@ public class Match {
          */
         public int getNumberOfTeam() {
             switch (this) {
-                case ROI:
-                    return 3;
                 case CHIBRE:
                 case PIQUE_DOUBLE:
                 case OBEN_ABE:
@@ -653,7 +646,6 @@ public class Match {
                 case SLALOM:
                 case CHICANE:
                 case JASS_MARANT:
-                case POMME:
                 default:
                     return 2;
             }
@@ -666,9 +658,6 @@ public class Match {
          */
         public int getNumberOfPlayerByTeam() {
             switch (this) {
-                case ROI:
-                case POMME:
-                    return 1;
                 case CHIBRE:
                 case PIQUE_DOUBLE:
                 case OBEN_ABE:
@@ -688,9 +677,6 @@ public class Match {
          */
         public int getPointGoal() {
             switch (this) {
-                case ROI:
-                case POMME:
-                    return 20;
                 case CHIBRE:
                     return 1000;
                 case PIQUE_DOUBLE:
@@ -720,7 +706,7 @@ public class Match {
         private boolean privateMatch;
         private GameVariant gameVariant;
         private int maxPlayerNumber;
-        private long expirationTime;
+        private long time;
         private String matchID;
         private MatchStatus matchStatus;
 
@@ -734,7 +720,7 @@ public class Match {
             privateMatch = false;
             gameVariant = CHIBRE;
             maxPlayerNumber = CHIBRE.getMaxPlayerNumber();
-            expirationTime = Calendar.getInstance().getTimeInMillis() + ONE_HOUR; // 1 hour after current time
+            time = Calendar.getInstance().getTimeInMillis() + ONE_HOUR; // 1 hour after current time
             matchID = DEFAULT_ID;
             matchStatus = MatchStatus.PENDING;
         }
@@ -837,11 +823,11 @@ public class Match {
         /**
          * Setter for the expiration time of this match
          *
-         * @param expirationTime the expiration time to be set
+         * @param time the expiration time to be set
          * @return A builder containing this expiration time
          */
-        public Builder setExpirationTime(long expirationTime) {
-            this.expirationTime = expirationTime;
+        public Builder setTime(long time) {
+            this.time = time;
             return this;
         }
 
@@ -886,14 +872,36 @@ public class Match {
          * @throws IllegalStateException If building with no players or too many players
          */
         public Match build() throws IllegalStateException {
-            // TODO: check validity of arguments
+            // If an error occured puts parameters back to basic state
+            if(location == null) {
+                location = new GPSPoint(46.520450, 6.567737);
+            }
+
+            if(description == null || description.equals("")) {
+                description = DEFAULT_DESCRIPTION;
+            }
+
+            if(maxPlayerNumber != gameVariant.getMaxPlayerNumber()) {
+                maxPlayerNumber = gameVariant.getMaxPlayerNumber();
+            }
+
+            if(time < Calendar.getInstance().getTimeInMillis()) {
+                time = Calendar.getInstance().getTimeInMillis() + (3600 * 1000);
+            }
+
+            // Need to generate random matchId when error.
+            if(matchID == null || matchID.equals("")) {
+                Random generator = new Random();
+                matchID = DEFAULT_ID + generator.nextInt(100000);
+            }
+
             if (players.isEmpty()) {
                 throw new IllegalStateException("Cannot create match without any player.");
             } else if (players.size() > maxPlayerNumber) {
                 throw new IllegalStateException("Too many players.");
             } else {
                 return new Match(players, location, description, privateMatch,
-                        gameVariant, expirationTime, matchID, matchStatus);
+                        gameVariant, time, matchID, matchStatus);
             }
         }
 

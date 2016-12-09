@@ -101,7 +101,7 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_notify)
-                .setContentTitle("Jass@EPFL - " + msgData.get("title"))
+                .setContentTitle(msgData.get("title"))
                 .setContentText(msgData.get("body"))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

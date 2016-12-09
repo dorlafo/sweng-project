@@ -59,7 +59,7 @@ public final class MatchBuilderTest {
                 + 24 * 3600 * 1000;
 
         matchBuilder.setLocation(newLocation).setDescription(newDescription)
-                .setPrivacy(true).setExpirationTime(newExpirationTime)
+                .setPrivacy(true).setTime(newExpirationTime)
                 .setMatchID("new match id");
 
         Match setMatch = matchBuilder.build();

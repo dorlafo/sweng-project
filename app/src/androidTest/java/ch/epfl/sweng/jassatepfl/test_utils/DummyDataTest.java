@@ -13,7 +13,7 @@ import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Player.PlayerID;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
-import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.POMME;
+import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.OBEN_ABE;
 
 public class DummyDataTest {
 
@@ -67,14 +67,14 @@ public class DummyDataTest {
         List<Player> matchPlayers = new ArrayList<>();
         matchPlayers.add(bricoloBob);
         matchPlayers.add(jimmy);
-        matchPlayers.add(random);
-        matchPlayers.add(marco);
-        Match match = new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
-        match.setTeam(0, bricoloBob.getID());
-        match.setTeam(0, jimmy.getID());
-        match.setTeam(1, random.getID());
-        match.setTeam(1, marco.getID());
-        return match;
+        matchPlayers.add(vincenzo);
+        matchPlayers.add(nicolas);
+        Match ownedMatch = new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+        ownedMatch.setTeam(0, bricoloBob.getID());
+        ownedMatch.setTeam(0, jimmy.getID());
+        ownedMatch.setTeam(1, nicolas.getID());
+        ownedMatch.setTeam(1, vincenzo.getID());
+        return ownedMatch;
     }
 
     public static Match noPlayersMatch() {
@@ -95,7 +95,12 @@ public class DummyDataTest {
         fullPlayers.add(marco);
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
-        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full");
+        Match fullMatch = new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full");
+        fullMatch.setTeam(0, random.getID());
+        fullMatch.setTeam(0, marco.getID());
+        fullMatch.setTeam(1, dorian.getID());
+        fullMatch.setTeam(1, vincenzo.getID());
+        return fullMatch;
     }
 
     public static Match fullMatchWithBob() {
@@ -118,11 +123,11 @@ public class DummyDataTest {
         return new Match(playerList, COCoord, "CO", false, CHIBRE, expirationTime(3), "bob");
     }
 
-    public static Match matchPomme() {
+    public static Match matchForTest() {
         List<Player> playerList = new ArrayList<>();
         playerList.add(bricoloBob);
         playerList.add(random);
-        return new Match(playerList, COCoord, "CO", false, POMME, expirationTime(3), "pomme");
+        return new Match(playerList, COCoord, "CO", false, OBEN_ABE, expirationTime(3), "pomme");
     }
 
     public static Match match_one_p_california() {
