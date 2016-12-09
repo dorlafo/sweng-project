@@ -49,6 +49,12 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             mtwBestPartner = (TextView) findViewById(R.id.twMostWonWith);
             mtwVariant = (TextView) findViewById(R.id.twMostVariant);
 
+            mtwMatchPlayed.setVisibility(View.INVISIBLE);
+            mtwMatchWon.setVisibility(View.INVISIBLE);
+            mtwRecurentPartner.setVisibility(View.INVISIBLE);
+            mtwBestPartner.setVisibility(View.INVISIBLE);
+            mtwVariant.setVisibility(View.INVISIBLE);
+
             sciper = getUserSciper();
 
             //New SingleEventListener that will change the value of the textView according to the current
@@ -86,11 +92,18 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         UserStats us = dataSnapshot.getValue(UserStats.class);
-                        mtwMatchPlayed.setText(String.format(getString(R.string.profile_label_matches_played), us.getPlayedMatches()));
-                        mtwMatchWon.setText(String.format(getString(R.string.profile_label_matches_won), us.getWonMatches()));
-                        getPartnersNames(us);
-                        mtwVariant.setText(String.format(getString(R.string.profile_label_most_variants),
-                                us.sortedVariants().get(0).getKey(), us.sortedVariants().get(0).getValue()));
+                        if(us != null) {
+                            mtwMatchPlayed.setText(String.format(getString(R.string.profile_label_matches_played), us.getPlayedMatches()));
+                            mtwMatchWon.setText(String.format(getString(R.string.profile_label_matches_won), us.getWonMatches()));
+                            getPartnersNames(us);
+                            mtwVariant.setText(String.format(getString(R.string.profile_label_most_variants),
+                                    us.sortedVariants().get(0).getKey(), us.sortedVariants().get(0).getValue()));
+                            mtwMatchPlayed.setVisibility(View.VISIBLE);
+                            mtwMatchWon.setVisibility(View.VISIBLE);
+                            mtwRecurentPartner.setVisibility(View.VISIBLE);
+                            mtwBestPartner.setVisibility(View.VISIBLE);
+                            mtwVariant.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     @Override

@@ -42,7 +42,9 @@ import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.bricoloBob;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.fullMatchWithBob;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.marco;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.nicolas;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -110,7 +112,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.team_members_1))
                 .check(matches(withText(bricoloBob.getFirstName() + ", " + jimmy.getFirstName())));
         onView(withId(R.id.team_members_2))
-                .check(matches(withText(random.getFirstName() + ", " + marco.getFirstName())));
+                .check(matches(withText(nicolas.getFirstName() + ", " + vincenzo.getFirstName())));
     }
 
     @Test

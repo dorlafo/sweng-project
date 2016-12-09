@@ -511,7 +511,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
             Collections.sort(leafList, new Comparator<LeafTest>() {
                 @Override
                 public int compare(LeafTest o1, LeafTest o2) {
-                    return -(((Player) o1.getData()).getQuote() - ((Player) o2.getData()).getQuote());
+                    return ((Player) o1.getData()).getQuote() - ((Player) o2.getData()).getQuote();
                 }
             });
             childOrder = "quote";

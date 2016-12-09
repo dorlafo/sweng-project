@@ -73,7 +73,7 @@ public class TreeNodeTest implements NodeTest {
                 MatchStatsLeafTest statsLeaf = new MatchStatsLeafTest(id, this);
                 children.add(statsLeaf);
                 return statsLeaf;
-            case DatabaseUtils.DATABASE_STATS_USER:
+            case DatabaseUtils.DATABASE_USERSTATS:
                 UserStatsLeafTest userStatsLeaf = new UserStatsLeafTest(id, this);
                 children.add(userStatsLeaf);
                 return userStatsLeaf;

@@ -71,8 +71,8 @@ public class DummyDataTest {
         Match ownedMatch = new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
         ownedMatch.setTeam(0, bricoloBob.getID());
         ownedMatch.setTeam(0, jimmy.getID());
-        ownedMatch.setTeam(1, vincenzo.getID());
         ownedMatch.setTeam(1, nicolas.getID());
+        ownedMatch.setTeam(1, vincenzo.getID());
         return ownedMatch;
     }
 
