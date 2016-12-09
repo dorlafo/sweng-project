@@ -79,6 +79,9 @@ public class UserStats {
 
     }
 
+    public Integer lastQuote() {
+        return quoteByDate.get(quoteByDate.size() - 1).getValue();
+    }
     public void setRank(Rank rank) {
         this.rank = rank;
     }
@@ -227,6 +230,7 @@ public class UserStats {
                             Rank newUserRank = SkillCalculator.calculateNewRatings(GameInfo.getDefaultGameInfo(), Arrays.asList(playersRank), winner);
                             ref.child("userStats").child(currentUserId).child("rank").setValue(newUserRank);
                             newQuote = newUserRank.computeRank();
+                            quoteByDate.add(new Tuple2<Long, Integer>());
                             ref.child("players").child(currentUserId).child("quote").setValue(newUserRank.computeRank());
                         }
                     }
