@@ -114,6 +114,7 @@
     <string name="toast_could_not_perform_login">Could not perform login. Please try again</string>
     <string name="toast_invalid_score">Invalid score: the max number of points in a round is %d</string>
     <string name="toast_invalid_goal">Invalid score goal: the minimum goal is %d</string>
+    <string name="toast_please_enter_description">You must enter a description to create a match.</string>
 
     <string name="error">Error!</string>
     <string name="error_cannot_join">Can not join match</string>

@@ -95,6 +95,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     private LocationProvider locationProvider;
     private PlayerListAdapter playerArrayAdapter;
     private Calendar matchCalendar;
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,22 +118,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             createMatchButton.setOnClickListener(this);
 
             // Description input
-            final EditText editText = (EditText) findViewById(R.id.description_match_text);
-            editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        String description = v.getText().toString();
-                        if (description.length() != 0) {
-                            matchBuilder.setDescription(description);
-                        }
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        return true;
-                    }
-                    return false;
-                }
-            });
+            editText = (EditText) findViewById(R.id.description_match_text);
 
             // Date and time pickers
             ImageButton timePickerDialog = (ImageButton) findViewById(R.id.time_picker_button);
@@ -241,10 +227,14 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     Toast.makeText(CreateMatchActivity.this,
                             R.string.toast_cannot_create_with_no_player, Toast.LENGTH_SHORT)
                             .show();
-                    createMatchButton.setEnabled(false);
-                } else {
+                } else if(editText.getText().toString().isEmpty()) {
+                    Toast.makeText(CreateMatchActivity.this,
+                            R.string.toast_please_enter_description, Toast.LENGTH_SHORT)
+                            .show();
+                }
+                else {
                     String matchId = dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).push().getKey();
-                    Match m = matchBuilder.setMatchID(matchId).build();
+                    Match m = matchBuilder.setMatchID(matchId).setDescription(editText.getText().toString()).build();
                     dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(m);
                     dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).setValue(false);
                     //Log.d(TAG, "Pushed match " + matchId + " to database");
