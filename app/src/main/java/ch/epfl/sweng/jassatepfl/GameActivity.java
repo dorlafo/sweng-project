@@ -218,10 +218,12 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         TextView commonGoal = (TextView) findViewById(R.id.game_playing_to);
         TextView firstTeamGoal = (TextView) findViewById(R.id.team_goal_1);
         TextView secondTeamGoal = (TextView) findViewById(R.id.team_goal_2);
+        int defaultPointsGoal = currentMatch.getGameVariant().getPointGoal();
+        matchStats.updatePointsGoal(defaultPointsGoal);
         if (splitMode == NORMAL) {
             splitMode = SPLIT;
             commonGoal.setVisibility(INVISIBLE);
-            String defaultGoal = Integer.toString(currentMatch.getGameVariant().getPointGoal());
+            String defaultGoal = Integer.toString(defaultPointsGoal);
 
             firstTeamGoal.setVisibility(VISIBLE);
             firstTeamGoal.setText(defaultGoal);
