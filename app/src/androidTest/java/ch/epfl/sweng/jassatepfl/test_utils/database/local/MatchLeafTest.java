@@ -71,7 +71,7 @@ public class MatchLeafTest extends LeafTest<Match> {
         privateMatchLeaf.setData(data.isPrivateMatch());
         gameVariantLeaf.setData(data.getGameVariant());
         maxPlayerNumberLeaf.setData(data.getMaxPlayerNumber());
-        expirationTimeLeaf.setData(data.getExpirationTime());
+        expirationTimeLeaf.setData(data.getTime());
         matchIDLeaf.setData(data.getMatchID());
     }
 

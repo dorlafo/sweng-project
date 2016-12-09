@@ -33,7 +33,7 @@ public class Match {
     private boolean privateMatch;
     private GameVariant gameVariant;
     private int maxPlayerNumber;
-    private long expirationTime;
+    private long time;
     private String matchID;
     private MatchStatus matchStatus;
     private Map<String, List<String>> teams;
@@ -53,7 +53,7 @@ public class Match {
      * @param description    A brief description of the match (detailed location...)
      * @param privateMatch   The visibility of the match (public or private)
      * @param gameVariant    The variant of the match
-     * @param expirationTime The time at which the match expires (in milliseconds after epoch)
+     * @param time The time at which the match expires (in milliseconds after epoch)
      * @param matchID        The unique firebase ID of the match
      * @param status         The status of the match
      */
@@ -62,7 +62,7 @@ public class Match {
                  String description,
                  boolean privateMatch,
                  GameVariant gameVariant,
-                 long expirationTime,
+                 long time,
                  String matchID,
                  MatchStatus status) {
         this.players = new ArrayList<>(players);
@@ -72,7 +72,7 @@ public class Match {
         this.privateMatch = privateMatch;
         this.gameVariant = gameVariant;
         this.maxPlayerNumber = gameVariant.getMaxPlayerNumber();
-        this.expirationTime = expirationTime;
+        this.time = time;
         this.matchID = matchID;
         this.matchStatus = status;
         this.teams = new HashMap<>();
@@ -93,7 +93,7 @@ public class Match {
      * @param description    A brief description of the match (detailed location...)
      * @param privateMatch   The visibility of the match (public or private)
      * @param gameVariant    The variant of the match
-     * @param expirationTime The time at which the match expires (in milliseconds after epoch)
+     * @param time The time at which the match expires (in milliseconds after epoch)
      * @param matchID        The unique firebase ID of the match
      */
     public Match(List<Player> players,
@@ -101,9 +101,9 @@ public class Match {
                  String description,
                  boolean privateMatch,
                  GameVariant gameVariant,
-                 long expirationTime,
+                 long time,
                  String matchID) {
-        this(players, location, description, privateMatch, gameVariant, expirationTime, matchID, MatchStatus.PENDING);
+        this(players, location, description, privateMatch, gameVariant, time, matchID, MatchStatus.PENDING);
     }
 
     /**
@@ -134,7 +134,7 @@ public class Match {
             if (other.maxPlayerNumber != this.maxPlayerNumber) {
                 return true;
             }
-            if (other.expirationTime != this.expirationTime) {
+            if (other.time != this.time) {
                 return true;
             }
             if (!other.matchStatus.equals(this.matchStatus)) {
@@ -149,7 +149,7 @@ public class Match {
                     || other.rank != this.rank
                     || other.privateMatch != this.privateMatch
                     || other.maxPlayerNumber != this.maxPlayerNumber
-                    || other.expirationTime != this.expirationTime
+                    || other.time != this.time
                     || other.matchStatus != this.matchStatus
                     || other.teams != this.teams) {
                 return true;
@@ -165,16 +165,16 @@ public class Match {
      * @param location       The location of the match
      * @param description    A brief description of the match (detailed location...)
      * @param privateMatch   The visibility of the match (public or private)
-     * @param expirationTime The time at which the match expires (in milliseconds after epoch)
+     * @param time The time at which the match expires (in milliseconds after epoch)
      * @param matchID        The unique firebase ID of the match
      */
     public Match(List<Player> players,
                  GPSPoint location,
                  String description,
                  boolean privateMatch,
-                 long expirationTime,
+                 long time,
                  String matchID) {
-        this(players, location, description, privateMatch, CHIBRE, expirationTime, matchID);
+        this(players, location, description, privateMatch, CHIBRE, time, matchID);
     }
 
     /**
@@ -276,8 +276,8 @@ public class Match {
      *
      * @return The expiration date of the match, in milliseconds from epoch
      */
-    public long getExpirationTime() {
-        return expirationTime;
+    public long getTime() {
+        return time;
     }
 
     public void copy(Match m) {
@@ -288,7 +288,7 @@ public class Match {
         privateMatch = m.isPrivateMatch();
         gameVariant = m.getGameVariant();
         maxPlayerNumber = m.getMaxPlayerNumber();
-        expirationTime = m.getExpirationTime();
+        time = m.getTime();
         matchID = m.getMatchID();
     }
 
@@ -297,8 +297,8 @@ public class Match {
      *
      * @param expTime The expiration time to set
      */
-    public void setExpirationTime(long expTime) {
-        this.expirationTime = expTime;
+    public void setTime(long expTime) {
+        this.time = expTime;
     }
 
     /**

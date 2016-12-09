@@ -79,7 +79,7 @@ public final class MatchStringifier {
         DateFormat dateFormat = new SimpleDateFormat(
                 context.getResources().getString(R.string.date_format_match_display),
                 Locale.FRENCH);
-        return dateFormat.format(match.getExpirationTime());
+        return dateFormat.format(match.getTime());
     }
 
     /**
