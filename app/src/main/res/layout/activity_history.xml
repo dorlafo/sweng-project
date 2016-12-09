@@ -31,26 +31,6 @@
             android:text="@string/game_team_name_1"
             android:textColor="@android:color/black"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/history_team_name_1">
-
-            <TextView
-                android:id="@+id/history_winner_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="@string/history_winner"
-                android:textAllCaps="true"
-                android:textColor="@android:color/holo_red_light"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:visibility="invisible"/>
-
-        </RelativeLayout>
-
         <TextView
             android:id="@+id/history_team_members_1"
             android:layout_width="wrap_content"
@@ -60,9 +40,12 @@
             android:layout_marginTop="3dp"/>
 
         <ScrollView
+            android:id="@+id/history_scrollview_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/history_team_members_1"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:scrollbars="none">
 
             <TableLayout
@@ -75,7 +58,6 @@
                     android:id="@+id/history_table_column_titles_1"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
                     tools:ignore="UselessParent">
 
                     <TextView
@@ -98,6 +80,27 @@
             </TableLayout>
 
         </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/history_scrollview_1"
+            android:layout_toStartOf="@+id/history_team_name_1">
+
+            <TextView
+                android:id="@+id/history_winner_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/history_winner"
+                android:textAllCaps="true"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="invisible"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -115,26 +118,6 @@
             android:text="@string/game_team_name_1"
             android:textColor="@android:color/black"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/history_team_name_2">
-
-            <TextView
-                android:id="@+id/history_winner_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="@string/history_winner"
-                android:textAllCaps="true"
-                android:textColor="@android:color/holo_red_light"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:visibility="invisible"/>
-
-        </RelativeLayout>
-
         <TextView
             android:id="@+id/history_team_members_2"
             android:layout_width="wrap_content"
@@ -144,9 +127,12 @@
             android:layout_marginTop="3dp"/>
 
         <ScrollView
+            android:id="@+id/history_scrollview_2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/history_team_members_2"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:scrollbars="none">
 
             <TableLayout
@@ -159,7 +145,6 @@
                     android:id="@+id/history_table_column_titles_2"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
                     tools:ignore="UselessParent">
 
                     <TextView
@@ -182,6 +167,27 @@
             </TableLayout>
 
         </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/history_scrollview_2"
+            android:layout_toStartOf="@+id/history_team_name_2">
+
+            <TextView
+                android:id="@+id/history_winner_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/history_winner"
+                android:textAllCaps="true"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="invisible"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
