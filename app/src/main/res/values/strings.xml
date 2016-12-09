@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Jass@EPFL</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_create">Match Information</string>
@@ -6,6 +6,7 @@
     <string name="title_activity_game">Scores</string>
     <string name="title_activity_main">My matches</string>
     <string name="title_activity_list">Nearby matches</string>
+    <string name="title_activity_history">Match History</string>
 
     <string name="main_button_text_ranking">Ranking</string>
     <string name="main_button_text_stats">Stats</string>
@@ -44,6 +45,8 @@
     <string name="numpad_text_8">8</string>
     <string name="numpad_text_9">9</string>
     <string name="numpad_text_double_score">x2</string>
+
+    <string name="history_winner">Winner</string>
 
     <string name="list_empty_list">No matches are available</string>
 
@@ -174,5 +177,4 @@
     <string name="won_with_graph">won_with_graph</string>
     <string name="won_graph">won_graph</string>
     <string name="rank_graph">rank_graph</string>
-    <string name="title_activity_history">HistoryActivity</string>
 </resources>
