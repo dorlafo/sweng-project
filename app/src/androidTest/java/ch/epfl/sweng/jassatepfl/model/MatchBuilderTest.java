@@ -5,7 +5,9 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.alexis;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.amaury;
@@ -35,7 +37,7 @@ public final class MatchBuilderTest {
         Match match = matchBuilder.build();
 
         List<Player> players = new ArrayList<>();
-        List<Player.PlayerID> hasCards = new ArrayList<>();
+        Map<String, Boolean> hasCards = new HashMap<>();
         players.add(amaury);
         Match defaultMatch = new Match(players, new GPSPoint(46.520407, 6.565802),
                 Match.Builder.DEFAULT_DESCRIPTION, false, Calendar.getInstance().getTimeInMillis() + 2 * 3600 * 1000,

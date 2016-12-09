@@ -3,8 +3,10 @@ package ch.epfl.sweng.jassatepfl.test_utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.GPSPoint;
@@ -36,7 +38,7 @@ public class DummyDataTest {
     public static GPSPoint CECoord = new GPSPoint(46.520525, 6.569554);
     public static GPSPoint flonCoord = new GPSPoint(46.520858, 6.629570);
     public static GPSPoint lemanCoord = new GPSPoint(46.453986, 6.553145);
-    public static List<PlayerID> hasCardsEmpty = new ArrayList<>();
+    public static Map<String, Boolean> hasCardsEmpty = new HashMap<>();
 
     public static Match onePlayerMatch() {
         List<Player> match1Players = new ArrayList<>();

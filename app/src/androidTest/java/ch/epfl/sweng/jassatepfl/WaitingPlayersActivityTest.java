@@ -24,6 +24,7 @@ import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -114,6 +115,50 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         onView(withId(android.R.id.button1)).perform(click());
         onView(withId(R.id.invite_button)).perform(click());
         onView(withId(R.id.invite_button)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testYesCardsbutton(){
+        dbRefWrapTest.reset();
+        fullMatchSetUp();
+        getActivity();
+        //onView(withText(R.string.dialog_have_cards)).perform(click());
+        onView(withText("Yes")).perform(click());
+        try {
+            Thread.sleep(3000);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        onView(withId(R.id.cards_yes)).check(matches(isDisplayed()));
+        /*
+        onView(withId(R.id.cards_no)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.cards_yes)).perform(click());
+        onView(withId(R.id.cards_no)).check(matches(isDisplayed()));
+        onView(withId(R.id.cards_yes)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.cards_no)).perform(click());
+        onView(withId(R.id.cards_yes)).check(matches(isDisplayed()));
+        onView(withId(R.id.cards_no)).check(matches(not(isDisplayed())));
+        */
+    }
+
+    @Test
+    public void testNoCardsbutton(){
+        dbRefWrapTest.reset();
+        onePlayerMatchSetUp();
+        getActivity();
+        onView(withText(R.string.dialog_have_cards)).perform(click());
+        onView(withId(android.R.id.button2)).perform(click());
+        onView(withId(R.id.cards_no)).check(matches(isDisplayed()));
+        onView(withId(R.id.cards_yes)).check(matches(not(isDisplayed())));
+        /*
+        onView(withId(R.id.cards_no)).perform(click());
+        onView(withId(R.id.cards_yes)).check(matches(isDisplayed()));
+        onView(withId(R.id.cards_no)).check(matches(not(isDisplayed())));
+
+        onView(withId(R.id.cards_yes)).perform(click());
+        onView(withId(R.id.cards_no)).check(matches(isDisplayed()));
+        onView(withId(R.id.cards_yes)).check(doesNotExist());
+        */
     }
 
 
