@@ -36,7 +36,7 @@ public class FinishedMatchListFragment extends BaseMatchListFragment {
     public QueryWrapper getQuery(DBReferenceWrapper dbRefWrapped) {
         return dbRefWrapped.child(DatabaseUtils.DATABASE_STATS)
                 .child(DatabaseUtils.DATABASE_STATS_MATCH_ARCHIVE)
-                .orderByChild(DatabaseUtils.DATABASE_MATCHES_EXPIRATION_TIME);
+                .orderByChild(DatabaseUtils.DATABASE_MATCHES_TIME);
     }
 
     @Override
@@ -46,9 +46,9 @@ public class FinishedMatchListFragment extends BaseMatchListFragment {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        final Match match = getAdapter().getItem(position);
-        Intent moveToGameActivity = new Intent(getActivity(), GameActivity.class);
-        moveToGameActivity.putExtra("match_Id", match.getMatchID());
-        startActivity(moveToGameActivity);
+        //final Match match = getAdapter().getItem(position);
+        //Intent moveToHistoryActivity = new Intent(getActivity(), HistoryActivity.class);
+        //moveToHistoryActivity.putExtra("match_Id", match.getMatchID());
+        //startActivity(moveToHistoryActivity);
     }
 }

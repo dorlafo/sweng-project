@@ -18,7 +18,7 @@ public class MatchLeafTest extends LeafTest<Match> {
     private LeafFieldTest<Boolean> privateMatchLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PRIVATE, this);
     private LeafFieldTest<Match.GameVariant> gameVariantLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_GAME_VARIANT, this);
     private LeafFieldTest<Integer> maxPlayerNumberLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MAX_NB_PLAYER, this);
-    private LeafFieldTest<Long> expirationTimeLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_EXPIRATION_TIME, this);
+    private LeafFieldTest<Long> expirationTimeLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_TIME, this);
     private LeafFieldTest<String> matchIDLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MATCH_ID, this);
 
     /**
@@ -47,7 +47,7 @@ public class MatchLeafTest extends LeafTest<Match> {
                 return gameVariantLeaf;
             case DatabaseUtils.DATABASE_MATCHES_MAX_NB_PLAYER:
                 return maxPlayerNumberLeaf;
-            case DatabaseUtils.DATABASE_MATCHES_EXPIRATION_TIME:
+            case DatabaseUtils.DATABASE_MATCHES_TIME:
                 return expirationTimeLeaf;
             case DatabaseUtils.DATABASE_MATCHES_MATCH_ID:
                 return matchIDLeaf;
@@ -71,7 +71,7 @@ public class MatchLeafTest extends LeafTest<Match> {
         privateMatchLeaf.setData(data.isPrivateMatch());
         gameVariantLeaf.setData(data.getGameVariant());
         maxPlayerNumberLeaf.setData(data.getMaxPlayerNumber());
-        expirationTimeLeaf.setData(data.getExpirationTime());
+        expirationTimeLeaf.setData(data.getTime());
         matchIDLeaf.setData(data.getMatchID());
     }
 

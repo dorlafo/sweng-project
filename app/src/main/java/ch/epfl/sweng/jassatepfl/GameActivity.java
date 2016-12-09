@@ -236,7 +236,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
     private void updateSplitGoal(int index, int points) {
         int goalIndex = index == 0 ? R.id.team_goal_1 : R.id.team_goal_2;
         TextView goal = (TextView) findViewById(goalIndex);
-        goal.setText(Integer.toString(points));
+        goal.setText(String.format(java.util.Locale.getDefault(), "%d", points));
     }
 
     private void displayMeldSpinner(final int teamIndex) {

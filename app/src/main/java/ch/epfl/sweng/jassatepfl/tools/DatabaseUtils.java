@@ -33,7 +33,7 @@ public class DatabaseUtils {
     public static final String DATABASE_MATCHES_QUOTE = "quote";
     public static final String DATABASE_MATCHES_GAME_VARIANT = "gameVariant";
     public static final String DATABASE_MATCHES_MAX_NB_PLAYER = "maxPlayerNumber";
-    public static final String DATABASE_MATCHES_EXPIRATION_TIME = "expirationTime";
+    public static final String DATABASE_MATCHES_TIME = "time";
     public static final String DATABASE_MATCHES_MATCH_STATUS = "matchStatus";
     public static final String DATABASE_MATCHES_MATCH_ID = "matchID";
 
