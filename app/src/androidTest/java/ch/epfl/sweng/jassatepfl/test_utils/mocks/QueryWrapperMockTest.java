@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.jassatepfl.database.helpers.QueryWrapper;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafTest;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -45,32 +45,38 @@ public class QueryWrapperMockTest extends QueryWrapper {
         int i = 0;
         int listSize = elements.size();
         List<LeafTest> elems = new ArrayList<>(elements);
-        for(LeafTest l: elems) {
-            if(!l.getId().startsWith(path)) elems.remove(l);
+        for (LeafTest l : elems) {
+            if (!l.getId().startsWith(path)) elems.remove(l);
         }
         return new QueryWrapperMockTest(elems, numOfValueListener, numOfChildListener);
     }
 
     @Override
     public QueryWrapper endAt(String path) {
-        return new QueryWrapperMockTest(elements,  numOfValueListener, numOfChildListener);
+        return new QueryWrapperMockTest(elements, numOfValueListener, numOfChildListener);
     }
 
     @Override
     public QueryWrapper limitToFirst(int num) {
-        return new QueryWrapperMockTest(elements.subList(0, num - 1),  numOfValueListener, numOfChildListener);
+        if(elements.isEmpty()) {
+            return new QueryWrapperMockTest(elements,  numOfValueListener, numOfChildListener);
+        } else if(num >= elements.size()) {
+            return new QueryWrapperMockTest(elements.subList(0, elements.size()),  numOfValueListener, numOfChildListener);
+        } else {
+            return new QueryWrapperMockTest(elements.subList(0, num),  numOfValueListener, numOfChildListener);
+        }
     }
 
     @Override
     public QueryWrapper equalTo(Boolean b) {
         List<LeafTest> newLeafs = new ArrayList<>();
-        for(LeafTest l: elements) {
+        for (LeafTest l : elements) {
             Match p = (Match) l.getData();
-            if(p.isPrivateMatch() == b) {
+            if (p.isPrivateMatch() == b) {
                 newLeafs.add(l);
             }
         }
-        return new QueryWrapperMockTest(newLeafs,  numOfValueListener, numOfChildListener);
+        return new QueryWrapperMockTest(newLeafs, numOfValueListener, numOfChildListener);
     }
 
     @Override
@@ -88,12 +94,12 @@ public class QueryWrapperMockTest extends QueryWrapper {
         ++numOfValueListener;
         new Thread() {
             public void run() {
-                for(LeafTest l: elements) {
+                for (LeafTest l : elements) {
                     Player p = null;
                     Match m = null;
                     DataSnapshot dSnap = mock(DataSnapshot.class);
                     Object obj = l.getData();
-                    if(obj instanceof Player) {
+                    if (obj instanceof Player) {
                         p = (Player) obj;
                     }
 
@@ -130,7 +136,7 @@ public class QueryWrapperMockTest extends QueryWrapper {
                                 id = p.getID().toString();
                             } else if (obj instanceof Match) {
                                 m = (Match) obj;
-                                id = m.getMatchID().toString();
+                                id = m.getMatchID();
                             }
 
                             when(dSnap.getValue(Player.class)).thenReturn(p);

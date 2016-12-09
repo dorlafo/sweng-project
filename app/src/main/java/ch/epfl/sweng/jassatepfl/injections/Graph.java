@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import ch.epfl.sweng.jassatepfl.BaseActivityWithNavDrawer;
 import ch.epfl.sweng.jassatepfl.BaseAppCompatActivity;
+import ch.epfl.sweng.jassatepfl.StatsFragment;
 import dagger.Component;
 
 /**
@@ -29,6 +30,13 @@ public interface Graph {
      * @param activity the activity which will be injected
      */
     void inject(BaseAppCompatActivity activity);
+
+    /**
+     * Injects providers return values to the BaseAppCompatActivity
+     *
+     * @param fragment the fragment which will be injected
+     */
+    void inject(StatsFragment fragment);
 
     /**
      * Initializer of the graph

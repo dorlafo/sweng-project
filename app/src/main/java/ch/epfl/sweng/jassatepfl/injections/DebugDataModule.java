@@ -9,7 +9,6 @@ import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import dagger.Module;
 import dagger.Provides;
 
-
 /**
  * DebugDataModule is module (i.e. a class that defines a set of providers which are the method
  * annotated with @Provides). The providers can provide their objects in normal mod or mocked mod.
@@ -27,7 +26,7 @@ public final class DebugDataModule {
     @Provides
     @Singleton
     public DBReferenceWrapper provideDBReference() {
-            return new DBReferenceWrapper(FirebaseDatabase.getInstance().getReference());
+        return new DBReferenceWrapper(FirebaseDatabase.getInstance().getReference());
     }
 
     /**
@@ -38,6 +37,6 @@ public final class DebugDataModule {
     @Provides
     @Singleton
     public FirebaseAuth provideDBAuth() {
-            return FirebaseAuth.getInstance();
+        return FirebaseAuth.getInstance();
     }
 }

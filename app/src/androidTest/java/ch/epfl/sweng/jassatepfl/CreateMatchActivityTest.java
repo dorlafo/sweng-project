@@ -43,7 +43,6 @@ import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.amaury;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
 import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.HOUR;
 import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.MONTH;
@@ -189,7 +188,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         release();
     }
 
-    /* TODO: fix this test (fails with java.lang.IllegalArgumentException: The node does not have a children named : matches2)
+    /*
     @Test
     public void testCreateMatchSendsIntent() {
         init();

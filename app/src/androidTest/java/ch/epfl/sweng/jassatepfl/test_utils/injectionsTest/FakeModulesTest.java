@@ -10,7 +10,6 @@ import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 import ch.epfl.sweng.jassatepfl.model.Player;
-import ch.epfl.sweng.jassatepfl.model.Rank;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import dagger.Module;
 import dagger.Provides;
@@ -56,7 +55,7 @@ public class FakeModulesTest {
         root.initialize();
         root.getChild(DatabaseUtils.DATABASE_PLAYERS)
                 .addChild("696969")
-                .setData(new Player(new Player.PlayerID("696969"), "LeBricoleur", "Bob", new Rank(1000)));
+                .setData(new Player(new Player.PlayerID("696969"), "LeBricoleur", "Bob", 1000));
     }
 
     private void addMockedBehaviorAuth(FirebaseAuth fAuth) {

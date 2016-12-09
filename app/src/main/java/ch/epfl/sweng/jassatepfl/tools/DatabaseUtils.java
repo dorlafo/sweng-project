@@ -21,7 +21,7 @@ import ch.epfl.sweng.jassatepfl.model.Player;
  * @author Alexis Montavon
  */
 public class DatabaseUtils {
-    public static final String DATABASE_PLAYERS = "players2";
+    public static final String DATABASE_PLAYERS = "players";
     public static final String DATABASE_PLAYERS_FIRST_NAME = "firstName";
 
     public static final String DATABASE_MATCHES = "matches2";
@@ -29,13 +29,13 @@ public class DatabaseUtils {
     public static final String DATABASE_MATCHES_PRIVATE = "privateMatch";
     public static final String DATABASE_MATCHES_LOCATION = "location";
     public static final String DATABASE_MATCHES_DESCRIPTION = "description";
-    public static final String DATABASE_MATCHES_RANK = "rank";
+    public static final String DATABASE_MATCHES_QUOTE = "quote";
     public static final String DATABASE_MATCHES_GAME_VARIANT = "gameVariant";
     public static final String DATABASE_MATCHES_MAX_NB_PLAYER = "maxPlayerNumber";
     public static final String DATABASE_MATCHES_EXPIRATION_TIME = "expirationTime";
     public static final String DATABASE_MATCHES_MATCH_ID = "matchID";
 
-    public static final String DATABASE_PENDING_MATCHES = "pendingMatches2";
+    public static final String DATABASE_PENDING_MATCHES = "pendingMatches";
 
     public static final String DATABASE_MATCH_STATS = "matchStats";
 

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -34,7 +33,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -105,8 +103,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_create_match, drawer, false);
@@ -181,8 +178,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             playersLV.setEmptyView(emptyList);
             playersLV.setBackgroundColor(0xFAFAFA);
 
-            playerArrayAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, new ArrayList<Player>());
+            playerArrayAdapter = new ArrayAdapter<>(this, R.layout.invited_player_list, new ArrayList<Player>());
             playersLV.setAdapter(playerArrayAdapter);
 
             playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -352,7 +348,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         final Calendar currentTime = Calendar.getInstance();
         if (tempCalendar.compareTo(currentTime) > 0) {
             matchCalendar.setTimeInMillis(tempCalendar.getTimeInMillis());
-            matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
+            matchBuilder.setTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
             Toast.makeText(this, R.string.toast_invalid_hour, Toast.LENGTH_SHORT)
@@ -379,7 +375,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                 matchCalendar.set(HOUR_OF_DAY, currentHour);
                 matchCalendar.set(MINUTE, currentMinute);
             }
-            matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
+            matchBuilder.setTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
             Calendar tempCalendar = Calendar.getInstance();
@@ -387,7 +383,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
 
             if (tempCalendar.compareTo(currentTime) > 0) {
                 matchCalendar.set(year, month, dayOfMonth);
-                matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
+                matchBuilder.setTime(matchCalendar.getTimeInMillis());
                 displayCurrentExpirationDate();
             } else {
                 Toast.makeText(this, R.string.toast_invalid_date, Toast.LENGTH_SHORT)

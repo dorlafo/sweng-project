@@ -3,7 +3,6 @@ package ch.epfl.sweng.jassatepfl;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -21,7 +20,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
     private TextView mtwPlayerID;
     private TextView mtwLastName;
     private TextView mtwFirstName;
-    private TextView mtwPlayerRank;
+    private TextView mtwPlayerQuote;
     String sciper;
 
     @Override
@@ -32,8 +31,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
             //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
             //setContentView(R.layout.activity_user_profile);
 
@@ -44,7 +42,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             mtwPlayerID = (TextView) findViewById(R.id.twPlayerID);
             mtwLastName = (TextView) findViewById(R.id.twLastName);
             mtwFirstName = (TextView) findViewById(R.id.twFirstName);
-            mtwPlayerRank = (TextView) findViewById(R.id.twRank);
+            mtwPlayerQuote = (TextView) findViewById(R.id.twQuote);
 
             sciper = getUserSciper();
             //Log.d(TAG, "DisplayName:" + sciper);
@@ -62,7 +60,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                             System.out.println(p.getID().toString());
                             mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
                             mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
-                            mtwPlayerRank.setText(mtwPlayerRank.getText() + " " + p.getRank().toString());
+                            mtwPlayerQuote.setText(mtwPlayerQuote.getText() + " " + Integer.toString(p.getQuote()));
                         }
 
                         @Override

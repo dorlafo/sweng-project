@@ -13,23 +13,22 @@ import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Player.PlayerID;
-import ch.epfl.sweng.jassatepfl.model.Rank;
 
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
 import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.POMME;
 
 public class DummyDataTest {
 
-    public static Player amaury = new Player(new PlayerID(235400), "Combes", "Amaury", new Rank(123));
-    public static Player vincenzo = new Player(new PlayerID(249733), "Bazzucchi", "Vincenzo", new Rank(456));
-    public static Player dorian = new Player(new PlayerID(234832), "Laforest", "Dorian", new Rank(789));
-    public static Player alexis = new Player(new PlayerID(245433), "Montavon", "Alexis", new Rank(321));
-    public static Player nicolas = new Player(new PlayerID(239293), "Phan Van", "Nicolas", new Rank(654));
-    public static Player jimmy = new Player(new PlayerID(888888), "Boulet", "Jimmy", new Rank(987));
-    public static Player random = new Player(new PlayerID(999999), "Smith", "John", new Rank(741));
-    public static Player colin = new Player(new PlayerID(777777), "Branca", "Colin", new Rank(852));
-    public static Player marco = new Player(new PlayerID(666666), "Ballerini", "Marco", new Rank(963));
-    public static Player bricoloBob = new Player(new PlayerID(696969), "LeBricoleur", "Bob", new Rank(1000));
+    public static Player amaury = new Player(new PlayerID(235400), "Combes", "Amaury", 123);
+    public static Player vincenzo = new Player(new PlayerID(249733), "Bazzucchi", "Vincenzo", 456);
+    public static Player dorian = new Player(new PlayerID(234832), "Laforest", "Dorian", 789);
+    public static Player alexis = new Player(new PlayerID(245433), "Montavon", "Alexis", 321);
+    public static Player nicolas = new Player(new PlayerID(239293), "Phan Van", "Nicolas", 654);
+    public static Player jimmy = new Player(new PlayerID(888888), "Boulet", "Jimmy", 987);
+    public static Player random = new Player(new PlayerID(999999), "Smith", "John", 741);
+    public static Player colin = new Player(new PlayerID(777777), "Branca", "Colin", 852);
+    public static Player marco = new Player(new PlayerID(666666), "Ballerini", "Marco", 963);
+    public static Player bricoloBob = new Player(new PlayerID(696969), "LeBricoleur", "Bob", 1000);
 
     public static GPSPoint rolexCoord = new GPSPoint(46.518299, 6.568323);
     public static GPSPoint BCCoord = new GPSPoint(46.518470, 6.561907);
@@ -71,7 +70,14 @@ public class DummyDataTest {
         List<Player> matchPlayers = new ArrayList<>();
         matchPlayers.add(bricoloBob);
         matchPlayers.add(jimmy);
-        return new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned", hasCardsEmpty, Match.MatchStatus.PENDING);
+        matchPlayers.add(random);
+        matchPlayers.add(marco);
+        Match match = new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+        match.setTeam(0, bricoloBob.getID());
+        match.setTeam(0, jimmy.getID());
+        match.setTeam(1, random.getID());
+        match.setTeam(1, marco.getID());
+        return match;
     }
 
     public static Match noPlayersMatch() {
@@ -97,11 +103,16 @@ public class DummyDataTest {
 
     public static Match fullMatchWithBob() {
         List<Player> fullPlayers = new ArrayList<>();
-        fullPlayers.add(bricoloBob);
         fullPlayers.add(marco);
+        fullPlayers.add(bricoloBob);
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
-        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full_bob");
+        Match match = new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full_bob");
+        match.setTeam(0, marco.getID());
+        match.setTeam(0, bricoloBob.getID());
+        match.setTeam(1, dorian.getID());
+        match.setTeam(1, vincenzo.getID());
+        return match;
     }
 
     public static Match matchWithBob() {

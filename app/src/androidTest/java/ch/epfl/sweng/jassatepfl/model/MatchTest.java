@@ -3,17 +3,22 @@ package ch.epfl.sweng.jassatepfl.model;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
 
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.alexis;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.amaury;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.colin;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.dorian;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.marco;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.threePlayersMatch;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -233,7 +238,7 @@ public final class MatchTest {
     public void getTeamsReturnsImmutableMap() {
         Match m = DummyDataTest.fullMatch();
         Map<String, List<String>> hm = m.getTeams();
-        hm.put("Team42", new ArrayList<>(Arrays.asList("TEST")));
+        hm.put("Team42", new ArrayList<>(Collections.singletonList("TEST")));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -358,4 +363,16 @@ public final class MatchTest {
         m1.removePlayerById(DummyDataTest.dorian.getID());
         assertTrue(m1.matchHasChanged(m2) && m2.matchHasChanged(m1));
     }
+
+    @Test
+    public void testGetPlayerById() {
+        Player player = threePlayersMatch().getPlayerById(colin.getID().toString());
+        assertEquals(colin, player);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testGetPlayerByIdThrowsException() {
+        threePlayersMatch().getPlayerById(jimmy.getID().toString());
+    }
+
 }

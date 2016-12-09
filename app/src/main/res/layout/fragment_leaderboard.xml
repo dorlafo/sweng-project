@@ -1,0 +1,23 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ch.epfl.sweng.jassatepfl.LeaderboardFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/listview_layout_margin"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/leaderboard_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/background_light"
+            android:divider="@color/listview_divider_color"
+            android:dividerHeight="@dimen/listview_divider_height"
+            android:drawSelectorOnTop="true"/>
+    </FrameLayout>
+
+</FrameLayout>
