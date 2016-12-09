@@ -34,18 +34,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
-import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Round;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
-import ch.epfl.sweng.jassatepfl.stats.UserStats;
-import ch.epfl.sweng.jassatepfl.stats.trueskill.GameInfo;
-import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
-import ch.epfl.sweng.jassatepfl.stats.trueskill.SkillCalculator;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static android.view.View.GONE;
@@ -123,8 +117,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
 
             meldCallers = new Stack<>();
 
-            Intent intent = getIntent();
-            matchId = intent.getStringExtra("match_Id");
+            matchId = startingIntent.getStringExtra("match_Id");
         }
     }
 
