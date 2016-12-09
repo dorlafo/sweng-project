@@ -34,7 +34,6 @@ import java.util.Stack;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
-import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.model.Round;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.stats.UserStats;
@@ -43,7 +42,6 @@ import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
 import ch.epfl.sweng.jassatepfl.stats.trueskill.SkillCalculator;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
-import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.sweng.jassatepfl.GameActivity.Caller.FIRST_TEAM;
@@ -212,70 +210,8 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
             }
             // dbRefWrapped.child("stats").child("buffer").child(matchId).setValue(matchStats); TODO: mock the buffer
             displayEndOfMatchMessage(matchStats.getWinnerIndex());
-            sendNewRankToServer(currentMatch, matchStats.getWinnerIndex());
         }
         updateMatchStats();
-    }
-
-    private void sendNewRankToServer(Match currentMatch, int winner) {
-        Map<String, List<String>> teams = currentMatch.getTeams();
-        final Rank[] playersRank = new Rank[4];
-        final List<Boolean> status = Arrays.asList(false, false, false, false);
-        String currentUserId = fAuth.getCurrentUser().getDisplayName();
-        int index = 0;
-
-        getRankFromServer(currentUserId, playersRank, winner, currentUserId, index, status);
-
-        for(List<String> team: teams.values()) {
-            if(team.contains(currentUserId)) {
-                for(String id: team) {
-                    if(!id.equals(currentUserId)) {
-                        ++index;
-                        getRankFromServer(id, playersRank, winner, currentUserId, index, status);
-                    }
-                }
-            }
-        }
-
-        for(List<String> team: teams.values()) {
-            if(!team.contains(currentUserId)) {
-                for(String id: team) {
-                    ++index;
-                    getRankFromServer(id, playersRank, winner, currentUserId, index, status);
-                }
-
-            }
-        }
-    }
-
-    private void getRankFromServer(String playerId, final Rank[] playersRank, final int winner, final String currentUserId, final int index, final List<Boolean> status) {
-        dbRefWrapped.child("userStats").child(playerId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                UserStats userStats = dataSnapshot.getValue(UserStats.class);
-                if(userStats == null) {
-                    if(index == 0) {
-                        dbRefWrapped.child("userStats").child(currentUserId).setValue(new UserStats(currentUserId, Rank.getDefaultRank()));
-                    }
-                    playersRank[index] = Rank.getDefaultRank();
-                    status.set(index, true);
-                } else {
-                    playersRank[index] = userStats.getRank();
-                    status.set(index, true);
-                }
-
-                if(!status.contains(false)) {
-                    Rank newUserRank = SkillCalculator.calculateNewRatings(GameInfo.getDefaultGameInfo(), Arrays.asList(playersRank), winner);
-                    dbRefWrapped.child("userStats").child(currentUserId).child("rank").setValue(newUserRank);
-                    dbRefWrapped.child("players").child(currentUserId).child("quote").setValue(newUserRank.getRank());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @SuppressLint("SetTextI18n")

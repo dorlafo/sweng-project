@@ -1,6 +1,13 @@
 package ch.epfl.sweng.jassatepfl.stats;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -8,10 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.jassatepfl.BaseAppCompatActivity;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.stats.trueskill.GameInfo;
 import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
+import ch.epfl.sweng.jassatepfl.stats.trueskill.SkillCalculator;
 
 
 /**
@@ -46,6 +55,8 @@ public class UserStats {
     private Map<String, Integer> partners = new HashMap<>();
     // How many matches have been won as a partner of other players.
     private Map<String, Integer> wonWith = new HashMap<>();
+
+    private int newQuote = -1;
 
     /**
      * Constructor, only start with user id.
@@ -160,14 +171,71 @@ public class UserStats {
         }
     }
 
-    /**
-     * Updates the rank object of the day specified in timestamp according to new information.
-     *
-     * @param quoteCalculator A Strategy object that computes the new rank using the UserStats object.
-     */
-    protected void updateRank(QuoteCalculator quoteCalculator) {
-        Integer newRank = quoteCalculator.computeNewQuote();
-        quoteByDate.get(quoteByDate.size() - 1).setValue(newRank);
+    protected void updateQuote(MatchStats ms) {
+        Map<String, List<String>> teams = ms.getMatch().getTeams();
+        final Rank[] playersRank = new Rank[4];
+        final List<Boolean> status = Arrays.asList(false, false, false, false);
+        String currentUserId = playerId.toString();
+        int index = 0;
+
+        int winner = ms.getWinnerIndex();
+        getRankFromServer(currentUserId, playersRank, winner, currentUserId, index, status);
+
+        for (List<String> team : teams.values()) {
+            if (team.contains(currentUserId)) {
+                for (String id : team) {
+                    if (!id.equals(currentUserId)) {
+                        ++index;
+                        getRankFromServer(id, playersRank, winner, currentUserId, index, status);
+                    }
+                }
+            }
+        }
+
+        for (List<String> team : teams.values()) {
+            if (!team.contains(currentUserId)) {
+                for (String id : team) {
+                    ++index;
+                    getRankFromServer(id, playersRank, winner, currentUserId, index, status);
+                }
+
+            }
+        }
+    }
+
+    private void getRankFromServer(String playerId, final Rank[] playersRank, final int winner, final String currentUserId, final int index, final List<Boolean> status) {
+        FirebaseDatabase.getInstance().getReference()
+                .child("userStats").child(playerId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        UserStats userStats = dataSnapshot.getValue(UserStats.class);
+                        if (userStats == null) {
+                            if (index == 0) {
+                                ref.child("userStats").child(currentUserId).setValue(new UserStats(currentUserId, Rank.getDefaultRank()));
+                            }
+                            playersRank[index] = Rank.getDefaultRank();
+                            status.set(index, true);
+                        } else {
+                            playersRank[index] = userStats.getRank();
+                            status.set(index, true);
+                        }
+
+                        if (!status.contains(false)) {
+                            Rank newUserRank = SkillCalculator.calculateNewRatings(GameInfo.getDefaultGameInfo(), Arrays.asList(playersRank), winner);
+                            ref.child("userStats").child(currentUserId).child("rank").setValue(newUserRank);
+                            newQuote = newUserRank.computeRank();
+                            ref.child("players").child(currentUserId).child("quote").setValue(newUserRank.computeRank());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
