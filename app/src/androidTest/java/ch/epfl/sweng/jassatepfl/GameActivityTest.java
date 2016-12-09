@@ -337,22 +337,4 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
             }
         };
     }
-
-    @Test
-    public void testNewRankIsWrittenToDatabase() {
-        dbRefWrapTest.reset();
-        ownedMatchSetUp();
-        getActivity();
-        for (int i = 0; i < 4; ++i) {
-            onView(withId(R.id.score_update_1)).perform(click());
-            onView(withId(R.id.score_picker_match)).perform(click());
-        }
-
-        onView(withId(android.R.id.button1)).perform(click());
-
-        Player bob = ((PlayerLeafTest) ((DBRefWrapTest) dbRefWrapTest.child("players").child("696969")).getCurrentNode()).getData();
-
-        assertEquals(true, bob.getQuote() > 1000);
-    }
-
 }
