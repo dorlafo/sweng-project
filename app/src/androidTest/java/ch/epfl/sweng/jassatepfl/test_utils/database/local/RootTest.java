@@ -74,6 +74,7 @@ public class RootTest implements NodeTest {
         addChild(DatabaseUtils.DATABASE_PLAYERS);
         addChild(DatabaseUtils.DATABASE_PENDING_MATCHES);
         addChild(DatabaseUtils.DATABASE_MATCH_STATS);
+        addChild(DatabaseUtils.DATABASE_STATS_USER);
     }
 
     @Override

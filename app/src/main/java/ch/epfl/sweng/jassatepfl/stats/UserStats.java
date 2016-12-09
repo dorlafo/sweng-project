@@ -12,6 +12,8 @@ import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.stats.trueskill.GameInfo;
+import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
 
 
 /**
@@ -27,6 +29,9 @@ public class UserStats {
     private int playedMatches = 0;
     // How many matches he won.
     private int wonMatches = 0;
+
+    // The rank of the player (this is not the quote)
+    private Rank rank;
 
     // Number of played matches by date (one counter per day).
     private List<Tuple2<Long, Integer>> playedByDate = new ArrayList<>();
@@ -53,11 +58,24 @@ public class UserStats {
         this.playerId = id;
     }
 
+    public UserStats(String id, Rank rank) {
+        this.playerId = new Player.PlayerID(id);
+        this.rank = rank;
+    }
+
     /**
      * Empty constructor, needed for Firebase serialization.
      */
     public UserStats() {
 
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
+    public Rank getRank() {
+        return rank;
     }
 
     /* Getters */

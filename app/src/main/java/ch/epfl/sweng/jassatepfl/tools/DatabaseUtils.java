@@ -38,7 +38,8 @@ public class DatabaseUtils {
     public static final String DATABASE_PENDING_MATCHES = "pendingMatches";
 
     public static final String DATABASE_MATCH_STATS = "matchStats";
-    public static final String DATABASE_USERSTATS = "userStats";
+    public static final String DATABASE_STATS_USER = "userStats";
+    public static final String DATABASE_USERSTATS_RANK = "rank";
 
     /**
      * Add player to match on the database.

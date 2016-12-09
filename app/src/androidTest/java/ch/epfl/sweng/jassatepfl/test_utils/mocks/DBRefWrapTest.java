@@ -60,7 +60,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
     }
 
     @Override
-    public DBReferenceWrapper child(String child) {
+    public DBRefWrapTest child(String child) {
         return new DBRefWrapTest(this.getCurrentNode().getChild(child));
     }
 

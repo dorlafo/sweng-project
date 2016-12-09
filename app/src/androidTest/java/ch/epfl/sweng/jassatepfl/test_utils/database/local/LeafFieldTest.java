@@ -3,6 +3,8 @@ package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
 import java.util.Set;
 
+import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
+
 /**
  * @author Amaury Combes
  */
@@ -27,6 +29,12 @@ public class LeafFieldTest<T> implements NodeTest {
 
     public void setData(T data) {
         this.data = data;
+        if(parent instanceof UserStatsLeafTest && data instanceof Rank) {
+            ((UserStatsLeafTest) parent).getData().setRank((Rank) data);
+        } else if(parent instanceof PlayerLeafTest && Integer.class.isInstance(data)) {
+            ((PlayerLeafTest) parent).getData().setQuote((Integer) data);
+
+        }
     }
 
     @Override

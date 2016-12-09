@@ -66,14 +66,14 @@ public class DummyDataTest {
         List<Player> matchPlayers = new ArrayList<>();
         matchPlayers.add(bricoloBob);
         matchPlayers.add(jimmy);
-        matchPlayers.add(random);
-        matchPlayers.add(marco);
-        Match match = new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
-        match.setTeam(0, bricoloBob.getID());
-        match.setTeam(0, jimmy.getID());
-        match.setTeam(1, random.getID());
-        match.setTeam(1, marco.getID());
-        return match;
+        matchPlayers.add(vincenzo);
+        matchPlayers.add(nicolas);
+        Match ownedMatch = new Match(matchPlayers, flonCoord, "Flon", false, CHIBRE, expirationTime(2), "owned");
+        ownedMatch.setTeam(0, bricoloBob.getID());
+        ownedMatch.setTeam(0, jimmy.getID());
+        ownedMatch.setTeam(1, vincenzo.getID());
+        ownedMatch.setTeam(1, nicolas.getID());
+        return ownedMatch;
     }
 
     public static Match noPlayersMatch() {

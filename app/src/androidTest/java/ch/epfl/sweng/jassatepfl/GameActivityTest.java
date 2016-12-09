@@ -16,9 +16,12 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
+import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.PlayerLeafTest;
+import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -484,5 +487,4 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
             }
         };
     }
-
 }
