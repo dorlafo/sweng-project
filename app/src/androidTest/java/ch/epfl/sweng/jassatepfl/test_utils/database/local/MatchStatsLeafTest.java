@@ -27,7 +27,7 @@ public final class MatchStatsLeafTest extends LeafTest<MatchStats> {
     public void setData(MatchStats data) {
         this.data = data;
         matchIdLeaf.setData(data.getMatchID());
-        variantLeaf.setData(data.getGameVariant());
+        variantLeaf.setData(data.obtainGameVariant());
         nbTeamLeaf.setData(data.getNbTeam());
         roundsLeaf.setData(data.getRounds());
         scoresLeaf.setData(data.getTotalScores());

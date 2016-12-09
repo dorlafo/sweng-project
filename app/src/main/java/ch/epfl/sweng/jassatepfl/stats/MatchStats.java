@@ -70,7 +70,7 @@ public class MatchStats {
      *
      * @return The game variant
      */
-    public GameVariant getGameVariant() {
+    public GameVariant obtainGameVariant() {
         return match.getGameVariant();
     }
 
@@ -120,7 +120,7 @@ public class MatchStats {
      * @param teamIndex the index of the team
      * @return the score of the team, for the currentRound
      */
-    public Integer getCurrentRoundTeamScore(int teamIndex) {
+    public Integer obtainCurrentRoundTeamScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
             throw new IndexOutOfBoundsException("Invalid team index");
         }
@@ -133,7 +133,7 @@ public class MatchStats {
      * @param teamIndex the index of the team
      * @return the total score of the team for the match
      */
-    public Integer getTotalMatchScore(int teamIndex) {
+    public Integer obtainTotalMatchScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
             throw new IndexOutOfBoundsException("Invalid team index");
         }
@@ -206,13 +206,13 @@ public class MatchStats {
         updateTotalScore(teamIndex, meld.value());
     }
 
-    public void setPointsGoal(int goal) {
+    public void updatePointsGoal(int goal) {
         for (String key : pointsGoal.keySet()) {
             pointsGoal.put(key, goal);
         }
     }
 
-    public void setPointsGoal(int teamIndex, int goal) {
+    public void updatePointsGoal(int teamIndex, int goal) {
         pointsGoal.put(concatKey(teamIndex), goal);
     }
 

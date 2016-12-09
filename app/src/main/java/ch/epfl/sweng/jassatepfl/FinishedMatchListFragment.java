@@ -46,9 +46,9 @@ public class FinishedMatchListFragment extends BaseMatchListFragment {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //final Match match = getAdapter().getItem(position);
-        //Intent moveToHistoryActivity = new Intent(getActivity(), HistoryActivity.class);
-        //moveToHistoryActivity.putExtra("match_Id", match.getMatchID());
-        //startActivity(moveToHistoryActivity);
+        final Match match = getAdapter().getItem(position);
+        Intent moveToHistoryActivity = new Intent(getActivity(), HistoryActivity.class);
+        moveToHistoryActivity.putExtra("match_Id", match.getMatchID());
+        startActivity(moveToHistoryActivity);
     }
 }

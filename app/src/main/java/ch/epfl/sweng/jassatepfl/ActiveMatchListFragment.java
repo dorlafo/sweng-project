@@ -49,6 +49,7 @@ public class ActiveMatchListFragment extends BaseMatchListFragment {
         final Match match = getAdapter().getItem(position);
         Intent moveToGameActivity = new Intent(getActivity(), GameActivity.class);
         moveToGameActivity.putExtra("match_Id", match.getMatchID());
+        moveToGameActivity.putExtra("mode", "online");
         startActivity(moveToGameActivity);
     }
 }

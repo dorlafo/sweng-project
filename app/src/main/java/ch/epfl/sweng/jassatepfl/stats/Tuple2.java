@@ -8,7 +8,7 @@ package ch.epfl.sweng.jassatepfl.stats;
  *         Class representing a Tuple. This class is needed in UserStats to associate a date to a counter
  *         or a date to a rank that have to be stored in a data structure which is ordered and iterable.
  */
-class Tuple2<T, V> {
+public class Tuple2<T, V> {
     private T k;
     private V v;
 

@@ -161,4 +161,5 @@
     <string name="won_with_graph">won_with_graph</string>
     <string name="won_graph">won_graph</string>
     <string name="rank_graph">rank_graph</string>
+    <string name="title_activity_history">HistoryActivity</string>
 </resources>

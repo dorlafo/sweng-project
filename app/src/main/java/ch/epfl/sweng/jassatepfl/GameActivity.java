@@ -64,7 +64,6 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
 
     private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
 
-    // TODO: max points depending on variant?
     private final static int TOTAL_POINTS_IN_ROUND = 157;
     private final static int MATCH_POINTS = 257;
 
@@ -291,8 +290,8 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
 
     @SuppressLint("SetTextI18n")
     private void displayScore() {
-        Integer firstTeamScore = matchStats.getTotalMatchScore(0);
-        Integer secondTeamScore = matchStats.getTotalMatchScore(1);
+        Integer firstTeamScore = matchStats.obtainTotalMatchScore(0);
+        Integer secondTeamScore = matchStats.obtainTotalMatchScore(1);
         firstTeamScoreDisplay.setText(firstTeamScore.toString());
         secondTeamScoreDisplay.setText(secondTeamScore.toString());
     }
@@ -435,15 +434,15 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                         computeScores(points * scoreMultiplier, scoreMultiplier);
                         break;
                     case COMMON_GOAL:
-                        matchStats.setPointsGoal(points);
+                        matchStats.updatePointsGoal(points);
                         updatePointsGoal(points);
                         break;
                     case FIRST_TEAM_GOAL:
-                        matchStats.setPointsGoal(0, points);
+                        matchStats.updatePointsGoal(0, points);
                         updateSplitGoal(0, points);
                         break;
                     case SECOND_TEAM_GOAL:
-                        matchStats.setPointsGoal(1, points);
+                        matchStats.updatePointsGoal(1, points);
                         updateSplitGoal(1, points);
                         break;
                 }
