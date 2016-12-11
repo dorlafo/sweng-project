@@ -10,7 +10,7 @@ import java.util.Set;
  *
  * @author Amaury Combes
  */
-public abstract class LeafTest<T> implements NodeTest {
+public abstract class LeafTest<T> implements NodeTest<T> {
 
     private String id;
     protected T data;

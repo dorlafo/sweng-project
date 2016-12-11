@@ -485,7 +485,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
     public QueryWrapper orderByChild(String path) {
         List<LeafTest> leafList = new ArrayList();
         String childOrder = null;
-        for (NodeTest n : currentNode.getChildren()) {
+        for (Object n : currentNode.getChildren()) {
             LeafTest l = ((LeafTest) n);
             leafList.add(l);
         }

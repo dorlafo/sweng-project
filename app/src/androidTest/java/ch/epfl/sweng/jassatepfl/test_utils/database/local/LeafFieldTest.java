@@ -8,7 +8,7 @@ import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
 /**
  * @author Amaury Combes
  */
-public class LeafFieldTest<T> implements NodeTest {
+public class LeafFieldTest<T> implements NodeTest<T> {
     private final String id;
     private T data;
     private NodeTest parent;

@@ -10,7 +10,7 @@ import java.util.Set;
  *
  * @author Amaury Combes
  */
-public interface NodeTest {
+public interface NodeTest<T> {
 
     /**
      * Getter for the id of the current node
@@ -51,6 +51,8 @@ public interface NodeTest {
      * @return the child that was just added
      */
     NodeTest addChild(String id);
+
+    void setData(T data);
 
     /**
      * Remove the current node from the database
