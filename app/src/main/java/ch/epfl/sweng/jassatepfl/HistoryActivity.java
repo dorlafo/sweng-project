@@ -92,20 +92,20 @@ public class HistoryActivity extends BaseActivityWithNavDrawer {
 
             TextView firstRoundIndexView = (TextView) firstTeamRow.findViewById(R.id.score_table_row_round_index);
             firstRoundIndexView.setTextColor(black);
-            firstRoundIndexView.setText(Integer.toString(roundIndex));
+            firstRoundIndexView.setText(String.format(java.util.Locale.getDefault(), "%d", roundIndex));
 
             TextView secondRoundIndexView = (TextView) secondTeamRow.findViewById(R.id.score_table_row_round_index);
             secondRoundIndexView.setTextColor(black);
-            secondRoundIndexView.setText(Integer.toString(roundIndex));
+            secondRoundIndexView.setText(String.format(java.util.Locale.getDefault(), "%d", roundIndex));
             ++roundIndex;
 
             TextView firstScore = (TextView) firstTeamRow.findViewById(R.id.score_table_row_points);
             firstScore.setTextColor(black);
-            firstScore.setText(round.getTeamTotalScore(0).toString());
+            firstScore.setText(String.format(java.util.Locale.getDefault(), "%d", round.getTeamTotalScore(0)));
 
             TextView secondScore = (TextView) secondTeamRow.findViewById(R.id.score_table_row_points);
             secondScore.setTextColor(black);
-            secondScore.setText(round.getTeamTotalScore(1).toString());
+            secondScore.setText(String.format(java.util.Locale.getDefault(), "%d", round.getTeamTotalScore(1)));
 
             TextView firstMelds = (TextView) firstTeamRow.findViewById(R.id.score_table_row_melds);
             firstMelds.setTextColor(black);

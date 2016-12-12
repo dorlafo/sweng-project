@@ -46,6 +46,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
@@ -82,7 +83,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         OnTimeSetListener,
         OnDateSetListener {
 
-    private static final String TAG = CreateMatchActivity.class.getSimpleName();
     private static final int PLACE_PICKER_REQUEST = 27;
     private static final int ADD_PLAYER_REQUEST = 0;
 
@@ -93,17 +93,16 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     private PlayerListAdapter playerArrayAdapter;
     private Calendar matchCalendar;
     private EditText editText;
+    private List<Player> playerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         } else {
-            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_create_match, drawer, false);
             drawer.addView(contentView, 0);
@@ -155,13 +154,14 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             emptyList.setText(R.string.create_empty_list);
             emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
             emptyList.setTextColor(Color.GRAY);
+            playerList = new ArrayList<>();
 
             ListView playersLV = (ListView) findViewById(R.id.create_player_list);
             ((ViewGroup) playersLV.getParent()).addView(emptyList);
             playersLV.setEmptyView(emptyList);
             playersLV.setBackgroundColor(0xFAFAFA);
 
-            playerArrayAdapter = new PlayerListAdapter(this, R.layout.player_list_element, new ArrayList<Player>());
+            playerArrayAdapter = new PlayerListAdapter(this, R.layout.player_list_element, playerList);
             playersLV.setAdapter(playerArrayAdapter);
 
             playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -172,7 +172,8 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                             .setTitle(R.string.dialog_remove_player)
                             .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    playerArrayAdapter.remove(player);
+                                    playerList.remove(player);
+                                    playerArrayAdapter.refreshData(playerList);
                                 }
                             })
                             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -234,8 +235,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     Match m = matchBuilder.setMatchID(matchId).setDescription(editText.getText().toString()).build();
                     dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(m);
                     dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).setValue(false);
-                    //Log.d(TAG, "Pushed match " + matchId + " to database");
-                    new InvitePlayer(playerArrayAdapter).execute(matchId);
+                    new InvitePlayer(playerList).execute(matchId);
                     startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("match_Id", matchId));
                     finish();
                 }
@@ -284,9 +284,11 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Player player = dataSnapshot.getValue(Player.class);
-                                        if (playerArrayAdapter.getPosition(player) == -1) {
-                                            playerArrayAdapter.add(player);
+                                        if(playerList.contains(player)) {
+                                            playerList.remove(player);
                                         }
+                                        playerList.add(player);
+                                        playerArrayAdapter.refreshData(playerList);
                                     }
 
                                     @Override

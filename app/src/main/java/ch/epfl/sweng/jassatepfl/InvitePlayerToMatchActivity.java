@@ -40,8 +40,6 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         SearchView.OnQueryTextListener,
         View.OnClickListener {
 
-    private static final String TAG = InvitePlayerToMatchActivity.class.getSimpleName();
-
     private String currentUserSciper;
     private PlayerListAdapter adapter;
     private ListView playerListView;
@@ -51,12 +49,10 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         } else {
-            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             setContentView(R.layout.activity_invite_player_to_match);
 
             currentUserSciper = getUserSciper();
@@ -70,6 +66,8 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
 
             playerListView = (ListView) findViewById(R.id.invite_list);
             ((ViewGroup) playerListView.getParent()).addView(emptyList);
+            adapter = new PlayerListAdapter(InvitePlayerToMatchActivity.this, R.layout.player_list_element, new ArrayList<Player>());
+            playerListView.setAdapter(adapter);
             playerListView.setEmptyView(emptyList);
             playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -131,8 +129,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             playerList.add(snapshot.getValue(Player.class));
                         }
-                        adapter = new PlayerListAdapter(InvitePlayerToMatchActivity.this, R.layout.player_list_element, playerList);
-                        playerListView.setAdapter(adapter);
+                        adapter.refreshData(playerList);
                     }
 
                     @Override

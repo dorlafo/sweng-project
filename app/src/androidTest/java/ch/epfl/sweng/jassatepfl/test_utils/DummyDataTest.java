@@ -95,6 +95,15 @@ public class DummyDataTest {
         fullPlayers.add(marco);
         fullPlayers.add(dorian);
         fullPlayers.add(vincenzo);
+        return new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full");
+    }
+
+    public static Match fullMatchWithTeam() {
+        List<Player> fullPlayers = new ArrayList<>();
+        fullPlayers.add(random);
+        fullPlayers.add(marco);
+        fullPlayers.add(dorian);
+        fullPlayers.add(vincenzo);
         Match fullMatch = new Match(fullPlayers, COCoord, "CO", false, CHIBRE, expirationTime(3), "full");
         fullMatch.setTeam(0, random.getID());
         fullMatch.setTeam(0, marco.getID());

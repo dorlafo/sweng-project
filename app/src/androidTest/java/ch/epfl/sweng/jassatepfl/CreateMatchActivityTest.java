@@ -159,11 +159,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     public void testInvitePlayerResultIsHandled() {
         setInviteResultIntent();
 
-        onView(withId(R.id.add_player_button)).perform(click());
-        onView(withId(R.id.invite_button)).check(matches(isDisplayed()));
-
         intended(hasComponent(InvitePlayerToMatchActivity.class.getName()));
-
 
         checkIfPlayerIsDisplayed(amaury);
         checkIfPlayerIsDisplayed(jimmy);
@@ -225,7 +221,6 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(hasComponent(InvitePlayerToMatchActivity.class.getName())).respondWith(result);
         onView(withId(R.id.add_player_button)).perform(click());
-        //onView(withId(R.id.invite_list)).check(matches(isDisplayed()));
     }
 
     private void setTime(int hour, int minute) {
