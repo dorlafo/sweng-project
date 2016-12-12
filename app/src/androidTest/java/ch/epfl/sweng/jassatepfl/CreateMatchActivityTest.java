@@ -158,7 +158,13 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testInvitePlayerResultIsHandled() {
         setInviteResultIntent();
+
+        onView(withId(R.id.add_player_button)).perform(click());
+        onView(withId(R.id.invite_button)).check(matches(isDisplayed()));
+
         intended(hasComponent(InvitePlayerToMatchActivity.class.getName()));
+
+
         checkIfPlayerIsDisplayed(amaury);
         checkIfPlayerIsDisplayed(jimmy);
         release();
@@ -213,12 +219,13 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     private void setInviteResultIntent() {
         init();
         Intent resultData = new Intent();
-        resultData.putExtra("player0", "888888");
-        resultData.putExtra("player1", "235400");
+        resultData.putExtra("player0", amaury.getID().toString());
+        resultData.putExtra("player1", jimmy.getID().toString());
         resultData.putExtra("players_added", 2);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(hasComponent(InvitePlayerToMatchActivity.class.getName())).respondWith(result);
         onView(withId(R.id.add_player_button)).perform(click());
+        //onView(withId(R.id.invite_list)).check(matches(isDisplayed()));
     }
 
     private void setTime(int hour, int minute) {
