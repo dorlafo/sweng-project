@@ -4,12 +4,9 @@
     <string name="title_activity_create">Match Information</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_game">Scores</string>
-    <string name="title_activity_main">My matches</string>
     <string name="title_activity_list">Nearby matches</string>
     <string name="title_activity_history">Match History</string>
 
-    <string name="main_button_text_ranking">Ranking</string>
-    <string name="main_button_text_stats">Stats</string>
     <string name="main_empty_pending_list">You are not enrolled in any match</string>
     <string name="main_empty_active_list">You are not in an active game</string>
     <string name="main_empty_finished_list">You have not finished any game yet</string>
@@ -52,23 +49,25 @@
 
     <string name="match_list_adapter_players_nb">%1$d/%2$d</string>
 
-    <string name="user_profile_player_id">Player id : %s</string>
-    <string name="user_profile_player_last_name">Last name : %s</string>
-    <string name="user_profile_player_first_name">First name : %s</string>
-    <string name="user_profile_player_quote">Quote : %d</string>
-
-    <string name="profile_label_player_id">Player id :</string>
-    <string name="profile_label_first_name">First name :</string>
-    <string name="profile_label_last_name">Last name :</string>
-    <string name="profile_label_quote">Quote :&#160;</string>
-    <string name="profile_button_text_menu">Menu</string>
-
+    <string name="profile_label_quote">Quote : %d</string>
     <string name="profile_label_name">%1$s %2$s</string>
     <string name="profile_label_matches_played">Matches Played : %d</string>
     <string name="profile_label_matches_won">Matches Won : %d</string>
-    <string name="profile_label_most_variants">Variant Most Played : %1$s - %2$d times played</string>
-    <string name="profile_label_most_played_with">Most Recurent Partner : %1$s - %2$d matches played together</string>
-    <string name="profile_label_most_won_with">Best Partner : %1$s - %2$d victory together</string>
+    <!--<string name="profile_label_most_variants">Variant Most Played : %1$s - %2$d times played</string>-->
+    <plurals name="profile_label_most_variants">
+        <item quantity="one">Variant Most Played : %1$s - %2$d time played</item>
+        <item quantity="other">Variant Most Played : %1$s - %2$d times played</item>
+    </plurals>
+    <!--<string name="profile_label_most_played_with">Most Recurrent Partner : %1$s - %2$d matches played together</string>-->
+    <plurals name="profile_label_most_played_with">
+        <item quantity="one">Most Recurrent Partner : %1$s - %2$d match played together</item>
+        <item quantity="other">Most Recurrent Partner : %1$s - %2$d matches played together</item>
+    </plurals>
+    <!--<string name="profile_label_most_won_with">Best Partner : %1$s - %2$d victory together</string>-->
+    <plurals name="profile_label_most_won_with">
+        <item quantity="one">Best Partner : %1$s - %2$d victory together</item>
+        <item quantity="other">Best Partner : %1$s - %2$d victories together</item>
+    </plurals>
     <string name="profile_string_no_stats_yet">Can not display your stats yet.\n You must play a game first.</string>
 
     <string name="login_welcoming_text">Welcome to Jass@EPFL !\nTo use this app you need to\nlogin with your EPFL account</string>
@@ -123,7 +122,6 @@
     <string name="toast_could_not_perform_login">Could not perform login. Please try again</string>
     <string name="toast_invalid_score">Invalid score: the max number of points in a round is %d</string>
 
-    <string name="toast_invalid_goal">Invalid score goal: the minimum goal is %d</string>
     <string name="toast_please_enter_description">You must enter a description to create a match.</string>
 
     <string name="error">Error!</string>

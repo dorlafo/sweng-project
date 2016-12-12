@@ -22,7 +22,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
     private TextView mtwPlayerQuote;
     private TextView mtwMatchPlayed;
     private TextView mtwMatchWon;
-    private TextView mtwRecurentPartner;
+    private TextView mtwRecurrentPartner;
     private TextView mtwBestPartner;
     private TextView mtwVariant;
     private String sciper;
@@ -48,13 +48,13 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             mtwPlayerQuote = (TextView) findViewById(R.id.twQuote);
             mtwMatchPlayed = (TextView) findViewById(R.id.twMatchPlayed);
             mtwMatchWon = (TextView) findViewById(R.id.twMatchWon);
-            mtwRecurentPartner = (TextView) findViewById(R.id.twMostPlayedWith);
+            mtwRecurrentPartner = (TextView) findViewById(R.id.twMostPlayedWith);
             mtwBestPartner = (TextView) findViewById(R.id.twMostWonWith);
             mtwVariant = (TextView) findViewById(R.id.twMostVariant);
 
             mtwMatchPlayed.setVisibility(View.INVISIBLE);
             mtwMatchWon.setVisibility(View.INVISIBLE);
-            mtwRecurentPartner.setVisibility(View.INVISIBLE);
+            mtwRecurrentPartner.setVisibility(View.INVISIBLE);
             mtwBestPartner.setVisibility(View.INVISIBLE);
             mtwVariant.setVisibility(View.INVISIBLE);
 
@@ -99,11 +99,12 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                             mtwMatchPlayed.setText(String.format(getString(R.string.profile_label_matches_played), us.getPlayedMatches()));
                             mtwMatchWon.setText(String.format(getString(R.string.profile_label_matches_won), us.getWonMatches()));
                             getPartnersNames(us);
-                            mtwVariant.setText(String.format(getString(R.string.profile_label_most_variants),
-                                    us.sortedVariants().get(0).getKey(), us.sortedVariants().get(0).getValue()));
+                            mtwVariant.setText(getResources().getQuantityString(R.plurals.profile_label_most_variants, us.sortedVariants().get(0).getValue(), us.sortedVariants().get(0).getKey()));
+                            /*mtwVariant.setText(String.format(getString(R.plurals.profile_label_most_variants),
+                                    us.sortedVariants().get(0).getKey(), us.sortedVariants().get(0).getValue()));*/
                             mtwMatchPlayed.setVisibility(View.VISIBLE);
                             mtwMatchWon.setVisibility(View.VISIBLE);
-                            mtwRecurentPartner.setVisibility(View.VISIBLE);
+                            mtwRecurrentPartner.setVisibility(View.VISIBLE);
                             mtwBestPartner.setVisibility(View.VISIBLE);
                             mtwVariant.setVisibility(View.VISIBLE);
                         }
@@ -125,8 +126,9 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Player p = dataSnapshot.getValue(Player.class);
                         mostPlayedWith = p.getFirstName() + " " + p.getLastName();
-                        mtwRecurentPartner.setText(String.format(getString(R.string.profile_label_most_played_with),
-                                mostPlayedWith, us.sortedPartners().get(0).getValue()));
+                        mtwRecurrentPartner.setText(getResources().getQuantityString(R.plurals.profile_label_most_played_with, us.sortedPartners().get(0).getValue(), mostPlayedWith));
+                        /*mtwRecurrentPartner.setText(String.format(getString(R.string.profile_label_most_played_with),
+                                mostPlayedWith, us.sortedPartners().get(0).getValue()));*/
                     }
 
                     @Override
@@ -143,8 +145,10 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Player p = dataSnapshot.getValue(Player.class);
                         mostWonWith = p.getFirstName() + " " + p.getLastName();
-                        mtwBestPartner.setText(String.format(getString(R.string.profile_label_most_won_with),
-                        mostWonWith, us.sortedWonWith().get(0).getValue()));
+                        mtwBestPartner.setText(getResources().getQuantityString(R.plurals.profile_label_most_won_with, us.sortedWonWith().get(0).getValue(), mostWonWith));
+
+                        /*mtwBestPartner.setText(String.format(getString(R.string.profile_label_most_won_with),
+                        mostWonWith, us.sortedWonWith().get(0).getValue()));*/
                     }
 
                     @Override

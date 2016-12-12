@@ -44,8 +44,8 @@ public class MatchStatsTest {
     @Test
     public void testPointsGoalGetter() {
         MatchStats stats = new MatchStats(match);
-        stats.setPointsGoal(0, 300);
-        stats.setPointsGoal(1, 500);
+        stats.updatePointsGoal(0, 300);
+        stats.updatePointsGoal(1, 500);
         Map<String, Integer> pointsGoal = stats.getPointsGoal();
         assertEquals(Integer.valueOf(300), pointsGoal.get("TEAM0"));
         assertEquals(Integer.valueOf(500), pointsGoal.get("TEAM1"));
