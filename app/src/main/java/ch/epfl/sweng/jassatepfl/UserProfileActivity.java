@@ -99,7 +99,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                             mtwMatchPlayed.setText(String.format(getString(R.string.profile_label_matches_played), us.getPlayedMatches()));
                             mtwMatchWon.setText(String.format(getString(R.string.profile_label_matches_won), us.getWonMatches()));
                             getPartnersNames(us);
-                            mtwVariant.setText(getResources().getQuantityString(R.plurals.profile_label_most_variants, us.sortedVariants().get(0).getValue(), us.sortedVariants().get(0).getKey()));
+                            mtwVariant.setText(getResources().getQuantityString(R.plurals.profile_label_most_variants, us.sortedVariants().get(0).getValue(), us.sortedVariants().get(0).getKey(), us.sortedVariants().get(0).getValue()));
                             /*mtwVariant.setText(String.format(getString(R.plurals.profile_label_most_variants),
                                     us.sortedVariants().get(0).getKey(), us.sortedVariants().get(0).getValue()));*/
                             mtwMatchPlayed.setVisibility(View.VISIBLE);
@@ -126,7 +126,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Player p = dataSnapshot.getValue(Player.class);
                         mostPlayedWith = p.getFirstName() + " " + p.getLastName();
-                        mtwRecurrentPartner.setText(getResources().getQuantityString(R.plurals.profile_label_most_played_with, us.sortedPartners().get(0).getValue(), mostPlayedWith));
+                        mtwRecurrentPartner.setText(getResources().getQuantityString(R.plurals.profile_label_most_played_with, us.sortedPartners().get(0).getValue(), mostPlayedWith, us.sortedPartners().get(0).getValue()));
                         /*mtwRecurrentPartner.setText(String.format(getString(R.string.profile_label_most_played_with),
                                 mostPlayedWith, us.sortedPartners().get(0).getValue()));*/
                     }
@@ -145,7 +145,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Player p = dataSnapshot.getValue(Player.class);
                         mostWonWith = p.getFirstName() + " " + p.getLastName();
-                        mtwBestPartner.setText(getResources().getQuantityString(R.plurals.profile_label_most_won_with, us.sortedWonWith().get(0).getValue(), mostWonWith));
+                        mtwBestPartner.setText(getResources().getQuantityString(R.plurals.profile_label_most_won_with, us.sortedWonWith().get(0).getValue(), mostWonWith, us.sortedWonWith().get(0).getValue()));
 
                         /*mtwBestPartner.setText(String.format(getString(R.string.profile_label_most_won_with),
                         mostWonWith, us.sortedWonWith().get(0).getValue()));*/
