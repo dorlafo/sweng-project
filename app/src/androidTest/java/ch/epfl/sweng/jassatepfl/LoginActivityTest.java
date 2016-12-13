@@ -1,6 +1,11 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -12,20 +17,29 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  *
  * @author Alexis Montavon
  */
+@RunWith(AndroidJUnit4.class)
 public final class LoginActivityTest extends InjectedBaseActivityTest {
 
-    public LoginActivityTest() {
+    /*public LoginActivityTest() {
         super(LoginActivity.class);
-    }
+    }*/
 
-    @Override
+    @Rule
+    public ActivityTestRule<LoginActivity> activityRule =
+            new ActivityTestRule<>(LoginActivity.class, false);
+
+    /*@Override
     public void setUp() throws Exception {
         super.setUp();
-    }
+    }*/
 
     @Test
     public void testShowLoginButtonAnd() {
-        getActivity();
+        //getActivity();
+        //activityRule.getActivity();
+        onView(withId(R.id.login_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.login_text_view)).check(matches(isDisplayed()));
+        /*
         try {
             onView(withId(R.id.login_button)).check(matches(isDisplayed()));
             onView(withId(R.id.login_text_view)).check(matches(isDisplayed()));
@@ -33,7 +47,7 @@ public final class LoginActivityTest extends InjectedBaseActivityTest {
         } catch (Exception e) {
             fail();
         }
-
+*/
     }
 
     /*@Test

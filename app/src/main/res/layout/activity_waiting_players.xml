@@ -16,16 +16,6 @@
         android:layout_height="?android:attr/actionBarSize"
         android:layout_alignParentTop="true"/>
 
-    <ImageView
-        android:layout_height="wrap_content"
-        android:layout_width="50dp"
-        android:id="@+id/cards_yes"
-        android:adjustViewBounds="true"
-        android:onClick="changeCardsStatus"
-        android:src="@drawable/cards_yes"
-        android:layout_below="@+id/waiting_top_space"
-        android:visibility="gone"/>
-
 
     <TextView
         android:id="@+id/match_description"
@@ -131,5 +121,16 @@
         android:src="@drawable/cards_no"
         android:layout_below="@+id/waiting_top_space"
         android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:id="@+id/cards_yes"
+        android:adjustViewBounds="true"
+        android:onClick="changeCardsStatus"
+        android:src="@drawable/cards_yes"
+        android:layout_below="@+id/waiting_top_space"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

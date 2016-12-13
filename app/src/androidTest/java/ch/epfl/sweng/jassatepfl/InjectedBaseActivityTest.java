@@ -1,8 +1,13 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.support.test.rule.ActivityTestRule;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 
 import javax.inject.Inject;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.DaggerFakeGraphTest;
@@ -10,6 +15,8 @@ import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.FakeGraphTest;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.FakeModulesTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
 /**
  * InjectedBaseActivityTest is the base class for the tests. It needs to remains in the main folder
@@ -22,7 +29,7 @@ import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
  * Quote : 1000
  */
 @SuppressWarnings("deprecation")
-public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
+public class InjectedBaseActivityTest /*extends ActivityInstrumentationTestCase2*/ {
 
     @Inject
     protected DBReferenceWrapper dbReferenceWrapper;
@@ -32,13 +39,14 @@ public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
 
     protected DBRefWrapTest dbRefWrapTest;
 
-    public InjectedBaseActivityTest(Class activityClass) {
+    /*public InjectedBaseActivityTest(Class activityClass) {
         super(activityClass);
-    }
+    }*/
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+
+    @Before
+    public void setUp() throws Exception {
+        //super.setUp();
         App app = (App) getInstrumentation().getTargetContext().getApplicationContext();
         FakeGraphTest component = DaggerFakeGraphTest.builder().fakeModulesTest(new FakeModulesTest()).build();
         app.setGraph(component);
@@ -47,9 +55,9 @@ public class InjectedBaseActivityTest extends ActivityInstrumentationTestCase2 {
         dbRefWrapTest = (DBRefWrapTest) dbReferenceWrapper;
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    @After
+    public void tearDown() throws Exception {
+        //super.tearDown();
     }
 
 }

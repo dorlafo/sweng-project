@@ -1,8 +1,12 @@
 package ch.epfl.sweng.jassatepfl;
 
 import android.location.Location;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,16 +21,21 @@ import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
+@RunWith(AndroidJUnit4.class)
 public final class MapsActivityTest extends InjectedBaseActivityTest {
 
-    public MapsActivityTest() {
+    /*public MapsActivityTest() {
         super(MapsActivity.class);
     }
+    */
+    @Rule
+    public ActivityTestRule<MapsActivity> activityRule =
+            new ActivityTestRule<>(MapsActivity.class, false);
 
-    @Override
+    /*@Override
     public void setUp() throws Exception {
         super.setUp();
-    }
+    }*/
 
     @Test
     public void testDrawerOpens() {
@@ -35,7 +44,8 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         matches.add(DummyDataTest.onePlayerMatch());
         dbRefWrapTest.addMatches(matches);
 
-        getActivity();
+        //getActivity();
+        //activityRule.getActivity();
 
         onView(withId(R.id.drawer_layout)).check(matches(isClosed()));
         onView(withId(R.id.maps_menu_button)).perform(click());
@@ -45,7 +55,8 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testMockLocation() {
-        MapsActivity activity = (MapsActivity) getActivity();
+        //MapsActivity activity = (MapsActivity) getActivity();
+        MapsActivity activity = activityRule.getActivity();
         Location location = new Location("flp");
         location.setLatitude(46.52);
         location.setLongitude(6.56);

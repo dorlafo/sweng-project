@@ -1,6 +1,12 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.content.Intent;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,16 +28,21 @@ import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContain
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsPlayer;
 import static org.hamcrest.core.IsAnything.anything;
 
+@RunWith(AndroidJUnit4.class)
 public final class MainActivityTest extends InjectedBaseActivityTest {
 
-    public MainActivityTest() {
+    /*public MainActivityTest() {
         super(MainActivity.class);
-    }
+    }*/
 
-    @Override
+    @Rule
+    public ActivityTestRule<MainActivity> activityRule =
+            new ActivityTestRule<>(MainActivity.class, false, false);
+
+    /*@Override
     public void setUp() throws Exception {
         super.setUp();
-    }
+    }*/
 
     @Test
     public void testSwitchToWaitingPlayersActivityWhenClickOnAMatch() {
@@ -46,9 +57,16 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapTest, "bob", 1);
         assertMatchContainsPlayer(dbRefWrapTest, "bob", new Player.PlayerID("696969"));
 
-        getActivity();
+        //getActivity();
+        //activityRule.getActivity();
+        activityRule.launchActivity(new Intent());
 
+        onData(anything()).inAdapterView(withId(R.id.list_my_matches)).atPosition(0).perform(click());
+        onView(withText(R.string.dialog_have_cards)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withText(R.string.wait_button_text_ready)).check(matches(isDisplayed()));
 
+        /*
         try {
             onData(anything()).inAdapterView(withId(R.id.list_my_matches)).atPosition(0).perform(click());
             onView(withText(R.string.dialog_have_cards)).perform(click());
@@ -57,7 +75,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         } catch (Exception e){
             e.printStackTrace();
             fail();
-        }
+        }*/
     }
 
 /* Need support of queries orderByChild and equalTo in mockito

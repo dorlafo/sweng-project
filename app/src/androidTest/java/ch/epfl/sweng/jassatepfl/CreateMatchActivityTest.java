@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.espresso.contrib.PickerActions;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import org.hamcrest.Matchers;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -57,22 +62,29 @@ import static org.hamcrest.Matchers.is;
  *
  * @author Alexis Montavon
  */
+@RunWith(AndroidJUnit4.class)
 public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
+
+    @Rule public ActivityTestRule<CreateMatchActivity> activityRule =
+            new ActivityTestRule<>(CreateMatchActivity.class, false);
 
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
 
-    public CreateMatchActivityTest() {
+    /*public CreateMatchActivityTest() {
         super(CreateMatchActivity.class);
     }
+    */
 
-    @Override
+    @Before
     public void setUp() throws Exception {
         super.setUp();
         Set<Player> playerSet = new HashSet<>();
         playerSet.add(amaury);
         playerSet.add(jimmy);
         dbRefWrapTest.addPlayers(playerSet);
-        getActivity();
+        //getActivity();
+        //activityRule.getActivity();
+        //activityRule.launchActivity(new Intent());
     }
 
     @Test

@@ -1,6 +1,11 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 
@@ -28,17 +33,22 @@ import static org.hamcrest.Matchers.is;
  *
  * Test class for RulesActivity
  */
+@RunWith(AndroidJUnit4.class)
 public class RulesActivityTest extends InjectedBaseActivityTest {
 
-    public RulesActivityTest() {
+    /*public RulesActivityTest() {
         super(RulesActivity.class);
-    }
+    }*/
+    @Rule
+    public ActivityTestRule<RulesActivity> activityRule =
+            new ActivityTestRule<>(RulesActivity.class, false);
 
-    @Override
+    /*@Override
     public void setUp() throws Exception {
         super.setUp();
-        getActivity();
-    }
+        //getActivity();
+        //activityRule.getActivity();
+    }*/
 
     @Test
     public void testDisplay() {
