@@ -55,10 +55,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     private final Match ownedMatch = DummyDataTest.ownedMatch();
 
-    /*public GameActivityTest() {
-        super(GameActivity.class);
-    }*/
-
     @Rule
     public ActivityTestRule<GameActivity> activityRule =
             new ActivityTestRule<>(GameActivity.class, false, false);
@@ -66,8 +62,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testElementsAreDisplayedForOwner() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.score_update_cancel)).check(matches(isDisplayed()));
         int pointsGoal = ownedMatch.getGameVariant().getPointGoal();
         String playingTo = String.format(getInstrumentation().getTargetContext().getResources()
@@ -81,7 +75,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         Intent intent = new Intent();
         intent.putExtra("match_Id", fullMatchWithBob().getMatchID());
         intent.putExtra("mode", "online");
-        //setActivityIntent(intent);
 
         Set<Match> matches = new HashSet<>();
         matches.add(fullMatchWithBob());
@@ -90,8 +83,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         stats.add(new MatchStats(fullMatchWithBob()));
         dbRefWrapTest.addStats(stats);
         dbRefWrapTest.addPlayers(DummyDataTest.players());
-        //getActivity();
-        //activityRule.getActivity();
+
         activityRule.launchActivity(intent);
         onView(withId(R.id.score_update_cancel)).check(matches(not(isDisplayed())));
         onView(withId(R.id.score_update_1)).check(matches(not(isDisplayed())));
@@ -101,8 +93,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testCancelDisplaysToastWhenNoCancelAvailable() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.score_update_cancel)).perform(click());
         onView(withText(R.string.toast_cannot_cancel)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
@@ -112,8 +102,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testPlayersNamesAreDisplayed() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.team_members_1))
                 .check(matches(withText(bricoloBob.getFirstName() + ", " + jimmy.getFirstName())));
         onView(withId(R.id.team_members_2))
@@ -123,8 +111,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testPlayersNamesAreNotDisplayedInOfflineMode() {
         offlineMatchSetup();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.team_members_1)).check(matches(not(isDisplayed())));
         onView(withId(R.id.team_members_2)).check(matches(not(isDisplayed())));
     }
@@ -132,8 +118,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testUpdateScore() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         incrementScore(0, "2", false);
         checkScoreDisplay("2", "155");
         incrementScore(1, "5", false);
@@ -143,8 +127,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testMatchButton() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.score_update_1)).perform(click());
         onView(withId(R.id.score_picker_match)).perform(click());
         checkScoreDisplay("257", "0");
@@ -156,8 +138,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testCancelUpdateDoesNotUpdateScore() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         incrementScore(0, "50", false);
         checkScoreDisplay("50", "107");
         onView(withId(R.id.score_update_1)).perform(click());
@@ -171,8 +151,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testCancelLastRoundResetsScore() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         incrementScore(0, "60", false);
         checkScoreDisplay("60", "97");
         incrementScore(1, "33", false);
@@ -186,8 +164,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testDisplayEndOfMatchMessage() {
         offlineMatchSetup();
-        //getActivity();
-        //activityRule.getActivity();
         for (int i = 0; i < 4; ++i) {
             onView(withId(R.id.score_update_1)).perform(click());
             onView(withId(R.id.score_picker_match)).perform(click());
@@ -201,8 +177,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testAddingMeldUpdatesScore() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         addMeld(0, MARRIAGE);
         checkScoreDisplay("20", "0");
         addMeld(1, FOUR_JACKS);
@@ -212,8 +186,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testCancelLastMeld() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         incrementScore(1, "100", false);
         checkScoreDisplay("57", "100");
         addMeld(0, FOUR_JACKS);
@@ -225,8 +197,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testCancelSequenceIsCorrect() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         addMeld(0, FOUR_NINE);
         incrementScore(0, "100", false);
         addMeld(1, FIFTY);
@@ -251,8 +221,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testCorrectWinnerIsDisplayedWhenBothTeamsHaveReachedGoal() {
         offlineMatchSetup();
-        //getActivity();
-        //activityRule.getActivity();
         for (int i = 0; i < 3; ++i) {
             onView(withId(R.id.score_update_1)).perform(click());
             onView(withId(R.id.score_picker_match)).perform(click());
@@ -270,8 +238,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testHistoryDisplay() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.score_display_1)).perform(click());
         onView(withId(R.id.score_table_layout)).check(matches(isDisplayed()));
     }
@@ -279,8 +245,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testHistoryIsCorrect() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         incrementScore(1, "50", false);
         incrementScore(0, "7", false);
         addMeld(1, THREE_CARDS);
@@ -293,16 +257,12 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testSetGoalIsDisabledInOnlineMode() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.game_playing_to)).check(matches(not(isClickable())));
     }
 
     @Test
     public void testSetGoalSetsGoal() {
         offlineMatchSetup();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.game_playing_to)).check(matches(isClickable()));
         incrementScore(-1, "700", false);
         String playingTo = String.format(getInstrumentation().getTargetContext().getResources()
@@ -313,8 +273,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testCancelSetGoalDoesNotUpdateGoal() {
         offlineMatchSetup();
-        //getActivity();
-        //activityRule.getActivity();
         String playingTo = String.format(getInstrumentation().getTargetContext().getResources()
                 .getString(R.string.game_text_point_goal), Integer.toString(1000));
         onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
@@ -326,8 +284,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testDoublePoints() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         incrementScore(0, "100", true);
         checkScoreDisplay("200", "114");
         incrementScore(1, "50", true);
@@ -337,8 +293,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testNumpadCorrect() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.score_update_1)).perform(click());
         onView(withId(R.id.numpad_1)).perform(click());
         onView(withId(R.id.numpad_3)).perform(click());
@@ -352,8 +306,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testToastIsDisplayedForInvalidPoints() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         incrementScore(0, "500", false);
         String pointToast = getInstrumentation().getTargetContext().getResources()
                 .getString(R.string.toast_invalid_score);
@@ -365,8 +317,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testSplitGoalsAreHiddenInOnlineMode() {
         ownedMatchSetUp();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.split_team_goals)).check(matches(not(isDisplayed())));
         onView(withId(R.id.team_goal_1)).check(matches(not(isDisplayed())));
         onView(withId(R.id.team_goal_2)).check(matches(not(isDisplayed())));
@@ -375,8 +325,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testSplitGoalsDisplaysBothGoals() {
         offlineMatchSetup();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.split_team_goals)).perform(click());
         onView(withId(R.id.team_goal_1)).check(matches(isDisplayed()));
         onView(withId(R.id.team_goal_2)).check(matches(isDisplayed()));
@@ -386,8 +334,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testCanReturnToNormalModeFromSplitMode() {
         offlineMatchSetup();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.split_team_goals)).perform(click());
         onView(withId(R.id.game_playing_to)).check(matches(not(isDisplayed())));
         onView(withId(R.id.split_team_goals)).perform(click());
@@ -397,8 +343,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testSplitGoalsCanUpdateBothTeamsGoals() {
         offlineMatchSetup();
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.split_team_goals)).perform(click());
         incrementScore(2, "456", false);
         onView(withId(R.id.team_goal_1)).check(matches(withText("456")));
@@ -479,7 +423,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         Intent intent = new Intent();
         intent.putExtra("match_Id", ownedMatch.getMatchID());
         intent.putExtra("mode", "online");
-        //setActivityIntent(intent);
 
         Set<Match> matches = new HashSet<>();
         matches.add(ownedMatch);
@@ -496,7 +439,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         Intent intent = new Intent();
         intent.putExtra("match_Id", ownedMatch.getMatchID());
         intent.putExtra("mode", "offline");
-        //setActivityIntent(intent);
         activityRule.launchActivity(intent);
     }
 

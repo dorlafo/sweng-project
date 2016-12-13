@@ -31,18 +31,9 @@ import static org.hamcrest.core.IsAnything.anything;
 @RunWith(AndroidJUnit4.class)
 public final class MainActivityTest extends InjectedBaseActivityTest {
 
-    /*public MainActivityTest() {
-        super(MainActivity.class);
-    }*/
-
     @Rule
     public ActivityTestRule<MainActivity> activityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
-
-    /*@Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }*/
 
     @Test
     public void testSwitchToWaitingPlayersActivityWhenClickOnAMatch() {
@@ -57,25 +48,11 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         assertMatchContainsNPlayers(dbRefWrapTest, "bob", 1);
         assertMatchContainsPlayer(dbRefWrapTest, "bob", new Player.PlayerID("696969"));
 
-        //getActivity();
-        //activityRule.getActivity();
         activityRule.launchActivity(new Intent());
 
         onData(anything()).inAdapterView(withId(R.id.list_my_matches)).atPosition(0).perform(click());
         onView(withText(R.string.dialog_have_cards)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        onView(withText(R.string.wait_button_text_ready)).check(matches(isDisplayed()));
-
-        /*
-        try {
-            onData(anything()).inAdapterView(withId(R.id.list_my_matches)).atPosition(0).perform(click());
-            onView(withText(R.string.dialog_have_cards)).perform(click());
-            onView(withId(android.R.id.button1)).perform(click());
-            onView(withText(R.string.wait_button_text_ready)).check(matches(isDisplayed()));
-        } catch (Exception e){
-            e.printStackTrace();
-            fail();
-        }*/
     }
 
 /* Need support of queries orderByChild and equalTo in mockito

@@ -8,7 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.jassatepfl.GameActivity;
 import ch.epfl.sweng.jassatepfl.MainActivity;
 import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.InjectedBaseActivityTest;
@@ -26,28 +25,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class ErrorHandlerUtilsTest extends InjectedBaseActivityTest {
 
-    /*public ErrorHandlerUtilsTest() {
-        super(MainActivity.class);
-    }*/
     @Rule
     public ActivityTestRule<MainActivity> activityRule =
             new ActivityTestRule<>(MainActivity.class, false);
 
-    /*@Override
-    public void setUp() throws Exception {
-        super.setUp();
-        //getActivity();
-        //activityRule.getActivity();
-    }*/
-
     @Test
     public void testErrorHandlerUtilsPopUp() {
-        /*getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                AlertDialog dialog = ErrorHandlerUtils.sendErrorMessage(getActivity(), R.string.error, R.string.error_cannot_join);
-            }
-        });*/
-
         activityRule.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 AlertDialog dialog = ErrorHandlerUtils.sendErrorMessage(activityRule.getActivity(), R.string.error, R.string.error_cannot_join);

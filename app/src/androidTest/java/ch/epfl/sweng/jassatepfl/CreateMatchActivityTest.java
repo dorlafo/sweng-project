@@ -70,21 +70,13 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
 
-    /*public CreateMatchActivityTest() {
-        super(CreateMatchActivity.class);
-    }
-    */
-
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
         Set<Player> playerSet = new HashSet<>();
         playerSet.add(amaury);
         playerSet.add(jimmy);
         dbRefWrapTest.addPlayers(playerSet);
-        //getActivity();
-        //activityRule.getActivity();
-        //activityRule.launchActivity(new Intent());
     }
 
     @Test

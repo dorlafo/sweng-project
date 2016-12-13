@@ -24,18 +24,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public final class MapsActivityTest extends InjectedBaseActivityTest {
 
-    /*public MapsActivityTest() {
-        super(MapsActivity.class);
-    }
-    */
     @Rule
     public ActivityTestRule<MapsActivity> activityRule =
             new ActivityTestRule<>(MapsActivity.class, false);
-
-    /*@Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }*/
 
     @Test
     public void testDrawerOpens() {
@@ -43,9 +34,6 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
         matches.add(DummyDataTest.twoPlayersMatch());
         matches.add(DummyDataTest.onePlayerMatch());
         dbRefWrapTest.addMatches(matches);
-
-        //getActivity();
-        //activityRule.getActivity();
 
         onView(withId(R.id.drawer_layout)).check(matches(isClosed()));
         onView(withId(R.id.maps_menu_button)).perform(click());
@@ -55,7 +43,6 @@ public final class MapsActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testMockLocation() {
-        //MapsActivity activity = (MapsActivity) getActivity();
         MapsActivity activity = activityRule.getActivity();
         Location location = new Location("flp");
         location.setLatitude(46.52);

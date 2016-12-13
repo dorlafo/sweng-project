@@ -20,34 +20,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public final class LoginActivityTest extends InjectedBaseActivityTest {
 
-    /*public LoginActivityTest() {
-        super(LoginActivity.class);
-    }*/
-
     @Rule
     public ActivityTestRule<LoginActivity> activityRule =
             new ActivityTestRule<>(LoginActivity.class, false);
 
-    /*@Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }*/
-
     @Test
     public void testShowLoginButtonAnd() {
-        //getActivity();
-        //activityRule.getActivity();
         onView(withId(R.id.login_button)).check(matches(isDisplayed()));
         onView(withId(R.id.login_text_view)).check(matches(isDisplayed()));
-        /*
-        try {
-            onView(withId(R.id.login_button)).check(matches(isDisplayed()));
-            onView(withId(R.id.login_text_view)).check(matches(isDisplayed()));
-            assertTrue(true);
-        } catch (Exception e) {
-            fail();
-        }
-*/
     }
 
     /*@Test

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,15 +33,12 @@ import static org.hamcrest.core.IsAnything.anything;
 @RunWith(AndroidJUnit4.class)
 public class StatsActivityTest extends InjectedBaseActivityTest {
 
-    /*public StatsActivityTest() {
-        super(StatsActivity.class);
-    }*/
     @Rule
     public ActivityTestRule<StatsActivity> activityRule =
             new ActivityTestRule<>(StatsActivity.class, false, false);
 
-    @Override
-    public void setUp() throws Exception {
+    @Before
+    public void setUp() {
         super.setUp();
         dbRefWrapTest.reset();
     }
@@ -50,20 +48,11 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
         Set<Player> emptyPlayerSet = new HashSet<>();
         dbRefWrapTest.addPlayers(emptyPlayerSet);
 
-        //getActivity();
-        //activityRule.getActivity();
         activityRule.launchActivity(new Intent());
 
         onView(withText("Leaderboard")).perform(click());
 
         onView(withText(R.string.loading_leaderboard)).check(matches(isDisplayed()));
-        /*
-        try {
-            onView(withText(R.string.loading_leaderboard)).check(matches(isDisplayed()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }*/
     }
 
     @Test
@@ -74,8 +63,6 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
         playerSet.add(DummyDataTest.alexis);
         dbRefWrapTest.addPlayers(playerSet);
 
-        //getActivity();
-        //activityRule.getActivity();
         activityRule.launchActivity(new Intent());
         onView(withText("Leaderboard")).perform(click());
 
@@ -85,36 +72,13 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
                 .atPosition(1).check(matches(hasDescendant(withText("Alexis Montavon"))));
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list))
                 .atPosition(2).check(matches(hasDescendant(withText("Amaury Combes"))));
-        /*
-        try {
-            onData(anything()).inAdapterView(withId(R.id.leaderboard_list))
-                    .atPosition(0).check(matches(hasDescendant(withText("Bob LeBricoleur"))));
-            onData(anything()).inAdapterView(withId(R.id.leaderboard_list))
-                    .atPosition(1).check(matches(hasDescendant(withText("Alexis Montavon"))));
-            onData(anything()).inAdapterView(withId(R.id.leaderboard_list))
-                    .atPosition(2).check(matches(hasDescendant(withText("Amaury Combes"))));
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }*/
     }
 
     @Test
     public void testMoveBetweenFragments() {
-        //getActivity();
-        //activityRule.getActivity();
         activityRule.launchActivity(new Intent());
         onView(withText("Leaderboard")).perform(click());
         onView(withText("Evolution")).perform(click());
         onView(withText("Counters")).perform(click());
-        /*
-        try {
-            onView(withText("Leaderboard")).perform(click());
-            onView(withText("Evolution")).perform(click());
-            onView(withText("Counters")).perform(click());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }*/
     }
 }

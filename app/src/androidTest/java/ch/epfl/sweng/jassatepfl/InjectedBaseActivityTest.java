@@ -1,13 +1,8 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.support.test.rule.ActivityTestRule;
-import android.test.ActivityInstrumentationTestCase2;
-
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 
 import javax.inject.Inject;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.DaggerFakeGraphTest;
@@ -28,8 +23,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
  * First name : Bob
  * Quote : 1000
  */
-@SuppressWarnings("deprecation")
-public class InjectedBaseActivityTest /*extends ActivityInstrumentationTestCase2*/ {
+public class InjectedBaseActivityTest {
 
     @Inject
     protected DBReferenceWrapper dbReferenceWrapper;
@@ -39,25 +33,12 @@ public class InjectedBaseActivityTest /*extends ActivityInstrumentationTestCase2
 
     protected DBRefWrapTest dbRefWrapTest;
 
-    /*public InjectedBaseActivityTest(Class activityClass) {
-        super(activityClass);
-    }*/
-
-
     @Before
-    public void setUp() throws Exception {
-        //super.setUp();
+    public void setUp() {
         App app = (App) getInstrumentation().getTargetContext().getApplicationContext();
         FakeGraphTest component = DaggerFakeGraphTest.builder().fakeModulesTest(new FakeModulesTest()).build();
         app.setGraph(component);
         component.inject(this);
-        //App.getInstance().graph().inject(this);
         dbRefWrapTest = (DBRefWrapTest) dbReferenceWrapper;
     }
-
-    @After
-    public void tearDown() throws Exception {
-        //super.tearDown();
-    }
-
 }

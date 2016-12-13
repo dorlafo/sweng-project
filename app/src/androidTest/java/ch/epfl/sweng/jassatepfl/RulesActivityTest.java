@@ -36,19 +36,9 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class RulesActivityTest extends InjectedBaseActivityTest {
 
-    /*public RulesActivityTest() {
-        super(RulesActivity.class);
-    }*/
     @Rule
     public ActivityTestRule<RulesActivity> activityRule =
             new ActivityTestRule<>(RulesActivity.class, false);
-
-    /*@Override
-    public void setUp() throws Exception {
-        super.setUp();
-        //getActivity();
-        //activityRule.getActivity();
-    }*/
 
     @Test
     public void testDisplay() {
