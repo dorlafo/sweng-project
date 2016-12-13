@@ -111,31 +111,16 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
     }
 
     @Test
-    public void testYesCardsbutton(){
+    public void testYesCardsButton(){
         dbRefWrapTest.reset();
         fullMatchSetUp();
         getActivity();
-        //onView(withText(R.string.dialog_have_cards)).perform(click());
         onView(withText("Yes")).perform(click());
-        try {
-            Thread.sleep(3000);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         onView(withId(R.id.cards_yes)).check(matches(isDisplayed()));
-        /*
-        onView(withId(R.id.cards_no)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.cards_yes)).perform(click());
-        onView(withId(R.id.cards_no)).check(matches(isDisplayed()));
-        onView(withId(R.id.cards_yes)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.cards_no)).perform(click());
-        onView(withId(R.id.cards_yes)).check(matches(isDisplayed()));
-        onView(withId(R.id.cards_no)).check(matches(not(isDisplayed())));
-        */
     }
 
     @Test
-    public void testNoCardsbutton(){
+    public void testNoCardsButton(){
         dbRefWrapTest.reset();
         onePlayerMatchSetUp();
         getActivity();
@@ -143,15 +128,6 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         onView(withId(android.R.id.button2)).perform(click());
         onView(withId(R.id.cards_no)).check(matches(isDisplayed()));
         onView(withId(R.id.cards_yes)).check(matches(not(isDisplayed())));
-        /*
-        onView(withId(R.id.cards_no)).perform(click());
-        onView(withId(R.id.cards_yes)).check(matches(isDisplayed()));
-        onView(withId(R.id.cards_no)).check(matches(not(isDisplayed())));
-
-        onView(withId(R.id.cards_yes)).perform(click());
-        onView(withId(R.id.cards_no)).check(matches(isDisplayed()));
-        onView(withId(R.id.cards_yes)).check(doesNotExist());
-        */
     }
 
 

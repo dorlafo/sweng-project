@@ -1,6 +1,8 @@
 package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.GPSPoint;
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -20,6 +22,8 @@ public class MatchLeafTest extends LeafTest<Match> {
     private LeafFieldTest<Integer> maxPlayerNumberLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MAX_NB_PLAYER, this);
     private LeafFieldTest<Long> expirationTimeLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_EXPIRATION_TIME, this);
     private LeafFieldTest<String> matchIDLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MATCH_ID, this);
+    private LeafFieldTest<Map<String, Boolean>> hasCardsLeaf =  new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_HAS_CARDS, this);
+    private LeafFieldTest<Map<String, List<String>>> teamsLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_TEAMS, this);
 
     /**
      * Constructor of the LeafTest class
@@ -51,6 +55,10 @@ public class MatchLeafTest extends LeafTest<Match> {
                 return expirationTimeLeaf;
             case DatabaseUtils.DATABASE_MATCHES_MATCH_ID:
                 return matchIDLeaf;
+            case DatabaseUtils.DATABASE_MATCHES_HAS_CARDS:
+                return hasCardsLeaf;
+            case DatabaseUtils.DATABASE_MATCHES_TEAMS:
+                return teamsLeaf;
             default:
                 throw new IllegalArgumentException("Match class does not have a field named : " + id);
         }
@@ -73,6 +81,8 @@ public class MatchLeafTest extends LeafTest<Match> {
         maxPlayerNumberLeaf.setData(data.getMaxPlayerNumber());
         expirationTimeLeaf.setData(data.getTime());
         matchIDLeaf.setData(data.getMatchID());
+        teamsLeaf.setData(data.getTeams());
+        hasCardsLeaf.setData(data.getHasCards());
     }
 
     @Override

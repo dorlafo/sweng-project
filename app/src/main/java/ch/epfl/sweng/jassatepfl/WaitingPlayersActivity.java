@@ -421,6 +421,8 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                                         matchHasCards = true;
                                         match.setPlayerCards(playerID.toString(), true);
                                         dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+                                        matchHasCards = match.hasCards();
+                                        updateViewWhoHasCards(cardsNo, cardsYes);
                                     }
                                 })
                                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -428,13 +430,12 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                                         playerHasCards = false;
                                         match.setPlayerCards(playerID.toString(), false);
                                         dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+                                        matchHasCards = match.hasCards();
+                                        updateViewWhoHasCards(cardsNo, cardsYes);
                                     }
                                 })
                                 .show();
                     }
-                    
-                    matchHasCards = match.hasCards();
-                    updateViewWhoHasCards(cardsNo, cardsYes);
                     modifyListAdapter();
                 }
 
@@ -514,7 +515,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     public void changeCardsStatus(View view) {
-        final Player.PlayerID playerID = new Player.PlayerID(fAuth.getCurrentUser().getDisplayName());
+        final Player.PlayerID playerID = new Player.PlayerID(getUserSciper());
         if (playerHasCards){
             playerHasCards = false;
             match.setPlayerCards(playerID.toString(), false);

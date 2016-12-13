@@ -34,6 +34,8 @@ public class DatabaseUtils {
     public static final String DATABASE_MATCHES_MAX_NB_PLAYER = "maxPlayerNumber";
     public static final String DATABASE_MATCHES_EXPIRATION_TIME = "expirationTime";
     public static final String DATABASE_MATCHES_MATCH_ID = "matchID";
+    public static final String DATABASE_MATCHES_HAS_CARDS = "hasCards";
+    public static final String DATABASE_MATCHES_TEAMS = "teams";
 
     public static final String DATABASE_PENDING_MATCHES = "pendingMatches";
 
