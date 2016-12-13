@@ -19,21 +19,10 @@
     <ImageView
         android:layout_height="wrap_content"
         android:layout_width="50dp"
-        android:id="@+id/cards_no"
-        android:onClick="changeCardsStatus"
-        android:adjustViewBounds="true"
-        android:src="@drawable/cards_no"
-        android:layout_alignEnd="@+id/main_linear_Layout"
-        android:layout_below="@+id/waiting_top_space"/>
-
-    <ImageView
-        android:layout_height="wrap_content"
-        android:layout_width="50dp"
         android:id="@+id/cards_yes"
         android:adjustViewBounds="true"
         android:onClick="changeCardsStatus"
         android:src="@drawable/cards_yes"
-        android:layout_alignEnd="@+id/main_linear_Layout"
         android:layout_below="@+id/waiting_top_space"
         android:visibility="gone"/>
 
@@ -132,5 +121,15 @@
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="20sp"/>
+
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:id="@+id/cards_no"
+        android:onClick="changeCardsStatus"
+        android:adjustViewBounds="true"
+        android:src="@drawable/cards_no"
+        android:layout_below="@+id/waiting_top_space"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
