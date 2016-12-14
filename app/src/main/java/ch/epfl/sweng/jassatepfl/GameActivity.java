@@ -554,7 +554,6 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
 
         updatePointsGoal(currentMatch.getGameVariant().getPointGoal());
 
-        //TODO: check if this code do what was intended
         if (isOwner) {
             firstTeamScoreDisplay.setEnabled(true);
             secondTeamScoreDisplay.setEnabled(true);

@@ -1,6 +1,11 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,21 +26,20 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+@RunWith(AndroidJUnit4.class)
 public final class DrawerTest extends InjectedBaseActivityTest {
 
-    public DrawerTest() {
-        super(MainActivity.class);
-    }
+    @Rule
+    public ActivityTestRule<MainActivity> activityRule =
+            new ActivityTestRule<>(MainActivity.class, false);
 
     @Override
-    public void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.twoPlayersMatch());
         matches.add(DummyDataTest.onePlayerMatch());
         dbRefWrapTest.addMatches(matches);
-
-        getActivity();
     }
 
     @Test

@@ -43,6 +43,19 @@ public final class MatchStringifier {
     }
 
     /**
+     * Set String depending if someone has cards or not
+     *
+     * @param match The Match
+     */
+    public String getStringHasCard(Match match) {
+        if(match.hasCards()) {
+            return "Yes";
+        } else {
+            return "No";
+        }
+    }
+
+    /**
      * Builds and returns a String representation of all useful
      * fields of a Match to be used in a googleMaps
      * {@link com.google.android.gms.maps.model.Marker Marker}.

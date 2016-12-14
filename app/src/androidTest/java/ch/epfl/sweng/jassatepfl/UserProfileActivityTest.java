@@ -1,15 +1,15 @@
 package ch.epfl.sweng.jassatepfl;
 
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.widget.TextView;
+import android.content.Intent;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
-
-import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -19,17 +19,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
- * UserProfileActivityTest show an example of mock usage
+ * UserProfileActivityTest
  */
+@RunWith(AndroidJUnit4.class)
 public final class UserProfileActivityTest extends InjectedBaseActivityTest {
 
-    public UserProfileActivityTest() {
-        super(UserProfileActivity.class);
-    }
+    @Rule
+    public ActivityTestRule<UserProfileActivity> activityRule =
+            new ActivityTestRule<>(UserProfileActivity.class, false, false);
 
-    @Override
-    public void setUp() throws Exception {
+    @Before
+    public void setUp() {
         super.setUp();
+        dbRefWrapTest.reset();
     }
 
     /**
@@ -37,9 +39,9 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
      */
     @Test
     public void testUserProfileActivityWithoutStats() {
-        dbRefWrapTest.reset();
         dbRefWrapTest.addPlayers(DummyDataTest.players());
-        getActivity();
+
+        activityRule.launchActivity(new Intent());
 
         onView(withId(R.id.profil_player)).check(matches(isDisplayed()));
         onView(withId(R.id.twQuote)).check(matches(isDisplayed()));
@@ -55,10 +57,10 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
      */
     @Test
     public void testUserProfileActivityWithStats() {
-        dbRefWrapTest.reset();
         dbRefWrapTest.addPlayers(DummyDataTest.players());
         dbRefWrapTest.addBobyFakeStats();
-        getActivity();
+
+        activityRule.launchActivity(new Intent());
 
         onView(withId(R.id.profil_player)).check(matches(isDisplayed()));
         onView(withId(R.id.twQuote)).check(matches(isDisplayed()));

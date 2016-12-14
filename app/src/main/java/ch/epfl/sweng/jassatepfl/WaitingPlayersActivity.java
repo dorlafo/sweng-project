@@ -44,7 +44,10 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     private ChildEventListener pendingMatchListener;
 
     private int posInList;
+    private boolean playerHasCards = false;
     private int teamSelected;
+
+    private Player.PlayerID playerID;
 
     private boolean creator = false;
 
@@ -53,6 +56,9 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     private Button gameBtn;
     private Button readyBtn;
     private Button inviteBtn;
+
+    private View cardsNo;
+    private View cardsYes;
 
     private static final int INVITE_CODE = 42;
 
@@ -71,7 +77,12 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             View contentView = inflater.inflate(R.layout.activity_waiting_players, drawer, false);
             drawer.addView(contentView, 0);
 
+            playerID = new Player.PlayerID(getUserSciper());
+
             matchId = getIntent().getStringExtra("match_Id");
+
+            cardsNo = findViewById(R.id.cards_no);
+            cardsYes = findViewById(R.id.cards_yes);
             match = Match.sentinelMatch();
             playersReady = new HashMap<>();
 
@@ -307,6 +318,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
      */
     public void leaveMatch(View view) {
         match.removePlayerById(new Player.PlayerID(getUserSciper()));
+        match.setPlayerCards(getUserSciper(), false);
 
         dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
                 .child(matchId).child(getUserSciper()).removeValue();
@@ -389,13 +401,37 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                             inviteBtn.setEnabled(true);
                         }
 
-                        if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
+                        if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect() && match.hasCards()) {
                             gameBtn.setEnabled(true);
                         } else {
                             gameBtn.setEnabled(false);
                         }
                     }
+                    playerHasCards = match.getPlayerCards(playerID.toString());
+                    if(!match.playerInCardList(playerID.toString())){
+                        new AlertDialog.Builder(WaitingPlayersActivity.this)
+                                .setTitle(R.string.dialog_cards)
+                                .setMessage(R.string.dialog_have_cards)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        playerHasCards = true;
+                                        match.setPlayerCards(playerID.toString(), true);
+                                        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+                                        updateViewWhoHasCards(cardsNo, cardsYes);
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        playerHasCards = false;
+                                        match.setPlayerCards(playerID.toString(), false);
+                                        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+                                        updateViewWhoHasCards(cardsNo, cardsYes);
+                                    }
+                                })
+                                .show();
+                    }
                     modifyListAdapter();
+                    updateViewWhoHasCards(cardsNo, cardsYes);
                 }
 
             }
@@ -461,13 +497,38 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
         adapter.refreshData(match.getPlayers(), match, playersReady);
     }
 
+    private void updateViewWhoHasCards(View cardsNo, View cardsYes) {
+        if (match.hasCards()){
+            cardsNo.setVisibility(View.GONE);
+            cardsYes.setVisibility(View.VISIBLE);
+        }
+        else {
+            cardsYes.setVisibility(View.GONE);
+            cardsNo.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void changeCardsStatus(View view) {
+        if (playerHasCards){
+            playerHasCards = false;
+            match.setPlayerCards(getUserSciper(), false);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+        }
+        else {
+            playerHasCards = true;
+            match.setPlayerCards(getUserSciper(), true);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+        }
+        updateViewWhoHasCards(cardsNo, cardsYes);
+    }
+
     private void updateButtonStatus(String key, boolean value) {
         playersReady.put(key, value);
         if (key.equals(getUserSciper())) {
             readyBtn.setEnabled(!value);
         }
         gameBtn.setEnabled(allPlayersReady(playersReady) &&
-                match.teamAssignmentIsCorrect());
+                match.teamAssignmentIsCorrect() && match.hasCards());
         modifyListAdapter();
     }
 
