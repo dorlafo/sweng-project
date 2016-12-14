@@ -156,6 +156,15 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (statsListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId)
+                    .removeEventListener(statsListener);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.score_display_1:
