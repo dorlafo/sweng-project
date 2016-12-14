@@ -17,6 +17,8 @@ public abstract class LeafTest<T> implements NodeTest {
 
     private NodeTest parent;
 
+    protected boolean deleted;
+
     /**
      * Constructor of the LeafTest class
      *
@@ -25,6 +27,7 @@ public abstract class LeafTest<T> implements NodeTest {
     public LeafTest(String id, NodeTest parent) {
         this.id = id;
         this.parent = parent;
+        this.deleted = false;
     }
 
     @Override
@@ -90,5 +93,9 @@ public abstract class LeafTest<T> implements NodeTest {
     @Override
     public void removeSelf() {
         parent.removeChild(this);
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 }

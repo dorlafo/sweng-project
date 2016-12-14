@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +70,9 @@ public class MatchLeafTest extends LeafTest<Match> {
      */
     @Override
     public void setData(Match data) {
+        if(deleted) {
+            throw new UnsupportedOperationException("Cannot set data on a deleted MatchLeafTest");
+        }
         this.data = data;
         playersLeaf.setData(data.getPlayers());
         locationLeaf.setData(data.getLocation());
