@@ -11,7 +11,7 @@ import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
  *
  * @author Amaury Combes
  */
-public class RootTest implements NodeTest {
+public class RootTest extends NodeTest {
 
     private final String id;
     private Set<NodeTest> children;

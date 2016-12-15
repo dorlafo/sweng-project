@@ -6,7 +6,7 @@ import java.util.Set;
 /**
  * @author Amaury Combes
  */
-public class LeafFieldTest<T> implements NodeTest {
+public class LeafFieldTest<T> extends NodeTest {
     private final String id;
     private T data;
     private NodeTest parent;

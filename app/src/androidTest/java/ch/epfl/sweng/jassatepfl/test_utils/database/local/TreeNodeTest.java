@@ -13,7 +13,7 @@ import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
  *
  * @author Amaury Combes
  */
-public class TreeNodeTest extends Observable implements NodeTest {
+public class TreeNodeTest extends NodeTest {
 
     private String id;
     private Set<NodeTest> children;

@@ -1,38 +1,25 @@
 package ch.epfl.sweng.jassatepfl;
 
 import android.content.Intent;
-import android.view.View;
 
-import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.w3c.dom.Node;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchLeafTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeafTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.NodeTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.TreeNodeTest;
-import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
-import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsNPlayers;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchesDBContainsNMatches;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertPendingMatchContainsNPlayers;
-import static org.hamcrest.Matchers.not;
 
 public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
 

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -102,6 +101,20 @@ public class DBRefWrapTest extends DBReferenceWrapper implements Observer {
      */
     @Override
     public void addListenerForSingleValueEvent(final ValueEventListener v) {
+        /*
+        if (currentNode instanceof MatchStatusLeafTest) {
+
+        } else if (currentNode instanceof MatchStatsLeafTest) {
+
+        } else if (currentNode instanceof PlayerLeafTest) {
+
+        } else if (currentNode instanceof MatchLeafTest) {
+
+        } else {
+            throw new IllegalArgumentException("addListenerForSingleValueEvent")
+        }
+        */
+
         final DataSnapshot obj = mock(DataSnapshot.class);
         Player p = null;
         Match m = null;

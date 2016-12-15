@@ -1,7 +1,6 @@
 package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
 
-import java.util.Observable;
 import java.util.Set;
 
 /**
@@ -11,7 +10,7 @@ import java.util.Set;
  *
  * @author Amaury Combes
  */
-public abstract class LeafTest<T> extends Observable implements NodeTest {
+public abstract class LeafTest<T> extends NodeTest {
 
     private String id;
     protected T data;
