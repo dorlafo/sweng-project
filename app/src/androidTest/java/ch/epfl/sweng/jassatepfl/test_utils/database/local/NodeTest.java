@@ -1,11 +1,10 @@
 package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
 
-import java.util.Observable;
 import java.util.Set;
 
-public abstract class NodeTest extends Observable {
-
+public abstract class NodeTest extends CustomObservable {
+    protected boolean isDeleted;
     /**
      * Getter for the id of the current node
      *
@@ -59,4 +58,8 @@ public abstract class NodeTest extends Observable {
     abstract public void dropChildren();
 
     abstract public void initialize();
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
 }

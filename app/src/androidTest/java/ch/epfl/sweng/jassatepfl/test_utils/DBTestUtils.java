@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchLeafTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeafTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.PendingMatchLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.NodeTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
@@ -51,7 +51,7 @@ public class DBTestUtils {
         List<Match> matches = new ArrayList<>();
         for(NodeTest matchLeaf: nodeMatches) {
             Match m = ((MatchLeafTest) matchLeaf).getData();
-            if(!((MatchLeafTest) matchLeaf).isDeleted()) {
+            if(!matchLeaf.isDeleted()) {
                 matches.add(m);
             }
         }
@@ -62,7 +62,7 @@ public class DBTestUtils {
     public static void assertPendingMatchContainsNPlayers(DBRefWrapTest dbRefWrapTest, final String matchID, final int nPlayers) {
         NodeTest db = dbRefWrapTest.getCurrentNode();
         NodeTest statusDB = db.getChild(DatabaseUtils.DATABASE_PENDING_MATCHES);
-        MatchStatusLeafTest status = (MatchStatusLeafTest) statusDB.getChild(matchID);
+        PendingMatchLeafTest status = (PendingMatchLeafTest) statusDB.getChild(matchID);
         Map<String, Boolean> matchStatus = status.getData();
 
         assertEquals(nPlayers, matchStatus.size());

@@ -17,8 +17,6 @@ public abstract class LeafTest<T> extends NodeTest {
 
     private NodeTest parent;
 
-    protected boolean deleted;
-
     /**
      * Constructor of the LeafTest class
      *
@@ -27,7 +25,7 @@ public abstract class LeafTest<T> extends NodeTest {
     public LeafTest(String id, NodeTest parent) {
         this.id = id;
         this.parent = parent;
-        this.deleted = false;
+        this.isDeleted = false;
     }
 
     @Override
@@ -77,7 +75,7 @@ public abstract class LeafTest<T> extends NodeTest {
 
     @Override
     public void dropChildren() {
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException("LeafTest does not support dropChildren()");
     }
 
     @Override
@@ -92,10 +90,10 @@ public abstract class LeafTest<T> extends NodeTest {
 
     @Override
     public void removeSelf() {
-        parent.removeChild(this);
+        this.isDeleted = true;
+        this.setDeleted();
+        this.notifyObservers(this);
+        //parent.removeChild(this);
     }
 
-    public boolean isDeleted() {
-        return deleted;
-    }
 }

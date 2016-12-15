@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeafTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.PendingMatchLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
@@ -92,8 +92,8 @@ public class DBRefWrapTestTest {
 
         waitCompletion();
 
-        assertEquals(false, ((MatchStatusLeafTest) refToMatchStatus.getCurrentNode()).getData().get(DummyDataTest.dorian.getID().toString()));
-        assertEquals(true, ((MatchStatusLeafTest) refToMatchStatus.getCurrentNode()).getData().get(DummyDataTest.vincenzo.getID().toString()));
+        assertEquals(false, ((PendingMatchLeafTest) refToMatchStatus.getCurrentNode()).getData().get(DummyDataTest.dorian.getID().toString()));
+        assertEquals(true, ((PendingMatchLeafTest) refToMatchStatus.getCurrentNode()).getData().get(DummyDataTest.vincenzo.getID().toString()));
     }
 
     @Test

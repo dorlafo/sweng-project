@@ -1,21 +1,21 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.widget.TextView;
 
 import org.junit.Test;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
-import ch.epfl.sweng.jassatepfl.model.Player;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.bricoloBob;
 
 /**
  * UserProfileActivityTest show an example of mock usage
  */
 public final class UserProfileActivityTest extends InjectedBaseActivityTest {
 
-    UserProfileActivity act;
 
     public UserProfileActivityTest() {
         super(UserProfileActivity.class);
@@ -24,6 +24,7 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        dbRefWrapTest.reset();
     }
 
     /**
@@ -31,41 +32,15 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
      */
     @Test
     public void testUserProfileActivity() {
-        //Fill the database as you want with addPlayers and addMatches
-        Set<Player> playerSet = new HashSet<Player>();
-        playerSet.add(new Player(new Player.PlayerID("123456"), "Not Pass", "You Shall", 123));
-        dbRefWrapTest.addPlayers(playerSet);
+        dbRefWrapTest.addPlayers(DummyDataTest.players());
 
-        //Start the activity
-        act = (UserProfileActivity) getActivity();
+        getActivity();
 
-        //Write your assertions
-        try {
-            Thread.sleep(3000);
-            Field playerIDField = act.getClass().getDeclaredField("mtwPlayerID");
-            Field playerLastNameField = act.getClass().getDeclaredField("mtwLastName");
-            Field playerFirstNameField = act.getClass().getDeclaredField("mtwFirstName");
-            Field playerQuoteField = act.getClass().getDeclaredField("mtwPlayerQuote");
-            playerIDField.setAccessible(true);
-            playerLastNameField.setAccessible(true);
-            playerFirstNameField.setAccessible(true);
-            playerQuoteField.setAccessible(true);
-            TextView idView = (TextView) playerIDField.get(act);
-            TextView lnView = (TextView) playerLastNameField.get(act);
-            TextView fnView = (TextView) playerFirstNameField.get(act);
-            TextView quoteView = (TextView) playerQuoteField.get(act);
+        onView(withId(R.id.twPlayerID)).check(matches(withText("Player id : " + bricoloBob.getID().toString())));
+        onView(withId(R.id.twLastName)).check(matches(withText("Last name : " + bricoloBob.getLastName())));
+        onView(withId(R.id.twFirstName)).check(matches(withText("First name : " + bricoloBob.getFirstName())));
+        onView(withId(R.id.twQuote)).check(matches(withText("Quote : " + bricoloBob.getQuote())));
 
-
-            assertEquals("Player id : 696969", idView.getText().toString());
-            assertEquals("Last name : LeBricoleur", lnView.getText().toString());
-            assertEquals("First name : Bob", fnView.getText().toString());
-            assertEquals("Quote : 1000", quoteView.getText().toString());
-        } catch (Exception e) {
-            fail();
-        }
-
-        //Reset the local database
-        dbRefWrapTest.reset();
     }
 
 }

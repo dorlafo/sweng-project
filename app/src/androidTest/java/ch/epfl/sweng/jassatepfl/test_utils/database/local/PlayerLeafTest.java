@@ -43,15 +43,16 @@ public class PlayerLeafTest extends LeafTest<Player> {
      */
     @Override
     public void setData(Player data) {
-        if(deleted) {
-            throw new UnsupportedOperationException("Cannot setData on a deleted PlayerLeafTest");
+        if(isDeleted) {
+            isDeleted = true;
+            //throw new UnsupportedOperationException("Cannot setData on a deleted PlayerLeafTest");
         }
         this.data = data;
         idLeaf.setData(data.getID());
         firstNameLeaf.setData(data.getFirstName());
         lastNameLeaf.setData(data.getLastName());
         quoteLeaf.setData(data.getQuote());
-        setChanged();
-        notifyObservers(this);
+        this.setChanged();
+        this.notifyObservers(this);
     }
 }

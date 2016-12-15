@@ -71,14 +71,14 @@ public class LeafFieldTest<T> extends NodeTest {
 
     @Override
     public void removeSelf() {
-        if(parent instanceof MatchStatusLeafTest) {
-            ((MatchStatusLeafTest) parent).removeOneStatus(id);
+        if(parent instanceof PendingMatchLeafTest) {
+            ((PendingMatchLeafTest) parent).removeOneStatus(id);
         }
         else {
             throw new UnsupportedOperationException("LeafFieldTest cannot remove itself");
         }
         /*if(data instanceof Boolean) {
-            ((MatchStatusLeafTest) parent).removeOneStatus(id);
+            ((PendingMatchLeafTest) parent).removeOneStatus(id);
         }*/
     }
 

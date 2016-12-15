@@ -25,8 +25,9 @@ public final class MatchStatsLeafTest extends LeafTest<MatchStats> {
 
     @Override
     public void setData(MatchStats data) {
-        if(deleted) {
-            throw new UnsupportedOperationException("Cannot setData on a deleted MatchStatsLeafTest");
+        if(isDeleted) {
+            //throw new UnsupportedOperationException("Cannot setData on a deleted MatchStatsLeafTest");
+            this.isDeleted = false;
         }
         this.data = data;
         matchIdLeaf.setData(data.getMatchID());
@@ -38,8 +39,8 @@ public final class MatchStatsLeafTest extends LeafTest<MatchStats> {
         goalLeaf.setData(data.goalHasBeenReached());
         winnerIndexLeaf.setData(data.getWinnerIndex());
         meldSetLeaf.setData(data.meldWasSetThisRound());
-        setChanged();
-        notifyObservers(this);
+        this.setChanged();
+        this.notifyObservers(this);
     }
 
     @Override

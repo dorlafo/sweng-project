@@ -55,7 +55,7 @@ public class RootTest extends NodeTest {
     public TreeNodeTest addChild(String id) {
         TreeNodeTest deletedNode = null;
         for(NodeTest n : children) {
-            if(n.getId().equals(id) && ((TreeNodeTest)n).deleted) {
+            if(n.getId().equals(id) && n.isDeleted) {
                 deletedNode = (TreeNodeTest) n;
             }
         }
@@ -74,6 +74,10 @@ public class RootTest extends NodeTest {
 
     @Override
     public void dropChildren() {
+        for(NodeTest n : children) {
+            n.dropChildren();
+            n.deleteAllObservers();
+        }
         children = new HashSet<>();
     }
 
@@ -93,11 +97,11 @@ public class RootTest extends NodeTest {
     @Override
     public void removeChild(NodeTest child) {
         for(NodeTest n : children) {
-            if(n.getId().equals(child.getId())) {
-                ((TreeNodeTest)n).deleted = true;
+            if(n.getId().equals(child.getId()) && !n.isDeleted) {
+                n.removeSelf();
+                this.setChanged();
+                this.notifyObservers(this);
             }
         }
-        //children.remove(child);
     }
-
 }
