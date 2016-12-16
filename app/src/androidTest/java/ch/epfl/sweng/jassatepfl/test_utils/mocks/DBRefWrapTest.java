@@ -48,20 +48,26 @@ import static org.mockito.Mockito.when;
 public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver {
 
     private NodeTest currentNode;
-    private int numValueEventListener = 0;
+    //private int numValueEventListener = 0;
     private int numChildEventListener = 0;
     private Map<NodeTest, ValueEventListener> listenerForSingleValue;
+    private Map<NodeTest, ValueEventListener> listenerForValue;
+    private Map<NodeTest, ValueEventListener> listenerForChild;
 
     public DBRefWrapTest(DatabaseReference dbRef) {
         super();
         currentNode = new RootTest("JassDB (Local mock database)");
         listenerForSingleValue = new HashMap<>();
+        listenerForValue = new HashMap<>();
+        listenerForChild = new HashMap<>();
     }
 
     public DBRefWrapTest(NodeTest nodeToPoint) {
         super();
         this.currentNode = nodeToPoint;
         this.listenerForSingleValue = new HashMap<>();
+        listenerForValue = new HashMap<>();
+        listenerForChild = new HashMap<>();
     }
 
     public NodeTest getCurrentNode() {
@@ -121,7 +127,14 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
      */
     @Override
     public ValueEventListener addValueEventListener(final ValueEventListener listener) {
-        ++numValueEventListener;
+        currentNode.addValueObserver(this);
+        listenerForValue.put(currentNode, listener);
+        Log.d("DBRefWrapTest", "addValueEventListener:adding new VEL to:"
+                + this + "::currentNode:" + currentNode.getId());
+        update(currentNode, currentNode, ObserverType.VALUE, ChangeType.CHANGED);
+        return listener;
+
+        /*++numValueEventListener;
 
         new Thread(new Runnable() {
 
@@ -173,7 +186,7 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
                         }
             }
         }).start();
-        return listener;
+        return listener;*/
     }
 
     /**
@@ -240,7 +253,9 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
 
     @Override
     public void removeEventListener(ValueEventListener listener) {
-        --numValueEventListener;
+        //--numValueEventListener;
+        listenerForValue.remove(listener);
+        currentNode.deleteValueObserver(this);
     }
 
     /**
@@ -377,13 +392,18 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
         Log.d("DBRefWrapTest", "in update from this:" + this.getCurrentNode().getId()
                 + "::CustomObservable:" + ((NodeTest)o).getId()
                 + "::arg:" + arg.getId() + "::oType:" + oType.name() + "::cType:" + cType.name());
+        final DataSnapshot obj = mock(DataSnapshot.class);
+        Player p = null;
+        Match m = null;
+        MatchStats stats = null;
+        Map<String, Boolean> status = null;
+        ValueEventListener v;
         switch(oType) {
             case FOR_SINGLE_VALUE :
                 currentNode.deleteSingleValueObserver(this);
 
-                final DataSnapshot obj = mock(DataSnapshot.class);
-                Player p = null;
-                Match m = null;
+                p = null;
+                m = null;
                 //Map<String, Boolean> status = null;
 
                 if (this.getCurrentNode() instanceof PlayerLeafTest) {
@@ -396,11 +416,30 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
 
                 when(obj.getValue(Player.class)).thenReturn(p);
                 when(obj.getValue(Match.class)).thenReturn(m);
-                ValueEventListener v = listenerForSingleValue.get(currentNode);
+                v = listenerForSingleValue.get(currentNode);
                 v.onDataChange(obj);
                 listenerForSingleValue.remove(currentNode);
             break;
             case VALUE :
+                p = null;
+                m = null;
+                stats = null;
+                if(cType != ChangeType.DELETED) {
+                    if (currentNode instanceof PlayerLeafTest) {
+                        p = ((PlayerLeafTest) currentNode).getData();
+                    } else if (currentNode instanceof MatchLeafTest) {
+                        m = ((MatchLeafTest) currentNode).getData();
+                    } else if (currentNode instanceof MatchStatsLeafTest) {
+                        stats = ((MatchStatsLeafTest) currentNode).getData();
+                    }
+                }
+
+                when(obj.getValue(Player.class)).thenReturn(p);
+                when(obj.getValue(Match.class)).thenReturn(m);
+                when(obj.getValue(MatchStats.class)).thenReturn(stats);
+
+                v = listenerForValue.get(currentNode);
+                v.onDataChange(obj);
             break;
             case CHILD :
             break;

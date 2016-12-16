@@ -146,12 +146,12 @@ public class CustomObservable {
             if (wasDeleted()) {
                 Log.d(TAG, "In notifyObservers something was deleted!");
                 clearDeleted();
-                localChangeType = ChangeType.ADDED;
+                localChangeType = ChangeType.DELETED;
             }
             if (wasAdded()) {
                 Log.d(TAG, "In notifyObservers something was added!");
                 clearAdded();
-                localChangeType = ChangeType.DELETED;
+                localChangeType = ChangeType.ADDED;
             }
 
             arrLocalChild = childObservers.toArray(new CustomObserver[childObservers.size()]);
