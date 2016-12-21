@@ -63,12 +63,12 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            Log.d(TAG, "showLogin:getCurrentUser:null");
+            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         } else {
-            Log.d(TAG, "showLogin:getCurrentUser:notNull");
+            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_waiting_players, drawer, false);
             drawer.addView(contentView, 0);
@@ -191,7 +191,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                     break;
             }
         }
-        Log.d(TAG, "onResume:finished");
     }
 
     @Override
@@ -294,7 +293,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 match = dataSnapshot.getValue(Match.class);
-                Log.d(TAG, "matchListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "matchListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
                 if (match != null) {
                     if (match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
                         Intent goToGameActivity = new Intent(WaitingPlayersActivity.this, GameActivity.class);
@@ -348,7 +347,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
         pendingMatchListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "pendingMatchListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "pendingMatchListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
                 String id = dataSnapshot.getKey();
                 if (id.equals(getUserSciper())) {
@@ -368,7 +367,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "pendingMatchListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "pendingMatchListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                 playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
                 String id = dataSnapshot.getKey();
                 if (id.equals(getUserSciper())) {
@@ -388,7 +387,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "pendingMatchListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "pendingMatchListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
                 playersReady.remove(dataSnapshot.getKey());
                 modifyListAdapter();
             }
@@ -396,7 +395,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 //TODO: check if this is indeed not used
-                Log.d(TAG, "pendingMatchListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
+                //Log.d(TAG, "pendingMatchListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
             }
 
             @Override

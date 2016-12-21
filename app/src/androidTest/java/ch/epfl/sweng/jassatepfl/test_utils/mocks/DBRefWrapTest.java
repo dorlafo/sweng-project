@@ -1,9 +1,5 @@
 package ch.epfl.sweng.jassatepfl.test_utils.mocks;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
-
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -48,11 +44,9 @@ import static org.mockito.Mockito.when;
 public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver {
 
     private NodeTest currentNode;
-    //private int numValueEventListener = 0;
-    private int numChildEventListener = 0;
     private Map<NodeTest, ValueEventListener> listenerForSingleValue;
     private Map<NodeTest, ValueEventListener> listenerForValue;
-    private Map<NodeTest, ValueEventListener> listenerForChild;
+    private Map<NodeTest, ChildEventListener> listenerForChild;
 
     public DBRefWrapTest(DatabaseReference dbRef) {
         super();
@@ -113,12 +107,12 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
     @Override
     public void addListenerForSingleValueEvent(ValueEventListener v) {
         if(v == null) {
-            Log.d("DBRefWrapTest", "v is null...");
+            //Log.d("DBRefWrapTest", "v is null...");
         }
         currentNode.addSingleValueObserver(this);
         listenerForSingleValue.put(currentNode, v);
-        Log.d("DBRefWrapTest", "addListenerForSingleValueEvent:adding new LFSV to:"
-                + this + "::currentNode:" + currentNode.getId());
+        /*Log.d("DBRefWrapTest", "addListenerForSingleValueEvent:adding new LFSV to:"
+                + this + "::currentNode:" + currentNode.getId());*/
         update(currentNode, currentNode, ObserverType.FOR_SINGLE_VALUE, ChangeType.CHANGED);
     }
 
@@ -129,64 +123,10 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
     public ValueEventListener addValueEventListener(final ValueEventListener listener) {
         currentNode.addValueObserver(this);
         listenerForValue.put(currentNode, listener);
-        Log.d("DBRefWrapTest", "addValueEventListener:adding new VEL to:"
-                + this + "::currentNode:" + currentNode.getId());
+        /*Log.d("DBRefWrapTest", "addValueEventListener:adding new VEL to:"
+                + this + "::currentNode:" + currentNode.getId());*/
         update(currentNode, currentNode, ObserverType.VALUE, ChangeType.CHANGED);
         return listener;
-
-        /*++numValueEventListener;
-
-        new Thread(new Runnable() {
-
-            public void run() {
-
-                        Player p = null;
-                        Match m = null;
-                        MatchStats stats = null;
-
-                        while (numValueEventListener > 0) {
-                            final DataSnapshot obj = mock(DataSnapshot.class);
-
-                            Map<String, Boolean> status = null;
-                            boolean callDataChange = false;
-
-                            if (currentNode instanceof PlayerLeafTest) {
-                                if (p == null || !p.equals(((PlayerLeafTest) currentNode).getData())) {
-                                    callDataChange = true;
-                                }
-                                p = ((PlayerLeafTest) currentNode).getData();
-                            } else if (currentNode instanceof MatchLeafTest) {
-                                if (m == null || !m.equals(((MatchLeafTest) currentNode).getData())) {
-                                    callDataChange = true;
-                                }
-                                m = ((MatchLeafTest) currentNode).getData();
-                            } else if (currentNode instanceof PendingMatchLeafTest) {
-                                status = new HashMap<>(((PendingMatchLeafTest) currentNode).getData());
-                            } else if (currentNode instanceof MatchStatsLeafTest) {
-                                if (stats == null || !stats.equals(((MatchStatsLeafTest) currentNode).getData())) {
-                                    callDataChange = true;
-                                }
-                                stats = ((MatchStatsLeafTest) currentNode).getData();
-                            }
-
-                            when(obj.getValue(Player.class)).thenReturn(p);
-                            when(obj.getValue(Match.class)).thenReturn(m);
-                            when(obj.getValue(MatchStats.class)).thenReturn(stats);
-
-                            if(callDataChange) {
-                                Handler uiHandler = new Handler(Looper.getMainLooper());
-                                Runnable toRun = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        listener.onDataChange((DataSnapshot) obj);
-                                    }
-                                };
-                                uiHandler.post(toRun);
-                            }
-                        }
-            }
-        }).start();
-        return listener;*/
     }
 
     /**
@@ -194,66 +134,22 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
      */
     @Override
     public ChildEventListener addChildEventListener(final ChildEventListener listener) {
-        /*
-        if(currentNode instanceof TreeNodeTest) {
-            ((TreeNodeTest) currentNode).addObserver(this);
-            Log.d("DBRefWrapTest", "currentNode:" + currentNode + ".addObserver:" + this);
-        } else if (currentNode instanceof LeafTest) {
-            ((LeafTest) currentNode).addObserver(this);
-            Log.d("DBRefWrapTest", "currentNode:" + currentNode + ".addObserver:" + this);
-        }
-        return listener;
-        */
-
-        ++numChildEventListener;
-
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-
-                Handler uiHandler = new Handler(Looper.getMainLooper());
-                Runnable toRun = new Runnable() {
-                    @Override
-                    public void run() {
-                        final DataSnapshot snap = mock(DataSnapshot.class);
-
-                        if(currentNode instanceof PendingMatchLeafTest) {
-                            Map<String, Boolean> statusMap = ((PendingMatchLeafTest) currentNode).getData();
-                            for(String key : statusMap.keySet()) {
-                                boolean value = statusMap.get(key);
-                                when(snap.getKey()).thenReturn(key);
-                                when(snap.getValue()).thenReturn(value);
-                                listener.onChildAdded(snap, currentNode.getId());
-                                listener.onChildChanged(snap, currentNode.getId());
-                                listener.onChildRemoved(snap);
-                            }
-                        } else if(currentNode.getId().equals(DatabaseUtils.DATABASE_MATCHES)) {
-                            Set<NodeTest> matches = currentNode.getChildren();
-                            for(NodeTest matchLeaf: matches) {
-                                Match m = ((MatchLeafTest) matchLeaf).getData();
-
-                                when(snap.getValue(Match.class)).thenReturn(m);
-                                listener.onChildAdded(snap, m.getMatchID());
-                            }
-                        }
-                    }
-                };
-                uiHandler.post(toRun);
-            }
-        }).start();
+        currentNode.addChildObserver(this);
+        listenerForChild.put(currentNode, listener);
+        /*Log.d("DBRefWrapTest", "addChildEventListener:adding new CEL to:"
+                + this + "::currentNode:" + currentNode.getId());*/
+        update(currentNode, currentNode, ObserverType.CHILD, ChangeType.ADDED);
         return listener;
     }
 
     @Override
     public void removeEventListener(ChildEventListener listener) {
-        --numChildEventListener;
+        listenerForChild.remove(listener);
+        currentNode.deleteChildObserver(this);
     }
 
     @Override
     public void removeEventListener(ValueEventListener listener) {
-        //--numValueEventListener;
         listenerForValue.remove(listener);
         currentNode.deleteValueObserver(this);
     }
@@ -389,15 +285,16 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
      */
     @Override
     public void update(CustomObservable o, NodeTest arg, ObserverType oType, ChangeType cType) {
-        Log.d("DBRefWrapTest", "in update from this:" + this.getCurrentNode().getId()
+        /*Log.d("DBRefWrapTest", "in update from this:" + this.getCurrentNode().getId()
                 + "::CustomObservable:" + ((NodeTest)o).getId()
-                + "::arg:" + arg.getId() + "::oType:" + oType.name() + "::cType:" + cType.name());
-        final DataSnapshot obj = mock(DataSnapshot.class);
+                + "::arg:" + arg.getId() + "::oType:" + oType.name() + "::cType:" + cType.name());*/
+        final DataSnapshot snapShot = mock(DataSnapshot.class);
         Player p = null;
         Match m = null;
         MatchStats stats = null;
         Map<String, Boolean> status = null;
         ValueEventListener v;
+        ChildEventListener c;
         switch(oType) {
             case FOR_SINGLE_VALUE :
                 currentNode.deleteSingleValueObserver(this);
@@ -414,12 +311,12 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
                     status = new HashMap<>(((PendingMatchLeafTest) this.getCurrentNode()).getData());
                 }*/
 
-                when(obj.getValue(Player.class)).thenReturn(p);
-                when(obj.getValue(Match.class)).thenReturn(m);
+                when(snapShot.getValue(Player.class)).thenReturn(p);
+                when(snapShot.getValue(Match.class)).thenReturn(m);
                 v = listenerForSingleValue.get(currentNode);
-                v.onDataChange(obj);
+                v.onDataChange(snapShot);
                 listenerForSingleValue.remove(currentNode);
-            break;
+                break;
             case VALUE :
                 p = null;
                 m = null;
@@ -434,17 +331,46 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
                     }
                 }
 
-                when(obj.getValue(Player.class)).thenReturn(p);
-                when(obj.getValue(Match.class)).thenReturn(m);
-                when(obj.getValue(MatchStats.class)).thenReturn(stats);
+                when(snapShot.getValue(Player.class)).thenReturn(p);
+                when(snapShot.getValue(Match.class)).thenReturn(m);
+                when(snapShot.getValue(MatchStats.class)).thenReturn(stats);
 
                 v = listenerForValue.get(currentNode);
-                v.onDataChange(obj);
-            break;
+                v.onDataChange(snapShot);
+                break;
             case CHILD :
-            break;
+                c = listenerForChild.get(currentNode);
+                switch(cType) {
+                    case ADDED:
+                        if(currentNode.getClass() == PendingMatchLeafTest.class) {
+                            Map<String, Boolean> statusMap = ((PendingMatchLeafTest) currentNode).getData();
+                            for(String key : statusMap.keySet()) {
+                                boolean value = statusMap.get(key);
+                                when(snapShot.getKey()).thenReturn(key);
+                                when(snapShot.getValue()).thenReturn(value);
+                                c.onChildAdded(snapShot, currentNode.getId());
+                                c.onChildChanged(snapShot, currentNode.getId());
+                                c.onChildRemoved(snapShot);
+                            }
+                        } else if (currentNode.getId().equals(DatabaseUtils.DATABASE_MATCHES)) {
+                            Set<NodeTest> matches = currentNode.getChildren();
+                            for(NodeTest matchLeaf: matches) {
+                                m = ((MatchLeafTest) matchLeaf).getData();
+                                when(snapShot.getValue(Match.class)).thenReturn(m);
+                                c.onChildAdded(snapShot, m.getMatchID());
+                            }
+                        }
+                        break;
+                    case DELETED:
+                        break;
+                    case CHANGED:
+                        break;
+                    default:
+                        break;
+                }
+                break;
             default:
-            break;
+             break;
         }
     }
 

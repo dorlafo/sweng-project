@@ -276,7 +276,7 @@ public class GameActivity extends BaseAppCompatActivity implements OnClickListen
                         finish();
                     }
                 })
-                .setCancelable(false)
+                //.setCancelable(false)
                 .show();
     }
 
