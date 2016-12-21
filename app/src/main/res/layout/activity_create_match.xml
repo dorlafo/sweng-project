@@ -175,7 +175,9 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_toStartOf="@+id/create_space_delimiter"
-            android:text="@string/create_button_text_add_player"/>
+            android:background="@android:color/transparent"
+            android:text="@string/create_button_text_add_player"
+            android:textColor="@android:color/black"/>
 
         <Space
             android:id="@+id/create_space_delimiter"
@@ -188,7 +190,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/create_space_delimiter"
-            android:text="@string/create_button_text_create"/>
+            android:background="@android:color/transparent"
+            android:text="@string/create_button_text_create"
+            android:textColor="#26A65B"
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 
