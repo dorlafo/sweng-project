@@ -39,7 +39,12 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
         } else {
             //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             //setContentView(R.layout.activity_user_profile);
-
+            Intent startIntent = getIntent();
+            if(startIntent.hasExtra("sciper")) {
+                sciper = startIntent.getStringExtra("sciper");
+            } else {
+                sciper = getUserSciper();
+            }
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_user_profile, drawer, false);
             drawer.addView(contentView, 0);
@@ -57,8 +62,6 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             mtwRecurrentPartner.setVisibility(View.INVISIBLE);
             mtwBestPartner.setVisibility(View.INVISIBLE);
             mtwVariant.setVisibility(View.INVISIBLE);
-
-            sciper = getUserSciper();
 
             //New SingleEventListener that will change the value of the textView according to the current
             //logged in user
@@ -100,8 +103,6 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                             mtwMatchWon.setText(String.format(getString(R.string.profile_label_matches_won), us.getWonMatches()));
                             getPartnersNames(us);
                             mtwVariant.setText(getResources().getQuantityString(R.plurals.profile_label_most_variants, us.sortedVariants().get(0).getValue(), us.sortedVariants().get(0).getKey(), us.sortedVariants().get(0).getValue()));
-                            /*mtwVariant.setText(String.format(getString(R.plurals.profile_label_most_variants),
-                                    us.sortedVariants().get(0).getKey(), us.sortedVariants().get(0).getValue()));*/
                             mtwMatchPlayed.setVisibility(View.VISIBLE);
                             mtwMatchWon.setVisibility(View.VISIBLE);
                             mtwRecurrentPartner.setVisibility(View.VISIBLE);
@@ -127,8 +128,6 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                         Player p = dataSnapshot.getValue(Player.class);
                         mostPlayedWith = p.getFirstName() + " " + p.getLastName();
                         mtwRecurrentPartner.setText(getResources().getQuantityString(R.plurals.profile_label_most_played_with, us.sortedPartners().get(0).getValue(), mostPlayedWith, us.sortedPartners().get(0).getValue()));
-                        /*mtwRecurrentPartner.setText(String.format(getString(R.string.profile_label_most_played_with),
-                                mostPlayedWith, us.sortedPartners().get(0).getValue()));*/
                     }
 
                     @Override
@@ -146,9 +145,6 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                         Player p = dataSnapshot.getValue(Player.class);
                         mostWonWith = p.getFirstName() + " " + p.getLastName();
                         mtwBestPartner.setText(getResources().getQuantityString(R.plurals.profile_label_most_won_with, us.sortedWonWith().get(0).getValue(), mostWonWith, us.sortedWonWith().get(0).getValue()));
-
-                        /*mtwBestPartner.setText(String.format(getString(R.string.profile_label_most_won_with),
-                        mostWonWith, us.sortedWonWith().get(0).getValue()));*/
                     }
 
                     @Override

@@ -5,10 +5,7 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
 
-/**
- * @author Amaury Combes
- */
-public class LeafFieldTest<T> implements NodeTest {
+public class LeafFieldTest<T> extends NodeTest {
     private final String id;
     private T data;
     private NodeTest parent;
@@ -29,6 +26,7 @@ public class LeafFieldTest<T> implements NodeTest {
 
     public void setData(T data) {
         this.data = data;
+        //TODO: voir si c'est utile...
         if(parent instanceof UserStatsLeafTest && data instanceof Rank) {
             ((UserStatsLeafTest) parent).getData().setRank((Rank) data);
         } else if(parent instanceof PlayerLeafTest && Integer.class.isInstance(data)) {
@@ -79,9 +77,10 @@ public class LeafFieldTest<T> implements NodeTest {
 
     @Override
     public void removeSelf() {
-        if(parent instanceof MatchStatusLeafTest) {
-            ((MatchStatusLeafTest) parent).removeOneStatus(id);
-        } else {
+        if(parent instanceof PendingMatchLeafTest) {
+            ((PendingMatchLeafTest) parent).removeOneStatus(id);
+        }
+        else {
             throw new UnsupportedOperationException("LeafFieldTest cannot remove itself");
         }
     }

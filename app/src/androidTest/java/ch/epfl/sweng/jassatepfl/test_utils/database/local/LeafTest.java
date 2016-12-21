@@ -8,16 +8,13 @@ import java.util.Set;
  * database.
  * Some operations are not supported
  *
- * @author Amaury Combes
  */
-public abstract class LeafTest<T> implements NodeTest {
+public abstract class LeafTest<T> extends NodeTest {
 
     private String id;
     protected T data;
 
     private NodeTest parent;
-
-    protected boolean deleted;
 
     /**
      * Constructor of the LeafTest class
@@ -27,7 +24,7 @@ public abstract class LeafTest<T> implements NodeTest {
     public LeafTest(String id, NodeTest parent) {
         this.id = id;
         this.parent = parent;
-        this.deleted = false;
+        this.isDeleted = false;
     }
 
     @Override
@@ -77,7 +74,7 @@ public abstract class LeafTest<T> implements NodeTest {
 
     @Override
     public void dropChildren() {
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
     }
 
     @Override
@@ -92,10 +89,9 @@ public abstract class LeafTest<T> implements NodeTest {
 
     @Override
     public void removeSelf() {
-        parent.removeChild(this);
-    }
-
-    public boolean isDeleted() {
-        return deleted;
+        this.isDeleted = true;
+        this.setDeleted();
+        this.notifyObservers(this);
+        //parent.removeChild(this);
     }
 }

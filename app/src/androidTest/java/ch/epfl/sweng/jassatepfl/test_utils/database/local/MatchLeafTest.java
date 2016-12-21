@@ -8,9 +8,6 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
-/**
- * @author Amaury Combes
- */
 public class MatchLeafTest extends LeafTest<Match> {
     private LeafFieldTest<List<Player>> playersLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PLAYERS, this);
     private LeafFieldTest<GPSPoint> locationLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_LOCATION, this);
@@ -19,7 +16,7 @@ public class MatchLeafTest extends LeafTest<Match> {
     private LeafFieldTest<Boolean> privateMatchLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_PRIVATE, this);
     private LeafFieldTest<Match.GameVariant> gameVariantLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_GAME_VARIANT, this);
     private LeafFieldTest<Integer> maxPlayerNumberLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MAX_NB_PLAYER, this);
-    private LeafFieldTest<Long> expirationTimeLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_TIME, this);
+    private LeafFieldTest<Long> timeLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_TIME, this);
     private LeafFieldTest<String> matchIDLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_MATCH_ID, this);
     private LeafFieldTest<Map<String, Boolean>> hasCardsLeaf =  new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_HAS_CARDS, this);
     private LeafFieldTest<Map<String, List<String>>> teamsLeaf = new LeafFieldTest<>(DatabaseUtils.DATABASE_MATCHES_TEAMS, this);
@@ -51,7 +48,7 @@ public class MatchLeafTest extends LeafTest<Match> {
             case DatabaseUtils.DATABASE_MATCHES_MAX_NB_PLAYER:
                 return maxPlayerNumberLeaf;
             case DatabaseUtils.DATABASE_MATCHES_TIME:
-                return expirationTimeLeaf;
+                return timeLeaf;
             case DatabaseUtils.DATABASE_MATCHES_MATCH_ID:
                 return matchIDLeaf;
             case DatabaseUtils.DATABASE_MATCHES_HAS_CARDS:
@@ -70,8 +67,9 @@ public class MatchLeafTest extends LeafTest<Match> {
      */
     @Override
     public void setData(Match data) {
-        if(deleted) {
-            throw new UnsupportedOperationException("Cannot set data on a deleted MatchLeafTest");
+        if(isDeleted) {
+            this.isDeleted = false;
+            //throw new UnsupportedOperationException("Cannot set data on a deleted MatchLeafTest");
         }
         this.data = data;
         playersLeaf.setData(data.getPlayers());
@@ -81,10 +79,12 @@ public class MatchLeafTest extends LeafTest<Match> {
         privateMatchLeaf.setData(data.isPrivateMatch());
         gameVariantLeaf.setData(data.getGameVariant());
         maxPlayerNumberLeaf.setData(data.getMaxPlayerNumber());
-        expirationTimeLeaf.setData(data.getTime());
+        timeLeaf.setData(data.getTime());
         matchIDLeaf.setData(data.getMatchID());
         teamsLeaf.setData(data.getTeams());
         hasCardsLeaf.setData(data.getHasCards());
+        this.setChanged();
+        this.notifyObservers(this);
     }
 
     @Override

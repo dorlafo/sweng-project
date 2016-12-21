@@ -1,8 +1,5 @@
 package ch.epfl.sweng.jassatepfl.test_utils.mocks;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,15 +19,17 @@ import ch.epfl.sweng.jassatepfl.database.helpers.QueryWrapper;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
-import ch.epfl.sweng.jassatepfl.stats.Tuple2;
 import ch.epfl.sweng.jassatepfl.stats.UserStats;
-import ch.epfl.sweng.jassatepfl.stats.UserStatsTest;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.ChangeType;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.CustomObservable;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.CustomObserver;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafFieldTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.LeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatsLeafTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.MatchStatusLeafTest;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.ObserverType;
+import ch.epfl.sweng.jassatepfl.test_utils.database.local.PendingMatchLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.NodeTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.PlayerLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.RootTest;
@@ -44,21 +43,28 @@ import static org.mockito.Mockito.when;
 /**
  * @author Amaury Combes
  */
-public class DBRefWrapTest extends DBReferenceWrapper {
+public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver {
 
     private NodeTest currentNode;
-    private int numValueEventListener = 0;
-    private int numChildEventListener = 0;
+    private Map<NodeTest, ValueEventListener> listenerForSingleValue;
+    private Map<NodeTest, ValueEventListener> listenerForValue;
+    private Map<NodeTest, ChildEventListener> listenerForChild;
     private String key = null;
 
     public DBRefWrapTest(DatabaseReference dbRef) {
         super();
         currentNode = new RootTest("JassDB (Local mock database)");
+        this.listenerForSingleValue = new HashMap<>();
+        this.listenerForValue = new HashMap<>();
+        this.listenerForChild = new HashMap<>();
     }
 
     public DBRefWrapTest(NodeTest nodeToPoint) {
         super();
         this.currentNode = nodeToPoint;
+        this.listenerForSingleValue = new HashMap<>();
+        this.listenerForValue = new HashMap<>();
+        this.listenerForChild = new HashMap<>();
     }
 
     public NodeTest getCurrentNode() {
@@ -104,125 +110,23 @@ public class DBRefWrapTest extends DBReferenceWrapper {
      */
     @Override
     public void addListenerForSingleValueEvent(final ValueEventListener v) {
-        final DataSnapshot obj = mock(DataSnapshot.class);
-        Player p = null;
-        Match m = null;
-        Map<String, Boolean> status = null;
-        UserStats us = null;
-
-        if (this.getCurrentNode() instanceof PlayerLeafTest) {
-            p = ((PlayerLeafTest) this.getCurrentNode()).getData();
-        } else if (this.getCurrentNode() instanceof MatchLeafTest) {
-            m = ((MatchLeafTest) this.getCurrentNode()).getData();
-        } else if (this.getCurrentNode() instanceof MatchStatusLeafTest) {
-            status = new HashMap<>(((MatchStatusLeafTest) this.getCurrentNode()).getData());
-        } else if (this.getCurrentNode() instanceof UserStatsLeafTest) {
-            us = ((UserStatsLeafTest) this.getCurrentNode()).getData();
-        }
-
-        when(obj.getValue(Player.class)).thenReturn(p);
-        when(obj.getValue(Match.class)).thenReturn(m);
-        when(obj.getValue(UserStats.class)).thenReturn(us);
-        new Thread(new Runnable() {
-            public void run() {
-                Handler uiHandler = new Handler(Looper.getMainLooper());
-                Runnable toRun = new Runnable() {
-                    @Override
-                    public void run() {
-                        v.onDataChange(obj);
-                    }
-                };
-                uiHandler.post(toRun);
-            }
-        }).start();
+        currentNode.addSingleValueObserver(this);
+        listenerForSingleValue.put(currentNode, v);
+        /*Log.d("DBRefWrapTest", "addListenerForSingleValueEvent:adding new LFSV to:"
+                + this + "::currentNode:" + currentNode.getId());*/
+        update(currentNode, currentNode, ObserverType.FOR_SINGLE_VALUE, ChangeType.CHANGED);
     }
-
-    /**
-     * Look at the firebase documentation to see what this method does
-     */
-    /*@Override
-    public ValueEventListener addValueEventListener(final ValueEventListener v) {
-        final DataSnapshot obj = mock(DataSnapshot.class);
-        Player p = null;
-        Match m = null;
-        List<Boolean> status = null;
-
-        if(this.getCurrentNode() instanceof PlayerLeafTest) {
-            p = ((PlayerLeafTest) this.getCurrentNode()).getData();
-        } else if(this.getCurrentNode() instanceof MatchLeafTest) {
-            m = ((MatchLeafTest) this.getCurrentNode()).getData();
-        } else if(this.getCurrentNode() instanceof MatchStatusLeafTest) {
-            status = new ArrayList<>(((MatchStatusLeafTest) this.getCurrentNode()).getData());
-        }
-
-        when(obj.getValue(Player.class)).thenReturn(p);
-        when(obj.getValue(Match.class)).thenReturn(m);
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                v.onDataChange((DataSnapshot) obj);
-            }
-        });
-        t.start();
-        return v;
-    }*/
 
     /**
      * Look at the firebase documentation to see what this method does
      */
     @Override
     public ValueEventListener addValueEventListener(final ValueEventListener listener) {
-        ++numValueEventListener;
-
-        new Thread(new Runnable() {
-
-            public void run() {
-
-                Player p = null;
-                Match m = null;
-                MatchStats stats = null;
-
-                while (numValueEventListener > 0) {
-                    final DataSnapshot obj = mock(DataSnapshot.class);
-
-                    Map<String, Boolean> status = null;
-                    boolean callDataChange = false;
-
-                    if (currentNode instanceof PlayerLeafTest) {
-                        if (p == null || !p.equals(((PlayerLeafTest) currentNode).getData())) {
-                            callDataChange = true;
-                        }
-                        p = ((PlayerLeafTest) currentNode).getData();
-                    } else if (currentNode instanceof MatchLeafTest) {
-                        if (m == null || !m.equals(((MatchLeafTest) currentNode).getData())) {
-                            callDataChange = true;
-                        }
-                        m = ((MatchLeafTest) currentNode).getData();
-                    } else if (currentNode instanceof MatchStatusLeafTest) {
-                        status = new HashMap<>(((MatchStatusLeafTest) currentNode).getData());
-                    } else if (currentNode instanceof MatchStatsLeafTest) {
-                        if (stats == null || !stats.equals(((MatchStatsLeafTest) currentNode).getData())) {
-                            callDataChange = true;
-                        }
-                        stats = ((MatchStatsLeafTest) currentNode).getData();
-                    }
-
-                    when(obj.getValue(Player.class)).thenReturn(p);
-                    when(obj.getValue(Match.class)).thenReturn(m);
-                    when(obj.getValue(MatchStats.class)).thenReturn(stats);
-
-                    if (callDataChange) {
-                        Handler uiHandler = new Handler(Looper.getMainLooper());
-                        Runnable toRun = new Runnable() {
-                            @Override
-                            public void run() {
-                                listener.onDataChange(obj);
-                            }
-                        };
-                        uiHandler.post(toRun);
-                    }
-                }
-            }
-        }).start();
+        currentNode.addValueObserver(this);
+        listenerForValue.put(currentNode, listener);
+        /*Log.d("DBRefWrapTest", "addValueEventListener:adding new VEL to:"
+                + this + "::currentNode:" + currentNode.getId());*/
+        update(currentNode, currentNode, ObserverType.VALUE, ChangeType.CHANGED);
         return listener;
     }
 
@@ -231,251 +135,23 @@ public class DBRefWrapTest extends DBReferenceWrapper {
      */
     @Override
     public ChildEventListener addChildEventListener(final ChildEventListener listener) {
-        ++numChildEventListener;
-
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-
-                Handler uiHandler = new Handler(Looper.getMainLooper());
-                Runnable toRun = new Runnable() {
-                    @Override
-                    public void run() {
-                        final DataSnapshot snap = mock(DataSnapshot.class);
-
-                        if (currentNode instanceof MatchStatusLeafTest) {
-                            Map<String, Boolean> statusMap = ((MatchStatusLeafTest) currentNode).getData();
-                            for (String key : statusMap.keySet()) {
-                                boolean value = statusMap.get(key);
-                                when(snap.getKey()).thenReturn(key);
-                                when(snap.getValue()).thenReturn(value);
-                                listener.onChildAdded(snap, currentNode.getId());
-                                listener.onChildChanged(snap, currentNode.getId());
-                                listener.onChildRemoved(snap);
-                            }
-                        } else if (currentNode.getId().equals(DatabaseUtils.DATABASE_MATCHES)) {
-                            Set<NodeTest> matches = currentNode.getChildren();
-                            for (NodeTest matchLeaf : matches) {
-                                Match m = ((MatchLeafTest) matchLeaf).getData();
-
-                                when(snap.getValue(Match.class)).thenReturn(m);
-                                listener.onChildAdded(snap, m.getMatchID());
-                            }
-                        }
-                    }
-                };
-                uiHandler.post(toRun);
-            }
-        }).start();
+        currentNode.addChildObserver(this);
+        listenerForChild.put(currentNode, listener);
+        /*Log.d("DBRefWrapTest", "addChildEventListener:adding new CEL to:"
+                + this + "::currentNode:" + currentNode.getId());*/
+        update(currentNode, currentNode, ObserverType.CHILD, ChangeType.ADDED);
         return listener;
     }
-    /*
-    public ChildEventListener addChildEventListener(final ChildEventListener listener) {
-        ++numChildEventListener;
-        final List<Match> matches = new ArrayList<>();
-        final Map<String, Boolean> statusMap = new HashMap<>();
-
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-
-                Handler uiHandler = new Handler(Looper.getMainLooper());
-                Runnable toRun = new Runnable() {
-                    @Override
-                    public void run() {
-                        final DataSnapshot snap = mock(DataSnapshot.class);
-
-                        if(currentNode.getId().equals(DatabaseUtils.DATABASE_MATCHES)) {
-                            if(currentNode.getChildren().size() < matches.size()) {
-                                Match mToRemove = null;
-                                for(Match m : matches) {
-                                    if(!currentNode.getChildren().contains(m)) {
-                                        mToRemove = m;
-                                    }
-                                }
-                                when(snap.getValue(Match.class)).thenReturn(mToRemove);
-                                matches.remove(mToRemove);
-                                listener.onChildRemoved(snap);
-                            } else {
-                                for(NodeTest matchLeaf : currentNode.getChildren()) {
-                                    Match m = ((MatchLeafTest) matchLeaf).getData();
-                                    if(matches.contains(m)) {
-                                        int id = matches.indexOf(m);
-                                        if((matches.get(id).matchHasChanged(m))) {
-                                            when(snap.getValue(Match.class)).thenReturn(m);
-                                            matches.add(id, m);
-                                            listener.onChildAdded(snap, currentNode.getId());
-                                        }
-                                    } else {
-                                        when(snap.getValue(Match.class)).thenReturn(m);
-                                        matches.add(m);
-                                        listener.onChildAdded(snap, currentNode.getId());
-                                    }
-                                }
-                            }
-                        } else if(currentNode instanceof MatchStatusLeafTest) {
-                            Map<String, Boolean> tmp = ((MatchStatusLeafTest) currentNode).getData();
-                            if(tmp.size() < statusMap.size()) {
-                                String keyToRemove = null;
-                                for(String key : statusMap.keySet()) {
-                                    if(!tmp.containsKey(key)) {
-                                        keyToRemove = key;
-                                    }
-                                }
-                                when(snap.getKey()).thenReturn(keyToRemove);
-                                when(snap.getValue()).thenReturn(statusMap.get(keyToRemove));
-                                statusMap.remove(keyToRemove);
-                                listener.onChildRemoved(snap);
-                            } else {
-                                for(String key : tmp.keySet()) {
-                                    if(statusMap.containsKey(key)) {
-                                        if(statusMap.get(key) != tmp.get(key)) {
-                                            when(snap.getKey()).thenReturn(key);
-                                            when(snap.getValue()).thenReturn(tmp.get(key));
-                                            statusMap.put(key, tmp.get(key));
-                                            listener.onChildChanged(snap, currentNode.getId());
-                                        }
-                                    } else {
-                                        when(snap.getKey()).thenReturn(key);
-                                        when(snap.getValue()).thenReturn(tmp.get(key));
-                                        statusMap.put(key, tmp.get(key));
-                                        listener.onChildAdded(snap, currentNode.getId());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
-                uiHandler.post(toRun);
-            }
-        }).start();
-        return listener;
-    }*/
-    /*public ChildEventListener addChildEventListener(final ChildEventListener listener) {
-        ++numChildEventListener;
-
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                List<Match> matches = new ArrayList<>();
-                Map<String, Boolean> statusMap = new HashMap<>();
-
-                while(numChildEventListener > 0) {
-                    final DataSnapshot snap = mock(DataSnapshot.class);
-
-                    boolean callChildAdded = false;
-                    boolean callChildChanged = false;
-                    boolean callChildRemoved = false;
-
-                    if(currentNode.getId().equals(DatabaseUtils.DATABASE_MATCHES)) {
-                        if(currentNode.getChildren().size() < matches.size()) {
-                            callChildRemoved = true;
-                            Match mToRemove = null;
-                            for(Match m : matches) {
-                                if(!currentNode.getChildren().contains(m)) {
-                                    mToRemove = m;
-                                }
-                            }
-                            when(snap.getValue(Match.class)).thenReturn(mToRemove);
-                            matches.remove(mToRemove);
-                        } else {
-                            for(NodeTest matchLeaf : currentNode.getChildren()) {
-                                Match m = ((MatchLeafTest) matchLeaf).getData();
-                                if(matches.contains(m)) {
-                                    int id = matches.indexOf(m);
-                                    if((matches.get(id).matchHasChanged(m))) {
-                                        when(snap.getValue(Match.class)).thenReturn(m);
-                                        callChildChanged = true;
-                                        matches.add(id, m);
-                                    }
-                                } else {
-                                    when(snap.getValue(Match.class)).thenReturn(m);
-                                    callChildAdded = true;
-                                    matches.add(m);
-                                }
-                            }
-                        }
-                    } else if (currentNode instanceof MatchStatusLeafTest) {
-                        Map<String, Boolean> tmp = ((MatchStatusLeafTest) currentNode).getData();
-                        if(tmp.size() < statusMap.size()) {
-                            callChildRemoved = true;
-                            String keyToRemove = null;
-                            for(String key : statusMap.keySet()) {
-                                if(!tmp.containsKey(key)) {
-                                    keyToRemove = key;
-                                }
-                            }
-                            when(snap.getKey()).thenReturn(keyToRemove);
-                            when(snap.getValue()).thenReturn(statusMap.get(keyToRemove));
-                            statusMap.remove(keyToRemove);
-                        } else {
-                            for(String key : tmp.keySet()) {
-                                if(statusMap.containsKey(key)) {
-                                    if(statusMap.get(key) != tmp.get(key)) {
-                                        when(snap.getKey()).thenReturn(key);
-                                        when(snap.getValue()).thenReturn(tmp.get(key));
-                                        callChildChanged = true;
-                                        statusMap.put(key, tmp.get(key));
-                                    }
-                                } else {
-                                    when(snap.getKey()).thenReturn(key);
-                                    when(snap.getValue()).thenReturn(tmp.get(key));
-                                    callChildAdded = true;
-                                    statusMap.put(key, tmp.get(key));
-                                }
-                            }
-                        }
-                    }
-
-                    if(callChildAdded) {
-                        Handler uiHandler = new Handler(Looper.getMainLooper());
-                        Runnable toRun = new Runnable() {
-                            @Override
-                            public void run() {
-                                listener.onChildAdded(snap, currentNode.getId());
-                            }
-                        };
-                        uiHandler.post(toRun);
-                    }
-                    if(callChildChanged) {
-                        Handler uiHandler = new Handler(Looper.getMainLooper());
-                        Runnable toRun = new Runnable() {
-                            @Override
-                            public void run() {
-                                listener.onChildChanged(snap, currentNode.getId());
-                            }
-                        };
-                        uiHandler.post(toRun);
-                    }
-                    if(callChildRemoved) {
-                        Handler uiHandler = new Handler(Looper.getMainLooper());
-                        Runnable toRun = new Runnable() {
-                            @Override
-                            public void run() {
-                                listener.onChildRemoved(snap);
-                            }
-                        };
-                        uiHandler.post(toRun);
-                    }
-                }
-            }
-        }).start();
-        return listener;
-    }*/
 
     @Override
     public void removeEventListener(ChildEventListener listener) {
-        --numChildEventListener;
-    }
+        listenerForChild.remove(listener);
+        currentNode.deleteChildObserver(this);    }
 
     @Override
     public void removeEventListener(ValueEventListener listener) {
-        --numValueEventListener;
+        listenerForValue.remove(listener);
+        currentNode.deleteValueObserver(this);
     }
 
     /**
@@ -483,7 +159,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
      */
     @Override
     public QueryWrapper orderByChild(String path) {
-        List<LeafTest> leafList = new ArrayList();
+        List<LeafTest> leafList = new ArrayList<>();
         String childOrder = null;
         for (NodeTest n : currentNode.getChildren()) {
             LeafTest l = ((LeafTest) n);
@@ -552,7 +228,12 @@ public class DBRefWrapTest extends DBReferenceWrapper {
      * Drop all children of the currentNode. This can be used as a reset of the local database
      */
     public void reset() {
+        for(NodeTest n : currentNode.getChildren()) {
+            n.dropChildren();
+            n.deleteAllObservers();
+        }
         currentNode.dropChildren();
+        currentNode.deleteAllObservers();
         currentNode.initialize();
     }
 
@@ -590,7 +271,7 @@ public class DBRefWrapTest extends DBReferenceWrapper {
 
     public void addPendingMatch(Match match, Map<String, Boolean> status) {
         TreeNodeTest pendingMatch = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_PENDING_MATCHES);
-        MatchStatusLeafTest statusLeaf = (MatchStatusLeafTest) pendingMatch.addChild(match.getMatchID());
+        PendingMatchLeafTest statusLeaf = (PendingMatchLeafTest) pendingMatch.addChild(match.getMatchID());
         statusLeaf.setData(status);
     }
 
@@ -613,4 +294,110 @@ public class DBRefWrapTest extends DBReferenceWrapper {
         userStatsNode.addChild(DummyDataTest.bricoloBob.getID().toString()).setData(bobUs);
     }
 
+    /**
+     * This method is called whenever the observed object is changed. An
+     * application calls an <tt>Observable</tt> object's
+     * <code>notifyObservers</code> method to have all the object's
+     * observers notified of the change.
+     *
+     * @param o   the observable object.
+     * @param arg an argument passed to the <code>notifyObservers</code>
+     */
+    @Override
+    public void update(CustomObservable o, NodeTest arg, ObserverType oType, ChangeType cType) {
+        /*Log.d("DBRefWrapTest", "in update from this:" + this.getCurrentNode().getId()
+                + "::CustomObservable:" + ((NodeTest)o).getId()
+                + "::arg:" + arg.getId() + "::oType:" + oType.name() + "::cType:" + cType.name());*/
+        final DataSnapshot snapShot = mock(DataSnapshot.class);
+        Player p = null;
+        Match m = null;
+        MatchStats stats = null;
+        Map<String, Boolean> status = null;
+        UserStats us = null;
+        ValueEventListener v;
+        ChildEventListener c;
+        switch(oType) {
+            case FOR_SINGLE_VALUE :
+                currentNode.deleteSingleValueObserver(this);
+
+                p = null;
+                m = null;
+                status = null;
+                us = null;
+
+                if (this.getCurrentNode() instanceof PlayerLeafTest) {
+                    p = ((PlayerLeafTest) this.getCurrentNode()).getData();
+                } else if (this.getCurrentNode() instanceof MatchLeafTest) {
+                    m = ((MatchLeafTest) this.getCurrentNode()).getData();
+                } else if (this.getCurrentNode() instanceof PendingMatchLeafTest) {
+                    status = new HashMap<>(((PendingMatchLeafTest) this.getCurrentNode()).getData());
+                } else if (this.getCurrentNode() instanceof UserStatsLeafTest) {
+                    us = ((UserStatsLeafTest) this.getCurrentNode()).getData();
+                }
+
+                when(snapShot.getValue(Player.class)).thenReturn(p);
+                when(snapShot.getValue(Match.class)).thenReturn(m);
+                when(snapShot.getValue(UserStats.class)).thenReturn(us);
+
+                v = listenerForSingleValue.get(currentNode);
+                v.onDataChange(snapShot);
+                listenerForSingleValue.remove(currentNode);
+                break;
+            case VALUE :
+                p = null;
+                m = null;
+                stats = null;
+
+                if(cType != ChangeType.DELETED) {
+                    if (currentNode instanceof PlayerLeafTest) {
+                        p = ((PlayerLeafTest) currentNode).getData();
+                    } else if (currentNode instanceof MatchLeafTest) {
+                        m = ((MatchLeafTest) currentNode).getData();
+                    } else if (currentNode instanceof MatchStatsLeafTest) {
+                        stats = ((MatchStatsLeafTest) currentNode).getData();
+                    }
+                }
+
+                when(snapShot.getValue(Player.class)).thenReturn(p);
+                when(snapShot.getValue(Match.class)).thenReturn(m);
+                when(snapShot.getValue(MatchStats.class)).thenReturn(stats);
+
+                v = listenerForValue.get(currentNode);
+                v.onDataChange(snapShot);
+                break;
+            case CHILD :
+                c = listenerForChild.get(currentNode);
+                switch(cType) {
+                    case ADDED:
+                        if(currentNode.getClass() == PendingMatchLeafTest.class) {
+                            Map<String, Boolean> statusMap = ((PendingMatchLeafTest) currentNode).getData();
+                            for(String key : statusMap.keySet()) {
+                                boolean value = statusMap.get(key);
+                                when(snapShot.getKey()).thenReturn(key);
+                                when(snapShot.getValue()).thenReturn(value);
+                                c.onChildAdded(snapShot, currentNode.getId());
+                                c.onChildChanged(snapShot, currentNode.getId());
+                                c.onChildRemoved(snapShot);
+                            }
+                        } else if (currentNode.getId().equals(DatabaseUtils.DATABASE_MATCHES)) {
+                            Set<NodeTest> matches = currentNode.getChildren();
+                            for(NodeTest matchLeaf: matches) {
+                                m = ((MatchLeafTest) matchLeaf).getData();
+                                when(snapShot.getValue(Match.class)).thenReturn(m);
+                                c.onChildAdded(snapShot, m.getMatchID());
+                            }
+                        }
+                        break;
+                    case DELETED:
+                        break;
+                    case CHANGED:
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
