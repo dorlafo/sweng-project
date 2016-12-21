@@ -34,7 +34,7 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public ActivityTestRule<MainActivity> activityRule =
             new ActivityTestRule<>(MainActivity.class, false);
 
-    @Before
+    @Override
     public void setUp() {
         super.setUp();
         Set<Match> matches = new HashSet<>();

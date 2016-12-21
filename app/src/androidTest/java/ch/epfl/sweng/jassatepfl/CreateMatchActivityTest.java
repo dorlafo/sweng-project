@@ -69,7 +69,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
 
-    @Before
+    @Override
     public void setUp() {
         super.setUp();
         Set<Player> playerSet = new HashSet<>();
