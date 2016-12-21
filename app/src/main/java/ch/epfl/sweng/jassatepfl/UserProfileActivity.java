@@ -50,18 +50,18 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             drawer.addView(contentView, 0);
 
             mtwPlayer = (TextView) findViewById(R.id.profil_player);
-            mtwPlayerQuote = (TextView) findViewById(R.id.twQuote);
-            mtwMatchPlayed = (TextView) findViewById(R.id.twMatchPlayed);
-            mtwMatchWon = (TextView) findViewById(R.id.twMatchWon);
-            mtwRecurrentPartner = (TextView) findViewById(R.id.twMostPlayedWith);
-            mtwBestPartner = (TextView) findViewById(R.id.twMostWonWith);
-            mtwVariant = (TextView) findViewById(R.id.twMostVariant);
+            mtwPlayerQuote = (TextView) findViewById(R.id.twQuoteNum);
+            mtwMatchPlayed = (TextView) findViewById(R.id.twMatchPlayedNum);
+            mtwMatchWon = (TextView) findViewById(R.id.twMatchWonNum);
+            mtwRecurrentPartner = (TextView) findViewById(R.id.twMostPlayedWithName);
+            mtwBestPartner = (TextView) findViewById(R.id.twMostWonWithName);
+            mtwVariant = (TextView) findViewById(R.id.twMostVariantName);
 
-            mtwMatchPlayed.setVisibility(View.INVISIBLE);
-            mtwMatchWon.setVisibility(View.INVISIBLE);
-            mtwRecurrentPartner.setVisibility(View.INVISIBLE);
-            mtwBestPartner.setVisibility(View.INVISIBLE);
-            mtwVariant.setVisibility(View.INVISIBLE);
+            mtwMatchPlayed.setVisibility(View.GONE);
+            mtwMatchWon.setVisibility(View.GONE);
+            mtwRecurrentPartner.setVisibility(View.GONE);
+            mtwBestPartner.setVisibility(View.GONE);
+            mtwVariant.setVisibility(View.GONE);
 
             //New SingleEventListener that will change the value of the textView according to the current
             //logged in user
@@ -73,7 +73,7 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Player p = dataSnapshot.getValue(Player.class);
                             mtwPlayer.setText(String.format(getString(R.string.profile_label_name), p.getFirstName(), p.getLastName()));
-                            mtwPlayerQuote.setText(String.format(getString(R.string.profile_label_quote), p.getQuote()));
+                            mtwPlayerQuote.setText(String.valueOf(p.getQuote()));
                         }
 
                         @Override
@@ -99,8 +99,8 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         UserStats us = dataSnapshot.getValue(UserStats.class);
                         if(us != null) {
-                            mtwMatchPlayed.setText(String.format(getString(R.string.profile_label_matches_played), us.getPlayedMatches()));
-                            mtwMatchWon.setText(String.format(getString(R.string.profile_label_matches_won), us.getWonMatches()));
+                            mtwMatchPlayed.setText(String.valueOf(us.getPlayedMatches()));
+                            mtwMatchWon.setText(String.valueOf(us.getWonMatches()));
                             getPartnersNames(us);
                             mtwVariant.setText(getResources().getQuantityString(R.plurals.profile_label_most_variants, us.sortedVariants().get(0).getValue(), us.sortedVariants().get(0).getKey(), us.sortedVariants().get(0).getValue()));
                             mtwMatchPlayed.setVisibility(View.VISIBLE);

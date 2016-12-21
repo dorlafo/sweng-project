@@ -44,12 +44,12 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
         activityRule.launchActivity(new Intent());
 
         onView(withId(R.id.profil_player)).check(matches(isDisplayed()));
-        onView(withId(R.id.twQuote)).check(matches(isDisplayed()));
-        onView(withId(R.id.twMostPlayedWith)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
-        onView(withId(R.id.twMostVariant)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
-        onView(withId(R.id.twMatchPlayed)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
-        onView(withId(R.id.twMostWonWith)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
-        onView(withId(R.id.twMatchWon)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+        onView(withId(R.id.twQuoteNum)).check(matches(isDisplayed()));
+        onView(withId(R.id.twMostPlayedWithName)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMostVariantName)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMatchPlayedNum)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMostWonWithName)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMatchWonNum)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
     /**
