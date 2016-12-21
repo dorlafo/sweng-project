@@ -13,6 +13,7 @@ import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.InjectedBaseActivityTest;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -38,5 +39,6 @@ public class ErrorHandlerUtilsTest extends InjectedBaseActivityTest {
         });
         onView(withText("Error!")).check(matches(isDisplayed()));
         onView(withText("Can not join match")).check(matches(isDisplayed()));
+        onView(withText("Can not join match")).perform(pressBack());
     }
 }
