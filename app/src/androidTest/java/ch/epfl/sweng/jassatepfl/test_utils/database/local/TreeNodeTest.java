@@ -73,6 +73,7 @@ public class TreeNodeTest extends NodeTest {
         }
 
         LeafTest newLeaf;
+
         switch (this.id) {
             case DatabaseUtils.DATABASE_PLAYERS:
                 newLeaf = new PlayerLeafTest(id, this);
@@ -85,6 +86,9 @@ public class TreeNodeTest extends NodeTest {
                 break;
             case DatabaseUtils.DATABASE_MATCH_STATS:
                 newLeaf = new MatchStatsLeafTest(id, this);
+                break;
+            case DatabaseUtils.DATABASE_USERSTATS:
+                newLeaf = new UserStatsLeafTest(id, this);
                 break;
             default:
                 throw new UnsupportedOperationException();
