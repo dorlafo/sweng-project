@@ -41,8 +41,6 @@ public final class DrawerTest extends InjectedBaseActivityTest {
         matches.add(DummyDataTest.twoPlayersMatch());
         matches.add(DummyDataTest.onePlayerMatch());
         dbRefWrapTest.addMatches(matches);
-        dbRefWrapTest.addPlayers(DummyDataTest.players());
-        dbRefWrapTest.addBobFakeStats();
     }
 
     @Test

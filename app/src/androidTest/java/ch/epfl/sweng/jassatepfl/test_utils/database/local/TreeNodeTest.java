@@ -51,7 +51,7 @@ public class TreeNodeTest extends NodeTest {
                 return (LeafTest) n;
             }
         }
-        throw new IllegalArgumentException("The node '" + this.id + "' does not have a children named : " + id);
+        return this.addChild(id);
     }
 
     @Override
