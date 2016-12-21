@@ -20,6 +20,7 @@ import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -62,6 +63,7 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         onView(withText(R.string.dialog_join_message)).check(matches(isDisplayed()));
         onView(withText(R.string.dialog_join_confirmation)).check(matches(isDisplayed()));
         onView(withText(R.string.dialog_cancel)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_cancel)).perform(pressBack());
     }
 
     /*@Test WAITING NEW WAITING PLAYER ACTIVITY
@@ -101,5 +103,6 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         onView(withText(R.string.dialog_join_confirmation)).perform(click());
         onView(withText(R.string.error_cannot_join)).check(matches(isDisplayed()));
         onView(withText(R.string.error_match_full)).check(matches(isDisplayed()));
+        onView(withText(R.string.error_match_full)).perform(pressBack());
     }
 }

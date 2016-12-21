@@ -31,6 +31,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -238,6 +239,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         String message = String.format(getInstrumentation().getTargetContext()
                 .getResources().getString(R.string.dialog_game_end), "Team 2");
         onView(withText(message)).check(matches(isDisplayed()));
+        onView(withId(android.R.id.button1)).perform(click());
     }
 
     @Test
@@ -245,6 +247,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         ownedMatchSetUp();
         onView(withId(R.id.score_display_1)).perform(click());
         onView(withId(R.id.score_table_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.score_table_layout)).perform(pressBack());
     }
 
     @Test
@@ -257,6 +260,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(atPositionInTable(1, 1)).check(matches(withText("50")));
         onView(atPositionInTable(1, 2)).check(matches(withText("150")));
         onView(atPositionInTable(2, 3)).check(matches(withText(THREE_CARDS.toString())));
+        onView(withId(R.id.score_table_layout)).perform(pressBack());
     }
 
     @Test
