@@ -20,6 +20,7 @@ import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class PlayerListAdapter extends ArrayAdapter<Player> {
@@ -85,10 +86,8 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
             }*/
         }
 
-        if (selectedIds.contains(p.getID().toString())) {
-            ImageView check = (ImageView) convertView.findViewById(R.id.player_check);
-            check.setVisibility(VISIBLE);
-        }
+        ImageView check = (ImageView) convertView.findViewById(R.id.player_check);
+        check.setVisibility(selectedIds.contains(p.getID().toString()) ? VISIBLE : INVISIBLE);
 
         return convertView;
     }
