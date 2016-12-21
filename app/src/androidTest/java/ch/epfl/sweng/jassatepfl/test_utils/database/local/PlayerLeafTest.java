@@ -2,9 +2,6 @@
 package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
-/**
- * @author Amaury Combes
- */
 public class PlayerLeafTest extends LeafTest<Player> {
     private LeafFieldTest<Player.PlayerID> idLeaf = new LeafFieldTest<>("id", this);
     private LeafFieldTest<String> lastNameLeaf = new LeafFieldTest<>("lastName", this);
@@ -43,13 +40,16 @@ public class PlayerLeafTest extends LeafTest<Player> {
      */
     @Override
     public void setData(Player data) {
-        if(deleted) {
-            throw new UnsupportedOperationException("Cannot setData on a deleted PlayerLeafTest");
+        if(isDeleted) {
+            isDeleted = true;
+            //throw new UnsupportedOperationException("Cannot setData on a deleted PlayerLeafTest");
         }
         this.data = data;
         idLeaf.setData(data.getID());
         firstNameLeaf.setData(data.getFirstName());
         lastNameLeaf.setData(data.getLastName());
         quoteLeaf.setData(data.getQuote());
+        this.setChanged();
+        this.notifyObservers(this);
     }
 }

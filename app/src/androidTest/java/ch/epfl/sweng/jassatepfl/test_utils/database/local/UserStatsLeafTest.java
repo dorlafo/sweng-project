@@ -9,10 +9,6 @@ import ch.epfl.sweng.jassatepfl.stats.UserStats;
 import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
-/**
- * Created by Amaury on 07/12/2016.
- */
-
 public class UserStatsLeafTest extends LeafTest<UserStats> {
     private LeafFieldTest<Rank> rankLeaf = new LeafFieldTest<Rank>(DatabaseUtils.DATABASE_USERSTATS_RANK, this);
     private LeafFieldTest<Map<String, Integer>> partners =  new LeafFieldTest<>(DatabaseUtils.DATABASE_USERSTATS_PARTNERS, this);
