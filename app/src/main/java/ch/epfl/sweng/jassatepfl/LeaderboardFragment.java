@@ -1,5 +1,6 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -71,6 +73,15 @@ public class LeaderboardFragment extends Fragment {
 
         adapter = new PlayerListAdapter(getContext(), R.layout.player_list_element, new ArrayList<Player>());
         playerListView.setAdapter(adapter);
+        playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Player player = (Player)adapterView.getAdapter().getItem(i);
+                String sciper = player.getID().toString();
+                Intent toProfile = new Intent(getContext(), UserProfileActivity.class).putExtra("sciper", sciper);
+                startActivity(toProfile);
+            }
+        });
 
         contactFirebase();
         return rootView;
