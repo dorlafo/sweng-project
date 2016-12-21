@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,13 +34,15 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public ActivityTestRule<MainActivity> activityRule =
             new ActivityTestRule<>(MainActivity.class, false);
 
-    @Override
+    @Before
     public void setUp() {
         super.setUp();
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.twoPlayersMatch());
         matches.add(DummyDataTest.onePlayerMatch());
         dbRefWrapTest.addMatches(matches);
+        dbRefWrapTest.addPlayers(DummyDataTest.players());
+        dbRefWrapTest.addBobFakeStats();
     }
 
     @Test

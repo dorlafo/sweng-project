@@ -58,7 +58,7 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testUserProfileActivityWithStats() {
         dbRefWrapTest.addPlayers(DummyDataTest.players());
-        dbRefWrapTest.addBobyFakeStats();
+        dbRefWrapTest.addBobFakeStats();
 
         activityRule.launchActivity(new Intent());
 
