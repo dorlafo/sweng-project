@@ -81,4 +81,21 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
         onView(withText("Evolution")).perform(click());
         onView(withText("Counters")).perform(click());
     }
+
+    @Test
+    public void testLeaderToUserProfileActivity(){
+        Set<Player> playerSet = new HashSet<>();
+        playerSet.add(DummyDataTest.bricoloBob);
+        playerSet.add(DummyDataTest.amaury);
+        playerSet.add(DummyDataTest.alexis);
+        dbRefWrapTest.addPlayers(playerSet);
+
+        activityRule.launchActivity(new Intent());
+        onView(withText("Leaderboard")).perform(click());
+
+        onData(anything()).inAdapterView(withId(R.id.leaderboard_list))
+                .atPosition(0).perform(click());
+
+        onView(withText("Bob LeBricoleur")).check(matches(isDisplayed()));
+    }
 }
