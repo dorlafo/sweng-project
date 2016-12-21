@@ -22,7 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
@@ -408,7 +410,7 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                         }
                     }
                     playerHasCards = match.getPlayerCards(playerID.toString());
-                    if(!match.playerInCardList(playerID.toString())){
+                    if (!match.playerInCardList(playerID.toString())) {
                         new AlertDialog.Builder(WaitingPlayersActivity.this)
                                 .setTitle(R.string.dialog_cards)
                                 .setMessage(R.string.dialog_have_cards)
@@ -494,27 +496,35 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     private void modifyListAdapter() {
-        adapter.refreshData(match.getPlayers(), match, playersReady);
+        adapter.refreshData(match.getPlayers(), match, filterReadyPlayers());
+    }
+
+    private Set<String> filterReadyPlayers() {
+        Set<String> ready = new HashSet<>();
+        for (String id : playersReady.keySet()) {
+            if (playersReady.get(id)) {
+                ready.add(id);
+            }
+        }
+        return ready;
     }
 
     private void updateViewWhoHasCards(View cardsNo, View cardsYes) {
-        if (match.hasCards()){
+        if (match.hasCards()) {
             cardsNo.setVisibility(View.GONE);
             cardsYes.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             cardsYes.setVisibility(View.GONE);
             cardsNo.setVisibility(View.VISIBLE);
         }
     }
 
     public void changeCardsStatus(View view) {
-        if (playerHasCards){
+        if (playerHasCards) {
             playerHasCards = false;
             match.setPlayerCards(getUserSciper(), false);
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
-        }
-        else {
+        } else {
             playerHasCards = true;
             match.setPlayerCards(getUserSciper(), true);
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
@@ -533,9 +543,9 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     }
 
     private boolean allPlayersReady(Map<String, Boolean> playersR) {
-        if(playersR.size() == match.getMaxPlayerNumber()) {
-            for(String k : playersR.keySet()) {
-                if(!playersR.get(k)) {
+        if (playersR.size() == match.getMaxPlayerNumber()) {
+            for (String k : playersR.keySet()) {
+                if (!playersR.get(k)) {
                     return false;
                 }
             }
