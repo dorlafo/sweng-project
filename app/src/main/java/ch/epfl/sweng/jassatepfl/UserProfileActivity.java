@@ -56,11 +56,11 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Player p = dataSnapshot.getValue(Player.class);
-                            mtwPlayerID.setText(mtwPlayerID.getText() + " " + p.getID().toString());
+                            mtwPlayerID.setText(p.getID().toString());
                             System.out.println(p.getID().toString());
-                            mtwLastName.setText(mtwLastName.getText() + " " + p.getLastName());
-                            mtwFirstName.setText(mtwFirstName.getText() + " " + p.getFirstName());
-                            mtwPlayerQuote.setText(mtwPlayerQuote.getText() + " " + Integer.toString(p.getQuote()));
+                            mtwLastName.setText(p.getLastName());
+                            mtwFirstName.setText(p.getFirstName());
+                            mtwPlayerQuote.setText(Integer.toString(p.getQuote()));
                         }
 
                         @Override
