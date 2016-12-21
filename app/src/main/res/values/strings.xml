@@ -49,6 +49,8 @@
 
     <string name="match_list_adapter_players_nb">%1$d/%2$d</string>
 
+    <string name="player_list_adapter_quote">Quote : %d</string>
+
     <string name="profile_label_quote">Quote</string>
     <string name="profile_label_name">%1$s %2$s</string>
     <string name="profile_label_matches_played">Matches Played</string>

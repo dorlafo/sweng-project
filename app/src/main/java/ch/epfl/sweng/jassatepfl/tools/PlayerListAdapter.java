@@ -61,7 +61,7 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
 
         TextView quoteTv = (TextView) convertView.findViewById(R.id.player_quote);
         TextView playerName = (TextView) convertView.findViewById(R.id.player_name);
-        quoteTv.setText(String.format(getContext().getString(R.string.profile_label_quote), p.getQuote()));
+        quoteTv.setText(String.format(getContext().getString(R.string.player_list_adapter_quote), p.getQuote()));
         if (match == null) {
             playerName.setText(p.toString());
 
