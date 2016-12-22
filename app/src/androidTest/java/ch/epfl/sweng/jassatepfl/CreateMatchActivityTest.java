@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -78,14 +79,9 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.addPlayers(playerSet);
     }
 
-    @Test
+    @Test(expected = NoMatchingViewException.class)
     public void testAInit() {
-        try {
-            int x = 0;
-            x += 1;
-        } catch(Exception e) {
-            fail();
-        }
+        onView(withId(R.id.add_player_button)).perform(click());
     }
 
     @Test
