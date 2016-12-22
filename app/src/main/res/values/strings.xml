@@ -171,7 +171,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="someone_has_card">Someone has a deck of cards:</string>
-    <string name="title_activity_stats">StatsActivity</string>
 
     <string name="no_cards_description">Displays no card image</string>
     <string name="yes_cards_description">Displays yes card image </string>
