@@ -52,9 +52,9 @@ public class UserStats {
     // We have to use strings instead of real objects as Firebase does not support Maps with
     // no string - keys
     // How many times different game variants have been played.
-    private Map<String, Integer> variants = new HashMap<>();
+    private Map<String, Integer> variants;
     // How many matches have been as a partner of other players.
-    private Map<String, Integer> partners = new HashMap<>();
+    private Map<String, Integer> partners;
     // How many matches have been won as a partner of other players.
     private Map<String, Integer> wonWith;
 
@@ -68,14 +68,37 @@ public class UserStats {
     public UserStats(Player.PlayerID id) {
         this.playerId = id;
         this.wonWith = new HashMap<>();
+        this.partners = new HashMap<>();
+        this.variants = new HashMap<>();
         this.wonWith.put("SENTINEL", 0);
+        this.partners.put("SENTINEL", 0);
+        this.variants.put("SENTINEL", 0);
+
+        this.quoteByDate = new ArrayList<>();
+        this.wonByDate = new ArrayList<>();
+        this.playedByDate = new ArrayList<>();
+        this.quoteByDate.add(new Tuple2<>(new Long(0), 0));
+        this.wonByDate.add(new Tuple2<>(new Long(0), 0));
+        this.playedByDate.add(new Tuple2<>(new Long(0), 0));
     }
 
     public UserStats(String id, Rank rank) {
         this.playerId = new Player.PlayerID(id);
         this.rank = rank;
         this.wonWith = new HashMap<>();
+        this.partners = new HashMap<>();
+        this.variants = new HashMap<>();
         this.wonWith.put("SENTINEL", 0);
+        this.partners.put("SENTINEL", 0);
+        this.variants.put("SENTINEL", 0);
+
+
+        this.quoteByDate = new ArrayList<>();
+        this.wonByDate = new ArrayList<>();
+        this.playedByDate = new ArrayList<>();
+        this.quoteByDate.add(new Tuple2<>(new Long(0), 0));
+        this.wonByDate.add(new Tuple2<>(new Long(0), 0));
+        this.playedByDate.add(new Tuple2<>(new Long(0), 0));
     }
 
     /**
@@ -143,6 +166,9 @@ public class UserStats {
         prepareLastBuckets(Calendar.getInstance().getTimeInMillis());
 
         updateQuote(stats);
+
+        partners.remove("SENTINEL");
+        variants.remove("SENTINEL");
 
         Match match = stats.getMatch();
         playedMatches += 1;
