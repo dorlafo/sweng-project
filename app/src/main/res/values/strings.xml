@@ -188,4 +188,6 @@
     <string name="won_with_graph">won_with_graph</string>
     <string name="won_graph">won_graph</string>
     <string name="rank_graph">rank_graph</string>
+
+    <string name="no_match_won">No match won yet</string>
 </resources>

@@ -106,7 +106,10 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                             mtwMatchPlayed.setVisibility(View.VISIBLE);
                             mtwMatchWon.setVisibility(View.VISIBLE);
                             mtwRecurrentPartner.setVisibility(View.VISIBLE);
-                            mtwBestPartner.setVisibility(View.VISIBLE);
+                            if(!us.getWonWith().containsKey("SENTINEL")) {
+                                mtwBestPartner.setVisibility(View.VISIBLE);
+                                mtwBestPartner.setText(R.string.no_match_won);
+                            }
                             mtwVariant.setVisibility(View.VISIBLE);
                         }
                     }
@@ -135,22 +138,23 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
                         // Do nothing
                     }
                 });
+        if(!us.getWonWith().containsKey("SENTINEL")) {
+            dbRefWrapped
+                    .child(DatabaseUtils.DATABASE_PLAYERS)
+                    .child(us.sortedWonWith().get(0).getKey())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Player p = dataSnapshot.getValue(Player.class);
+                            mostWonWith = p.getFirstName() + " " + p.getLastName();
+                            mtwBestPartner.setText(getResources().getQuantityString(R.plurals.profile_label_most_won_with, us.sortedWonWith().get(0).getValue(), mostWonWith, us.sortedWonWith().get(0).getValue()));
+                        }
 
-        dbRefWrapped
-                .child(DatabaseUtils.DATABASE_PLAYERS)
-                .child(us.sortedWonWith().get(0).getKey())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Player p = dataSnapshot.getValue(Player.class);
-                        mostWonWith = p.getFirstName() + " " + p.getLastName();
-                        mtwBestPartner.setText(getResources().getQuantityString(R.plurals.profile_label_most_won_with, us.sortedWonWith().get(0).getValue(), mostWonWith, us.sortedWonWith().get(0).getValue()));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Do nothing
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // Do nothing
+                        }
+                    });
+        }
     }
 }
