@@ -65,7 +65,7 @@ import static org.hamcrest.Matchers.is;
 public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     @Rule public ActivityTestRule<CreateMatchActivity> activityRule =
-            new ActivityTestRule<>(CreateMatchActivity.class, false);
+            new ActivityTestRule<>(CreateMatchActivity.class, false, false);
 
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
 
@@ -80,18 +80,21 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testSwitchToInvitePlayerActivity() {
+        activityRule.launchActivity(new Intent());
         onView(withId(R.id.add_player_button)).perform(click());
         onView(withId(R.id.invite_button)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testSpinnerSelection() {
+        activityRule.launchActivity(new Intent());
         onView(withId(R.id.variant_spinner)).perform(click());
         onData(allOf(is(instanceOf(Match.GameVariant.class)), is(CHIBRE))).perform(click());
     }
 
     @Test
     public void testInputDescription() {
+        activityRule.launchActivity(new Intent());
         onView(withId(R.id.description_match_text)).check(matches(withHint(R.string.create_field_description)));
         onView(withId(R.id.description_match_text)).perform(typeText("Hello World"));
         onView(withId(R.id.description_match_text)).check(matches(withText("Hello World")));
@@ -99,6 +102,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testPrivacySwitch() {
+        activityRule.launchActivity(new Intent());
         onView(withId(R.id.switch_private)).perform(click());
         onView(withId(R.id.switch_private)).check(matches(isChecked()));
     }
@@ -108,6 +112,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         Calendar calendar = Calendar.getInstance();
         calendar.add(HOUR_OF_DAY, 1);
         calendar.add(MINUTE, 5);
+        activityRule.launchActivity(new Intent());
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         onView(withId(R.id.current_expiration_time))
                 .check(matches(withText(dateFormat.format(calendar.getTimeInMillis()))));
@@ -117,6 +122,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     public void testTimePickerDisplaysToastForInvalidTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(MINUTE, -5);
+        activityRule.launchActivity(new Intent());
         setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         onView(withText(R.string.toast_invalid_hour)).inRoot(new ToastMatcherTest())
@@ -129,6 +135,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         calendar.add(HOUR_OF_DAY, 1);
         calendar.add(DAY_OF_MONTH, 3);
         calendar.add(MONTH, 1);
+        activityRule.launchActivity(new Intent());
         setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         onView(withId(R.id.current_expiration_time))
                 .check(matches(withText(dateFormat.format(calendar.getTimeInMillis()))));
@@ -138,6 +145,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     public void testDatePickerDisplaysToastForInvalidDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(DAY_OF_MONTH, -5);
+        activityRule.launchActivity(new Intent());
         setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         onView(withText(R.string.toast_invalid_date)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
@@ -150,6 +158,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         int currentMonth = calendar.get(MONTH);
         int currentDay = calendar.get(DAY_OF_MONTH);
         calendar.add(DAY_OF_MONTH, 6);
+        activityRule.launchActivity(new Intent());
         setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         calendar.add(MINUTE, -5);
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
@@ -188,6 +197,8 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, resultData);
         intending(toPackage("com.google.android.gms")).respondWith(result);
 
+        activityRule.launchActivity(new Intent());
+
         onView(withId(R.id.create_place_picker_button)).perform(click());
         intended(toPackage("com.google.android.gms"));
         release();
@@ -222,6 +233,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         resultData.putExtra("player0", amaury.getID().toString());
         resultData.putExtra("player1", jimmy.getID().toString());
         resultData.putExtra("players_added", 2);
+        activityRule.launchActivity(new Intent());
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(hasComponent(InvitePlayerToMatchActivity.class.getName())).respondWith(result);
         onView(withId(R.id.add_player_button)).perform(click());
