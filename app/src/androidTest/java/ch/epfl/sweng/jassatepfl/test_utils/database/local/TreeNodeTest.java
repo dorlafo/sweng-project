@@ -45,10 +45,15 @@ public class TreeNodeTest extends NodeTest {
     }
 
     @Override
-    public LeafTest getChild(String id) {
+    public void setData(Object data) {
+        throw new UnsupportedOperationException("TreeNode does not support setData");
+    }
+
+    @Override
+    public NodeTest getChild(String id) {
         for (NodeTest n : children) {
             if (n.getId().equals(id)) {
-                return (LeafTest) n;
+                return n;
             }
         }
         return this.addChild(id);

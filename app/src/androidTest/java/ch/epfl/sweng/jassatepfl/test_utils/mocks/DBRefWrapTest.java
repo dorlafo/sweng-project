@@ -161,7 +161,7 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
     public QueryWrapper orderByChild(String path) {
         List<LeafTest> leafList = new ArrayList<>();
         String childOrder = null;
-        for (NodeTest n : currentNode.getChildren()) {
+        for (Object n : currentNode.getChildren()) {
             LeafTest l = ((LeafTest) n);
             leafList.add(l);
         }
@@ -228,9 +228,9 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
      * Drop all children of the currentNode. This can be used as a reset of the local database
      */
     public void reset() {
-        for(NodeTest n : currentNode.getChildren()) {
-            n.dropChildren();
-            n.deleteAllObservers();
+        for(Object n : currentNode.getChildren()) {
+            ((NodeTest)n).dropChildren();
+            ((NodeTest)n).deleteAllObservers();
         }
         currentNode.dropChildren();
         currentNode.deleteAllObservers();

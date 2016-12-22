@@ -5,7 +5,7 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
 
-public class LeafFieldTest<T> extends NodeTest {
+public class LeafFieldTest<T> extends NodeTest<T> {
     private final String id;
     private T data;
     private NodeTest parent;

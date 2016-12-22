@@ -9,7 +9,7 @@ import java.util.Set;
  * Some operations are not supported
  *
  */
-public abstract class LeafTest<T> extends NodeTest {
+public abstract class LeafTest<T> extends NodeTest<T> {
 
     private String id;
     protected T data;

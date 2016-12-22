@@ -41,6 +41,11 @@ public class RootTest extends NodeTest {
     }
 
     @Override
+    public void setData(Object data) {
+        throw new UnsupportedOperationException("Root does not support setData");
+    }
+
+    @Override
     public TreeNodeTest getChild(String id) {
         for (NodeTest n : children) {
             if (n.getId().equals(id)) {

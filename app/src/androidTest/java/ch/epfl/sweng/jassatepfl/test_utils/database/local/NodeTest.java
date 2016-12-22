@@ -9,7 +9,7 @@ import java.util.Set;
  * of height 3).
  *
  */
-public abstract class NodeTest extends CustomObservable {
+public abstract class NodeTest<T> extends CustomObservable {
     protected boolean isDeleted;
 
     /**
@@ -27,6 +27,8 @@ public abstract class NodeTest extends CustomObservable {
     abstract public Set<NodeTest> getChildren();
 
     abstract public NodeTest getParent();
+
+    abstract public void setData(T data);
 
     /**
      * Tries to get a specific child of the current node
