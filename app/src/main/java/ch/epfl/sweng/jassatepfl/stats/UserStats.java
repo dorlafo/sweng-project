@@ -65,11 +65,15 @@ public class UserStats {
      */
     public UserStats(Player.PlayerID id) {
         this.playerId = id;
+        this.wonWith = new HashMap<>();
+        this.wonWith.put("SENTINEL", 0);
     }
 
     public UserStats(String id, Rank rank) {
         this.playerId = new Player.PlayerID(id);
         this.rank = rank;
+        this.wonWith = new HashMap<>();
+        this.wonWith.put("SENTINEL", 0);
     }
 
     /**
@@ -155,6 +159,7 @@ public class UserStats {
             if (!playerId.toString().equals(id)) {
                 partners.put(id, getOrDefaultMap(partners, id, 0) + 1);
                 if (isWinner) {
+                    wonWith.remove("SENTINEL");
                     wonWith.put(id, getOrDefaultMap(wonWith, id, 0) + 1);
                 }
             }
