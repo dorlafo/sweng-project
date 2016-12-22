@@ -34,20 +34,40 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="112dp"
+        android:layout_marginBottom="50dp"
+        android:textSize="20dp"
         android:onClick="login"
-        android:text="@string/login_button_text"/>
+        android:text="@string/login_button_text"
+        android:textStyle="normal|bold"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/greenCardBoardAccent"
+        android:background="@android:color/transparent"/>
 
     <TextView
         android:id="@+id/login_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/login_button"
+        android:layout_above="@+id/login_text_view2"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="17dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/login_welcoming_text"
         android:textSize="24sp"
-        android:textStyle="normal|bold"/>
+        android:textColor="@android:color/black"
+        android:textStyle="normal"/>
+
+    <TextView
+        android:id="@+id/login_text_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/login_button"
+        android:layout_margin="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="17dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/login_welcoming_text_suite"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:textStyle="normal"/>
 
 </RelativeLayout>
