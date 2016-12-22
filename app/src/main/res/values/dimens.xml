@@ -16,4 +16,6 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="score_text_size">40sp</dimen>
+    <dimen name="guides_horizontal_padding">2dp</dimen>
+    <dimen name="guides_vertical_padding">5dp</dimen>
 </resources>
