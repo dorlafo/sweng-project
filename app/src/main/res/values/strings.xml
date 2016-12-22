@@ -7,7 +7,7 @@
     <string name="title_activity_list">Nearby matches</string>
     <string name="title_activity_history">Match History</string>
     <string name="title_activity_guide">Help</string>
-    <string name="title_activity_rules">Rules of:</string>
+    <string name="title_activity_rules">Rules of :</string>
 
     <string name="main_empty_pending_list">You are not enrolled in any match</string>
     <string name="main_empty_active_list">You are not in an active game</string>
