@@ -42,7 +42,6 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
 
     private String currentUserSciper;
     private PlayerListAdapter adapter;
-    private ListView playerListView;
     private Set<String> inviteScipers;
 
     @Override
@@ -64,7 +63,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
             emptyList.setTextColor(Color.BLACK);
             emptyList.setTextSize(20);
 
-            playerListView = (ListView) findViewById(R.id.invite_list);
+            ListView playerListView = (ListView) findViewById(R.id.invite_list);
             ((ViewGroup) playerListView.getParent()).addView(emptyList);
             adapter = new PlayerListAdapter(InvitePlayerToMatchActivity.this, R.layout.player_list_element, new ArrayList<Player>());
             playerListView.setAdapter(adapter);
@@ -85,6 +84,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                                                 R.string.error_already_in_match);
                                     } else {
                                         inviteScipers.add(player.getID().toString());
+                                        adapter.refreshData(inviteScipers);
                                     }
                                 }
                             })
@@ -96,6 +96,9 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                             .show();
                 }
             });
+
+            onQueryTextChange("");
+
             Button inviteButton = (Button) findViewById(R.id.invite_button);
             inviteButton.setOnClickListener(this);
         }

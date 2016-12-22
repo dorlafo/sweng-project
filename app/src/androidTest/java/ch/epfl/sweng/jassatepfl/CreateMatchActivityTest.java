@@ -9,6 +9,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,6 +26,7 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
 
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -59,7 +61,6 @@ import static org.hamcrest.Matchers.is;
 
 /**
  * Test class for CreateMatchActivity
- *
  */
 @RunWith(AndroidJUnit4.class)
 public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
@@ -204,15 +205,26 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         release();
     }
 
-    /*
+    @Test
+    public void testToastIsDisplayedWhenDescriptionIsEmpty() {
+        activityRule.launchActivity(new Intent());
+        onView(withId(R.id.create_create_button)).perform(click());
+        onView(withText(R.string.toast_please_enter_description)).inRoot(new ToastMatcherTest())
+                .check(matches(isDisplayed()));
+    }
+
     @Test
     public void testCreateMatchSendsIntent() {
         init();
         Matcher<Intent> expectedIntent = hasComponent(WaitingPlayersActivity.class.getName());
+        activityRule.launchActivity(new Intent());
+        onView(withId(R.id.description_match_text)).perform(typeText("Hello World"));
+        closeSoftKeyboard();
+        intending(expectedIntent).respondWith(new Instrumentation.ActivityResult(0, null));
         onView(withId(R.id.create_create_button)).perform(click());
         intended(expectedIntent);
+        release();
     }
-    */
 
     private void removePlayer(Player player) {
         onData(allOf(is(instanceOf(Player.class)), hasToString(player.toString())))

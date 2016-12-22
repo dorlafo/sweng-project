@@ -561,7 +561,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         cancelButton.setOnClickListener(this);
         cancelButton.setVisibility(visibility);
 
-        updatePointsGoal(currentMatch.getGameVariant().getPointGoal());
+        updatePointsGoal(matchStats.getPointsGoal().get("TEAM0"));
 
         if (isOwner) {
             firstTeamScoreDisplay.setEnabled(true);

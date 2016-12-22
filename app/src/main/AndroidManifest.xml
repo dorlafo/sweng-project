@@ -63,13 +63,16 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".WaitingPlayersActivity"
+            android:label="@string/title_activity_waiting"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".LoginActivity"/>
         <activity
             android:name=".InvitePlayerToMatchActivity"
+            android:label="@string/title_activity_invite"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".UserGuideActivity"
+            android:label="@string/title_activity_guide"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".RulesActivity"
@@ -105,7 +108,7 @@
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_stat_notify" />
+            android:resource="@drawable/ic_stat_notify"/>
 
         <!-- App required serviced -->
         <service

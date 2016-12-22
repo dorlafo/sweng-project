@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_user_guide"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/guides_horizontal_padding"
+    android:paddingLeft="@dimen/guides_vertical_padding"
+    android:paddingRight="@dimen/guides_vertical_padding"
+    android:paddingTop="@dimen/guides_horizontal_padding"
     tools:context="ch.epfl.sweng.jassatepfl.UserGuideActivity">
 
     <Space
@@ -15,15 +16,17 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"/>
 
-    <RelativeLayout
+    <ScrollView
+        android:id="@+id/user_guide_ScrollV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/space_user_guide">
 
         <com.mukesh.MarkdownView
             android:id="@+id/user_guide_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </RelativeLayout>
+            android:layout_height="match_parent"/>
+
+    </ScrollView>
 
 </RelativeLayout>

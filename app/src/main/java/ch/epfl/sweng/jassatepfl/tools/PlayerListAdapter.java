@@ -8,34 +8,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.R;
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 
 public class PlayerListAdapter extends ArrayAdapter<Player> {
 
     private final Context context;
     private final List<Player> players;
     private Match match;
-    private final Map<String, Boolean> playersReady;
+    private final Set<String> selectedIds;
 
-    public PlayerListAdapter(Context context, int resource, List<Player> players, Match match, Map<String, Boolean> playersReady) {
+    public PlayerListAdapter(Context context, int resource, List<Player> players, Match match, Set<String> selectedIds) {
         super(context, resource, players);
         this.context = context;
         this.players = new ArrayList<>(players);
         this.match = match;
-        this.playersReady = new HashMap<>(playersReady);
+        this.selectedIds = new HashSet<>(selectedIds);
     }
 
     public PlayerListAdapter(Context context, int resource, List<Player> players) {
-        this(context, resource, players, null, new HashMap<String, Boolean>());
+        this(context, resource, players, null, new HashSet<String>());
     }
 
     @Override
@@ -64,7 +68,6 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         quoteTv.setText(String.format(getContext().getString(R.string.player_list_adapter_quote), p.getQuote()));
         if (match == null) {
             playerName.setText(p.toString());
-
         } else {
             Resources res = context.getResources();
             String firstFirstName = p.getFirstName().split(" ")[0];
@@ -72,30 +75,31 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
                     String.format(res.getString(R.string.wait_not_assigned), firstFirstName) :
                     String.format(res.getString(R.string.wait_assigned), firstFirstName, (match.teamNbForPlayer(p) + 1));
             playerName.setText(teamAssignment);
-
-            View layout = convertView.findViewById(R.id.player_list_layout);
-            if (playersReady.containsKey(p.getID().toString()) && playersReady.get(p.getID().toString())) {
-                layout.setBackgroundColor(0xFF00FF00);
-            } else {
-                layout.setBackgroundColor(0xFFFFFFFF);
-            }
         }
+
+        ImageView check = (ImageView) convertView.findViewById(R.id.player_check);
+        check.setVisibility(selectedIds.contains(p.getID().toString()) ? VISIBLE : INVISIBLE);
 
         return convertView;
     }
 
-    public void refreshData(List<Player> p, Match m, Map<String, Boolean> pr) {
+    public void refreshData(List<Player> players, Match match, Set<String> selectedIds) {
         this.players.clear();
-        this.players.addAll(p);
-        this.match = m;
-        this.playersReady.clear();
-        this.playersReady.putAll(pr);
+        this.players.addAll(players);
+        this.match = match;
+        this.selectedIds.clear();
+        this.selectedIds.addAll(selectedIds);
         notifyDataSetChanged();
     }
 
     public void refreshData(List<Player> p) {
         this.players.clear();
         this.players.addAll(p);
+        notifyDataSetChanged();
+    }
+
+    public void refreshData(Set<String> selectedIds) {
+        this.selectedIds.addAll(selectedIds);
         notifyDataSetChanged();
     }
 
