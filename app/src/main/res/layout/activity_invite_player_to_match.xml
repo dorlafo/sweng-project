@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     android:orientation="vertical"
     tools:context="ch.epfl.sweng.jassatepfl.InvitePlayerToMatchActivity">
 
@@ -23,12 +24,15 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/invite_button"
         android:layout_margin="@dimen/listview_layout_margin"
+        android:background="#FAFAFA"
         android:orientation="vertical">
 
         <ListView
             android:id="@+id/invite_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/listview_divider_height"
+            android:layout_marginTop="@dimen/listview_divider_height"
             android:background="@android:color/background_light"
             android:divider="@color/listview_divider_color"
             android:dividerHeight="@dimen/listview_divider_height"
