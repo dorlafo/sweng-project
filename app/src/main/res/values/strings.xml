@@ -75,7 +75,8 @@
     </plurals>
     <string name="profile_string_no_stats_yet">Can not display your stats yet.\n You must play a game first.</string>
 
-    <string name="login_welcoming_text">Welcome to Jass@EPFL !\nTo use this app you need to\nlogin with your EPFL account</string>
+    <string name="login_welcoming_text">Welcome to Jass@EPFL !</string>
+    <string name="login_welcoming_text_suite">To use this app you need to\nlogin with your EPFL account</string>
     <string name="login_button_text">Login</string>
 
     <string name="notification_player_joined">A new player has joined your game!</string>
