@@ -1,11 +1,10 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.content.Intent;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +27,7 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
     public ActivityTestRule<UserProfileActivity> activityRule =
             new ActivityTestRule<>(UserProfileActivity.class, false, false);
 
-    @Before
+    @Override
     public void setUp() {
         super.setUp();
         dbRefWrapTest.reset();
@@ -44,12 +43,12 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
         activityRule.launchActivity(new Intent());
 
         onView(withId(R.id.profil_player)).check(matches(isDisplayed()));
-        onView(withId(R.id.twQuote)).check(matches(isDisplayed()));
-        onView(withId(R.id.twMostPlayedWith)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
-        onView(withId(R.id.twMostVariant)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
-        onView(withId(R.id.twMatchPlayed)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
-        onView(withId(R.id.twMostWonWith)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
-        onView(withId(R.id.twMatchWon)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+        onView(withId(R.id.twQuoteNum)).check(matches(isDisplayed()));
+        onView(withId(R.id.twMostPlayedWithName)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMostVariantName)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMatchPlayedNum)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMostWonWithName)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMatchWonNum)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
     /**
@@ -58,7 +57,7 @@ public final class UserProfileActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testUserProfileActivityWithStats() {
         dbRefWrapTest.addPlayers(DummyDataTest.players());
-        dbRefWrapTest.addBobyFakeStats();
+        dbRefWrapTest.addBobFakeStats();
 
         activityRule.launchActivity(new Intent());
 

@@ -30,7 +30,7 @@ public final class MatchStatsLeafTest extends LeafTest<MatchStats> {
             this.isDeleted = false;
         }
         this.data = data;
-        matchIdLeaf.setData(data.getMatchID());
+        matchIdLeaf.setData(data.obtainMatchID());
         variantLeaf.setData(data.obtainGameVariant());
         nbTeamLeaf.setData(data.getNbTeam());
         roundsLeaf.setData(data.getRounds());

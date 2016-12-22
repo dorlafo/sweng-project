@@ -336,6 +336,13 @@ public class Match {
         }
      }
 
+    /**
+     * Set
+     * @param hasCards
+     */
+    public void setHasCards(Map<String, Boolean> hasCards) {
+        this.hasCards = hasCards;
+    }
 
     /**
      * Setter for player cards

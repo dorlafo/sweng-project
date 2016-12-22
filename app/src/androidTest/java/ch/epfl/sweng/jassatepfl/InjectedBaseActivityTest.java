@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 import javax.inject.Inject;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.DaggerFakeGraphTest;

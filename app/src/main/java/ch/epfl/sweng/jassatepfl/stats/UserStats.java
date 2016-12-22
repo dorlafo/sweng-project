@@ -47,7 +47,7 @@ public class UserStats {
     // How many matches have been as a partner of other players.
     private Map<String, Integer> partners = new HashMap<>();
     // How many matches have been won as a partner of other players.
-    private Map<String, Integer> wonWith = new HashMap<>();
+    private Map<String, Integer> wonWith;
 
     /**
      * Constructor, only start with user id.
@@ -56,11 +56,15 @@ public class UserStats {
      */
     public UserStats(Player.PlayerID id) {
         this.playerId = id;
+        this.wonWith = new HashMap<>();
+        this.wonWith.put("SENTINEL", 0);
     }
 
     public UserStats(String id, Rank rank) {
         this.playerId = new Player.PlayerID(id);
         this.rank = rank;
+        this.wonWith = new HashMap<>();
+        this.wonWith.put("SENTINEL", 0);
     }
 
     /**
@@ -141,6 +145,7 @@ public class UserStats {
             if (!playerId.toString().equals(id)) {
                 partners.put(id, getOrDefaultMap(partners, id, 0) + 1);
                 if (isWinner) {
+                    wonWith.remove("SENTINEL");
                     wonWith.put(id, getOrDefaultMap(wonWith, id, 0) + 1);
                 }
             }

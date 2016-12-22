@@ -10,26 +10,65 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ch.epfl.sweng.jassatepfl.LoginActivity">
 
+    <ImageView
+        android:layout_width="205dp"
+        android:layout_height="205dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/login_text_view"
+        android:layout_marginBottom="10dp"
+        android:tint="@color/greenCardBoardDark"
+        android:contentDescription="@string/main_app_icon"/>
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/login_text_view"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@string/main_app_icon"/>
+
     <Button
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="112dp"
+        android:layout_marginBottom="50dp"
+        android:textSize="20sp"
         android:onClick="login"
-        android:text="@string/login_button_text"/>
+        android:text="@string/login_button_text"
+        android:textStyle="normal|bold"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/greenCardBoardAccent"
+        android:background="@android:color/transparent"/>
 
     <TextView
         android:id="@+id/login_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/login_button"
+        android:layout_above="@+id/login_text_view2"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="17dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/login_welcoming_text"
         android:textSize="24sp"
-        android:textStyle="normal|bold"/>
+        android:textColor="@android:color/black"
+        android:textStyle="normal"/>
+
+    <TextView
+        android:id="@+id/login_text_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/login_button"
+        android:layout_margin="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="17dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/login_welcoming_text_suite"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:textStyle="normal"/>
 
 </RelativeLayout>

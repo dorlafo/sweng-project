@@ -53,33 +53,33 @@
 
     <string name="match_list_adapter_players_nb">%1$d/%2$d</string>
 
-    <string name="profile_label_quote">Quote : %d</string>
+    <string name="player_list_adapter_quote">Quote : %d</string>
+
+    <string name="profile_label_quote">Quote</string>
     <string name="profile_label_name">%1$s %2$s</string>
-    <string name="profile_label_matches_played">Matches Played : %d</string>
-    <string name="profile_label_matches_won">Matches Won : %d</string>
+    <string name="profile_label_matches_played">Matches Played</string>
+    <string name="profile_label_matches_won">Matches Won</string>
+    <string name="profile_label_variants">Variant Most Played</string>
     <!--<string name="profile_label_most_variants">Variant Most Played : %1$s - %2$d times played</string>-->
     <plurals name="profile_label_most_variants">
-        <item quantity="one">Variant Most Played : %1$s - %2$d time played</item>
-        <item quantity="other">Variant Most Played : %1$s - %2$d times played</item>
+        <item quantity="one">%1$s - %2$d time played</item>
+        <item quantity="other">%1$s - %2$d times played</item>
     </plurals>
+    <string name="profile_label_most_played">Most Recurrent Partner</string>
     <!--<string name="profile_label_most_played_with">Most Recurrent Partner : %1$s - %2$d matches played together</string>-->
     <plurals name="profile_label_most_played_with">
-        <item quantity="one">Most Recurrent Partner : %1$s - %2$d match played together</item>
-        <item quantity="other">Most Recurrent Partner : %1$s - %2$d matches played together</item>
+        <item quantity="one">%1$s - %2$d match</item>
+        <item quantity="other">%1$s - %2$d matches</item>
     </plurals>
     <!--<string name="profile_label_most_won_with">Best Partner : %1$s - %2$d victory together</string>-->
+    <string name="profile_label_most_won">Best Partner</string>
     <plurals name="profile_label_most_won_with">
-        <item quantity="one">Best Partner : %1$s - %2$d victory together</item>
-        <item quantity="other">Best Partner : %1$s - %2$d victories together</item>
+        <item quantity="one">%1$s - %2$d victory</item>
+        <item quantity="other">%1$s - %2$d victories</item>
     </plurals>
-    <string name="profile_string_no_stats_yet">Can not display your stats yet.\n You must play a game first.</string>
-    <!--TO BE DELETED<string name="profile_label_player_id">Player id :</string>
-    <string name="profile_label_first_name">First name :</string>
-    <string name="profile_label_last_name">Last name :</string>
-    <string name="profile_label_quote">Quote :</string>
-    <string name="profile_button_text_menu">Menu</string>-->
 
-    <string name="login_welcoming_text">Welcome to Jass@EPFL !\nTo use this app you need to\nlogin with your EPFL account</string>
+    <string name="login_welcoming_text">Welcome to Jass@EPFL !</string>
+    <string name="login_welcoming_text_suite">To use this app you need to\nlogin with your EPFL account</string>
     <string name="login_button_text">Login</string>
 
     <string name="notification_player_joined">A new player has joined your game!</string>
@@ -192,4 +192,7 @@
     <string name="won_with_graph">won_with_graph</string>
     <string name="won_graph">won_graph</string>
     <string name="rank_graph">rank_graph</string>
+
+    <string name="no_match_won">No match won yet</string>
+    <string name="main_app_icon">Main app icon</string>
 </resources>

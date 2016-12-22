@@ -1,8 +1,10 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,7 +55,8 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public void testBackClosesDrawer() {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.drawer_layout)).check(matches(isOpen()));
-        pressBack();
+        onView(withId(R.id.drawer_layout)).perform(ViewActions.pressBack());
+        //pressBack();
         onView(withId(R.id.drawer_layout)).check(matches(isClosed()));
     }
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +34,7 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
     public ActivityTestRule<WaitingPlayersActivity> activityRule =
             new ActivityTestRule<>(WaitingPlayersActivity.class, false, false);
 
-    @Before
+    @Override
     public void setUp() {
         super.setUp();
         dbRefWrapTest.reset();
@@ -79,7 +78,7 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         onView(withText(R.string.dialog_have_cards)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         onView(withId(R.id.ready_button)).perform(click());
-        String matchID = DummyDataTest.onePlayerMatchWithBob().getMatchID();
+        String matchID = DummyDataTest.onePlayerMatchWithBob().obtainMatchID();
 
         assertPendingMatchContainsNPlayers(dbRefWrapTest, matchID, 1);
         assertTrue(status.get(DummyDataTest.bricoloBob.getID().toString()));

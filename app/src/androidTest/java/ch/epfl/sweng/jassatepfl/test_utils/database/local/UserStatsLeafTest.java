@@ -65,6 +65,10 @@ public class UserStatsLeafTest extends LeafTest<UserStats> {
      */
     @Override
     public void setData(UserStats data) {
+        if(isDeleted) {
+            isDeleted = true;
+            //throw new UnsupportedOperationException("Cannot setData on a deleted PendingMatchLeafTest");
+        }
         this.data = data;
         rankLeaf.setData(data.getRank());
         partners.setData(data.getPartners());
@@ -76,6 +80,8 @@ public class UserStatsLeafTest extends LeafTest<UserStats> {
         wonByDate.setData(data.getWonByDate());
         wonMatches.setData(data.getWonMatches());
         wonWith.setData(data.getWonWith());
+        this.setChanged();
+        this.notifyObservers(this);
     }
 
     @Override
