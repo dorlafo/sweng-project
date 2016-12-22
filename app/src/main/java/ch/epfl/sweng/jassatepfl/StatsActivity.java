@@ -54,7 +54,7 @@ public class StatsActivity extends BaseActivityWithNavDrawer {
                 private final String[] mFragmentNames = new String[]{
                         "Counters",
                         "Evolution",
-                        "Leaderboard"
+                        "Leader board"
                 };
 
                 @Override
