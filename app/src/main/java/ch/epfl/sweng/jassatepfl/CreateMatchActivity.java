@@ -13,13 +13,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -49,6 +46,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.jassatepfl.error.ErrorHandlerUtils;
@@ -60,6 +58,7 @@ import ch.epfl.sweng.jassatepfl.notification.InvitePlayer;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.DatePickerFragment;
 import ch.epfl.sweng.jassatepfl.tools.LocationProvider;
+import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 import ch.epfl.sweng.jassatepfl.tools.TimePickerFragment;
 
 import static java.util.Calendar.DAY_OF_MONTH;
@@ -84,7 +83,6 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         OnTimeSetListener,
         OnDateSetListener {
 
-    private static final String TAG = CreateMatchActivity.class.getSimpleName();
     private static final int PLACE_PICKER_REQUEST = 27;
     private static final int ADD_PLAYER_REQUEST = 0;
 
@@ -92,19 +90,19 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     private ImageButton placePickerButton;
     private Match.Builder matchBuilder;
     private LocationProvider locationProvider;
-    private ArrayAdapter<Player> playerArrayAdapter;
+    private PlayerListAdapter playerArrayAdapter;
     private Calendar matchCalendar;
+    private EditText editText;
+    private List<Player> playerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         } else {
-            //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_create_match, drawer, false);
             drawer.addView(contentView, 0);
@@ -116,22 +114,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             createMatchButton.setOnClickListener(this);
 
             // Description input
-            final EditText editText = (EditText) findViewById(R.id.description_match_text);
-            editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        String description = v.getText().toString();
-                        if (description.length() != 0) {
-                            matchBuilder.setDescription(description);
-                        }
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        return true;
-                    }
-                    return false;
-                }
-            });
+            editText = (EditText) findViewById(R.id.description_match_text);
 
             // Date and time pickers
             ImageButton timePickerDialog = (ImageButton) findViewById(R.id.time_picker_button);
@@ -171,14 +154,14 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
             emptyList.setText(R.string.create_empty_list);
             emptyList.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
             emptyList.setTextColor(Color.GRAY);
+            playerList = new ArrayList<>();
 
-            //TODO: Doesn't show players... --> fix this + make clicking on player ask to remove him
             ListView playersLV = (ListView) findViewById(R.id.create_player_list);
             ((ViewGroup) playersLV.getParent()).addView(emptyList);
             playersLV.setEmptyView(emptyList);
             playersLV.setBackgroundColor(0xFAFAFA);
 
-            playerArrayAdapter = new ArrayAdapter<>(this, R.layout.invited_player_list, new ArrayList<Player>());
+            playerArrayAdapter = new PlayerListAdapter(this, R.layout.player_list_element, playerList);
             playersLV.setAdapter(playerArrayAdapter);
 
             playersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -189,7 +172,8 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                             .setTitle(R.string.dialog_remove_player)
                             .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    playerArrayAdapter.remove(player);
+                                    playerList.remove(player);
+                                    playerArrayAdapter.refreshData(playerList);
                                 }
                             })
                             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -241,14 +225,17 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                     Toast.makeText(CreateMatchActivity.this,
                             R.string.toast_cannot_create_with_no_player, Toast.LENGTH_SHORT)
                             .show();
-                    createMatchButton.setEnabled(false);
-                } else {
+                } else if(editText.getText().toString().isEmpty()) {
+                    Toast.makeText(CreateMatchActivity.this,
+                            R.string.toast_please_enter_description, Toast.LENGTH_SHORT)
+                            .show();
+                }
+                else {
                     String matchId = dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).push().getKey();
-                    Match m = matchBuilder.setMatchID(matchId).build();
+                    Match m = matchBuilder.setMatchID(matchId).setDescription(editText.getText().toString()).build();
                     dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(m);
                     dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).setValue(false);
-                    //Log.d(TAG, "Pushed match " + matchId + " to database");
-                    new InvitePlayer(playerArrayAdapter).execute(matchId);
+                    new InvitePlayer(playerList).execute(matchId);
                     startActivity(new Intent(this, WaitingPlayersActivity.class).putExtra("match_Id", matchId));
                     finish();
                 }
@@ -297,9 +284,11 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Player player = dataSnapshot.getValue(Player.class);
-                                        if (playerArrayAdapter.getPosition(player) == -1) {
-                                            playerArrayAdapter.add(player);
+                                        if(playerList.contains(player)) {
+                                            playerList.remove(player);
                                         }
+                                        playerList.add(player);
+                                        playerArrayAdapter.refreshData(playerList);
                                     }
 
                                     @Override
@@ -348,7 +337,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
         final Calendar currentTime = Calendar.getInstance();
         if (tempCalendar.compareTo(currentTime) > 0) {
             matchCalendar.setTimeInMillis(tempCalendar.getTimeInMillis());
-            matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
+            matchBuilder.setTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
             Toast.makeText(this, R.string.toast_invalid_hour, Toast.LENGTH_SHORT)
@@ -375,7 +364,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                 matchCalendar.set(HOUR_OF_DAY, currentHour);
                 matchCalendar.set(MINUTE, currentMinute);
             }
-            matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
+            matchBuilder.setTime(matchCalendar.getTimeInMillis());
             displayCurrentExpirationDate();
         } else {
             Calendar tempCalendar = Calendar.getInstance();
@@ -383,7 +372,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
 
             if (tempCalendar.compareTo(currentTime) > 0) {
                 matchCalendar.set(year, month, dayOfMonth);
-                matchBuilder.setExpirationTime(matchCalendar.getTimeInMillis());
+                matchBuilder.setTime(matchCalendar.getTimeInMillis());
                 displayCurrentExpirationDate();
             } else {
                 Toast.makeText(this, R.string.toast_invalid_date, Toast.LENGTH_SHORT)
@@ -393,10 +382,8 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     }
 
     private void addCurrentUserToBuilder() {
-        // TODO: can we fuse this method with addplayer l.258, it is almost the same
         try {
-            String currentUserId = fAuth.getCurrentUser().getDisplayName();
-            dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS).child(currentUserId)
+            dbRefWrapped.child(DatabaseUtils.DATABASE_PLAYERS).child(getUserSciper())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

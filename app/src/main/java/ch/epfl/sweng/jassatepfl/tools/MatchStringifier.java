@@ -43,6 +43,19 @@ public final class MatchStringifier {
     }
 
     /**
+     * Set String depending if someone has cards or not
+     *
+     * @param match The Match
+     */
+    public String getStringHasCard(Match match) {
+        if(match.hasCards()) {
+            return "Yes";
+        } else {
+            return "No";
+        }
+    }
+
+    /**
      * Builds and returns a String representation of all useful
      * fields of a Match to be used in a googleMaps
      * {@link com.google.android.gms.maps.model.Marker Marker}.
@@ -53,20 +66,19 @@ public final class MatchStringifier {
         Resources res = context.getResources();
         String newLine = System.getProperty("line.separator");
 
-        StringBuilder builder = new StringBuilder(
-                res.getString(R.string.snippet_match_quote))
-                .append(Integer.toString(match.getQuote()))
-                .append(newLine)
-                .append(res.getString(R.string.snippet_player_list))
-                .append(playersToString())
-                .append(newLine)
-                .append(res.getString(R.string.snippet_game_variant))
-                .append(match.getGameVariant().toString())
-                .append(newLine)
-                .append(res.getString(R.string.snippet_expiration_date))
-                .append(dateToStringCustom());
+        String builder = res.getString(R.string.snippet_match_quote) +
+                Integer.toString(match.getQuote()) +
+                newLine +
+                res.getString(R.string.snippet_player_list) +
+                playersToString() +
+                newLine +
+                res.getString(R.string.snippet_game_variant) +
+                match.getGameVariant().toString() +
+                newLine +
+                res.getString(R.string.snippet_expiration_date) +
+                dateToStringCustom();
 
-        return builder.toString();
+        return builder;
     }
 
     /**
@@ -79,7 +91,7 @@ public final class MatchStringifier {
         DateFormat dateFormat = new SimpleDateFormat(
                 context.getResources().getString(R.string.date_format_match_display),
                 Locale.FRENCH);
-        return dateFormat.format(match.getExpirationTime());
+        return dateFormat.format(match.getTime());
     }
 
     /**

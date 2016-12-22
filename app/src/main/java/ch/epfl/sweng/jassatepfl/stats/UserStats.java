@@ -3,13 +3,17 @@ package ch.epfl.sweng.jassatepfl.stats;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.stats.trueskill.GameInfo;
+import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
 
 
 /**
@@ -26,6 +30,9 @@ public class UserStats {
     // How many matches he won.
     private int wonMatches = 0;
 
+    // The rank of the player (this is not the quote)
+    private Rank rank;
+
     // Number of played matches by date (one counter per day).
     private List<Tuple2<Long, Integer>> playedByDate = new ArrayList<>();
     // Number of won matches by date (one counter per day).
@@ -40,7 +47,7 @@ public class UserStats {
     // How many matches have been as a partner of other players.
     private Map<String, Integer> partners = new HashMap<>();
     // How many matches have been won as a partner of other players.
-    private Map<String, Integer> wonWith = new HashMap<>();
+    private Map<String, Integer> wonWith;
 
     /**
      * Constructor, only start with user id.
@@ -49,6 +56,15 @@ public class UserStats {
      */
     public UserStats(Player.PlayerID id) {
         this.playerId = id;
+        this.wonWith = new HashMap<>();
+        this.wonWith.put("SENTINEL", 0);
+    }
+
+    public UserStats(String id, Rank rank) {
+        this.playerId = new Player.PlayerID(id);
+        this.rank = rank;
+        this.wonWith = new HashMap<>();
+        this.wonWith.put("SENTINEL", 0);
     }
 
     /**
@@ -56,6 +72,14 @@ public class UserStats {
      */
     public UserStats() {
 
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
+    public Rank getRank() {
+        return rank;
     }
 
     /* Getters */
@@ -101,7 +125,7 @@ public class UserStats {
      *
      * @param stats The results of a concluded match
      */
-    protected UserStats update(MatchStats stats) {
+    public UserStats update(MatchStats stats) {
         prepareLastBuckets(Calendar.getInstance().getTimeInMillis());
 
         Match match = stats.getMatch();
@@ -121,6 +145,7 @@ public class UserStats {
             if (!playerId.toString().equals(id)) {
                 partners.put(id, getOrDefaultMap(partners, id, 0) + 1);
                 if (isWinner) {
+                    wonWith.remove("SENTINEL");
                     wonWith.put(id, getOrDefaultMap(wonWith, id, 0) + 1);
                 }
             }
@@ -173,7 +198,7 @@ public class UserStats {
     }
 
     /**
-     * Normalizes the date: We interestad in tracking data day by day. Therefore we have to
+     * Normalizes the date: We interested in tracking data day by day. Therefore we have to
      * make all hours and seconds the same in the same day. We settled for 23:59:59
      *
      * @param timestamp The time at the end of the match in milliseconds
@@ -189,4 +214,33 @@ public class UserStats {
         thisDate.set(Calendar.SECOND, 59);
         return thisDate.getTimeInMillis();
     }
+
+    private List<Tuple2<String, Integer>> sortedStringIntMap(Map<String, Integer> map) {
+        LinkedList<Tuple2<String, Integer>> result = new LinkedList<>();
+        for (String k : map.keySet()) {
+            result.add(new Tuple2<>(k, map.get(k)));
+        }
+        Collections.sort(result, new Comparator<Tuple2<String, Integer>>() {
+            @Override
+            public int compare(Tuple2<String, Integer> o1, Tuple2<String, Integer> o2) {
+                if (o1.getValue() > o2.getValue()) return -1;
+                else if (o1.getValue() < o2.getValue()) return 1;
+                else return 0;
+            }
+        });
+        return result;
+    }
+
+    public List<Tuple2<String, Integer>> sortedPartners() {
+        return sortedStringIntMap(partners);
+    }
+
+    public List<Tuple2<String, Integer>> sortedVariants() {
+        return sortedStringIntMap(variants);
+    }
+
+    public List<Tuple2<String, Integer>> sortedWonWith() {
+        return sortedStringIntMap(wonWith);
+    }
+
 }

@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="listactivity_background_color">#E4E4E4</color>
     <color name="listview_divider_color">#E4E4E4</color>
-
+    <color name="light_grey">#D3D3D3</color>
     <color name="greenCardBoard">#2B6C3E</color>
     <color name="greenCardBoardDark">#21432B</color>
     <color name="greenCardBoardAccent">#D493C1</color>

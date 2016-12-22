@@ -251,26 +251,26 @@ public final class MatchTest {
     @Test
     public void setTeamRemoveSentinelIfOnlyOneMemberIsAssigned() {
         Match m = DummyDataTest.fullMatch();
-        m.setTeam(0, new Player.PlayerID("234832"));
-        assertEquals("234832", m.getTeams().get("Team0").get(0));
+        m.setTeam(0, dorian.getID());
+        assertEquals(dorian.getID().toString(), m.getTeams().get("Team0").get(0));
         assertEquals(1, m.getTeams().get("Team0").size());
     }
 
     @Test
     public void setTeamDoesNotAddDuplicateMemberInOneTeam() {
         Match m = DummyDataTest.fullMatch();
-        m.setTeam(0, new Player.PlayerID("234832"));
-        m.setTeam(0, new Player.PlayerID("234832"));
-        assertEquals("234832", m.getTeams().get("Team0").get(0));
+        m.setTeam(0, dorian.getID());
+        m.setTeam(0, dorian.getID());
+        assertEquals(dorian.getID().toString(), m.getTeams().get("Team0").get(0));
         assertEquals(1, m.getTeams().get("Team0").size());
     }
 
     @Test
     public void setTeamChangeSwitchPlayerFromTeamCorrectly() {
         Match m = DummyDataTest.fullMatch();
-        m.setTeam(0, new Player.PlayerID("234832"));
-        m.setTeam(1, new Player.PlayerID("234832"));
-        assertEquals("234832", m.getTeams().get("Team1").get(0));
+        m.setTeam(0, dorian.getID());
+        m.setTeam(1, dorian.getID());
+        assertEquals(dorian.getID().toString(), m.getTeams().get("Team1").get(0));
         assertEquals(1, m.getTeams().get("Team1").size());
 
         assertEquals("SENTINEL", m.getTeams().get("Team0").get(0));
@@ -280,25 +280,25 @@ public final class MatchTest {
     @Test
     public void teamAssignmentIsCorrectReturnsTrueWhenAssignmentIsCorrect() {
         Match m = DummyDataTest.fullMatch();
-        m.setTeam(0, new Player.PlayerID("234832"));
-        m.setTeam(0, new Player.PlayerID("999999"));
-        m.setTeam(1, new Player.PlayerID("666666"));
-        m.setTeam(1, new Player.PlayerID("249733"));
+        m.setTeam(0, dorian.getID());
+        m.setTeam(0, random.getID());
+        m.setTeam(1, marco.getID());
+        m.setTeam(1, vincenzo.getID());
         assertTrue(m.teamAssignmentIsCorrect());
     }
 
     @Test
     public void teamAssignmentIsCorrectReturnsFalseWhenATeamContainsASentinel() {
-        Match m = DummyDataTest.matchPomme();
+        Match m = DummyDataTest.matchForTest();
         assertFalse(m.teamAssignmentIsCorrect());
     }
 
     @Test
     public void teamAssignmentIsCorrectReturnsFalseWhenWrongNumberOfPlayerInTeam() {
         Match m = DummyDataTest.fullMatch();
-        m.setTeam(0, new Player.PlayerID("234832"));
-        m.setTeam(0, new Player.PlayerID("999999"));
-        m.setTeam(1, new Player.PlayerID("666666"));
+        m.setTeam(0, dorian.getID());
+        m.setTeam(0, random.getID());
+        m.setTeam(1, marco.getID());
         assertFalse(m.teamAssignmentIsCorrect());
     }
 
@@ -340,7 +340,7 @@ public final class MatchTest {
     public void matchHasChangedReturnFalseIfNotSameMatch() {
         Match m1 = DummyDataTest.fullMatch();
         Match m2 = DummyDataTest.fullMatchWithBob();
-        m2.setExpirationTime(m1.getExpirationTime());
+        m2.setTime(m1.getTime());
 
         assertFalse(m1.matchHasChanged(m2) || m2.matchHasChanged(m1));
     }
@@ -349,7 +349,7 @@ public final class MatchTest {
     public void matchHasChangedReturnFalseIfMatchHasNotChanged() {
         Match m1 = DummyDataTest.fullMatch();
         Match m2 = DummyDataTest.fullMatch();
-        m2.setExpirationTime(m1.getExpirationTime());
+        m2.setTime(m1.getTime());
 
         assertFalse(m1.matchHasChanged(m2) || m2.matchHasChanged(m1));
     }
@@ -358,7 +358,7 @@ public final class MatchTest {
     public void matchHasChangedReturnTrueIfMatchHasChanged() {
         Match m1 = DummyDataTest.fullMatch();
         Match m2 = DummyDataTest.fullMatch();
-        m2.setExpirationTime(m1.getExpirationTime());
+        m2.setTime(m1.getTime());
 
         m1.removePlayerById(DummyDataTest.dorian.getID());
         assertTrue(m1.matchHasChanged(m2) && m2.matchHasChanged(m1));

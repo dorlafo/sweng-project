@@ -3,14 +3,11 @@ package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Amaury Combes
- */
-public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
+public class PendingMatchLeafTest extends LeafTest<Map<String, Boolean>> {
 
     private Map<String, LeafFieldTest<Boolean>> status = new HashMap<>();
 
-    public MatchStatusLeafTest(String id, NodeTest parent) {
+    public PendingMatchLeafTest(String id, NodeTest parent) {
         super(id, parent);
     }
 
@@ -20,7 +17,7 @@ public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
             return status.get(id);
         }
         else {
-            throw new IllegalArgumentException("Could not get player : " + id);
+            throw new IllegalArgumentException("Could not get pending match value for player : " + id);
         }
     }
 
@@ -33,16 +30,24 @@ public class MatchStatusLeafTest extends LeafTest<Map<String, Boolean>> {
         if(status.isEmpty()) {
             removeSelf();
         }
+        this.setChanged();
+        this.notifyObservers(this);
     }
 
     @Override
     public void setData(Map<String, Boolean> data) {
+        if(isDeleted) {
+            isDeleted = true;
+            //throw new UnsupportedOperationException("Cannot setData on a deleted PendingMatchLeafTest");
+        }
         this.data = data;
         for(String key : data.keySet()) {
             LeafFieldTest<Boolean> s = new LeafFieldTest<>(key, this);
             s.setData(data.get(key));
             status.put(key, s);
         }
+        this.setChanged();
+        this.notifyObservers(this);
     }
 
     @Override

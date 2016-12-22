@@ -16,17 +16,20 @@
         <ImageView
             android:id="@+id/played_graph"
             android:layout_width="400dip"
-            android:layout_height="400dip" />
+            android:layout_height="400dip"
+            android:contentDescription="@string/played_graph" />
 
         <ImageView
             android:id="@+id/won_graph"
             android:layout_width="400dip"
-            android:layout_height="400dip" />
+            android:layout_height="400dip"
+            android:contentDescription="@string/won_graph" />
 
         <ImageView
             android:id="@+id/rank_graph"
             android:layout_width="400dip"
-            android:layout_height="400dip" />
+            android:layout_height="400dip"
+            android:contentDescription="@string/rank_graph" />
 
     </LinearLayout>
 </ScrollView>

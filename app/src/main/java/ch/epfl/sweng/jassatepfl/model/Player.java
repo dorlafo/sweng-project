@@ -46,7 +46,7 @@ public class Player {
      * @param firstName The first name of the player
      */
     public Player(PlayerID id, String lastName, String firstName) {
-        this(id, lastName, firstName, 0);
+        this(id, lastName, firstName, 1000);
     }
 
     /**

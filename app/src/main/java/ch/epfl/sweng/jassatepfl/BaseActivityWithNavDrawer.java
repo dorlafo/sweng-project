@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -129,6 +130,15 @@ public abstract class BaseActivityWithNavDrawer extends AppCompatActivity
      * @return The user' sciper
      */
     public String getUserSciper() {
-        return fAuth.getCurrentUser().getDisplayName();
+        String sciper = "";
+        try {
+            sciper = fAuth.getCurrentUser().getDisplayName();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
+                    .show();
+            return "";
+        }
+        return sciper;
     }
 }

@@ -3,6 +3,8 @@ package ch.epfl.sweng.jassatepfl.tequila;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -19,7 +21,7 @@ public class OAuth2ConfigTest {
         String clientSecret = "TOTO";
         String redirectUri = "TUTU";
         OAuth2Config config = new OAuth2Config(scopes, clientId, clientSecret, redirectUri);
-        assertTrue(config.scopes.equals(scopes));
+        assertTrue(Arrays.equals(config.scopes, scopes));
         assertTrue(config.clientId.equals(clientId));
         assertTrue(config.clientSecret.equals(clientSecret));
         assertTrue(config.redirectUri.equals(redirectUri));

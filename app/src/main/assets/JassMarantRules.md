@@ -1,6 +1,6 @@
-## Jass Rules - Jass Marant
+## Jass Rules - Jass Marrant
 
-Jass Marant is a variant of Jass. The rules are similar to Chibre, Pique Double, Oben Abe, Unden Ufe and Slalom so you should read those tutorials first.
+Jass Marrant is a variant of Jass. The rules are similar to Chibre, Pique Double, Oben Abe, Unden Ufe and Slalom so you should read those tutorials first.
 It is actually a mix of those variants. Each round the player that usually select *Atout* can select the variant to play for this round.
 The big difference with Chicane is that you have to play each variant once and ONLY once. They count this way:
 - *Atout* Diamonds x1
@@ -12,4 +12,4 @@ The big difference with Chicane is that you have to play each variant once and O
 - Slalom x7
 - Joker x8
 
-Joker means that you can select the variant you wish and it counts 8 times, so make it count! This is usualy played with a lot of fun because you can be forced to play something you really don't want to and risk big fails. The game ends when each team played all variants once. The team with the most points at the end wins.
+Joker means that you can select the variant you wish and it counts 8 times, so make it count! This is usually played with a lot of fun because you can be forced to play something you really don't want to and risk big fails. The game ends when each team played all variants once. The team with the most points at the end wins.

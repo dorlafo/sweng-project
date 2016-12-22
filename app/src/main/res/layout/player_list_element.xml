@@ -13,30 +13,18 @@
         android:gravity="center"
         android:paddingBottom="2dp"
         android:paddingTop="2dp"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:textStyle="bold"/>
 
-    <LinearLayout
-        android:id="@+id/player_list_row1"
+    <TextView
+        android:id="@+id/player_quote"
+        android:layout_below="@id/player_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/player_name"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="2dp"
-            android:text="@string/profile_label_quote"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/player_quote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="2dp"/>
-
-    </LinearLayout>
+        android:gravity="center"
+        android:paddingBottom="2dp"
+        android:text="@string/profile_label_quote"
+        android:textStyle="bold"/>
 
 </RelativeLayout>

@@ -64,7 +64,6 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
 
     private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
 
-    // TODO: max points depending on variant?
     private final static int TOTAL_POINTS_IN_ROUND = 157;
     private final static int MATCH_POINTS = 257;
 
@@ -118,8 +117,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
 
             meldCallers = new Stack<>();
 
-            Intent intent = getIntent();
-            matchId = intent.getStringExtra("match_Id");
+            matchId = startingIntent.getStringExtra("match_Id");
         }
     }
 
@@ -155,8 +153,15 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId)
                     .removeEventListener(statsListener);
         }
-        // TODO: remove matchstats from firebase (are you sure ? If the player exit
-        // the app when the match is still active, it should not delete it)
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (statsListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId)
+                    .removeEventListener(statsListener);
+        }
     }
 
     @Override
@@ -215,10 +220,12 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         TextView commonGoal = (TextView) findViewById(R.id.game_playing_to);
         TextView firstTeamGoal = (TextView) findViewById(R.id.team_goal_1);
         TextView secondTeamGoal = (TextView) findViewById(R.id.team_goal_2);
+        int defaultPointsGoal = currentMatch.getGameVariant().getPointGoal();
+        matchStats.updatePointsGoal(defaultPointsGoal);
         if (splitMode == NORMAL) {
             splitMode = SPLIT;
             commonGoal.setVisibility(INVISIBLE);
-            String defaultGoal = Integer.toString(currentMatch.getGameVariant().getPointGoal());
+            String defaultGoal = Integer.toString(defaultPointsGoal);
 
             firstTeamGoal.setVisibility(VISIBLE);
             firstTeamGoal.setText(defaultGoal);
@@ -238,7 +245,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
     private void updateSplitGoal(int index, int points) {
         int goalIndex = index == 0 ? R.id.team_goal_1 : R.id.team_goal_2;
         TextView goal = (TextView) findViewById(goalIndex);
-        goal.setText(Integer.toString(points));
+        goal.setText(String.format(java.util.Locale.getDefault(), "%d", points));
     }
 
     private void displayMeldSpinner(final int teamIndex) {
@@ -254,6 +261,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                         matchStats.setMeld(teamIndex, meld);
                         dialog.dismiss();
                         displayScore();
+                        testEndOfMatch();
                         updateMatchStats();
                         cancelButton.setEnabled(true);
                     }
@@ -279,6 +287,11 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         matchStats.finishRound();
         cancelButton.setEnabled(true);
         displayScore();
+        testEndOfMatch();
+        updateMatchStats();
+    }
+
+    private void testEndOfMatch() {
         if (matchStats.goalHasBeenReached()) {
             if (matchStats.allTeamsHaveReachedGoal()) {
                 matchStats.setWinnerIndex(caller.ordinal());
@@ -288,13 +301,12 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
             }
             displayEndOfMatchMessage(matchStats.getWinnerIndex());
         }
-        updateMatchStats();
     }
 
     @SuppressLint("SetTextI18n")
     private void displayScore() {
-        Integer firstTeamScore = matchStats.getTotalMatchScore(0);
-        Integer secondTeamScore = matchStats.getTotalMatchScore(1);
+        Integer firstTeamScore = matchStats.obtainTotalMatchScore(0);
+        Integer secondTeamScore = matchStats.obtainTotalMatchScore(1);
         firstTeamScoreDisplay.setText(firstTeamScore.toString());
         secondTeamScoreDisplay.setText(secondTeamScore.toString());
     }
@@ -437,15 +449,15 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
                         computeScores(points * scoreMultiplier, scoreMultiplier);
                         break;
                     case COMMON_GOAL:
-                        matchStats.setPointsGoal(points);
+                        matchStats.updatePointsGoal(points);
                         updatePointsGoal(points);
                         break;
                     case FIRST_TEAM_GOAL:
-                        matchStats.setPointsGoal(0, points);
+                        matchStats.updatePointsGoal(0, points);
                         updateSplitGoal(0, points);
                         break;
                     case SECOND_TEAM_GOAL:
-                        matchStats.setPointsGoal(1, points);
+                        matchStats.updatePointsGoal(1, points);
                         updateSplitGoal(1, points);
                         break;
                 }
@@ -592,6 +604,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void displayScoreHistory(int teamIndex) {
         final Dialog dialog = new Dialog(this) {
             @Override
@@ -609,7 +622,7 @@ public class GameActivity extends BaseActivityWithNavDrawer implements OnClickLi
         int roundIndex = 1;
 
         for (Round round : matchStats.getRounds()) {
-            TableRow row = (TableRow) inflater.inflate(R.layout.score_table_row, null);
+            TableRow row = (TableRow) inflater.inflate(R.layout.score_table_row, tableLayout, false);
 
             int black = ContextCompat.getColor(this, android.R.color.black);
 

@@ -6,14 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.concurrent.ExecutionException;
-
-import ch.epfl.sweng.jassatepfl.server.ServerInterface;
-import ch.epfl.sweng.jassatepfl.stats.DrawableRetriever;
-
 /**
  * Fragment containing the "counter" statistics.
  */

@@ -122,7 +122,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/numpad_grid"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        style="?android:attr/buttonBarStyle">
 
         <Button
             android:id="@+id/score_picker_cancel"
@@ -130,7 +131,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:text="@string/dialog_cancel"/>
+            android:text="@string/dialog_cancel"
+            style="?android:attr/buttonBarButtonStyle" />
 
         <Button
             android:id="@+id/score_picker_match"
@@ -139,7 +141,8 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:text="@string/dialog_match"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            style="?android:attr/buttonBarButtonStyle" />
 
         <Button
             android:id="@+id/score_picker_confirm"
@@ -147,7 +150,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:text="@string/dialog_ok"/>
+            android:text="@string/dialog_ok"
+            style="?android:attr/buttonBarButtonStyle" />
 
     </LinearLayout>
 

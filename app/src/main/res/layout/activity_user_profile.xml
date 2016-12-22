@@ -7,112 +7,116 @@
     android:orientation="vertical">
 
     <Space
+        android:id="@+id/profile_space"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"/>
 
-    <LinearLayout
-        android:id="@+id/llPlayerID"
+    <TextView
+        android:id="@+id/profil_player"
+        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.2"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/twPlayerID"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:gravity="center_vertical"
-            android:text="@string/profile_label_player_id"
-            android:textAllCaps="false"
-            android:textSize="18sp"
-            android:textStyle="normal|bold"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.2"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/twLastName"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:gravity="center_vertical"
-            android:text="@string/profile_label_last_name"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.2"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/twFirstName"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:gravity="center_vertical"
-            android:text="@string/profile_label_first_name"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.2"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/twQuote"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:gravity="center_vertical"
-            android:text="@string/profile_label_quote"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:layout_weight="0.2"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
-        <Button
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/roundedbutton"
-            android:onClick="viewMenu"
-            android:text="@string/profile_button_text_menu"/>
+    <TableLayout
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1">
 
-        <Button
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:background="@drawable/roundedbutton"
-            android:text="@string/main_button_text_ranking"/>
+        <TableRow android:background="@color/light_grey">
+            <TextView
+                android:id="@+id/twMatchPlayed"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/profile_label_matches_played"
+                android:textColor="@android:color/black"
+                android:padding="3dip"/>
+            <TextView
+                android:id="@+id/twMatchPlayedNum"
+                android:gravity="end"
+                android:textColor="@android:color/black"
+                android:padding="3dip"/>
+        </TableRow>
 
-        <Button
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/roundedbutton"
-            android:text="@string/main_button_text_stats"/>
+        <TableRow>
+            <TextView
+                android:id="@+id/twMatchWon"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/profile_label_matches_won"
+                android:textColor="@android:color/black"
+                android:padding="3dip"/>
+            <TextView
+                android:id="@+id/twMatchWonNum"
+                android:gravity="end"
+                android:textColor="@android:color/black"
+                android:padding="3dip"/>
+        </TableRow>
 
-    </LinearLayout>
+        <TableRow android:background="@color/light_grey">
+            <TextView
+                android:id="@+id/twMostPlayedWith"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/profile_label_most_played"
+                android:textColor="@android:color/black"
+                android:padding="3dip"/>
+            <TextView
+                android:id="@+id/twMostPlayedWithName"
+                android:textColor="@android:color/black"
+                android:gravity="end"
+                android:padding="3dip"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/twMostWonWith"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/profile_label_most_won"
+                android:padding="3dip"/>
+            <TextView
+                android:id="@+id/twMostWonWithName"
+                android:textColor="@android:color/black"
+                android:gravity="end"
+                android:padding="3dip"/>
+        </TableRow>
+
+        <TableRow android:background="@color/light_grey">
+            <TextView
+                android:id="@+id/twMostVariant"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/profile_label_variants"
+                android:padding="3dip"/>
+            <TextView
+                android:id="@+id/twMostVariantName"
+                android:textColor="@android:color/black"
+                android:gravity="end"
+                android:padding="3dip"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/twQuote"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/profile_label_quote"
+                android:padding="3dip"/>
+            <TextView
+                android:id="@+id/twQuoteNum"
+                android:textColor="@android:color/black"
+                android:gravity="end"
+                android:padding="3dip"/>
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>

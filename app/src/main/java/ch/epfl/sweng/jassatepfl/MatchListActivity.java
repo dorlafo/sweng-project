@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,7 +38,7 @@ import static android.view.Gravity.CENTER_VERTICAL;
  */
 public class MatchListActivity extends BaseActivityWithNavDrawer implements OnItemClickListener {
 
-    private BaseAdapter adapter;
+    private MatchListAdapter adapter;
     private List<Match> matches;
     private ListView listView;
     private ChildEventListener childEventListener;
@@ -75,6 +74,9 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
 
             matches = new ArrayList<>();
             listView.setOnItemClickListener(this);
+
+            adapter = new MatchListAdapter(MatchListActivity.this, R.layout.match_list_row, new ArrayList<Match>());
+            listView.setAdapter(adapter);
         }
     }
 
@@ -105,7 +107,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
                 .setMessage(R.string.dialog_join_message)
                 .setPositiveButton(R.string.dialog_join_confirmation, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        final Match match = (Match) adapter.getItem(position);
+                        final Match match = adapter.getItem(position);
                         DatabaseUtils.addPlayerToMatch(MatchListActivity.this,
                                 dbRefWrapped,
                                 match.getMatchID(),
@@ -194,8 +196,7 @@ public class MatchListActivity extends BaseActivityWithNavDrawer implements OnIt
      * Updates Match list adapter
      */
     private void modifyListAdapter() {
-        adapter = new MatchListAdapter(MatchListActivity.this, R.layout.match_list_row, matches);
-        listView.setAdapter(adapter);
+        adapter.refreshData(matches);
     }
 
 }

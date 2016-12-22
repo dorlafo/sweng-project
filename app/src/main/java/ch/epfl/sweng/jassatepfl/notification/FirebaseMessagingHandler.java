@@ -60,7 +60,7 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
      * Create and show a simple notification containing the received FCM message.
      * Redirects User depending on the msgType.
      *
-     * @param msgData FCM message datas.
+     * @param msgData FCM message data.
      * @param msgType NotificationMessage type.
      */
     private void sendNotification(NotificationMessages msgType, Map<String, String> msgData) {
@@ -101,7 +101,7 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_notify)
-                .setContentTitle("Jass@EPFL - " + msgData.get("title"))
+                .setContentTitle(msgData.get("title"))
                 .setContentText(msgData.get("body"))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

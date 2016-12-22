@@ -3,10 +3,9 @@ package ch.epfl.sweng.jassatepfl.test_utils.database.local;
 
 import java.util.Set;
 
-/**
- * @author Amaury Combes
- */
-public class LeafFieldTest<T> implements NodeTest {
+import ch.epfl.sweng.jassatepfl.stats.trueskill.Rank;
+
+public class LeafFieldTest<T> extends NodeTest {
     private final String id;
     private T data;
     private NodeTest parent;
@@ -27,6 +26,13 @@ public class LeafFieldTest<T> implements NodeTest {
 
     public void setData(T data) {
         this.data = data;
+        //TODO: voir si c'est utile...
+        if(parent instanceof UserStatsLeafTest && data instanceof Rank) {
+            ((UserStatsLeafTest) parent).getData().setRank((Rank) data);
+        } else if(parent instanceof PlayerLeafTest && Integer.class.isInstance(data)) {
+            ((PlayerLeafTest) parent).getData().setQuote((Integer) data);
+
+        }
     }
 
     @Override
@@ -71,8 +77,11 @@ public class LeafFieldTest<T> implements NodeTest {
 
     @Override
     public void removeSelf() {
-        if(data instanceof Boolean) {
-            ((MatchStatusLeafTest) parent).removeOneStatus(id);
+        if(parent instanceof PendingMatchLeafTest) {
+            ((PendingMatchLeafTest) parent).removeOneStatus(id);
+        }
+        else {
+            throw new UnsupportedOperationException("LeafFieldTest cannot remove itself");
         }
     }
 

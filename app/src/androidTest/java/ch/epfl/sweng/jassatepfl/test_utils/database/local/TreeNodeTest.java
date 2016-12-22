@@ -10,9 +10,8 @@ import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
  * The TreeNodeTest class is a special case of the NodeTest interface. It represents the middle nodes of our
  * tree structure
  *
- * @author Amaury Combes
  */
-public class TreeNodeTest implements NodeTest {
+public class TreeNodeTest extends NodeTest {
 
     private String id;
     private Set<NodeTest> children;
@@ -27,6 +26,7 @@ public class TreeNodeTest implements NodeTest {
         this.id = id;
         children = new HashSet<>();
         this.parent = parent;
+        this.isDeleted = false;
     }
 
     @Override
@@ -51,31 +51,53 @@ public class TreeNodeTest implements NodeTest {
                 return (LeafTest) n;
             }
         }
-        throw new IllegalArgumentException("The node '" + this.id + "' does not have a children named : " + id);
+        return this.addChild(id);
     }
 
     @Override
     public LeafTest addChild(String id) {
+        if(isDeleted) {
+            this.isDeleted = false;
+        }
+
+        LeafTest deletedLeaf = null;
+        for(NodeTest n : children) {
+            if(n.getId().equals(id) && n.isDeleted) {
+                deletedLeaf = (LeafTest) n;
+            }
+        }
+        if(deletedLeaf != null) {
+            deletedLeaf.dropChildren();
+            deletedLeaf.deleteAllObservers();
+            children.remove(deletedLeaf);
+        }
+
+        LeafTest newLeaf;
+
         switch (this.id) {
             case DatabaseUtils.DATABASE_PLAYERS:
-                PlayerLeafTest playerLeaf = new PlayerLeafTest(id, this);
-                children.add(playerLeaf);
-                return playerLeaf;
+                newLeaf = new PlayerLeafTest(id, this);
+                break;
             case DatabaseUtils.DATABASE_MATCHES:
-                MatchLeafTest matchLeaf = new MatchLeafTest(id, this);
-                children.add(matchLeaf);
-                return matchLeaf;
+                newLeaf = new MatchLeafTest(id, this);
+                break;
             case DatabaseUtils.DATABASE_PENDING_MATCHES:
-                MatchStatusLeafTest statusLeaf = new MatchStatusLeafTest(id, this);
-                children.add(statusLeaf);
-                return statusLeaf;
+                newLeaf = new PendingMatchLeafTest(id, this);
+                break;
             case DatabaseUtils.DATABASE_MATCH_STATS:
-                MatchStatsLeafTest statsLeaf = new MatchStatsLeafTest(id, this);
-                children.add(statsLeaf);
-                return statsLeaf;
+                newLeaf = new MatchStatsLeafTest(id, this);
+                break;
+            case DatabaseUtils.DATABASE_USERSTATS:
+                newLeaf = new UserStatsLeafTest(id, this);
+                break;
             default:
                 throw new UnsupportedOperationException();
         }
+
+        children.add(newLeaf);
+        this.setAdded();
+        this.notifyObservers(this);
+        return newLeaf;
     }
 
     @Override
@@ -93,30 +115,18 @@ public class TreeNodeTest implements NodeTest {
             }
         }
 
-        LeafTest newLeaf;
-        switch (this.id) {
-            case DatabaseUtils.DATABASE_PLAYERS:
-                newLeaf = new PlayerLeafTest(tempId, this);
-                break;
-            case DatabaseUtils.DATABASE_MATCHES:
-                newLeaf = new MatchLeafTest(tempId, this);
-                break;
-            case DatabaseUtils.DATABASE_PENDING_MATCHES:
-                newLeaf = new MatchStatusLeafTest(tempId, this);
-                break;
-            case DatabaseUtils.DATABASE_MATCH_STATS:
-                newLeaf = new MatchStatsLeafTest(tempId, this);
-                break;
-            default:
-                throw new UnsupportedOperationException("Cannot add an auto generated child to : " + id);
-        }
-        children.add(newLeaf);
-        return newLeaf;
+        return this.addChild(tempId);
     }
 
     @Override
     public void dropChildren() {
-        children = new HashSet<>();
+        if(!isDeleted) {
+            for(NodeTest n : children) {
+                n.dropChildren();
+                n.deleteAllObservers();
+            }
+            children = new HashSet<>();
+        }
     }
 
     private String randomStringGenerator() {
@@ -130,12 +140,22 @@ public class TreeNodeTest implements NodeTest {
 
     @Override
     public void removeSelf() {
-        parent.removeChild(this);
+        this.isDeleted = true;
+        for(NodeTest n : children) {
+            removeChild(n);
+        }
+        this.setDeleted();
+        this.notifyObservers(this);
     }
 
     @Override
     public void removeChild(NodeTest child) {
-        children.remove(child);
+        for (NodeTest n : children) {
+            if (n.getId().equals(child.getId()) && !n.isDeleted) {
+                n.removeSelf();
+                this.setChanged();
+                this.notifyObservers(this);
+            }
+        }
     }
-
 }

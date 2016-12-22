@@ -74,7 +74,7 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
             finish();
             startActivity(intent);
         } else {
-            //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_maps, drawer, false);
             drawer.addView(contentView, 0);

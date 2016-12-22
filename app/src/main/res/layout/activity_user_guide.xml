@@ -10,10 +10,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ch.epfl.sweng.jassatepfl.UserGuideActivity">
 
-    <com.mukesh.MarkdownView
-        android:id="@+id/user_guide_text"
+    <Space
+        android:id="@+id/space_user_guide"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="540dp" />
+        android:layout_height="?android:attr/actionBarSize"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space_user_guide">
+
+        <com.mukesh.MarkdownView
+            android:id="@+id/user_guide_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
 
 </RelativeLayout>
