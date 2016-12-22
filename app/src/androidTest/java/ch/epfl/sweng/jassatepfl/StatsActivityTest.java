@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,9 +36,9 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
     public ActivityTestRule<StatsActivity> activityRule =
             new ActivityTestRule<>(StatsActivity.class, false, false);
 
-    @Before
+    @Override
     public void setUp() {
-        //super.setUp();
+        super.setUp();
         dbRefWrapTest.reset();
     }
 

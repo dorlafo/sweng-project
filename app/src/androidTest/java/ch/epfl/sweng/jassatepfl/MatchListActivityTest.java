@@ -5,19 +5,16 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
-import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -29,8 +26,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsNPlayers;
-import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsPlayer;
-import static junit.framework.Assert.fail;
 import static org.hamcrest.core.IsAnything.anything;
 
 @RunWith(AndroidJUnit4.class)
@@ -40,9 +35,9 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
     public ActivityTestRule<MatchListActivity> activityRule =
             new ActivityTestRule<>(MatchListActivity.class, false, false);
 
-    @Before
+    @Override
     public void setUp() {
-        //super.setUp();
+        super.setUp();
         dbRefWrapTest.reset();
     }
 

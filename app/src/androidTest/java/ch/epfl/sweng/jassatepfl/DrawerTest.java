@@ -35,9 +35,9 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public ActivityTestRule<MainActivity> activityRule =
             new ActivityTestRule<>(MainActivity.class, false);
 
-    @Before
+    @Override
     public void setUp() {
-        //super.setUp();
+        super.setUp();
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.twoPlayersMatch());
         matches.add(DummyDataTest.onePlayerMatch());

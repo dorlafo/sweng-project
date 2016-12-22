@@ -3,7 +3,6 @@ package ch.epfl.sweng.jassatepfl;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -11,7 +10,6 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import org.hamcrest.Matchers;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,18 +69,13 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
 
-    @Before
+    @Override
     public void setUp() {
-        //super.setUp();
+        super.setUp();
         Set<Player> playerSet = new HashSet<>();
         playerSet.add(amaury);
         playerSet.add(jimmy);
         dbRefWrapTest.addPlayers(playerSet);
-    }
-
-    @Test(expected = NoMatchingViewException.class)
-    public void testAInit() {
-        onView(withId(R.id.add_player_button)).perform(click());
     }
 
     @Test
