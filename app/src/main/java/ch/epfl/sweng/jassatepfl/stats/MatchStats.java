@@ -61,10 +61,9 @@ public class MatchStats {
      *
      * @return The matchID
      */
-    public String getMatchID() {
+    public String obtainMatchID() {
         return match.getMatchID();
     }
-
     /**
      * Getter for the game variant of this match
      *
@@ -112,6 +111,14 @@ public class MatchStats {
             allTeamSHaveReachedGoal &= totalScores.get(key) >= pointsGoal.get(key);
         }
         return allTeamSHaveReachedGoal;
+    }
+
+    /**
+     * Set pointsGoal with given value
+     * @param pointsGoal the value to set
+     */
+    public void setPointsGoal(Map<String, Integer> pointsGoal) {
+        this.pointsGoal = pointsGoal;
     }
 
     /**

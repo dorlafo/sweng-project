@@ -278,7 +278,7 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
     public void addStats(Set<MatchStats> stats) {
         TreeNodeTest statsNode = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_MATCH_STATS);
         for (MatchStats stat : stats) {
-            String statId = stat.getMatchID();
+            String statId = stat.obtainMatchID();
             statsNode.addChild(statId);
             statsNode.getChild(statId).setData(stat);
         }

@@ -78,7 +78,7 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         onView(withText(R.string.dialog_have_cards)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         onView(withId(R.id.ready_button)).perform(click());
-        String matchID = DummyDataTest.onePlayerMatchWithBob().getMatchID();
+        String matchID = DummyDataTest.onePlayerMatchWithBob().obtainMatchID();
 
         assertPendingMatchContainsNPlayers(dbRefWrapTest, matchID, 1);
         assertTrue(status.get(DummyDataTest.bricoloBob.getID().toString()));
