@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,7 +31,7 @@ import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 import ch.epfl.sweng.jassatepfl.tools.PlayerListAdapter;
 
-public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements AdapterView.OnItemClickListener {
+public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements OnItemClickListener {
 
     private static final String TAG = WaitingPlayersActivity.class.getSimpleName();
 
@@ -42,12 +43,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     private ValueEventListener matchListener;
     private ChildEventListener pendingMatchListener;
 
-    private TextView variant;
-    private TextView description;
-    private ListView listView;
-
     private int posInList;
+    private boolean playerHasCards = false;
     private int teamSelected;
+
+    private Player.PlayerID playerID;
 
     private boolean creator = false;
 
@@ -56,6 +56,9 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     private Button gameBtn;
     private Button readyBtn;
     private Button inviteBtn;
+
+    private View cardsNo;
+    private View cardsYes;
 
     private static final int INVITE_CODE = 42;
 
@@ -69,14 +72,18 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             startActivity(intent);
         } else {
             Log.d(TAG, "showLogin:getCurrentUser:notNull");
+
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_waiting_players, drawer, false);
             drawer.addView(contentView, 0);
 
+            playerID = new Player.PlayerID(getUserSciper());
+
             matchId = getIntent().getStringExtra("match_Id");
 
+            cardsNo = findViewById(R.id.cards_no);
+            cardsYes = findViewById(R.id.cards_yes);
             match = Match.sentinelMatch();
-
             playersReady = new HashMap<>();
 
             gameBtn = (Button) findViewById(R.id.play);
@@ -85,15 +92,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             readyBtn = (Button) findViewById(R.id.ready_button);
             inviteBtn = (Button) findViewById(R.id.invite_button);
 
-            listView = (ListView) findViewById(android.R.id.list);
-            listView.setEmptyView(findViewById(android.R.id.empty));
+            adapter = new PlayerListAdapter(WaitingPlayersActivity.this,
+                    R.layout.player_list_element, new ArrayList<Player>());
 
-            description = (TextView) findViewById(R.id.match_description);
-            variant = (TextView) findViewById(R.id.match_variant);
-
+            ListView listView = (ListView) findViewById(android.R.id.list);
             listView.setOnItemClickListener(this);
-
-            adapter = new PlayerListAdapter(WaitingPlayersActivity.this, R.layout.player_list_element, new ArrayList<Player>());
             listView.setAdapter(adapter);
         }
     }
@@ -191,7 +194,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                     break;
             }
         }
-        Log.d(TAG, "onResume:finished");
     }
 
     @Override
@@ -230,200 +232,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     public void onDestroy() {
         super.onDestroy();
         removeListener();
-    }
-
-    /**
-     * When button "LEAVE MATCH" is pressed, the current user is removed from the match player list
-     * send him back to main menu.
-     *
-     * @param view General view
-     */
-    public void leaveMatch(View view) {
-        match.removePlayerById(new Player.PlayerID(getUserSciper()));
-
-        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).removeValue();
-
-        if (match.getPlayers().size() == 0) {
-            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).removeValue();
-        } else {
-            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
-        }
-        Intent backToMain = new Intent(this, MainActivity.class);
-        startActivity(backToMain);
-        finish();
-    }
-
-    /**
-     *
-     *
-     * @param view General view
-     */
-    public void userIsReady(View view) {
-        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).child(getUserSciper()).setValue(true);
-    }
-
-    /**
-     * Redirects user to InvitePlayerToMatchActivity when
-     * clicks on "Invite" button
-     *
-     * @param view General view
-     */
-    public void invitePlayers(View view) {
-        startActivityForResult(new Intent(this, InvitePlayerToMatchActivity.class), INVITE_CODE);
-    }
-
-    public void goToMatch(View view) {
-        Intent goToGameActivity = new Intent(this, GameActivity.class);
-        goToGameActivity.putExtra("match_Id", matchId);
-        removeListener();
-
-        match.setStatus(Match.MatchStatus.ACTIVE);
-        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
-
-        MatchStats matchStats = new MatchStats(match);
-        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId).setValue(matchStats);
-
-        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).removeValue();
-
-        startActivity(goToGameActivity);
-        finish();
-    }
-
-    private void contactFirebase() {
-        matchListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                match = dataSnapshot.getValue(Match.class);
-                Log.d(TAG, "matchListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
-                if (match != null) {
-                    if (match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
-                        Intent goToGameActivity = new Intent(WaitingPlayersActivity.this, GameActivity.class);
-                        goToGameActivity.putExtra("match_Id", matchId);
-                        startActivity(goToGameActivity);
-                        finish();
-                    }
-                    if (match.createdBy().getID().toString().equals(getUserSciper())) {
-                        creator = true;
-                        gameBtn.setVisibility(View.VISIBLE);
-                    } else {
-                        creator = false;
-                        gameBtn.setVisibility(View.GONE);
-                    }
-
-                    description.setText(match.getDescription());
-                    variant.setText(match.getGameVariant().toString());
-
-                    posInList = match.getPlayerIndex(new Player.PlayerID(getUserSciper()));
-                    if (posInList != -1) {
-                        if (match.matchFull()) {
-                            if (!match.teamAssignmentIsCorrect() && creator) {
-                                Toast.makeText(WaitingPlayersActivity.this, R.string.toast_team_assignment_incorrect, Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                            inviteBtn.setEnabled(false);
-                        } else {
-                            inviteBtn.setEnabled(true);
-                        }
-
-                        if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
-                            gameBtn.setEnabled(true);
-                        } else {
-                            gameBtn.setEnabled(false);
-                        }
-                    }
-                    modifyListAdapter();
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("ERROR-DATABASE", databaseError.toString());
-            }
-        };
-        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
-                .child(matchId)
-                .addValueEventListener(matchListener);
-
-        pendingMatchListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "pendingMatchListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
-                playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
-                String id = dataSnapshot.getKey();
-                if (id.equals(getUserSciper())) {
-                    if(playersReady.get(id)) {
-                        readyBtn.setEnabled(false);
-                    } else {
-                        readyBtn.setEnabled(true);
-                    }
-                }
-                if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
-                    gameBtn.setEnabled(true);
-                } else {
-                    gameBtn.setEnabled(false);
-                }
-                modifyListAdapter();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "pendingMatchListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
-                playersReady.put(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
-                String id = dataSnapshot.getKey();
-                if (id.equals(getUserSciper())) {
-                    if(playersReady.get(id)) {
-                        readyBtn.setEnabled(false);
-                    } else {
-                        readyBtn.setEnabled(true);
-                    }
-                }
-                if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect()) {
-                    gameBtn.setEnabled(true);
-                } else {
-                    gameBtn.setEnabled(false);
-                }
-                modifyListAdapter();
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "pendingMatchListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
-                playersReady.remove(dataSnapshot.getKey());
-                modifyListAdapter();
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                //TODO: check if this is indeed not used
-                Log.d(TAG, "pendingMatchListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("ERROR-DATABASE", databaseError.toString());
-            }
-        };
-        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
-                .child(matchId)
-                .addChildEventListener(pendingMatchListener);
-    }
-
-    private void removeListener() {
-        if (matchListener != null) {
-            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
-                    .child(matchId)
-                    .removeEventListener(matchListener);
-        }
-        if (pendingMatchListener != null) {
-            dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
-                    .child(matchId)
-                    .removeEventListener(pendingMatchListener);
-        }
-    }
-
-    private void modifyListAdapter() {
-        adapter.refreshData(match.getPlayers(), match, playersReady);
     }
 
     /**
@@ -466,25 +274,25 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                                 teamSelected = which;
                             }
                         })
-                        .setPositiveButton(R.string.dialog_team_selection_confirmation, new DialogInterface.OnClickListener() {
-
-                            /**
-                             * This method will be invoked when a button in the dialog is clicked.
-                             *
-                             * @param dialog The dialog that received the click.
-                             * @param which  The button that was clicked (e.g.
-                             *               {@link DialogInterface#BUTTON1}) or the position
-                             */
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (teamSelected != (match.teamNbForPlayer(p))) {
-                                    match.setTeam(teamSelected, p.getID());
-                                    dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
-                                }
-                            }
-                        })
+                        .setPositiveButton(R.string.dialog_team_selection_confirmation,
+                                new DialogInterface.OnClickListener() {
+                                    /**
+                                     * This method will be invoked when a button in the dialog is clicked.
+                                     *
+                                     * @param dialog The dialog that received the click.
+                                     * @param which  The button that was clicked (e.g.
+                                     *               {@link DialogInterface#BUTTON1}) or the position
+                                     */
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (teamSelected != (match.teamNbForPlayer(p))) {
+                                            match.setTeam(teamSelected, p.getID());
+                                            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                                                    .child(matchId).setValue(match);
+                                        }
+                                    }
+                                })
                         .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-
                             /**
                              * This method will be invoked when a button in the dialog is clicked.
                              *
@@ -494,11 +302,255 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
                              */
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //Nothing to be done, goes back to WaitingPlayersActivity
+                                dialog.dismiss();
                             }
                         })
                         .show();
             }
         }
     }
+
+    /**
+     * When button "LEAVE MATCH" is pressed, the current user is removed from the match player list
+     * send him back to main menu.
+     *
+     * @param view General view
+     */
+    public void leaveMatch(View view) {
+        match.removePlayerById(new Player.PlayerID(getUserSciper()));
+        match.setPlayerCards(getUserSciper(), false);
+
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
+                .child(matchId).child(getUserSciper()).removeValue();
+
+        if (match.getPlayers().size() == 0) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).removeValue();
+        } else {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+        }
+        Intent backToMain = new Intent(this, MainActivity.class);
+        startActivity(backToMain);
+        finish();
+    }
+
+    /**
+     * @param view General view
+     */
+    public void userIsReady(View view) {
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
+                .child(matchId).child(getUserSciper()).setValue(true);
+    }
+
+    /**
+     * Redirects user to InvitePlayerToMatchActivity when
+     * clicks on "Invite" button
+     *
+     * @param view General view
+     */
+    public void invitePlayers(View view) {
+        startActivityForResult(new Intent(this, InvitePlayerToMatchActivity.class), INVITE_CODE);
+    }
+
+    public void goToMatch(View view) {
+        removeListener();
+
+        match.setStatus(Match.MatchStatus.ACTIVE);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES).child(matchId).removeValue();
+
+        MatchStats matchStats = new MatchStats(match);
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCH_STATS).child(matchId).setValue(matchStats);
+        goToGameActivity();
+    }
+
+    private void contactFirebase() {
+        matchListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                match = dataSnapshot.getValue(Match.class);
+                Log.d(TAG, "matchListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
+                if (match != null) {
+                    if (match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
+                        goToGameActivity();
+                    }
+                    if (match.createdBy().getID().toString().equals(getUserSciper())) {
+                        creator = true;
+                        gameBtn.setVisibility(View.VISIBLE);
+                    } else {
+                        creator = false;
+                        gameBtn.setVisibility(View.GONE);
+                    }
+
+                    TextView description = (TextView) findViewById(R.id.match_description);
+                    description.setText(match.getDescription());
+
+                    TextView variant = (TextView) findViewById(R.id.match_variant);
+                    String gameVariant = String.format(getString(R.string.wait_field_match_variant),
+                            match.getGameVariant().toString());
+                    variant.setText(gameVariant);
+
+                    posInList = match.getPlayerIndex(new Player.PlayerID(getUserSciper()));
+                    if (posInList != -1) {
+                        if (match.matchFull()) {
+                            if (!match.teamAssignmentIsCorrect() && creator) {
+                                Toast.makeText(WaitingPlayersActivity.this, R.string.toast_team_assignment_incorrect, Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                            inviteBtn.setEnabled(false);
+                        } else {
+                            inviteBtn.setEnabled(true);
+                        }
+
+                        if (playersReady.size() == match.getMaxPlayerNumber() && match.teamAssignmentIsCorrect() && match.hasCards()) {
+                            gameBtn.setEnabled(true);
+                        } else {
+                            gameBtn.setEnabled(false);
+                        }
+                    }
+                    playerHasCards = match.getPlayerCards(playerID.toString());
+                    if(!match.playerInCardList(playerID.toString())){
+                        new AlertDialog.Builder(WaitingPlayersActivity.this)
+                                .setTitle(R.string.dialog_cards)
+                                .setMessage(R.string.dialog_have_cards)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        playerHasCards = true;
+                                        match.setPlayerCards(playerID.toString(), true);
+                                        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+                                        updateViewWhoHasCards(cardsNo, cardsYes);
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        playerHasCards = false;
+                                        match.setPlayerCards(playerID.toString(), false);
+                                        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+                                        updateViewWhoHasCards(cardsNo, cardsYes);
+                                    }
+                                })
+                                .show();
+                    }
+                    modifyListAdapter();
+                    updateViewWhoHasCards(cardsNo, cardsYes);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("ERROR-DATABASE", databaseError.toString());
+            }
+        };
+        dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                .child(matchId)
+                .addValueEventListener(matchListener);
+
+        pendingMatchListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "pendingMatchListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
+                updateButtonStatus(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "pendingMatchListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
+                updateButtonStatus(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "pendingMatchListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
+                playersReady.remove(dataSnapshot.getKey());
+                modifyListAdapter();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "pendingMatchListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("ERROR-DATABASE", databaseError.toString());
+            }
+        };
+        dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
+                .child(matchId)
+                .addChildEventListener(pendingMatchListener);
+    }
+
+    private void removeListener() {
+        if (matchListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES)
+                    .child(matchId)
+                    .removeEventListener(matchListener);
+        }
+        if (pendingMatchListener != null) {
+            dbRefWrapped.child(DatabaseUtils.DATABASE_PENDING_MATCHES)
+                    .child(matchId)
+                    .removeEventListener(pendingMatchListener);
+        }
+    }
+
+    private void modifyListAdapter() {
+        adapter.refreshData(match.getPlayers(), match, playersReady);
+    }
+
+    private void updateViewWhoHasCards(View cardsNo, View cardsYes) {
+        if (match.hasCards()){
+            cardsNo.setVisibility(View.GONE);
+            cardsYes.setVisibility(View.VISIBLE);
+        }
+        else {
+            cardsYes.setVisibility(View.GONE);
+            cardsNo.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void changeCardsStatus(View view) {
+        if (playerHasCards){
+            playerHasCards = false;
+            match.setPlayerCards(getUserSciper(), false);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+        }
+        else {
+            playerHasCards = true;
+            match.setPlayerCards(getUserSciper(), true);
+            dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(match);
+        }
+        updateViewWhoHasCards(cardsNo, cardsYes);
+    }
+
+    private void updateButtonStatus(String key, boolean value) {
+        playersReady.put(key, value);
+        if (key.equals(getUserSciper())) {
+            readyBtn.setEnabled(!value);
+        }
+        gameBtn.setEnabled(allPlayersReady(playersReady) &&
+                match.teamAssignmentIsCorrect() && match.hasCards());
+        modifyListAdapter();
+    }
+
+    private boolean allPlayersReady(Map<String, Boolean> playersR) {
+        if(playersR.size() == match.getMaxPlayerNumber()) {
+            for(String k : playersR.keySet()) {
+                if(!playersR.get(k)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void goToGameActivity() {
+        Intent goToGameActivity = new Intent(this, GameActivity.class);
+        goToGameActivity.putExtra("match_Id", matchId);
+        goToGameActivity.putExtra("mode", "online");
+        startActivity(goToGameActivity);
+        finish();
+    }
+
 }

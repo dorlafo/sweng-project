@@ -37,6 +37,10 @@ public class QueryWrapper {
         return new QueryWrapper(query.equalTo(b));
     }
 
+    public QueryWrapper equalTo(String s) {
+        return new QueryWrapper(query.equalTo(s));
+    }
+
     public ValueEventListener addValueEventListener(ValueEventListener listener) {
         return query.addValueEventListener(listener);
     }

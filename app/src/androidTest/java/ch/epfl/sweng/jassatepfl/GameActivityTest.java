@@ -1,18 +1,19 @@
 package ch.epfl.sweng.jassatepfl;
 
 import android.content.Intent;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import android.view.ViewParent;
-import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,14 +27,15 @@ import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
 import ch.epfl.sweng.jassatepfl.test_utils.database.local.PlayerLeafTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.FIFTY;
@@ -42,53 +44,53 @@ import static ch.epfl.sweng.jassatepfl.model.Match.Meld.FOUR_NINE;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.HUNDRED;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.MARRIAGE;
 import static ch.epfl.sweng.jassatepfl.model.Match.Meld.THREE_CARDS;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.bricoloBob;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.fullMatchWithBob;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.marco;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.nicolas;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
+import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
+@RunWith(AndroidJUnit4.class)
 public final class GameActivityTest extends InjectedBaseActivityTest {
 
     private final Match ownedMatch = DummyDataTest.ownedMatch();
 
-    public GameActivityTest() {
-        super(GameActivity.class);
-    }
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+    @Rule
+    public ActivityTestRule<GameActivity> activityRule =
+            new ActivityTestRule<>(GameActivity.class, false, false);
 
     @Test
     public void testElementsAreDisplayedForOwner() {
-        dbRefWrapTest.reset();
         ownedMatchSetUp();
-        getActivity();
         onView(withId(R.id.score_update_cancel)).check(matches(isDisplayed()));
         int pointsGoal = ownedMatch.getGameVariant().getPointGoal();
         String playingTo = String.format(getInstrumentation().getTargetContext().getResources()
-                .getString(R.string.game_text_point_goal), pointsGoal);
+                .getString(R.string.game_text_point_goal), Integer.toString(pointsGoal));
         onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
     }
 
     @Test
     public void testElementsAreHiddenForRegularPlayer() {
         dbRefWrapTest.reset();
-        Match threePlayerMatch = DummyDataTest.threePlayersMatch();
         Intent intent = new Intent();
-        intent.putExtra("match_Id", threePlayerMatch.getMatchID());
-        setActivityIntent(intent);
+        intent.putExtra("match_Id", fullMatchWithBob().getMatchID());
+        intent.putExtra("mode", "online");
+
         Set<Match> matches = new HashSet<>();
-        matches.add(threePlayerMatch);
+        matches.add(fullMatchWithBob());
         dbRefWrapTest.addMatches(matches);
         Set<MatchStats> stats = new HashSet<>();
-        stats.add(new MatchStats(threePlayerMatch));
+        stats.add(new MatchStats(fullMatchWithBob()));
         dbRefWrapTest.addStats(stats);
         dbRefWrapTest.addPlayers(DummyDataTest.players());
-        getActivity();
 
+        activityRule.launchActivity(intent);
         onView(withId(R.id.score_update_cancel)).check(matches(not(isDisplayed())));
         onView(withId(R.id.score_update_1)).check(matches(not(isDisplayed())));
         onView(withId(R.id.score_meld_spinner_2)).check(matches(not(isDisplayed())));
@@ -96,9 +98,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testCancelDisplaysToastWhenNoCancelAvailable() {
-        dbRefWrapTest.reset();
         ownedMatchSetUp();
-        getActivity();
         onView(withId(R.id.score_update_cancel)).perform(click());
         onView(withText(R.string.toast_cannot_cancel)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
@@ -106,21 +106,33 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     }
 
     @Test
-    public void testUpdateScore() {
-        dbRefWrapTest.reset();
+    public void testPlayersNamesAreDisplayed() {
         ownedMatchSetUp();
-        getActivity();
-        incrementScore(0, 2);
+        onView(withId(R.id.team_members_1))
+                .check(matches(withText(bricoloBob.getFirstName() + ", " + jimmy.getFirstName())));
+        onView(withId(R.id.team_members_2))
+                .check(matches(withText(nicolas.getFirstName() + ", " + vincenzo.getFirstName())));
+    }
+
+    @Test
+    public void testPlayersNamesAreNotDisplayedInOfflineMode() {
+        offlineMatchSetup();
+        onView(withId(R.id.team_members_1)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.team_members_2)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testUpdateScore() {
+        ownedMatchSetUp();
+        incrementScore(0, "2", false);
         checkScoreDisplay("2", "155");
-        incrementScore(1, 5);
+        incrementScore(1, "5", false);
         checkScoreDisplay("154", "160");
     }
 
     @Test
     public void testMatchButton() {
-        dbRefWrapTest.reset();
         ownedMatchSetUp();
-        getActivity();
         onView(withId(R.id.score_update_1)).perform(click());
         onView(withId(R.id.score_picker_match)).perform(click());
         checkScoreDisplay("257", "0");
@@ -131,10 +143,8 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testCancelUpdateDoesNotUpdateScore() {
-        dbRefWrapTest.reset();
         ownedMatchSetUp();
-        getActivity();
-        incrementScore(0, 50);
+        incrementScore(0, "50", false);
         checkScoreDisplay("50", "107");
         onView(withId(R.id.score_update_1)).perform(click());
         onView(withId(R.id.score_picker_cancel)).perform(click());
@@ -146,12 +156,10 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testCancelLastRoundResetsScore() {
-        dbRefWrapTest.reset();
         ownedMatchSetUp();
-        getActivity();
-        incrementScore(0, 60);
+        incrementScore(0, "60", false);
         checkScoreDisplay("60", "97");
-        incrementScore(1, 33);
+        incrementScore(1, "33", false);
         checkScoreDisplay("184", "130");
         onView(withId(R.id.score_update_cancel)).perform(click());
         checkScoreDisplay("60", "97");
@@ -161,9 +169,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testDisplayEndOfMatchMessage() {
-        dbRefWrapTest.reset();
-        ownedMatchSetUp();
-        getActivity();
+        offlineMatchSetup();
         for (int i = 0; i < 4; ++i) {
             onView(withId(R.id.score_update_1)).perform(click());
             onView(withId(R.id.score_picker_match)).perform(click());
@@ -176,9 +182,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testAddingMeldUpdatesScore() {
-        dbRefWrapTest.reset();
         ownedMatchSetUp();
-        getActivity();
         addMeld(0, MARRIAGE);
         checkScoreDisplay("20", "0");
         addMeld(1, FOUR_JACKS);
@@ -187,10 +191,8 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testCancelLastMeld() {
-        dbRefWrapTest.reset();
         ownedMatchSetUp();
-        getActivity();
-        incrementScore(1, 100);
+        incrementScore(1, "100", false);
         checkScoreDisplay("57", "100");
         addMeld(0, FOUR_JACKS);
         checkScoreDisplay("257", "100");
@@ -200,13 +202,11 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testCancelSequenceIsCorrect() {
-        dbRefWrapTest.reset();
         ownedMatchSetUp();
-        getActivity();
         addMeld(0, FOUR_NINE);
-        incrementScore(0, 100);
+        incrementScore(0, "100", false);
         addMeld(1, FIFTY);
-        incrementScore(1, 50);
+        incrementScore(1, "50", false);
         addMeld(0, HUNDRED);
         addMeld(0, THREE_CARDS);
         checkScoreDisplay("477", "157");
@@ -226,9 +226,7 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testCorrectWinnerIsDisplayedWhenBothTeamsHaveReachedGoal() {
-        dbRefWrapTest.reset();
-        ownedMatchSetUp();
-        getActivity();
+        offlineMatchSetup();
         for (int i = 0; i < 3; ++i) {
             onView(withId(R.id.score_update_1)).perform(click());
             onView(withId(R.id.score_picker_match)).perform(click());
@@ -237,33 +235,142 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         }
         addMeld(0, FOUR_JACKS);
         addMeld(1, FOUR_JACKS);
-        incrementScore(1, 50);
+        incrementScore(1, "50", false);
         String message = String.format(getInstrumentation().getTargetContext()
                 .getResources().getString(R.string.dialog_game_end), "Team 2");
         onView(withText(message)).check(matches(isDisplayed()));
+        onView(withId(android.R.id.button1)).perform(click());
     }
 
     @Test
     public void testHistoryDisplay() {
-        dbRefWrapTest.reset();
         ownedMatchSetUp();
-        getActivity();
         onView(withId(R.id.score_display_1)).perform(click());
         onView(withId(R.id.score_table_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.score_table_layout)).perform(pressBack());
     }
 
     @Test
     public void testHistoryIsCorrect() {
-        dbRefWrapTest.reset();
         ownedMatchSetUp();
-        getActivity();
-        incrementScore(1, 50);
-        incrementScore(0, 7);
+        incrementScore(1, "50", false);
+        incrementScore(0, "7", false);
         addMeld(1, THREE_CARDS);
         onView(withId(R.id.score_display_2)).perform(click());
         onView(atPositionInTable(1, 1)).check(matches(withText("50")));
         onView(atPositionInTable(1, 2)).check(matches(withText("150")));
         onView(atPositionInTable(2, 3)).check(matches(withText(THREE_CARDS.toString())));
+        onView(withId(R.id.score_table_layout)).perform(pressBack());
+    }
+
+    @Test
+    public void testSetGoalIsDisabledInOnlineMode() {
+        ownedMatchSetUp();
+        onView(withId(R.id.game_playing_to)).check(matches(not(isClickable())));
+    }
+
+    @Test
+    public void testSetGoalSetsGoal() {
+        offlineMatchSetup();
+        onView(withId(R.id.game_playing_to)).check(matches(isClickable()));
+        incrementScore(-1, "700", false);
+        String playingTo = String.format(getInstrumentation().getTargetContext().getResources()
+                .getString(R.string.game_text_point_goal), Integer.toString(700));
+        onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
+    }
+
+    @Test
+    public void testCancelSetGoalDoesNotUpdateGoal() {
+        offlineMatchSetup();
+        String playingTo = String.format(getInstrumentation().getTargetContext().getResources()
+                .getString(R.string.game_text_point_goal), Integer.toString(1000));
+        onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
+        onView(withId(R.id.game_playing_to)).perform(click());
+        onView(withId(R.id.score_picker_cancel)).perform(click());
+        onView(withId(R.id.game_playing_to)).check(matches(withText(playingTo)));
+    }
+
+    @Test
+    public void testDoublePoints() {
+        ownedMatchSetUp();
+        incrementScore(0, "100", true);
+        checkScoreDisplay("200", "114");
+        incrementScore(1, "50", true);
+        checkScoreDisplay("414", "214");
+    }
+
+    @Test
+    public void testNumpadCorrect() {
+        ownedMatchSetUp();
+        onView(withId(R.id.score_update_1)).perform(click());
+        onView(withId(R.id.numpad_1)).perform(click());
+        onView(withId(R.id.numpad_3)).perform(click());
+        onView(withId(R.id.numpad_4)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.numpad_9)).perform(click());
+        onView(withId(R.id.score_picker_confirm)).perform(click());
+        checkScoreDisplay("139", "18");
+    }
+
+    @Test
+    public void testNumpadCorrectReturns() {
+        ownedMatchSetUp();
+        onView(withId(R.id.score_update_2)).perform(click());
+        onView(withId(R.id.numpad_0)).perform(click());
+        onView(withId(R.id.numpad_2)).perform(click());
+        onView(withId(R.id.numpad_6)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.numpad_correct)).perform(click());
+        onView(withId(R.id.score_picker_confirm)).perform(click());
+        checkScoreDisplay("157", "0");
+    }
+
+    @Test
+    public void testToastIsDisplayedForInvalidPoints() {
+        ownedMatchSetUp();
+        incrementScore(0, "500", false);
+        String pointToast = getInstrumentation().getTargetContext().getResources()
+                .getString(R.string.toast_invalid_score);
+        pointToast = String.format(pointToast, 157);
+        onView(withText(pointToast)).inRoot(new ToastMatcherTest())
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSplitGoalsAreHiddenInOnlineMode() {
+        ownedMatchSetUp();
+        onView(withId(R.id.split_team_goals)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.team_goal_1)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.team_goal_2)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testSplitGoalsDisplaysBothGoals() {
+        offlineMatchSetup();
+        onView(withId(R.id.split_team_goals)).perform(click());
+        onView(withId(R.id.team_goal_1)).check(matches(isDisplayed()));
+        onView(withId(R.id.team_goal_2)).check(matches(isDisplayed()));
+        onView(withId(R.id.game_playing_to)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testCanReturnToNormalModeFromSplitMode() {
+        offlineMatchSetup();
+        onView(withId(R.id.split_team_goals)).perform(click());
+        onView(withId(R.id.game_playing_to)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.split_team_goals)).perform(click());
+        onView(withId(R.id.game_playing_to)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSplitGoalsCanUpdateBothTeamsGoals() {
+        offlineMatchSetup();
+        onView(withId(R.id.split_team_goals)).perform(click());
+        incrementScore(2, "456", false);
+        onView(withId(R.id.team_goal_1)).check(matches(withText("456")));
+        incrementScore(3, "789", false);
+        onView(withId(R.id.team_goal_2)).check(matches(withText("789")));
     }
 
     private void checkScoreDisplay(String firstDisplay, String secondDisplay) {
@@ -271,27 +378,61 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.score_display_2)).check(matches(withText(secondDisplay)));
     }
 
-    private void incrementScore(int teamIndex, final int value) {
-        int button = teamIndex == 0 ? R.id.score_update_1 : R.id.score_update_2;
+    private void incrementScore(int teamIndex, final String value, boolean doubleScore) {
+        int button = 0;
+        switch (teamIndex) {
+            case 0:
+                button = R.id.score_update_1;
+                break;
+            case 1:
+                button = R.id.score_update_2;
+                break;
+            case 2:
+                button = R.id.team_goal_1;
+                break;
+            case 3:
+                button = R.id.team_goal_2;
+                break;
+            case -1:
+                button = R.id.game_playing_to;
+                break;
+        }
         onView(withId(button)).perform(click());
-        onView(withClassName(equalTo(NumberPicker.class.getName()))).perform(new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isAssignableFrom(NumberPicker.class);
-            }
-
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                NumberPicker numberPicker = (NumberPicker) view;
-                numberPicker.setValue(value);
-            }
-        });
+        for (int i = 0; i < value.length(); ++i) {
+            int buttonId = buttonId(value.charAt(i));
+            onView(withId(buttonId)).perform(click());
+        }
+        if (doubleScore) {
+            onView(withId(R.id.numpad_double_score)).perform(click());
+        }
         onView(withId(R.id.score_picker_confirm)).perform(click());
+    }
+
+    private int buttonId(char value) {
+        switch (value) {
+            case '0':
+                return R.id.numpad_0;
+            case '1':
+                return R.id.numpad_1;
+            case '2':
+                return R.id.numpad_2;
+            case '3':
+                return R.id.numpad_3;
+            case '4':
+                return R.id.numpad_4;
+            case '5':
+                return R.id.numpad_5;
+            case '6':
+                return R.id.numpad_6;
+            case '7':
+                return R.id.numpad_7;
+            case '8':
+                return R.id.numpad_8;
+            case '9':
+                return R.id.numpad_9;
+            default:
+                return -1;
+        }
     }
 
     private void addMeld(int teamIndex, Meld meld) {
@@ -301,9 +442,11 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
     }
 
     private void ownedMatchSetUp() {
+        dbRefWrapTest.reset();
         Intent intent = new Intent();
         intent.putExtra("match_Id", ownedMatch.getMatchID());
-        setActivityIntent(intent);
+        intent.putExtra("mode", "online");
+
         Set<Match> matches = new HashSet<>();
         matches.add(ownedMatch);
         dbRefWrapTest.addMatches(matches);
@@ -311,6 +454,15 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         stats.add(new MatchStats(ownedMatch));
         dbRefWrapTest.addStats(stats);
         dbRefWrapTest.addPlayers(DummyDataTest.players());
+        activityRule.launchActivity(intent);
+    }
+
+    private void offlineMatchSetup() {
+        dbRefWrapTest.reset();
+        Intent intent = new Intent();
+        intent.putExtra("match_Id", ownedMatch.getMatchID());
+        intent.putExtra("mode", "offline");
+        activityRule.launchActivity(intent);
     }
 
     private static Matcher<View> atPositionInTable(final int x, final int y) {
@@ -328,31 +480,8 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
                 }
                 TableRow row = (TableRow) viewParent;
                 TableLayout table = (TableLayout) row.getParent();
-                if (table.indexOfChild(row) != y)
-                    return false;
-                if (row.indexOfChild(view) == x)
-                    return true;
-                else
-                    return false;
+                return table.indexOfChild(row) == y && row.indexOfChild(view) == x;
             }
         };
     }
-
-    @Test
-    public void testNewRankIsWrittenToDatabase() {
-        dbRefWrapTest.reset();
-        ownedMatchSetUp();
-        getActivity();
-        for (int i = 0; i < 4; ++i) {
-            onView(withId(R.id.score_update_1)).perform(click());
-            onView(withId(R.id.score_picker_match)).perform(click());
-        }
-
-        onView(withId(android.R.id.button1)).perform(click());
-
-        Player bob = ((PlayerLeafTest) ((DBRefWrapTest) dbRefWrapTest.child("players").child("696969")).getCurrentNode()).getData();
-
-        assertEquals(true, bob.getQuote() > 1000);
-    }
-
 }

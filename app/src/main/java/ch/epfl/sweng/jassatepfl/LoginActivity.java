@@ -3,7 +3,6 @@ package ch.epfl.sweng.jassatepfl;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -73,6 +72,7 @@ public class LoginActivity extends BaseAppCompatActivity {
 
     /**
      * Launch the login process when a user click on the login button
+     *
      * @param view the current view (This is a required parameters for method related to a button)
      */
     public void login(View view) {
@@ -109,9 +109,9 @@ public class LoginActivity extends BaseAppCompatActivity {
     /**
      * Sign in the user with the information from the Profile object. If the sign in does not work,
      * it means that the user does not have an account so it creates one by calling signUp
+     *
      * @param profile The user Profile retrieved from Tequila authentication
      */
-    //TODO: REPLACE SCIPER WITH HASH
     private void signIn(final Profile profile) {
         //Log.d(TAG, "signIn");
 
@@ -134,9 +134,9 @@ public class LoginActivity extends BaseAppCompatActivity {
     /**
      * Sign up the user by creating an account on Firebase and adding it's user profile to the
      * database
+     *
      * @param profile The user Profile retrieved from Tequila authentication
      */
-    //TODO: REPLACE SCIPER WITH HASH
     private void signUp(final Profile profile) {
         //Log.d(TAG, "signUp");
 
@@ -166,7 +166,6 @@ public class LoginActivity extends BaseAppCompatActivity {
     /**
      * Handle the result from the log in process
      */
-    //TODO: Add a default case to the switch ?
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -198,6 +197,9 @@ public class LoginActivity extends BaseAppCompatActivity {
                     String code = AuthClient.extractCode(data.getStringExtra("url"));
                     new FetchTokens().execute(code);
                 }
+                break;
+            default:
+                break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -225,7 +227,7 @@ public class LoginActivity extends BaseAppCompatActivity {
                 signIn(profile);
                 ServerInterface.getInstance().registerSciperToken(profile.sciper, FirebaseInstanceId.getInstance().getToken());
             } catch (IOException e) {
-                //TODO: Handle exception
+                Toast.makeText(LoginActivity.this, R.string.toast_could_not_connect_to_tequila, Toast.LENGTH_SHORT).show();
                 Log.e("ERR", "IOException, couldn't fetch token");
             }
             return "profile retrieved";
@@ -258,7 +260,7 @@ public class LoginActivity extends BaseAppCompatActivity {
             is.close();
             json = new String(buffer, "UTF-8");
         } catch (IOException ex) {
-            //TODO: Handle the exception
+            Toast.makeText(LoginActivity.this, R.string.toast_could_not_perform_login, Toast.LENGTH_SHORT).show();
             ex.printStackTrace();
         }
         return json;
@@ -266,6 +268,7 @@ public class LoginActivity extends BaseAppCompatActivity {
 
     /**
      * Get the OAuth2Config from the JSON file
+     *
      * @return the OAuth2Config
      */
     private OAuth2Config getOAuth2Config() {
@@ -275,7 +278,7 @@ public class LoginActivity extends BaseAppCompatActivity {
             clientSecret = jObj.getString("clientSecret");
             redirectUri = jObj.getString("redirectURI");
         } catch (JSONException e) {
-            //TODO: Handle the exception
+            Toast.makeText(LoginActivity.this, R.string.toast_could_not_perform_login, Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 

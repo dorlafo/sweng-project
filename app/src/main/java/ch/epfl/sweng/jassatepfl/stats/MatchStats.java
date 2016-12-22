@@ -24,6 +24,7 @@ public class MatchStats {
     private int nbTeam;
     private List<Round> rounds;
     private Map<String, Integer> totalScores;
+    private Map<String, Integer> pointsGoal;
     // Index to the current round
     private int currentRoundIndex;
     private int winnerIndex;
@@ -42,8 +43,10 @@ public class MatchStats {
         this.rounds = new ArrayList<>();
         this.rounds.add(new Round(nbTeam));
         this.totalScores = new HashMap<>();
+        this.pointsGoal = new HashMap<>();
         for (int i = 0; i < nbTeam; ++i) {
             totalScores.put(concatKey(i), 0);
+            pointsGoal.put(concatKey(i), match.getGameVariant().getPointGoal());
         }
         this.currentRoundIndex = 0;
         this.winnerIndex = -1;
@@ -58,16 +61,15 @@ public class MatchStats {
      *
      * @return The matchID
      */
-    public String getMatchID() {
+    public String obtainMatchID() {
         return match.getMatchID();
     }
-
     /**
      * Getter for the game variant of this match
      *
      * @return The game variant
      */
-    public GameVariant getGameVariant() {
+    public GameVariant obtainGameVariant() {
         return match.getGameVariant();
     }
 
@@ -81,6 +83,10 @@ public class MatchStats {
 
     public Map<String, Integer> getTotalScores() {
         return Collections.unmodifiableMap(totalScores);
+    }
+
+    public Map<String, Integer> getPointsGoal() {
+        return Collections.unmodifiableMap(pointsGoal);
     }
 
     public int getCurrentRoundIndex() {
@@ -102,9 +108,17 @@ public class MatchStats {
     public boolean allTeamsHaveReachedGoal() {
         boolean allTeamSHaveReachedGoal = true;
         for (String key : totalScores.keySet()) {
-            allTeamSHaveReachedGoal &= totalScores.get(key) >= match.getGameVariant().getPointGoal();
+            allTeamSHaveReachedGoal &= totalScores.get(key) >= pointsGoal.get(key);
         }
         return allTeamSHaveReachedGoal;
+    }
+
+    /**
+     * Set pointsGoal with given value
+     * @param pointsGoal the value to set
+     */
+    public void setPointsGoal(Map<String, Integer> pointsGoal) {
+        this.pointsGoal = pointsGoal;
     }
 
     /**
@@ -113,7 +127,7 @@ public class MatchStats {
      * @param teamIndex the index of the team
      * @return the score of the team, for the currentRound
      */
-    public Integer getCurrentRoundTeamScore(int teamIndex) {
+    public Integer obtainCurrentRoundTeamScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
             throw new IndexOutOfBoundsException("Invalid team index");
         }
@@ -126,7 +140,7 @@ public class MatchStats {
      * @param teamIndex the index of the team
      * @return the total score of the team for the match
      */
-    public Integer getTotalMatchScore(int teamIndex) {
+    public Integer obtainTotalMatchScore(int teamIndex) {
         if (teamIndex < 0 || teamIndex >= nbTeam) {
             throw new IndexOutOfBoundsException("Invalid team index");
         }
@@ -199,6 +213,16 @@ public class MatchStats {
         updateTotalScore(teamIndex, meld.value());
     }
 
+    public void updatePointsGoal(int goal) {
+        for (String key : pointsGoal.keySet()) {
+            pointsGoal.put(key, goal);
+        }
+    }
+
+    public void updatePointsGoal(int teamIndex, int goal) {
+        pointsGoal.put(concatKey(teamIndex), goal);
+    }
+
     public void setWinnerIndex(int winnerIndex) {
         this.winnerIndex = winnerIndex;
     }
@@ -218,7 +242,7 @@ public class MatchStats {
     private boolean updateGoalAndWinner() {
         boolean goalHasBeenReached = false;
         for (String key : totalScores.keySet()) {
-            if (!goalHasBeenReached && totalScores.get(key) >= match.getGameVariant().getPointGoal()) {
+            if (!goalHasBeenReached && totalScores.get(key) >= pointsGoal.get(key)) {
                 goalHasBeenReached = true;
                 winnerIndex = winnerIndex == -1 ? key.charAt(4) - '0' : winnerIndex;
             }

@@ -25,9 +25,13 @@ public final class MatchStatsLeafTest extends LeafTest<MatchStats> {
 
     @Override
     public void setData(MatchStats data) {
+        if(isDeleted) {
+            //throw new UnsupportedOperationException("Cannot setData on a deleted MatchStatsLeafTest");
+            this.isDeleted = false;
+        }
         this.data = data;
-        matchIdLeaf.setData(data.getMatchID());
-        variantLeaf.setData(data.getGameVariant());
+        matchIdLeaf.setData(data.obtainMatchID());
+        variantLeaf.setData(data.obtainGameVariant());
         nbTeamLeaf.setData(data.getNbTeam());
         roundsLeaf.setData(data.getRounds());
         scoresLeaf.setData(data.getTotalScores());
@@ -35,6 +39,8 @@ public final class MatchStatsLeafTest extends LeafTest<MatchStats> {
         goalLeaf.setData(data.goalHasBeenReached());
         winnerIndexLeaf.setData(data.getWinnerIndex());
         meldSetLeaf.setData(data.meldWasSetThisRound());
+        this.setChanged();
+        this.notifyObservers(this);
     }
 
     @Override

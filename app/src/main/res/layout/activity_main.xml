@@ -12,23 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize" />
 
-    <TextView
-        android:text="My matches"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs_main_activity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/twMyMatches"
-        android:textStyle="normal|bold"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textSize="24sp"/>
+        android:layout_height="wrap_content" />
 
-    <ListView
-        android:id="@android:id/list"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container_main_activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/background_light"
-        android:divider="@color/listview_divider_color"
-        android:dividerHeight="1dp"
-        android:drawSelectorOnTop="true"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

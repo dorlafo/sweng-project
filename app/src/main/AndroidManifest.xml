@@ -19,6 +19,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:supportsRtl="false"
         android:theme="@style/AppTheme">
 
         <!-- App Activities -->
@@ -27,7 +28,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -55,6 +55,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".MatchListActivity"
+            android:label="@string/title_activity_list"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".MapsActivity"
@@ -75,7 +76,16 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".GameActivity"
-            android:label="@string/title_activity_game"/>
+            android:label="@string/title_activity_game"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".StatsActivity"
+            android:label="@string/title_activity_stats"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".HistoryActivity"
+            android:label="@string/title_activity_history"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -95,23 +105,23 @@
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_stat_notify"/>
+            android:resource="@drawable/ic_stat_notify" />
 
         <!-- App required serviced -->
-        <service android:name=".notification.FirebaseMessagingHandler">
+        <service
+            android:name=".notification.FirebaseMessagingHandler"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name=".notification.JassTokenService">
+        <service
+            android:name=".notification.JassTokenService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-        <activity
-            android:name=".StatsActivity"
-            android:label="@string/title_activity_stats"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

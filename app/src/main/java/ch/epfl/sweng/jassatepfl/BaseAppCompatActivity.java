@@ -2,6 +2,7 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -27,7 +28,16 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @return The user' sciper
      */
     public String getUserSciper() {
-        return fAuth.getCurrentUser().getDisplayName();
+        String sciper = null;
+        try {
+            sciper = fAuth.getCurrentUser().getDisplayName();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            Toast.makeText(this, R.string.toast_no_connection, Toast.LENGTH_SHORT)
+                    .show();
+            return "";
+        }
+        return sciper;
     }
 
 }

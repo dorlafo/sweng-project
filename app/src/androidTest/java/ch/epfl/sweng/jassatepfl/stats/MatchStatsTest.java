@@ -2,6 +2,8 @@ package ch.epfl.sweng.jassatepfl.stats;
 
 import org.junit.Test;
 
+import java.util.Map;
+
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
@@ -25,8 +27,8 @@ public class MatchStatsTest {
         setTeamScores(stats, 57, 100);
         stats.setMeld(1, FOUR_JACKS);
         setTeamScores(stats, 33, 122);
-        assertEquals(Integer.valueOf(110), stats.getTotalMatchScore(0));
-        assertEquals(Integer.valueOf(422), stats.getTotalMatchScore(1));
+        assertEquals(Integer.valueOf(110), stats.obtainTotalMatchScore(0));
+        assertEquals(Integer.valueOf(422), stats.obtainTotalMatchScore(1));
     }
 
     @Test
@@ -35,8 +37,18 @@ public class MatchStatsTest {
         stats.setScore(0, 89);
         stats.setMeld(0, THREE_CARDS);
         stats.setScore(1, 68);
-        assertEquals(Integer.valueOf(109), stats.getCurrentRoundTeamScore(0));
-        assertEquals(Integer.valueOf(68), stats.getCurrentRoundTeamScore(1));
+        assertEquals(Integer.valueOf(109), stats.obtainCurrentRoundTeamScore(0));
+        assertEquals(Integer.valueOf(68), stats.obtainCurrentRoundTeamScore(1));
+    }
+
+    @Test
+    public void testPointsGoalGetter() {
+        MatchStats stats = new MatchStats(match);
+        stats.updatePointsGoal(0, 300);
+        stats.updatePointsGoal(1, 500);
+        Map<String, Integer> pointsGoal = stats.getPointsGoal();
+        assertEquals(Integer.valueOf(300), pointsGoal.get("TEAM0"));
+        assertEquals(Integer.valueOf(500), pointsGoal.get("TEAM1"));
     }
 
     @Test
@@ -44,11 +56,11 @@ public class MatchStatsTest {
         MatchStats stats = new MatchStats(match);
         setTeamScores(stats, 57, 100);
         setTeamScores(stats, 100, 57);
-        assertEquals(Integer.valueOf(157), stats.getTotalMatchScore(0));
-        assertEquals(Integer.valueOf(157), stats.getTotalMatchScore(1));
+        assertEquals(Integer.valueOf(157), stats.obtainTotalMatchScore(0));
+        assertEquals(Integer.valueOf(157), stats.obtainTotalMatchScore(1));
         stats.cancelLastRound(0);
-        assertEquals(Integer.valueOf(57), stats.getTotalMatchScore(0));
-        assertEquals(Integer.valueOf(100), stats.getTotalMatchScore(1));
+        assertEquals(Integer.valueOf(57), stats.obtainTotalMatchScore(0));
+        assertEquals(Integer.valueOf(100), stats.obtainTotalMatchScore(1));
     }
 
     @Test
@@ -63,13 +75,13 @@ public class MatchStatsTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void testRoundScoreGetterThrowsException() {
         MatchStats stats = new MatchStats(match);
-        stats.getCurrentRoundTeamScore(2);
+        stats.obtainCurrentRoundTeamScore(2);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testMatchScoreGetterThrowsException() {
         MatchStats stats = new MatchStats(match);
-        stats.getTotalMatchScore(2);
+        stats.obtainTotalMatchScore(2);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)

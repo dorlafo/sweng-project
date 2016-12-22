@@ -38,9 +38,9 @@ public class FakeModulesTest {
     }
 
     /**
-     * A firebase authentification provider
+     * A firebase authentication provider
      *
-     * @return returns a firebase authentification that can be mocked or not
+     * @return returns a firebase authentication that can be mocked or not
      */
     @Provides
     @Singleton

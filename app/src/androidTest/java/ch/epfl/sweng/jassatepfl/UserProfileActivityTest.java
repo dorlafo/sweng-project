@@ -1,71 +1,73 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.widget.TextView;
+import android.support.test.espresso.matcher.ViewMatchers;
+import android.content.Intent;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
+import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
-import ch.epfl.sweng.jassatepfl.model.Player;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
- * UserProfileActivityTest show an example of mock usage
+ * UserProfileActivityTest
  */
+@RunWith(AndroidJUnit4.class)
 public final class UserProfileActivityTest extends InjectedBaseActivityTest {
 
-    UserProfileActivity act;
-
-    public UserProfileActivityTest() {
-        super(UserProfileActivity.class);
-    }
+    @Rule
+    public ActivityTestRule<UserProfileActivity> activityRule =
+            new ActivityTestRule<>(UserProfileActivity.class, false, false);
 
     @Override
-    public void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
+        dbRefWrapTest.reset();
     }
 
     /**
      * This test verifies that the assignment to the text view is correct
      */
     @Test
-    public void testUserProfileActivity() {
-        //Fill the database as you want with addPlayers and addMatches
-        Set<Player> playerSet = new HashSet<Player>();
-        playerSet.add(new Player(new Player.PlayerID("123456"), "Not Pass", "You Shall", 123));
-        dbRefWrapTest.addPlayers(playerSet);
+    public void testUserProfileActivityWithoutStats() {
+        dbRefWrapTest.addPlayers(DummyDataTest.players());
 
-        //Start the activity
-        act = (UserProfileActivity) getActivity();
+        activityRule.launchActivity(new Intent());
 
-        //Write your assertions
-        try {
-            Thread.sleep(3000);
-            Field playerIDField = act.getClass().getDeclaredField("mtwPlayerID");
-            Field playerLastNameField = act.getClass().getDeclaredField("mtwLastName");
-            Field playerFirstNameField = act.getClass().getDeclaredField("mtwFirstName");
-            Field playerQuoteField = act.getClass().getDeclaredField("mtwPlayerQuote");
-            playerIDField.setAccessible(true);
-            playerLastNameField.setAccessible(true);
-            playerFirstNameField.setAccessible(true);
-            playerQuoteField.setAccessible(true);
-            TextView idView = (TextView) playerIDField.get(act);
-            TextView lnView = (TextView) playerLastNameField.get(act);
-            TextView fnView = (TextView) playerFirstNameField.get(act);
-            TextView quoteView = (TextView) playerQuoteField.get(act);
+        onView(withId(R.id.profil_player)).check(matches(isDisplayed()));
+        onView(withId(R.id.twQuoteNum)).check(matches(isDisplayed()));
+        onView(withId(R.id.twMostPlayedWithName)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMostVariantName)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMatchPlayedNum)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMostWonWithName)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.twMatchWonNum)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+    }
 
+    /**
+     * This test verifies that the assignment to the text view is correct
+     */
+    @Test
+    public void testUserProfileActivityWithStats() {
+        dbRefWrapTest.addPlayers(DummyDataTest.players());
+        dbRefWrapTest.addBobFakeStats();
 
-            assertEquals("Player id : 696969", idView.getText().toString());
-            assertEquals("Last name : LeBricoleur", lnView.getText().toString());
-            assertEquals("First name : Bob", fnView.getText().toString());
-            assertEquals("Quote : 1000", quoteView.getText().toString());
-        } catch (Exception e) {
-            fail();
-        }
+        activityRule.launchActivity(new Intent());
 
-        //Reset the local database
-        dbRefWrapTest.reset();
+        onView(withId(R.id.profil_player)).check(matches(isDisplayed()));
+        onView(withId(R.id.twQuote)).check(matches(isDisplayed()));
+        onView(withId(R.id.twMostPlayedWith)).check(matches(isDisplayed()));
+        onView(withId(R.id.twMostVariant)).check(matches(isDisplayed()));
+        onView(withId(R.id.twMatchPlayed)).check(matches(isDisplayed()));
+        onView(withId(R.id.twMostWonWith)).check(matches(isDisplayed()));
+        onView(withId(R.id.twMatchWon)).check(matches(isDisplayed()));
     }
 
 }

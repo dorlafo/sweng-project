@@ -4,6 +4,8 @@ import javax.inject.Singleton;
 
 import ch.epfl.sweng.jassatepfl.BaseActivityWithNavDrawer;
 import ch.epfl.sweng.jassatepfl.BaseAppCompatActivity;
+import ch.epfl.sweng.jassatepfl.BaseMatchListFragment;
+import ch.epfl.sweng.jassatepfl.LeaderboardFragment;
 import ch.epfl.sweng.jassatepfl.StatsFragment;
 import dagger.Component;
 
@@ -37,6 +39,18 @@ public interface Graph {
      * @param fragment the fragment which will be injected
      */
     void inject(StatsFragment fragment);
+
+    /**
+     * Injects providers return values to the baseMatchListFragment
+     * @param fragment the fragment which will be injected
+     */
+    void inject(BaseMatchListFragment fragment);
+
+    /**
+     * Injects providers return values to the leaderboardFragment
+     * @param fragment the fragment which will be injected
+     */
+    void inject(LeaderboardFragment fragment);
 
     /**
      * Initializer of the graph

@@ -2,7 +2,6 @@ package ch.epfl.sweng.jassatepfl;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -41,8 +40,6 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
         SearchView.OnQueryTextListener,
         View.OnClickListener {
 
-    private static final String TAG = InvitePlayerToMatchActivity.class.getSimpleName();
-
     private String currentUserSciper;
     private PlayerListAdapter adapter;
     private ListView playerListView;
@@ -52,16 +49,12 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
-            //Log.d(TAG, "showLogin:getCurrentUser:NOTnull");
+        } else {
             setContentView(R.layout.activity_invite_player_to_match);
 
-            // TODO: maybe have a field in base activity with sciper of current user, with error management
             currentUserSciper = getUserSciper();
             inviteScipers = new HashSet<>();
 
@@ -73,6 +66,8 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
 
             playerListView = (ListView) findViewById(R.id.invite_list);
             ((ViewGroup) playerListView.getParent()).addView(emptyList);
+            adapter = new PlayerListAdapter(InvitePlayerToMatchActivity.this, R.layout.player_list_element, new ArrayList<Player>());
+            playerListView.setAdapter(adapter);
             playerListView.setEmptyView(emptyList);
             playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -134,8 +129,7 @@ public class InvitePlayerToMatchActivity extends BaseAppCompatActivity implement
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             playerList.add(snapshot.getValue(Player.class));
                         }
-                        adapter = new PlayerListAdapter(InvitePlayerToMatchActivity.this, R.layout.player_list_element, playerList);
-                        playerListView.setAdapter(adapter);
+                        adapter.refreshData(playerList);
                     }
 
                     @Override

@@ -17,15 +17,18 @@
         <ImageView
             android:id="@+id/variants_graph"
             android:layout_width="400dip"
-            android:layout_height="400dip" />
+            android:layout_height="400dip"
+            android:contentDescription="@string/variants_graph"/>
         <ImageView
             android:id="@+id/partners_graph"
             android:layout_width="400dip"
-            android:layout_height="400dip" />
+            android:layout_height="400dip"
+            android:contentDescription="@string/partners_graph"/>
         <ImageView
             android:id="@+id/won_with_graph"
             android:layout_width="400dip"
-            android:layout_height="400dip" />
+            android:layout_height="400dip"
+            android:contentDescription="@string/won_with_graph"/>
 
     </LinearLayout>
 </ScrollView>

@@ -3,12 +3,17 @@ package ch.epfl.sweng.jassatepfl;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.contrib.PickerActions;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import org.hamcrest.Matchers;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -43,11 +48,11 @@ import static ch.epfl.sweng.jassatepfl.model.Match.GameVariant.CHIBRE;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.amaury;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
 import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.HOUR;
 import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
@@ -56,24 +61,27 @@ import static org.hamcrest.Matchers.is;
 /**
  * Test class for CreateMatchActivity
  *
- * @author Alexis Montavon
  */
+@RunWith(AndroidJUnit4.class)
 public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
+
+    @Rule public ActivityTestRule<CreateMatchActivity> activityRule =
+            new ActivityTestRule<>(CreateMatchActivity.class, false);
 
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
 
-    public CreateMatchActivityTest() {
-        super(CreateMatchActivity.class);
-    }
-
     @Override
-    public void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
         Set<Player> playerSet = new HashSet<>();
         playerSet.add(amaury);
         playerSet.add(jimmy);
         dbRefWrapTest.addPlayers(playerSet);
-        getActivity();
+    }
+
+    @Test(expected = NoMatchingViewException.class)
+    public void testAInit() {
+        onView(withId(R.id.add_player_button)).perform(click());
     }
 
     @Test
@@ -115,6 +123,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     public void testTimePickerDisplaysToastForInvalidTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(MINUTE, -5);
+        setDate(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH));
         setTime(calendar.get(HOUR_OF_DAY), calendar.get(MINUTE));
         onView(withText(R.string.toast_invalid_hour)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
@@ -159,7 +168,9 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testInvitePlayerResultIsHandled() {
         setInviteResultIntent();
+
         intended(hasComponent(InvitePlayerToMatchActivity.class.getName()));
+
         checkIfPlayerIsDisplayed(amaury);
         checkIfPlayerIsDisplayed(jimmy);
         release();
@@ -188,7 +199,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         release();
     }
 
-    /* TODO: fix this test (fails with java.lang.IllegalArgumentException: The node does not have a children named : matches2)
+    /*
     @Test
     public void testCreateMatchSendsIntent() {
         init();
@@ -214,8 +225,8 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     private void setInviteResultIntent() {
         init();
         Intent resultData = new Intent();
-        resultData.putExtra("player0", "888888");
-        resultData.putExtra("player1", "235400");
+        resultData.putExtra("player0", amaury.getID().toString());
+        resultData.putExtra("player1", jimmy.getID().toString());
         resultData.putExtra("players_added", 2);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(hasComponent(InvitePlayerToMatchActivity.class.getName())).respondWith(result);

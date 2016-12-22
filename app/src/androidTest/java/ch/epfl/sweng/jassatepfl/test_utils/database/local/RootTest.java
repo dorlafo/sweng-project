@@ -9,9 +9,8 @@ import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
  * The root class is a special case of the NodeTest interface. It represents the top of our tree
  * structure.
  *
- * @author Amaury Combes
  */
-public class RootTest implements NodeTest {
+public class RootTest extends NodeTest {
 
     private final String id;
     private Set<NodeTest> children;
@@ -53,6 +52,15 @@ public class RootTest implements NodeTest {
 
     @Override
     public TreeNodeTest addChild(String id) {
+        TreeNodeTest deletedNode = null;
+        for(NodeTest n : children) {
+            if(n.getId().equals(id) && n.isDeleted) {
+                deletedNode = (TreeNodeTest) n;
+            }
+        }
+        if(deletedNode != null) {
+            children.remove(deletedNode);
+        }
         TreeNodeTest tNode = new TreeNodeTest(id, this);
         children.add(tNode);
         return tNode;
@@ -65,6 +73,10 @@ public class RootTest implements NodeTest {
 
     @Override
     public void dropChildren() {
+        for(NodeTest n : children) {
+            n.dropChildren();
+            n.deleteAllObservers();
+        }
         children = new HashSet<>();
     }
 
@@ -74,7 +86,7 @@ public class RootTest implements NodeTest {
         addChild(DatabaseUtils.DATABASE_PLAYERS);
         addChild(DatabaseUtils.DATABASE_PENDING_MATCHES);
         addChild(DatabaseUtils.DATABASE_MATCH_STATS);
-        addChild(DatabaseUtils.DATABASE_STATS_USER);
+        addChild(DatabaseUtils.DATABASE_USERSTATS);
     }
 
     @Override
@@ -84,7 +96,12 @@ public class RootTest implements NodeTest {
 
     @Override
     public void removeChild(NodeTest child) {
-        children.remove(child);
+        for(NodeTest n : children) {
+            if(n.getId().equals(child.getId()) && !n.isDeleted) {
+                n.removeSelf();
+                this.setChanged();
+                this.notifyObservers(this);
+            }
+        }
     }
-
 }

@@ -1,6 +1,13 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,22 +26,22 @@ import static android.support.test.espresso.contrib.NavigationViewActions.naviga
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+@RunWith(AndroidJUnit4.class)
 public final class DrawerTest extends InjectedBaseActivityTest {
 
-    public DrawerTest() {
-        super(MainActivity.class);
-    }
+    @Rule
+    public ActivityTestRule<MainActivity> activityRule =
+            new ActivityTestRule<>(MainActivity.class, false);
 
     @Override
-    public void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.twoPlayersMatch());
         matches.add(DummyDataTest.onePlayerMatch());
         dbRefWrapTest.addMatches(matches);
-
-        getActivity();
     }
 
     @Test
@@ -48,7 +55,8 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public void testBackClosesDrawer() {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.drawer_layout)).check(matches(isOpen()));
-        pressBack();
+        onView(withId(R.id.drawer_layout)).perform(ViewActions.pressBack());
+        //pressBack();
         onView(withId(R.id.drawer_layout)).check(matches(isClosed()));
     }
 
@@ -78,17 +86,17 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public void testCanNavigateToMainActivity() {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_profile));
-        onView(withId(R.id.llPlayerID)).check(matches(isDisplayed()));
+        onView(withId(R.id.profil_player)).check(matches(isDisplayed()));
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_main));
-        onView(withId(R.id.twMyMatches)).check(matches(isDisplayed()));
+        onView(withText(R.string.main_empty_pending_list)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testCanNavigateToListActivity() {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_list));
-        onView(withId(R.id.twNearbyMatches)).check(matches(isDisplayed()));
+        onView(withId(R.id.list_nearby_matches)).check(matches(isDisplayed()));
     }
 
 
@@ -96,7 +104,7 @@ public final class DrawerTest extends InjectedBaseActivityTest {
     public void testCanNavigateToProfileActivity() {
         onView(withId(R.id.drawer_layout)).perform(open());
         onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_profile));
-        onView(withId(R.id.llPlayerID)).check(matches(isDisplayed()));
+        onView(withId(R.id.profil_player)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -113,6 +121,12 @@ public final class DrawerTest extends InjectedBaseActivityTest {
         onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testCanNavigateToScoreBoard() {
+        onView(withId(R.id.drawer_layout)).perform(open());
+        onView(withId(R.id.nav_view)).perform(navigateTo(R.id.nav_score));
+        onView(withId(R.id.game_playing_to)).check(matches(isDisplayed()));
+    }
 
     @Test
     public void testLogout() {
