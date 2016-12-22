@@ -1,4 +1,3 @@
-/*
 package ch.epfl.sweng.jassatepfl;
 
 import android.app.Activity;
@@ -57,10 +56,10 @@ import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
-**
+/**
  * Test class for CreateMatchActivity
  *
- *
+ */
 @RunWith(AndroidJUnit4.class)
 public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
@@ -202,7 +201,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         intended(expectedIntent);
     }
     */
-/*
+
     private void removePlayer(Player player) {
         onData(allOf(is(instanceOf(Player.class)), hasToString(player.toString())))
                 .inAdapterView(withId(R.id.create_player_list))
@@ -242,4 +241,3 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     }
 
 }
-*/
