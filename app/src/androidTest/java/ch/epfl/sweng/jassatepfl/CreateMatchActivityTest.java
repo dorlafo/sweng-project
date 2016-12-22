@@ -51,6 +51,7 @@ import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
@@ -75,6 +76,16 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         playerSet.add(amaury);
         playerSet.add(jimmy);
         dbRefWrapTest.addPlayers(playerSet);
+    }
+
+    @Test
+    public void testAInit() {
+        try {
+            int x = 0;
+            x += 1;
+        } catch(Exception e) {
+            fail();
+        }
     }
 
     @Test
