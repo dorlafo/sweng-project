@@ -73,7 +73,6 @@
         <item quantity="one">%1$s - %2$d victory</item>
         <item quantity="other">%1$s - %2$d victories</item>
     </plurals>
-    <string name="profile_string_no_stats_yet">Can not display your stats yet.\n You must play a game first.</string>
 
     <string name="login_welcoming_text">Welcome to Jass@EPFL !</string>
     <string name="login_welcoming_text_suite">To use this app you need to\nlogin with your EPFL account</string>
@@ -191,4 +190,5 @@
     <string name="rank_graph">rank_graph</string>
 
     <string name="no_match_won">No match won yet</string>
+    <string name="main_app_icon">Main app icon</string>
 </resources>
