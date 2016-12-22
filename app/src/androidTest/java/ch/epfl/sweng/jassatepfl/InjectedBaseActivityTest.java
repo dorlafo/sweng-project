@@ -3,6 +3,7 @@ package ch.epfl.sweng.jassatepfl;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 import javax.inject.Inject;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.DaggerFakeGraphTest;
@@ -33,7 +34,7 @@ public class InjectedBaseActivityTest {
 
     protected DBRefWrapTest dbRefWrapTest;
 
-    @Before
+    @BeforeClass
     public void setUp() {
         App app = (App) getInstrumentation().getTargetContext().getApplicationContext();
         FakeGraphTest component = DaggerFakeGraphTest.builder().fakeModulesTest(new FakeModulesTest()).build();

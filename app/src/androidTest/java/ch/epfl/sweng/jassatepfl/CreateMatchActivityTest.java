@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,9 +71,9 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
 
-    @Override
+    @Before
     public void setUp() {
-        super.setUp();
+        //super.setUp();
         Set<Player> playerSet = new HashSet<>();
         playerSet.add(amaury);
         playerSet.add(jimmy);
