@@ -27,6 +27,6 @@ public class UserGuideActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testDisplay() {
-        onView(withId(R.id.user_guide_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.user_guide_ScrollV)).check(matches(isDisplayed()));
     }
 }
