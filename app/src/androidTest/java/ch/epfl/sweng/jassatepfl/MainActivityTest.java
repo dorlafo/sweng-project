@@ -15,7 +15,9 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
+import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
+import ch.epfl.sweng.jassatepfl.tools.DatabaseUtils;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -56,6 +58,22 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         onView(withText(R.string.wait_button_text_ready)).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testFinishedMatchesAreShown() {
+        dbRefWrapTest.reset();
+        /*
+        Match match = DummyDataTest.fullMatchWithBob();
+        MatchStats mS = new MatchStats(match);
+        mS.setWinnerIndex(0);
+        Set<MatchStats> matchStatsSet = new HashSet<>();
+        matchStatsSet.add(mS);
+        dbRefWrapTest.addMatchStatsArchive(matchStatsSet);
+        */
+        activityRule.launchActivity(new Intent());
+
+        onView(withText(R.string.heading_finished_matches)).perform(click());
+        //onData(anything()).inAdapterView(withId(R.id.my_finished_matches_list)).atPosition(0).perform(click());
+    }
     @Test
     public void testMainWithIntent() {
         dbRefWrapTest.reset();

@@ -47,6 +47,7 @@ public class DatabaseUtils {
     public static final String DATABASE_STATS_MATCH_ARCHIVE = "matchArchive";
 
     public static final String DATABASE_MATCH_STATS = "matchStats";
+
     public static final String DATABASE_USERSTATS = "userStats";
     public static final String DATABASE_USERSTATS_RANK = "rank";
     public static final String DATABASE_USERSTATS_PARTNERS = "partners";

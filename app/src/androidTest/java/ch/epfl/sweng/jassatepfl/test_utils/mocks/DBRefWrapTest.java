@@ -94,13 +94,18 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
      */
     @Override
     public Task<Void> setValue(Object value) {
-        if (getCurrentNode() instanceof LeafTest) {
-            ((LeafTest) getCurrentNode()).setData(value);
+        /*
+        if(getCurrentNode() instanceof TreeNodeTest) {
+            getCurrentNode().setData(value);
+        } else if (getCurrentNode() instanceof LeafTest) {
+            getCurrentNode().setData(value);
         } else if (getCurrentNode() instanceof LeafFieldTest) {
-            ((LeafFieldTest) getCurrentNode()).setData(value);
+            getCurrentNode().setData(value);
         } else {
             throw new UnsupportedOperationException("Cannot apply setValue on node : " + getCurrentNode().getId());
         }
+        */
+        getCurrentNode().setData(value);
 
         return null;
     }
@@ -213,6 +218,13 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
                 });
                 childOrder = DatabaseUtils.DATABASE_MATCHES_MATCH_STATUS;
                 return new QueryWrapperMockTest(leafList, childOrder);
+            case DatabaseUtils.DATABASE_MATCHES_TIME:
+                Collections.sort(leafList, new Comparator<LeafTest>() {
+                    @Override
+                    public int compare(LeafTest o1, LeafTest o2) {
+                        return Long.compare(((Match) o1.getData()).getTime(), ((Match) o2.getData()).getTime());
+                    }
+                });
             default :
                 throw new IllegalArgumentException("Path : " + path + " is not supported");
         }
@@ -278,6 +290,16 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
     public void addStats(Set<MatchStats> stats) {
         TreeNodeTest statsNode = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_MATCH_STATS);
         for (MatchStats stat : stats) {
+            String statId = stat.obtainMatchID();
+            statsNode.addChild(statId);
+            statsNode.getChild(statId).setData(stat);
+        }
+    }
+
+    public void addMatchStatsArchive(Set<MatchStats> statsSet) {
+        NodeTest statsNode = ((RootTest) currentNode).getChild(DatabaseUtils.DATABASE_STATS)
+                .getChild(DatabaseUtils.DATABASE_STATS_MATCH_STATS_ARCHIVE);
+        for (MatchStats stat : statsSet) {
             String statId = stat.obtainMatchID();
             statsNode.addChild(statId);
             statsNode.getChild(statId).setData(stat);
