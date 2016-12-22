@@ -221,16 +221,11 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_create_button:
-                if (matchBuilder.getPlayerList().size() == 0) {
-                    Toast.makeText(CreateMatchActivity.this,
-                            R.string.toast_cannot_create_with_no_player, Toast.LENGTH_SHORT)
-                            .show();
-                } else if(editText.getText().toString().isEmpty()) {
+                if (editText.getText().toString().isEmpty()) {
                     Toast.makeText(CreateMatchActivity.this,
                             R.string.toast_please_enter_description, Toast.LENGTH_SHORT)
                             .show();
-                }
-                else {
+                } else {
                     String matchId = dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).push().getKey();
                     Match m = matchBuilder.setMatchID(matchId).setDescription(editText.getText().toString()).build();
                     dbRefWrapped.child(DatabaseUtils.DATABASE_MATCHES).child(matchId).setValue(m);
@@ -284,7 +279,7 @@ public class CreateMatchActivity extends BaseActivityWithNavDrawer implements
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Player player = dataSnapshot.getValue(Player.class);
-                                        if(playerList.contains(player)) {
+                                        if (playerList.contains(player)) {
                                             playerList.remove(player);
                                         }
                                         playerList.add(player);
