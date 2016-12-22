@@ -34,7 +34,7 @@ public class InjectedBaseActivityTest {
 
     protected DBRefWrapTest dbRefWrapTest;
 
-    @BeforeClass
+    @Before
     public void setUp() {
         App app = (App) getInstrumentation().getTargetContext().getApplicationContext();
         FakeGraphTest component = DaggerFakeGraphTest.builder().fakeModulesTest(new FakeModulesTest()).build();
