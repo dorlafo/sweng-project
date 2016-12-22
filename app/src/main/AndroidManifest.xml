@@ -63,10 +63,12 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".WaitingPlayersActivity"
+            android:label="@string/title_activity_waiting"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".LoginActivity"/>
         <activity
             android:name=".InvitePlayerToMatchActivity"
+            android:label="@string/title_activity_invite"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".UserGuideActivity"
