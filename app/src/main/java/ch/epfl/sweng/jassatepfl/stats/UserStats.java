@@ -56,6 +56,8 @@ public class UserStats {
      */
     public UserStats(Player.PlayerID id) {
         this.playerId = id;
+        this.wonWith = new HashMap<>();
+        this.wonWith.put("SENTINEL", 0);
     }
 
     public UserStats(String id, Rank rank) {
