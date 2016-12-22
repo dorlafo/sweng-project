@@ -28,7 +28,6 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
     private final Context context;
     private final List<Player> players;
     private Match match;
-    //private final Map<String, Boolean> playersReady;
     private final Set<String> selectedIds;
 
     public PlayerListAdapter(Context context, int resource, List<Player> players, Match match, Set<String> selectedIds) {
@@ -36,7 +35,6 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         this.context = context;
         this.players = new ArrayList<>(players);
         this.match = match;
-        //this.playersReady = new HashMap<>(playersReady);
         this.selectedIds = new HashSet<>(selectedIds);
     }
 
@@ -66,8 +64,9 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         Player p = getItem(position);
 
         TextView quoteTv = (TextView) convertView.findViewById(R.id.player_quote);
-        TextView playerName = (TextView) convertView.findViewById(R.id.player_name);
         quoteTv.setText(String.format(getContext().getString(R.string.profile_label_quote), p.getQuote()));
+
+        TextView playerName = (TextView) convertView.findViewById(R.id.player_name);
         if (match == null) {
             playerName.setText(p.toString());
         } else {
@@ -77,13 +76,6 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
                     String.format(res.getString(R.string.wait_not_assigned), firstFirstName) :
                     String.format(res.getString(R.string.wait_assigned), firstFirstName, (match.teamNbForPlayer(p) + 1));
             playerName.setText(teamAssignment);
-
-            /*View layout = convertView.findViewById(R.id.player_list_layout);
-            if (playersReady.containsKey(p.getID().toString()) && playersReady.get(p.getID().toString())) {
-                layout.setBackgroundColor(0xFF00FF00);
-            } else {
-                layout.setBackgroundColor(0xFFFFFFFF);
-            }*/
         }
 
         ImageView check = (ImageView) convertView.findViewById(R.id.player_check);
@@ -100,17 +92,6 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
         this.selectedIds.addAll(selectedIds);
         notifyDataSetChanged();
     }
-
-    /*
-    public void refreshData(List<Player> p, Match m, Map<String, Boolean> pr) {
-        this.players.clear();
-        this.players.addAll(p);
-        this.match = m;
-        this.playersReady.clear();
-        this.playersReady.putAll(pr);
-        notifyDataSetChanged();
-    }
-    */
 
     public void refreshData(List<Player> p) {
         this.players.clear();
