@@ -49,7 +49,7 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
 
         activityRule.launchActivity(new Intent());
 
-        onView(withText("Leaderboard")).perform(click());
+        onView(withText("Leader board")).perform(click());
 
         onView(withText(R.string.loading_leaderboard)).check(matches(isDisplayed()));
     }
@@ -63,7 +63,7 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.addPlayers(playerSet);
 
         activityRule.launchActivity(new Intent());
-        onView(withText("Leaderboard")).perform(click());
+        onView(withText("Leader board")).perform(click());
 
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list))
                 .atPosition(0).check(matches(hasDescendant(withText("Bob LeBricoleur"))));
@@ -76,7 +76,7 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testMoveBetweenFragments() {
         activityRule.launchActivity(new Intent());
-        onView(withText("Leaderboard")).perform(click());
+        onView(withText("Leader board")).perform(click());
         onView(withText("Evolution")).perform(click());
         onView(withText("Counters")).perform(click());
     }
@@ -90,7 +90,7 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.addPlayers(playerSet);
 
         activityRule.launchActivity(new Intent());
-        onView(withText("Leaderboard")).perform(click());
+        onView(withText("Leader board")).perform(click());
 
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list))
                 .atPosition(0).perform(click());
