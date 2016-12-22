@@ -9,12 +9,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
+import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -26,6 +28,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsNPlayers;
+import static ch.epfl.sweng.jassatepfl.test_utils.DBTestUtils.assertMatchContainsPlayer;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.core.IsAnything.anything;
 
 @RunWith(AndroidJUnit4.class)
@@ -66,15 +70,13 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         onView(withText(R.string.dialog_cancel)).perform(pressBack());
     }
 
-    /*@Test WAITING NEW WAITING PLAYER ACTIVITY
+    /*@Test
     public void testAddPlayerOnListMatchActivity() {
         Set<Match> matches = new HashSet<>();
         matches.add(DummyDataTest.onePlayerMatch());
         dbRefWrapTest.addMatches(matches);
         dbRefWrapTest.addPendingMatch(DummyDataTest.onePlayerMatch(), Arrays.asList(false, false, false, false));
         assertMatchContainsNPlayers(dbRefWrapTest, "one_player", 1);
-
-        getActivity();
 
         try {
             onData(anything()).inAdapterView(withId(R.id.list_nearby_matches)).atPosition(0).perform(click());
