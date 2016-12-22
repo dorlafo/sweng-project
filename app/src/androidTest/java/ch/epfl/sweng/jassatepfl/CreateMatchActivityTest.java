@@ -207,6 +207,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testToastIsDisplayedWhenDescriptionIsEmpty() {
+        activityRule.launchActivity(new Intent());
         onView(withId(R.id.create_create_button)).perform(click());
         onView(withText(R.string.toast_please_enter_description)).inRoot(new ToastMatcherTest())
                 .check(matches(isDisplayed()));
@@ -216,6 +217,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     public void testCreateMatchSendsIntent() {
         init();
         Matcher<Intent> expectedIntent = hasComponent(WaitingPlayersActivity.class.getName());
+        activityRule.launchActivity(new Intent());
         onView(withId(R.id.description_match_text)).perform(typeText("Hello World"));
         closeSoftKeyboard();
         intending(expectedIntent).respondWith(new Instrumentation.ActivityResult(0, null));

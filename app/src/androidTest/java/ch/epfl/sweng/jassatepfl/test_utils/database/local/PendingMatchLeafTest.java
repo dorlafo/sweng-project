@@ -17,7 +17,9 @@ public class PendingMatchLeafTest extends LeafTest<Map<String, Boolean>> {
             return status.get(id);
         }
         else {
-            throw new IllegalArgumentException("Could not get pending match value for player : " + id);
+            //throw new IllegalArgumentException("Could not get pending match value for player : " + id);
+            status.put(id, new LeafFieldTest<Boolean>(id, false));
+            return status.get(id);
         }
     }
 
