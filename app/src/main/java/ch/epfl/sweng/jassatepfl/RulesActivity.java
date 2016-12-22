@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,7 +15,6 @@ import com.mukesh.MarkdownView;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 
-import static android.support.v7.widget.ListPopupWindow.WRAP_CONTENT;
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 /**
@@ -37,11 +35,15 @@ public class RulesActivity extends BaseActivityWithNavDrawer {
         drawer.addView(contentView, 0);
         userGuideView = (MarkdownView) findViewById(R.id.rules_text);
 
+        View toolbarLayout = inflater.inflate(R.layout.rules_toolbar_layout, drawer, false);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.addView(toolbarLayout);
+
         ArrayAdapter<Match.GameVariant> variantAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, Match.GameVariant.values());
         variantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        Spinner variantSpinner = new Spinner(this);
+        Spinner variantSpinner = (Spinner) findViewById(R.id.rules_spinner);
         variantSpinner.setAdapter(variantAdapter);
         variantSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -75,15 +77,11 @@ public class RulesActivity extends BaseActivityWithNavDrawer {
                 }
             }
 
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 userGuideView.loadMarkdownFromAssets("ChibreRules.md");
             }
         });
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.addView(variantSpinner, new Toolbar.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, Gravity.END));
     }
 
 }

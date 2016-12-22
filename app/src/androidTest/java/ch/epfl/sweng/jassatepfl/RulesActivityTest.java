@@ -43,7 +43,7 @@ public class RulesActivityTest extends InjectedBaseActivityTest {
 
     @Before
     public void setUp() {
-        onView(allOf(withParent(withId(R.id.toolbar)), instanceOf(Spinner.class)))
+        onView(allOf(withParent(withId(R.id.rules_toolbar_layout)), instanceOf(Spinner.class)))
                 .perform(click());
     }
 
