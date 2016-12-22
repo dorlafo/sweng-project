@@ -25,7 +25,7 @@ public class SkillCalculatorTest {
         List<Rank> players = Arrays.asList(userRank, player2, player3, player4);
 
         Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, 0);
-        assertEquals(userRank.getRank()  < newUserRank.getRank(), true);
+        assertEquals(userRank.computeRank()  < newUserRank.computeRank(), true);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class SkillCalculatorTest {
         List<Rank> players = Arrays.asList(userRank, player2, player3, player4);
 
         Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, 0);
-        assertEquals(userRank.getRank() < newUserRank.getRank(), true);
+        assertEquals(userRank.computeRank() < newUserRank.computeRank(), true);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class SkillCalculatorTest {
 
         Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, 1);
 
-        assertEquals(userRank.getRank() < newUserRank.getRank(), false);
+        assertEquals(userRank.computeRank() < newUserRank.computeRank(), false);
     }
 
     @Test
@@ -65,6 +65,6 @@ public class SkillCalculatorTest {
         List<Rank> players = Arrays.asList(userRank, player2, player3, player4);
 
         Rank newUserRank = calculateNewRatings(GameInfo.getDefaultGameInfo(), players, 1);
-        assertEquals(userRank.getRank() < newUserRank.getRank(), false);
+        assertEquals(userRank.computeRank() < newUserRank.computeRank(), false);
     }
 }

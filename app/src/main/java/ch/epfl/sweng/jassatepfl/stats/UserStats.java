@@ -217,7 +217,7 @@ public class UserStats {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         UserStats userStats = dataSnapshot.getValue(UserStats.class);
-                        if (userStats == null) {
+                        if (!dataSnapshot.exists()) {
                             if (index == 0) {
                                 ref.child("userStats").child(currentUserId).setValue(new UserStats(currentUserId, Rank.getDefaultRank()));
                             }
