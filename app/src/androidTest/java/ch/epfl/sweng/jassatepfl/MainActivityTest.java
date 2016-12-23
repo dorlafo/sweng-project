@@ -71,7 +71,7 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         */
         activityRule.launchActivity(new Intent());
 
-        onView(withText(R.string.heading_finished_matches)).perform(click());
+        onView(withText(R.id.my_finished_matches_list)).perform(click());
         //onData(anything()).inAdapterView(withId(R.id.my_finished_matches_list)).atPosition(0).perform(click());
     }
     @Test
