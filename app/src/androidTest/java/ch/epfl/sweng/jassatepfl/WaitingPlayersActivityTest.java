@@ -81,24 +81,6 @@ public class WaitingPlayersActivityTest extends InjectedBaseActivityTest {
         //release();
     }
 
-    //TODO: re-enabled when childEventListener will work...
-    /*
-    @Test
-    public void testUserIsReadyWorks() {
-        onePlayerMatchSetUp();
-
-        onView(withText(R.string.dialog_have_cards)).perform(click());
-        onView(withId(android.R.id.button1)).perform(click());
-        onView(withId(R.id.ready_button)).perform(click());
-        String matchID = DummyDataTest.onePlayerMatchWithBob().obtainMatchID();
-
-        assertPendingMatchContainsNPlayers(dbRefWrapTest, matchID, 1);
-        assertTrue(status.get(DummyDataTest.bricoloBob.getID().toString()));
-
-        onView(withId(R.id.ready_button)).check(matches(not(isEnabled())));
-    }
-    */
-
     @Test
     public void testInviteResultIsHandled() {
         init();
