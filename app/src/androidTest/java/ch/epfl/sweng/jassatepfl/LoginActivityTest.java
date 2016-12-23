@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -37,10 +36,6 @@ public final class LoginActivityTest extends InjectedBaseActivityTest {
     public ActivityTestRule<LoginActivity> activityRule =
             new ActivityTestRule<>(LoginActivity.class, false);
 
-    @Override
-    public void setUp() {
-        super.setUp();
-    }
 
     @Test
     public void testShowLoginButtonAnd() {
@@ -48,16 +43,6 @@ public final class LoginActivityTest extends InjectedBaseActivityTest {
         onView(withId(R.id.login_text_view)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testPressButtonGoesToWebView() {
-        Intents.init();
-        Matcher<Intent> expectedIntent = hasComponent(WebViewActivity.class.getName());
-        intending(expectedIntent)
-                .respondWith(new Instrumentation.ActivityResult(RESULT_CANCELED, null));
-        onView(withId(R.id.login_button)).perform(click());
-        intended(expectedIntent);
-        Intents.release();
-    }
 
     // Do more here
     @Test
