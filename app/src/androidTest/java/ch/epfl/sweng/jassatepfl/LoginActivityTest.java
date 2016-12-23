@@ -37,6 +37,11 @@ public final class LoginActivityTest extends InjectedBaseActivityTest {
     public ActivityTestRule<LoginActivity> activityRule =
             new ActivityTestRule<>(LoginActivity.class, false);
 
+    @Override
+    public void setUp() {
+        super.setUp();
+    }
+
     @Test
     public void testShowLoginButtonAnd() {
         onView(withId(R.id.login_button)).check(matches(isDisplayed()));
@@ -45,13 +50,13 @@ public final class LoginActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testPressButtonGoesToWebView() {
-        init();
+        Intents.init();
         Matcher<Intent> expectedIntent = hasComponent(WebViewActivity.class.getName());
         intending(expectedIntent)
                 .respondWith(new Instrumentation.ActivityResult(RESULT_CANCELED, null));
         onView(withId(R.id.login_button)).perform(click());
         intended(expectedIntent);
-        release();
+        Intents.release();
     }
 
     // Do more here
