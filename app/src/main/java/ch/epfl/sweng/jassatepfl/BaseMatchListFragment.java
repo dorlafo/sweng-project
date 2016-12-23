@@ -114,7 +114,6 @@ public abstract class BaseMatchListFragment extends Fragment implements AdapterV
         matchListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 //Add match to the list if we are in it
                 if(match.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
@@ -125,7 +124,6 @@ public abstract class BaseMatchListFragment extends Fragment implements AdapterV
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 int matchIndex = matches.indexOf(match);
                 //If the match is in the list (ie we were in it)
@@ -150,7 +148,6 @@ public abstract class BaseMatchListFragment extends Fragment implements AdapterV
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
                 Match match = dataSnapshot.getValue(Match.class);
                 matches.remove(match);
                 modifyListAdapter();

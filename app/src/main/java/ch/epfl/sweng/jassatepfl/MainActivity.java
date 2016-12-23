@@ -22,12 +22,10 @@ public final class MainActivity extends BaseActivityWithNavDrawer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         } else {
-            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             this.getSupportActionBar().setTitle("My Matches");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_main, drawer, false);

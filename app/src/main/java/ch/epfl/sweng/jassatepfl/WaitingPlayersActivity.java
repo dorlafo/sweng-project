@@ -68,13 +68,10 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         } else {
-            Log.d(TAG, "showLogin:getCurrentUser:notNull");
-
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_waiting_players, drawer, false);
             drawer.addView(contentView, 0);
@@ -370,7 +367,6 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 match = dataSnapshot.getValue(Match.class);
-                Log.d(TAG, "matchListener:onDataChange:dataSnapshot:" + dataSnapshot.toString());
                 if (match != null) {
                     if (match.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
                         goToGameActivity();
@@ -450,26 +446,23 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
         pendingMatchListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "pendingMatchListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 updateButtonStatus(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "pendingMatchListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                 updateButtonStatus(dataSnapshot.getKey(), (boolean) dataSnapshot.getValue());
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "pendingMatchListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
                 playersReady.remove(dataSnapshot.getKey());
                 modifyListAdapter();
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "pendingMatchListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
+                //Nothing to be done here
             }
 
             @Override

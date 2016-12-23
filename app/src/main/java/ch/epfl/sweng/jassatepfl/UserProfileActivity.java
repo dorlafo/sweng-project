@@ -37,8 +37,6 @@ public class UserProfileActivity extends BaseActivityWithNavDrawer {
             finish();
             startActivity(intent);
         } else {
-            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
-            //setContentView(R.layout.activity_user_profile);
             Intent startIntent = getIntent();
             if(startIntent.hasExtra("sciper")) {
                 sciper = startIntent.getStringExtra("sciper");
