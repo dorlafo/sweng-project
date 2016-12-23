@@ -2,7 +2,6 @@ package ch.epfl.sweng.jassatepfl.tools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +24,12 @@ import static android.view.View.VISIBLE;
 
 public class PlayerListAdapter extends ArrayAdapter<Player> {
 
-    private final Context context;
     private final List<Player> players;
     private Match match;
     private final Set<String> selectedIds;
 
     public PlayerListAdapter(Context context, int resource, List<Player> players, Match match, Set<String> selectedIds) {
         super(context, resource, players);
-        this.context = context;
         this.players = new ArrayList<>(players);
         this.match = match;
         this.selectedIds = new HashSet<>(selectedIds);
@@ -57,24 +54,28 @@ public class PlayerListAdapter extends ArrayAdapter<Player> {
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.player_list_element, parent, false);
+            LayoutInflater inflater = (LayoutInflater) getContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(
+                    match == null ? R.layout.player_list_element : R.layout.player_grid_element,
+                    parent, false);
         }
 
         Player p = getItem(position);
 
         TextView quoteTv = (TextView) convertView.findViewById(R.id.player_quote);
-        TextView playerName = (TextView) convertView.findViewById(R.id.player_name);
         quoteTv.setText(String.format(getContext().getString(R.string.player_list_adapter_quote), p.getQuote()));
+
+        TextView playerName = (TextView) convertView.findViewById(R.id.player_name);
         if (match == null) {
             playerName.setText(p.toString());
         } else {
-            Resources res = context.getResources();
             String firstFirstName = p.getFirstName().split(" ")[0];
-            String teamAssignment = match.teamNbForPlayer(p) == -1 ?
-                    String.format(res.getString(R.string.wait_not_assigned), firstFirstName) :
-                    String.format(res.getString(R.string.wait_assigned), firstFirstName, (match.teamNbForPlayer(p) + 1));
-            playerName.setText(teamAssignment);
+            playerName.setText(firstFirstName);
+            String teamAssignment = match.teamNbForPlayer(p) == -1 ? "No Team" :
+                    "Team " + (match.teamNbForPlayer(p) + 1);
+            TextView teamView = (TextView) convertView.findViewById(R.id.player_team);
+            teamView.setText(teamAssignment);
         }
 
         ImageView check = (ImageView) convertView.findViewById(R.id.player_check);

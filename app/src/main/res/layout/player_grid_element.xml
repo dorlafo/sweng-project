@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/player_list_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:id="@+id/player_grid_element"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/player_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:paddingBottom="2dp"
@@ -17,10 +18,19 @@
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/player_quote"
+        android:id="@+id/player_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/player_name"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:paddingBottom="2dp"/>
+
+    <TextView
+        android:id="@+id/player_quote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/player_team"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:paddingBottom="2dp"
@@ -31,10 +41,10 @@
         android:id="@+id/player_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="15dp"
+        android:layout_below="@id/player_quote"
+        android:layout_centerHorizontal="true"
         android:contentDescription="@string/icon_description_check"
+        android:gravity="center"
         android:src="@drawable/ic_check_black"
         android:visibility="invisible"/>
 

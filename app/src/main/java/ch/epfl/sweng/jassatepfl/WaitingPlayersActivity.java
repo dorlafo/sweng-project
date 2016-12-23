@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,11 +95,11 @@ public class WaitingPlayersActivity extends BaseActivityWithNavDrawer implements
             inviteBtn = (Button) findViewById(R.id.invite_button);
 
             adapter = new PlayerListAdapter(WaitingPlayersActivity.this,
-                    R.layout.player_list_element, new ArrayList<Player>());
+                    R.layout.player_grid_element, new ArrayList<Player>());
 
-            ListView listView = (ListView) findViewById(android.R.id.list);
-            listView.setOnItemClickListener(this);
-            listView.setAdapter(adapter);
+            GridView gridView = (GridView) findViewById(R.id.waiting_players_grid);
+            gridView.setOnItemClickListener(this);
+            gridView.setAdapter(adapter);
         }
     }
 
