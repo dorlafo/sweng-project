@@ -69,12 +69,10 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (fAuth.getCurrentUser() == null) {
-            //Log.d(TAG, "showLogin:getCurrentUser:null");
             Intent intent = new Intent(this, LoginActivity.class);
             finish();
             startActivity(intent);
         } else {
-            //Log.d(TAG, "showLogin:getCurrentUser:notNull");
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View contentView = inflater.inflate(R.layout.activity_maps, drawer, false);
             drawer.addView(contentView, 0);
@@ -158,8 +156,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
         matchMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(final Marker marker) {
-                //Log.d(TAG, "MARKER:" + marker.toString() + ":TAG:" + marker.getTag());
-                //Log.d(TAG, "matches:size:" + matches.size() + ":" + matches.toString());
                 final Match currMatch = matches.get(marker.getTag());
                 if (currMatch.hasParticipantWithID(new Player.PlayerID(getUserSciper()))) {
                     if (currMatch.getMatchStatus().equals(Match.MatchStatus.ACTIVE)) {
@@ -236,7 +232,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //Log.d(TAG, "childEventListener:onChildAdded:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
                 if (m.hasParticipantWithID(new Player.PlayerID(getUserSciper()))
                         || (m.getMatchStatus().equals(Match.MatchStatus.PENDING) && !m.isPrivateMatch())) {
@@ -248,7 +243,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                //Log.d(TAG, "childEventListener:onChildChanged:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
                 String id = dataSnapshot.getKey();
                 if (markers.containsKey(id)) {
@@ -264,7 +258,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                //Log.d(TAG, "childEventListener:onChildRemoved:dataSnapshot:" + dataSnapshot.toString());
                 String id = dataSnapshot.getKey();
                 matches.remove(id);
                 markers.get(id).remove();
@@ -273,7 +266,6 @@ public class MapsActivity extends BaseActivityWithNavDrawer implements
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                //Log.d(TAG, "childEventListener:onChildMoved:dataSnapshot:" + dataSnapshot.toString());
                 Match m = dataSnapshot.getValue(Match.class);
                 String id = dataSnapshot.getKey();
                 if (markers.containsKey(id)) {

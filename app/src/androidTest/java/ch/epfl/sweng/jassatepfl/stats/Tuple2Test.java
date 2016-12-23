@@ -5,9 +5,10 @@ import org.junit.Test;
 import ch.epfl.sweng.jassatepfl.model.Player;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class Tuple2Test {
+
     Player.PlayerID id = new Player.PlayerID("000000");
     Tuple2<Player.PlayerID, Integer> counter1 = new Tuple2<>(id, 0);
 

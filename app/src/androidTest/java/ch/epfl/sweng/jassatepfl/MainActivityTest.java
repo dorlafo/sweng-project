@@ -1,9 +1,12 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +20,16 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.init;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.Intents.release;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -35,8 +44,8 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
     public ActivityTestRule<MainActivity> activityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
 
-    @Test
-    public void testSwitchToWaitingPlayersActivityWhenClickOnAMatch() {
+    @Before
+    public void matchSetUp() {
         dbRefWrapTest.reset();
         Set<Match> matches = new HashSet<>();
         Match m = DummyDataTest.matchWithBob();
@@ -47,28 +56,24 @@ public final class MainActivityTest extends InjectedBaseActivityTest {
         dbRefWrapTest.addPendingMatch(DummyDataTest.matchWithBob(), pendingMatches);
         assertMatchContainsNPlayers(dbRefWrapTest, "bob", 1);
         assertMatchContainsPlayer(dbRefWrapTest, "bob", new Player.PlayerID("696969"));
+    }
 
+    @Test
+    public void testSwitchToWaitingPlayersActivityWhenClickOnAMatch() {
+        init();
         activityRule.launchActivity(new Intent());
 
+        Matcher<Intent> expectedIntent = hasComponent(WaitingPlayersActivity.class.getName());
+        intending(expectedIntent).respondWith(new Instrumentation.ActivityResult(RESULT_CANCELED, null));
+
         onData(anything()).inAdapterView(withId(R.id.my_pending_matches_list)).atPosition(0).perform(click());
-        onView(withText(R.string.dialog_have_cards)).perform(click());
-        onView(withId(android.R.id.button1)).perform(click());
-        onView(withText(R.string.wait_button_text_ready)).check(matches(isDisplayed()));
+
+        intended(expectedIntent);
+        release();
     }
 
     @Test
     public void testMainWithIntent() {
-        dbRefWrapTest.reset();
-        Set<Match> matches = new HashSet<>();
-        Match m = DummyDataTest.matchWithBob();
-        matches.add(m);
-        dbRefWrapTest.addMatches(matches);
-        Map<String, Boolean> pendingMatches = new HashMap<>();
-        pendingMatches.put(DummyDataTest.bricoloBob.getID().toString(), false);
-        dbRefWrapTest.addPendingMatch(DummyDataTest.matchWithBob(), pendingMatches);
-        assertMatchContainsNPlayers(dbRefWrapTest, "bob", 1);
-        assertMatchContainsPlayer(dbRefWrapTest, "bob", new Player.PlayerID("696969"));
-
         activityRule.launchActivity(new Intent().putExtra("notif", "matchexpired"));
 
         onView(withText(R.string.notification_match_expired)).check(matches(isDisplayed()));

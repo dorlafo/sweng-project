@@ -24,22 +24,11 @@ public final class LoginActivityTest extends InjectedBaseActivityTest {
     public ActivityTestRule<LoginActivity> activityRule =
             new ActivityTestRule<>(LoginActivity.class, false);
 
+
     @Test
     public void testShowLoginButtonAnd() {
         onView(withId(R.id.login_button)).check(matches(isDisplayed()));
         onView(withId(R.id.login_text_view)).check(matches(isDisplayed()));
     }
 
-    /*@Test
-    public void testPressButtonGoesToWebView(){
-        getActivity();
-        try {
-            onView(withId(R.id.login_button)).perform(click());
-            //Thread.sleep(3000);
-            onView(withText("English")).check(matches(isDisplayed()));
-        } catch(Exception e) {
-            fail();
-        }
-
-    }*/
 }

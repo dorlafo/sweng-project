@@ -16,127 +16,124 @@
         android:layout_height="?android:attr/actionBarSize"
         android:layout_alignParentTop="true"/>
 
-
     <TextView
         android:id="@+id/match_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/waiting_top_space"
         android:gravity="center"
-        android:textSize="20sp"
         android:textColor="@android:color/black"
+        android:textSize="20sp"
         android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/match_variant"
-        android:layout_below="@id/match_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_below="@id/match_description"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:text="@string/wait_field_match_variant"
-        android:textSize="18sp" />
-
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/match_players"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/match_variant"
-        android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/wait_field_player_list"
         android:textSize="18sp"/>
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/match_players"
-        android:background="@android:color/background_light"
-        android:divider="@color/listview_divider_color"
-        android:dividerHeight="1dp"/>
-
     <LinearLayout
         android:id="@+id/bottom_buttons"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        style="?android:attr/buttonBarStyle">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/invite_button"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="invitePlayers"
             android:text="@string/invite_button_text_invite"
             android:textAlignment="center"
-            android:textSize="15sp"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:textSize="15sp"/>
 
         <Button
             android:id="@+id/leave_match_button"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="leaveMatch"
             android:text="@string/wait_button_text_leave"
             android:textAlignment="center"
-            android:textSize="15sp"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:textSize="15sp"/>
 
         <Button
             android:id="@+id/ready_button"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="userIsReady"
             android:text="@string/wait_button_text_ready"
             android:textAlignment="center"
-            android:textSize="15sp"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:textSize="15sp"/>
 
     </LinearLayout>
 
+    <GridView
+        android:id="@+id/waiting_players_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_buttons"
+        android:layout_below="@id/match_players"
+        android:numColumns="2"
+        android:verticalSpacing="10dp"/>
+
     <Button
         android:id="@+id/play"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@id/bottom_buttons"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/roundedbutton"
+        style="?android:attr/buttonBarButtonStyle"
         android:enabled="false"
         android:onClick="goToMatch"
         android:text="@string/wait_button_text_play"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
         android:textSize="20sp"/>
 
     <ImageView
-        android:layout_height="wrap_content"
-        android:layout_width="50dp"
         android:id="@+id/cards_no"
-        android:onClick="changeCardsStatus"
-        android:adjustViewBounds="true"
-        android:src="@drawable/cards_no"
-        android:layout_below="@+id/waiting_top_space"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:contentDescription="@string/no_cards_description"/>
+        android:layout_below="@+id/match_description"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/no_cards_description"
+        android:onClick="changeCardsStatus"
+        android:src="@drawable/cards_no"/>
 
     <ImageView
-        android:layout_height="wrap_content"
-        android:layout_width="50dp"
         android:id="@+id/cards_yes"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/match_description"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/yes_cards_description"
         android:onClick="changeCardsStatus"
         android:src="@drawable/cards_yes"
-        android:layout_below="@+id/waiting_top_space"
-        android:layout_alignParentEnd="true"
-        android:visibility="gone"
-        android:contentDescription="@string/yes_cards_description"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

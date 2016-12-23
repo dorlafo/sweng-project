@@ -2,8 +2,6 @@ package ch.epfl.sweng.jassatepfl.tequila;
 
 import com.google.gson.annotations.SerializedName;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
 import java.io.IOException;
@@ -45,21 +43,14 @@ public class HttpUtilsTest {
         try {
             HttpUtils.urlEncode(testString);
         } catch (AssertionError e) {
-            fail("UTF-8 is supported here, Huston we have a problem");
+            fail("UTF-8 is supported here, Houston we have a problem");
         }
     }
 
-    @Test
-    public void fetchError() {
+    @Test(expected = AssertionError.class)
+    public void fetchError() throws IOException {
         String fakeUrl = "ceci@%n@@es$ëdoedjft&pasune%vrai&url.com";
-        try {
-            HttpUtils.fetch(fakeUrl, JsonProfile.class);
-            fail("Excepted MalformedURLException");
-        } catch (AssertionError e) {
-            Assert.assertTrue(e.getMessage().equals(("The URL is malformed!?")));
-        } catch (IOException i) {
-            fail("Should not throw this");
-        }
+        HttpUtils.fetch(fakeUrl, JsonProfile.class);
     }
 
 }

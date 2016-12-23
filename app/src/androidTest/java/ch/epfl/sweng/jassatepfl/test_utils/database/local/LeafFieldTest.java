@@ -26,12 +26,10 @@ public class LeafFieldTest<T> extends NodeTest {
 
     public void setData(T data) {
         this.data = data;
-        //TODO: voir si c'est utile...
         if(parent instanceof UserStatsLeafTest && data instanceof Rank) {
             ((UserStatsLeafTest) parent).getData().setRank((Rank) data);
         } else if(parent instanceof PlayerLeafTest && Integer.class.isInstance(data)) {
             ((PlayerLeafTest) parent).getData().setQuote((Integer) data);
-
         }
     }
 

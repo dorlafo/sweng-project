@@ -14,6 +14,7 @@ import static org.junit.Assert.assertThat;
  * Tests for the Team class
  */
 public class TeamTest {
+
     @Test
     public void teamIsImmutable() {
         Player.PlayerID p1 = new Player.PlayerID(234832);
@@ -127,4 +128,5 @@ public class TeamTest {
 
         assertThat(t1.hashCode() == t2.hashCode(), is(false));
     }
+
 }

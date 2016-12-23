@@ -94,7 +94,6 @@ public class DBRefWrapTestTest {
         assertEquals(true, ((PendingMatchLeafTest) refToMatchStatus.getCurrentNode()).getData().get(vincenzo.getID().toString()));
     }
 
-    //TODO: Make this test actually test something...
     @Test
     public void childEventListenerTest() {
         RootTest root = new RootTest("jass@EPFL");
@@ -108,25 +107,21 @@ public class DBRefWrapTestTest {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Player p = dataSnapshot.getValue(Player.class);
-                //Log.d("cel", "onChildAdded:player:" + p.getFirstName());
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Player p = dataSnapshot.getValue(Player.class);
-                //Log.d("cel", "onChildChanged:player:" + p.getFirstName());
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Player p = dataSnapshot.getValue(Player.class);
-                //Log.d("cel", "onChildRemoved:player:" + p.getFirstName());
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 Player p = dataSnapshot.getValue(Player.class);
-                //Log.d("cel", "onChildMoved:player:" + p.getFirstName());
             }
 
             @Override

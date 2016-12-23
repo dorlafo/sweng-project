@@ -15,7 +15,6 @@ public class CustomObservable {
      * Construct an Observable with zero Observers.
      */
     public CustomObservable() {
-        //Log.d(TAG, "creating a new CustomObservable");
         singleValueObservers = new ArrayList<>();
         valueObservers = new ArrayList<>();
         childObservers = new ArrayList<>();
@@ -34,7 +33,6 @@ public class CustomObservable {
         if (o == null)
             throw new NullPointerException();
         if (!singleValueObservers.contains(o)) {
-            //Log.d(TAG, "adding a new SingleValueObserver for o:" + ((DBRefWrapTest)o).getCurrentNode().getId());
             singleValueObservers.add(o);
         }
     }
@@ -52,7 +50,6 @@ public class CustomObservable {
         if (o == null)
             throw new NullPointerException();
         if (!valueObservers.contains(o)) {
-            //Log.d(TAG, "adding a new ValueObserver for o:" + ((DBRefWrapTest)o).getCurrentNode().getId());
             valueObservers.add(o);
         }
     }
@@ -70,7 +67,6 @@ public class CustomObservable {
         if (o == null)
             throw new NullPointerException();
         if (!childObservers.contains(o)) {
-            //Log.d(TAG, "adding a new ChildObserver for o :" + ((DBRefWrapTest)o).getCurrentNode().getId());
             childObservers.add(o);
         }
     }
@@ -81,7 +77,6 @@ public class CustomObservable {
      * @param   o   the observer to be deleted.
      */
     public synchronized void deleteSingleValueObserver(CustomObserver o) {
-        //Log.d(TAG, "deleting SingleValueObserver:" + ((DBRefWrapTest)o).getCurrentNode().getId());
         singleValueObservers.remove(o);
     }
 
@@ -91,7 +86,6 @@ public class CustomObservable {
      * @param   o   the observer to be deleted.
      */
     public synchronized void deleteValueObserver(CustomObserver o) {
-        //Log.d(TAG, "deleting ValueObserver:" + ((DBRefWrapTest)o).getCurrentNode().getId());
         valueObservers.remove(o);
     }
 
@@ -101,12 +95,10 @@ public class CustomObservable {
      * @param   o   the observer to be deleted.
      */
     public synchronized void deleteChildObserver(CustomObserver o) {
-        //Log.d(TAG, "deleting ChildObserver:" + ((DBRefWrapTest)o).getCurrentNode().getId());
         childObservers.remove(o);
     }
 
     public void notifyObservers(NodeTest arg) {
-        //Log.d(TAG, "In notifyObservers with arg:" + arg.getId());
         /*
          * a temporary array buffer, used as a snapshot of the state of
          * current Observers.
@@ -135,16 +127,13 @@ public class CustomObservable {
                 return;
 
             if (hasChanged()) {
-                //Log.d(TAG, "In notifyObservers something has changed!");
                 clearChanged();
             }
             if (wasDeleted()) {
-                //Log.d(TAG, "In notifyObservers something was deleted!");
                 clearDeleted();
                 localChangeType = ChangeType.DELETED;
             }
             if (wasAdded()) {
-                //Log.d(TAG, "In notifyObservers something was added!");
                 clearAdded();
                 localChangeType = ChangeType.ADDED;
             }
@@ -171,7 +160,6 @@ public class CustomObservable {
      * Clears all the observer list so that this object no longer has any observers.
      */
     public synchronized void deleteAllObservers() {
-        //Log.d(TAG, "Deleting all observers!");
 
         childObservers.clear();
         singleValueObservers.clear();
@@ -182,7 +170,6 @@ public class CustomObservable {
      * Clears the single value observer list so that this object no longer has any observers for single value.
      */
     public synchronized void deleteSingleValueObservers() {
-        //Log.d(TAG, "Deleting singleValue observers!");
         singleValueObservers.clear();
     }
 
@@ -190,7 +177,6 @@ public class CustomObservable {
      * Clears the value observer list so that this object no longer has any observers for value.
      */
     public synchronized void deleteValueObservers() {
-        //Log.d(TAG, "Deleting value observers!");
         valueObservers.clear();
     }
 
@@ -198,7 +184,6 @@ public class CustomObservable {
      * Clears the child observer list so that this object no longer has any observers for child.
      */
     public synchronized void deleteChildObservers() {
-        //Log.d(TAG, "Deleting child observers!");
         childObservers.clear();
     }
 
@@ -207,7 +192,6 @@ public class CustomObservable {
      * <tt>hasChanged</tt> method will now return <tt>true</tt>.
      */
     protected synchronized void setChanged() {
-        //Log.d(TAG, "Changed set to true !");
         changed = true;
     }
 
@@ -216,7 +200,6 @@ public class CustomObservable {
      * <tt>wasAdded</tt> method will now return <tt>true</tt>.
      */
     protected synchronized void setAdded() {
-        //Log.d(TAG, "Added set to true !");
         added = true;
     }
 
@@ -225,7 +208,6 @@ public class CustomObservable {
      * <tt>wasDeleted</tt> method will now return <tt>true</tt>.
      */
     protected synchronized void setDeleted() {
-        //Log.d(TAG, "Deleted set to true !");
         deleted = true;
     }
 
@@ -239,7 +221,6 @@ public class CustomObservable {
      * @see     CustomObservable#notifyObservers(NodeTest)
      */
     protected synchronized void clearChanged() {
-        //Log.d(TAG, "Changed set to false !");
         changed = false;
     }
 
@@ -253,7 +234,6 @@ public class CustomObservable {
      * @see     CustomObservable#notifyObservers(NodeTest)
      */
     protected synchronized void clearAdded() {
-        //Log.d(TAG, "Added set to false !");
         added = false;
     }
 
@@ -267,7 +247,6 @@ public class CustomObservable {
      * @see     CustomObservable#notifyObservers(NodeTest)
      */
     protected synchronized void clearDeleted() {
-        //Log.d(TAG, "Deleted set to false !");
         deleted = false;
     }
 

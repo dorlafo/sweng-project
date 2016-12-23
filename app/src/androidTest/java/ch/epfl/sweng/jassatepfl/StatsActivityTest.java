@@ -25,9 +25,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.IsAnything.anything;
 
 /**
- * @author Alexis Montavon
- *
  * Test class for StatsActivity
+ *
+ * @author Alexis Montavon
  */
 @RunWith(AndroidJUnit4.class)
 public class StatsActivityTest extends InjectedBaseActivityTest {
@@ -55,7 +55,7 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
     }
 
     @Test
-    public void testLeaderBoardWithSomePlayerAtRightPosition(){
+    public void testLeaderBoardWithSomePlayerAtRightPosition() {
         Set<Player> playerSet = new HashSet<>();
         playerSet.add(DummyDataTest.bricoloBob);
         playerSet.add(DummyDataTest.amaury);
@@ -82,7 +82,7 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
     }
 
     @Test
-    public void testLeaderToUserProfileActivity(){
+    public void testLeaderToUserProfileActivity() {
         Set<Player> playerSet = new HashSet<>();
         playerSet.add(DummyDataTest.bricoloBob);
         playerSet.add(DummyDataTest.amaury);
@@ -97,4 +97,5 @@ public class StatsActivityTest extends InjectedBaseActivityTest {
 
         onView(withText("Bob LeBricoleur")).check(matches(isDisplayed()));
     }
+
 }

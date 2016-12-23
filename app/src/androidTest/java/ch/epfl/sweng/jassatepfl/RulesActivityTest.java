@@ -50,43 +50,43 @@ public class RulesActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testSpinnerSelectionPiqueDouble() {
         onData(allOf(is(instanceOf(Match.GameVariant.class)), is(PIQUE_DOUBLE))).perform(click());
-        onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.rules_layout)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testSpinnerSelectionObenAbe() {
         onData(allOf(is(instanceOf(Match.GameVariant.class)), is(OBEN_ABE))).perform(click());
-        onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.rules_layout)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testSpinnerSelectionUndenUfe() {
         onData(allOf(is(instanceOf(Match.GameVariant.class)), is(UNDEN_UFE))).perform(click());
-        onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.rules_layout)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testSpinnerSelectionSlalom() {
         onData(allOf(is(instanceOf(Match.GameVariant.class)), is(SLALOM))).perform(click());
-        onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.rules_layout)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testSpinnerSelectionJassMarrant() {
         onData(allOf(is(instanceOf(Match.GameVariant.class)), is(JASS_MARANT))).perform(click());
-        onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.rules_layout)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testSpinnerSelectionChibre() {
         onData(allOf(is(instanceOf(Match.GameVariant.class)), is(CHIBRE))).perform(click());
-        onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.rules_layout)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testSpinnerSelectionChicane() {
         onData(allOf(is(instanceOf(Match.GameVariant.class)), is(CHICANE))).perform(click());
-        onView(withId(R.id.rules_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.rules_layout)).check(matches(isDisplayed()));
     }
 
 }

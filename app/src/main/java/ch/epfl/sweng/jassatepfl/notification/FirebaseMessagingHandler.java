@@ -40,19 +40,16 @@ public class FirebaseMessagingHandler extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        //Log.d(TAG, "From: " + remoteMessage.getFrom());
         NotificationMessages msgType;
         Map<String, String> msgData = remoteMessage.getData();
 
         // Check if message contains a data payload otherwise this isn't one of our notifications.
         if (msgData != null && msgData.size() > 0) {
-            //Log.d(TAG, "Message data payload: " + msgData);
             msgType = getMsgType(msgData.get("type"));
 
             // Sends notification when app is on foreground & background.
             sendNotification(msgType, msgData);
         } else {
-            //Log.d(TAG, "Message contains no data payload!");
         }
     }
 

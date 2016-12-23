@@ -1,5 +1,6 @@
 package ch.epfl.sweng.jassatepfl;
 
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -20,19 +21,22 @@ import java.util.Set;
 
 import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Match.Meld;
-import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.stats.MatchStats;
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
-import ch.epfl.sweng.jassatepfl.test_utils.database.local.PlayerLeafTest;
-import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.init;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.Intents.release;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -47,9 +51,7 @@ import static ch.epfl.sweng.jassatepfl.model.Match.Meld.THREE_CARDS;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.bricoloBob;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.fullMatchWithBob;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.jimmy;
-import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.marco;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.nicolas;
-import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
@@ -177,7 +179,6 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         String message = String.format(getInstrumentation().getTargetContext()
                 .getResources().getString(R.string.dialog_game_end), "Team 1");
         onView(withText(message)).check(matches(isDisplayed()));
-        onView(withId(android.R.id.button1)).perform(click());
     }
 
     @Test
@@ -239,7 +240,23 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
         String message = String.format(getInstrumentation().getTargetContext()
                 .getResources().getString(R.string.dialog_game_end), "Team 2");
         onView(withText(message)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testReturnToMainActivityIntentIsSentWhenMatchIsOver() {
+        init();
+        offlineMatchSetup();
+
+        for (int i = 0; i < 4; ++i) {
+            onView(withId(R.id.score_update_1)).perform(click());
+            onView(withId(R.id.score_picker_match)).perform(click());
+        }
+
+        Matcher<Intent> expectedIntent = hasComponent(MainActivity.class.getName());
+        intending(expectedIntent).respondWith(new Instrumentation.ActivityResult(RESULT_CANCELED, null));
         onView(withId(android.R.id.button1)).perform(click());
+        intended(expectedIntent);
+        release();
     }
 
     @Test
@@ -484,4 +501,5 @@ public final class GameActivityTest extends InjectedBaseActivityTest {
             }
         };
     }
+
 }

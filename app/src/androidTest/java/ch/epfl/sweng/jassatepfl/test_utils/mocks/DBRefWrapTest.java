@@ -112,8 +112,6 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
     public void addListenerForSingleValueEvent(final ValueEventListener v) {
         currentNode.addSingleValueObserver(this);
         listenerForSingleValue.put(currentNode, v);
-        /*Log.d("DBRefWrapTest", "addListenerForSingleValueEvent:adding new LFSV to:"
-                + this + "::currentNode:" + currentNode.getId());*/
         update(currentNode, currentNode, ObserverType.FOR_SINGLE_VALUE, ChangeType.CHANGED);
     }
 
@@ -124,8 +122,6 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
     public ValueEventListener addValueEventListener(final ValueEventListener listener) {
         currentNode.addValueObserver(this);
         listenerForValue.put(currentNode, listener);
-        /*Log.d("DBRefWrapTest", "addValueEventListener:adding new VEL to:"
-                + this + "::currentNode:" + currentNode.getId());*/
         update(currentNode, currentNode, ObserverType.VALUE, ChangeType.CHANGED);
         return listener;
     }
@@ -137,8 +133,6 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
     public ChildEventListener addChildEventListener(final ChildEventListener listener) {
         currentNode.addChildObserver(this);
         listenerForChild.put(currentNode, listener);
-        /*Log.d("DBRefWrapTest", "addChildEventListener:adding new CEL to:"
-                + this + "::currentNode:" + currentNode.getId());*/
         update(currentNode, currentNode, ObserverType.CHILD, ChangeType.ADDED);
         return listener;
     }
@@ -305,9 +299,6 @@ public class DBRefWrapTest extends DBReferenceWrapper implements CustomObserver 
      */
     @Override
     public void update(CustomObservable o, NodeTest arg, ObserverType oType, ChangeType cType) {
-        /*Log.d("DBRefWrapTest", "in update from this:" + this.getCurrentNode().getId()
-                + "::CustomObservable:" + ((NodeTest)o).getId()
-                + "::arg:" + arg.getId() + "::oType:" + oType.name() + "::cType:" + cType.name());*/
         final DataSnapshot snapShot = mock(DataSnapshot.class);
         Player p = null;
         Match m = null;

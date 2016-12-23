@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl.tequila;
 
-
 import org.junit.Test;
 
 import java.util.Arrays;
