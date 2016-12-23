@@ -101,17 +101,16 @@
 
     <Button
         android:id="@+id/play"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@id/bottom_buttons"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/roundedbutton"
+        style="?android:attr/buttonBarButtonStyle"
         android:enabled="false"
         android:onClick="goToMatch"
         android:text="@string/wait_button_text_play"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
         android:textSize="20sp"/>
 
     <ImageView

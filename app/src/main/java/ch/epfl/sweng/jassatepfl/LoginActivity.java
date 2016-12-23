@@ -53,18 +53,6 @@ public class LoginActivity extends BaseAppCompatActivity {
         //Log.d(TAG, "onCreate");
     }
 
-    /*
-    This code should not be necessary
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // Check if user is already logged in
-        if (fAuth.getCurrentUser() != null) {
-            onAuthSuccess();
-        }
-    }
-    */
     @Override
     public void onBackPressed() {
         //DO NOTHING -> it disables the back button
