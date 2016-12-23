@@ -13,11 +13,14 @@ import org.junit.runner.RunWith;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.init;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.Intents.release;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -42,25 +45,25 @@ public final class LoginActivityTest extends InjectedBaseActivityTest {
 
     @Test
     public void testPressButtonGoesToWebView() {
-        Intents.init();
+        init();
         Matcher<Intent> expectedIntent = hasComponent(WebViewActivity.class.getName());
         intending(expectedIntent)
                 .respondWith(new Instrumentation.ActivityResult(RESULT_CANCELED, null));
         onView(withId(R.id.login_button)).perform(click());
         intended(expectedIntent);
-        Intents.release();
+        release();
     }
 
     // Do more here
     @Test
     public void testWebViewResponseIsHandled() {
-        Intents.init();
+        init();
         Matcher<Intent> expectedIntent = hasComponent(WebViewActivity.class.getName());
         intending(expectedIntent)
                 .respondWith(new Instrumentation.ActivityResult(RESULT_OK, null));
         onView(withId(R.id.login_button)).perform(click());
         intended(expectedIntent);
-        Intents.release();
+        release();
     }
 
 }
