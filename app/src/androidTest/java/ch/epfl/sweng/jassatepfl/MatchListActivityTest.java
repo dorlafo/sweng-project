@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl;
 
-
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -103,4 +102,5 @@ public final class MatchListActivityTest extends InjectedBaseActivityTest {
         onView(withText(R.string.error_match_full)).check(matches(isDisplayed()));
         onView(withText(R.string.error_match_full)).perform(pressBack());
     }
+
 }

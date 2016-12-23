@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl.model;
 
-
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;

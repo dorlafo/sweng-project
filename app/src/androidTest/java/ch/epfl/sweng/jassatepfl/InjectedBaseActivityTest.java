@@ -3,11 +3,11 @@ package ch.epfl.sweng.jassatepfl;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 
 import javax.inject.Inject;
-import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.DaggerFakeGraphTest;
+
 import ch.epfl.sweng.jassatepfl.database.helpers.DBReferenceWrapper;
+import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.DaggerFakeGraphTest;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.FakeGraphTest;
 import ch.epfl.sweng.jassatepfl.test_utils.injectionsTest.FakeModulesTest;
 import ch.epfl.sweng.jassatepfl.test_utils.mocks.DBRefWrapTest;
@@ -42,4 +42,5 @@ public class InjectedBaseActivityTest {
         component.inject(this);
         dbRefWrapTest = (DBRefWrapTest) dbReferenceWrapper;
     }
+
 }

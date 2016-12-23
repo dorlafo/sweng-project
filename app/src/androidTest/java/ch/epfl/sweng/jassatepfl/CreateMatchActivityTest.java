@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl;
 
-import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.espresso.contrib.PickerActions;
@@ -26,6 +25,8 @@ import ch.epfl.sweng.jassatepfl.model.Match;
 import ch.epfl.sweng.jassatepfl.model.Player;
 import ch.epfl.sweng.jassatepfl.test_utils.ToastMatcherTest;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -37,8 +38,8 @@ import static android.support.test.espresso.intent.Intents.init;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.Intents.release;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -53,7 +54,6 @@ import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
-import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
@@ -65,7 +65,8 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
 
-    @Rule public ActivityTestRule<CreateMatchActivity> activityRule =
+    @Rule
+    public ActivityTestRule<CreateMatchActivity> activityRule =
             new ActivityTestRule<>(CreateMatchActivity.class, false, false);
 
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.FRENCH);
@@ -77,13 +78,6 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         playerSet.add(amaury);
         playerSet.add(jimmy);
         dbRefWrapTest.addPlayers(playerSet);
-    }
-
-    @Test
-    public void testSwitchToInvitePlayerActivity() {
-        activityRule.launchActivity(new Intent());
-        onView(withId(R.id.add_player_button)).perform(click());
-        onView(withId(R.id.invite_button)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -194,14 +188,19 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
     @Test
     public void testLocationPickerButtonSendsIntent() {
         init();
-        Intent resultData = new Intent();
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, resultData);
-        intending(toPackage("com.google.android.gms")).respondWith(result);
-
         activityRule.launchActivity(new Intent());
 
+        Intent resultData = new Intent();
+        Instrumentation.ActivityResult result =
+                new Instrumentation.ActivityResult(RESULT_CANCELED, resultData);
+        Matcher<Intent> expectedIntent =
+                hasAction("com.google.android.gms.location.places.ui.PICK_PLACE");
+        //toPackage("com.google.android.gms");
+
+        intending(expectedIntent).respondWith(result);
+
         onView(withId(R.id.create_place_picker_button)).perform(click());
-        intended(toPackage("com.google.android.gms"));
+        intended(expectedIntent);
         release();
     }
 
@@ -220,7 +219,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         activityRule.launchActivity(new Intent());
         onView(withId(R.id.description_match_text)).perform(typeText("Hello World"));
         closeSoftKeyboard();
-        intending(expectedIntent).respondWith(new Instrumentation.ActivityResult(0, null));
+        intending(expectedIntent).respondWith(new Instrumentation.ActivityResult(RESULT_CANCELED, null));
         onView(withId(R.id.create_create_button)).perform(click());
         intended(expectedIntent);
         release();
@@ -246,7 +245,7 @@ public final class CreateMatchActivityTest extends InjectedBaseActivityTest {
         resultData.putExtra("player1", jimmy.getID().toString());
         resultData.putExtra("players_added", 2);
         activityRule.launchActivity(new Intent());
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(RESULT_OK, resultData);
         intending(hasComponent(InvitePlayerToMatchActivity.class.getName())).respondWith(result);
         onView(withId(R.id.add_player_button)).perform(click());
     }

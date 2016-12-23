@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-
 import ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest;
 
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.alexis;
@@ -30,7 +29,7 @@ import static org.junit.Assert.assertNotEquals;
 @SuppressWarnings({"EqualsBetweenInconvertibleTypes", "EqualsWithItself", "ObjectEqualsNull"})
 public final class MatchTest {
 
-    public Match.Builder defaultBuilder() {
+    private Match.Builder defaultBuilder() {
         Match.Builder match = null;
         try {
             match = new Match.Builder().addPlayer(amaury).addPlayer(vincenzo);
@@ -102,13 +101,9 @@ public final class MatchTest {
     }
 
     @Test
-    public void matchAddsPlayer() {
+    public void matchAddsPlayer() throws IllegalAccessException {
         Match match = defaultBuilder().build();
-        try {
-            match.addPlayer(alexis);
-        } catch (IllegalStateException | IllegalAccessException e) {
-            fail();
-        }
+        match.addPlayer(alexis);
         assertEquals(3, match.getPlayers().size());
         assertEquals(alexis, match.getPlayers().get(2));
     }
@@ -131,24 +126,12 @@ public final class MatchTest {
         assertEquals(alexis, match.getPlayers().get(2));
     }
 
-    @Test
-    public void addingTooManyPlayersThrowsException() {
+    @Test(expected = IllegalStateException.class)
+    public void addingTooManyPlayersThrowsException() throws IllegalAccessException {
         Match match = defaultBuilder().build();
-        try {
-            match.addPlayer(alexis);
-            match.addPlayer(dorian);
-        } catch (IllegalStateException | IllegalAccessException e) {
-            fail();
-        }
-
-        try {
-            match.addPlayer(random);
-            fail("Expected IllegalStateException");
-        } catch (IllegalStateException e) {
-            assertEquals("Match is full.", e.getMessage());
-        } catch (IllegalAccessException a) {
-            fail();
-        }
+        match.addPlayer(alexis);
+        match.addPlayer(dorian);
+        match.addPlayer(random);
     }
 
     @Test

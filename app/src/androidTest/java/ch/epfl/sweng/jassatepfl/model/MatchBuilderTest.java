@@ -1,7 +1,10 @@
 package ch.epfl.sweng.jassatepfl.model;
 
+import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,24 +19,20 @@ import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.random;
 import static ch.epfl.sweng.jassatepfl.test_utils.DummyDataTest.vincenzo;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 
+@RunWith(AndroidJUnit4.class)
 public final class MatchBuilderTest {
 
     private Match.Builder matchBuilder;
 
+    @Before
     public void setUp() {
         matchBuilder = new Match.Builder();
     }
 
     @Test
-    public void defaultMatchBuilderHasCorrectValues() {
-        setUp();
-        try {
-            matchBuilder.addPlayer(amaury);
-        } catch (IllegalStateException | IllegalAccessException e) {
-            fail();
-        }
+    public void defaultMatchBuilderHasCorrectValues() throws IllegalAccessException {
+        matchBuilder.addPlayer(amaury);
         Match match = matchBuilder.build();
 
         List<Player> players = new ArrayList<>();
@@ -47,14 +46,8 @@ public final class MatchBuilderTest {
     }
 
     @Test
-    public void builderSetsFieldsCorrectly() {
-        setUp();
-        try {
-            matchBuilder.addPlayer(amaury);
-        } catch (IllegalStateException | IllegalAccessException e) {
-            fail();
-        }
-
+    public void builderSetsFieldsCorrectly() throws IllegalAccessException {
+        matchBuilder.addPlayer(amaury);
 
         GPSPoint newLocation = new GPSPoint(33.02245, 15.04457);
         String newDescription = "This is gonna be a great match!";
@@ -76,27 +69,15 @@ public final class MatchBuilderTest {
         assertTrue(!matchBuilder.getHasCards().isEmpty());
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void buildingWithEmptyPlayerListThrowsException() {
-        setUp();
-        try {
-            matchBuilder.build();
-            fail("Expected IllegalStateException");
-        } catch (IllegalStateException e) {
-            assertTrue(e.getMessage().equals("Cannot create match without any player."));
-        }
+        matchBuilder.build();
     }
 
     @Test
-    public void builderCorrectlyAddsPlayers() {
-        setUp();
-        try {
-            matchBuilder.addPlayer(amaury);
-            matchBuilder.addPlayer(vincenzo);
-        } catch (IllegalStateException | IllegalAccessException e) {
-            fail();
-        }
-
+    public void builderCorrectlyAddsPlayers() throws IllegalAccessException {
+        matchBuilder.addPlayer(amaury);
+        matchBuilder.addPlayer(vincenzo);
         Match match = matchBuilder.build();
 
         Player player1 = match.getPlayers().get(0);
@@ -106,81 +87,39 @@ public final class MatchBuilderTest {
         assertEquals(vincenzo, player2);
     }
 
-    @Test
-    public void builderDoesNotAddTheSamePlayerTwice() {
-        setUp();
-        try {
-            matchBuilder.addPlayer(amaury).addPlayer(amaury)
-                    .addPlayer(vincenzo).addPlayer(vincenzo);
-        } catch (IllegalStateException e) {
-            fail();
-        } catch (IllegalAccessException a) {
-            assertTrue(a.getMessage().equals("Player already in that Match."));
-        }
+    @Test(expected = IllegalAccessException.class)
+    public void builderDoesNotAddTheSamePlayerTwice() throws IllegalAccessException {
+        matchBuilder.addPlayer(amaury).addPlayer(amaury)
+                .addPlayer(vincenzo).addPlayer(vincenzo);
     }
 
-    @Test
-    public void addingTooManyPlayersThrowsException() {
-        setUp();
-        try {
-            matchBuilder.addPlayer(amaury).addPlayer(vincenzo)
-                    .addPlayer(dorian).addPlayer(alexis);
-        } catch (IllegalStateException | IllegalAccessException e) {
-            fail();
-        }
-
-        try {
-            matchBuilder.addPlayer(random);
-            fail("Expected IllegalStateException");
-        } catch (IllegalStateException e) {
-            assertTrue(e.getMessage().equals("Match is full."));
-        } catch (IllegalAccessException a) {
-            fail();
-        }
+    @Test(expected = IllegalStateException.class)
+    public void addingTooManyPlayersThrowsException() throws IllegalAccessException {
+        matchBuilder.addPlayer(amaury).addPlayer(vincenzo)
+                .addPlayer(dorian).addPlayer(alexis);
+        matchBuilder.addPlayer(random);
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void testRemovingFromEmptyListThrowsException() {
-        setUp();
-        try {
-            matchBuilder.removePlayer(amaury);
-            fail("Expected IllegalStateException");
-        } catch (IllegalArgumentException e) {
-            fail();
-        } catch (IllegalStateException e) {
-            assertTrue(e.getMessage().equals("No players in the match."));
-        }
+        matchBuilder.removePlayer(amaury);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRemovingPlayerNotInMatchThrowsException() throws IllegalAccessException {
+        matchBuilder.addPlayer(amaury);
+        matchBuilder.removePlayer(vincenzo);
     }
 
     @Test
-    public void testRemovingPlayerNotInMatchThrowsException() {
-        setUp();
-        try {
-            matchBuilder.addPlayer(amaury);
-            matchBuilder.removePlayer(vincenzo);
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalStateException | IllegalAccessException e) {
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertTrue(e.getMessage().equals("Player not in the Match."));
-        }
-    }
-
-    @Test
-    public void testRemovePlayerIsCorrect() {
-        setUp();
-        try {
-            matchBuilder.addPlayer(amaury);
-            matchBuilder.removePlayer(amaury);
-        } catch (IllegalStateException | IllegalArgumentException | IllegalAccessException e) {
-            fail();
-        }
+    public void testRemovePlayerIsCorrect() throws IllegalAccessException {
+        matchBuilder.addPlayer(amaury);
+        matchBuilder.removePlayer(amaury);
         assertTrue(matchBuilder.getPlayerList().isEmpty());
     }
 
     @Test
     public void setStatusWorksCorrectly() {
-        setUp();
         matchBuilder.setStatus(Match.MatchStatus.ACTIVE);
         assertEquals(Match.MatchStatus.ACTIVE, matchBuilder.getMatchStatus());
     }

@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl.model;
 
-
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;

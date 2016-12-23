@@ -284,4 +284,5 @@ public class LoginActivity extends BaseAppCompatActivity {
 
         return new OAuth2Config(scopes, clientID, clientSecret, redirectUri);
     }
+
 }

@@ -7,16 +7,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
- * @author Alexis Montavon
- *
  * Test class for UserGuideActivity
+ *
+ * @author Alexis Montavon
  */
 @RunWith(AndroidJUnit4.class)
 public class UserGuideActivityTest extends InjectedBaseActivityTest {
@@ -29,4 +28,5 @@ public class UserGuideActivityTest extends InjectedBaseActivityTest {
     public void testDisplay() {
         onView(withId(R.id.user_guide_ScrollV)).check(matches(isDisplayed()));
     }
+
 }

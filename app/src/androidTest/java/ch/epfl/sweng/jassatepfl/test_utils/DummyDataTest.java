@@ -1,6 +1,5 @@
 package ch.epfl.sweng.jassatepfl.test_utils;
 
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
